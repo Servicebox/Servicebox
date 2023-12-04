@@ -1,0 +1,113 @@
+.contactsRef {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+
+  .contacts__content {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.contacts__icon-sochial{
+    list-style: none;
+}
+.contacts__block{
+  display: flex;
+  flex-direction: row;
+  font-family: Montserrat;
+  gap: 10px;
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+  color:rgb(0, 0, 0);
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+.contactsRef {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+color: black;
+  border-radius: 29px;
+  background-color: #fffffff2;
+  filter: drop-shadow(0px 8px 10px rgba(76, 76, 76, 0.26)) drop-shadow(0px 20px 30px rgba(74, 74, 74, 0.26));
+}
+
+.contacts__list-text{
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 10px;
+  color: #13171D;
+  font-family: Bebas Neue;
+  font-size: 56px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.contacts__list-title{
+  margin: 0 auto;
+}
+.contacts__text{
+  font-size: 14px;
+}
+.contacts__block-sochial{
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  border-top: 1px solid black;
+}
+.contacts__image-sochial{
+  max-width: 50px;
+  height: 50px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0px auto;
+  padding: 3px 6px;
+}
+.contacts__image{
+  max-width: 30px;
+  height: 30px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+}
+.contacts__icon{
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 15px auto;
+  gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .contactsRef {
+      padding: 10px;
+    }
+
+}
+@media (max-width: 320px) {
+.contacts__info{
+ flex-direction: column;
+}
+.footer__contacts{
+  text-align: center;
+font-family: Bebas Neue;
+font-size: 26px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+}

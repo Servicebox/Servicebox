@@ -1,0 +1,312 @@
+
+.service__title{
+color: #13171D;
+font-family: Bebas Neue;
+text-align: left;
+font-size: 80px;
+font-style: normal;
+font-weight: 700;
+line-height: 84px; /* 105% */
+margin: 0 auto;
+text-align: center;
+padding: 100px 0 0;
+}
+.service__subtitle{
+  color: #444;
+  font-family: Gilroy;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0 auto;
+  max-width: 800px;
+  text-align: center;
+}
+    .rectangle {
+        opacity: 0.5;
+        filter: drop-shadow(0px 8px 10px rgb(201, 201, 201)) drop-shadow(0px 50px 60px rgba(141, 141, 141, 0.125));
+        max-width: 565px;
+        box-shadow: 30px 14px 30px -31px #575757;
+        grid-row: 1;
+        border-radius: 20px;
+        grid-row: 1;
+}
+.vector {
+    width: 77.713px;
+    height: 77.718px;
+    flex-shrink: 0;
+    background-size: cover;
+    background-position: center;
+    fill: #005AAA;
+    overflow: visible;
+    display: block;
+    margin-bottom: 10px;
+    position: absolute;
+    top: 59px;
+    left: 60px;
+    z-index: -1;
+  }
+  .photo {
+    width: 183px;
+    height: 241px;
+    flex-shrink: 0;
+    background-color: transparent;
+  }
+  .arrow-one{
+display: none;
+  }
+
+
+  .ellipse-one__tel{
+    width: 92px;
+    height: 92px;
+    flex-shrink: 0;
+  }
+  .apple{
+    width: 32.576px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+  
+  .card {
+  max-width: 590px;
+    position: relative;
+    height: 100%;
+    margin: 10px auto;
+    }
+.card__image{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  max-width: 200px;
+}
+.card__title{
+    position: absolute;
+    top: 0px;
+    left: 302px;
+    font-family: Gilroy;
+font-size: 25px;
+font-style: normal;
+font-weight: 600;
+line-height: 30px; /* 136.364% */
+margin: 5px auto;
+
+}
+
+.ellipsis{
+  position: absolute;
+  top: 70px;
+  left: 220px;
+  font-family: Gilroy;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 25px;
+  margin: 0 auto;
+  max-width: 300px;
+
+}
+.card__button{
+    position: absolute;
+    top: 301px;
+    left: 237px;
+}
+
+.tech {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 50px auto 0 auto;
+  box-sizing: border-box;
+  justify-content: center;
+
+}
+
+.serviceRef{
+margin: 0 auto;
+}
+@media screen and (min-width: 500px) and (max-width: 768px){
+.tech {
+max-width: 600px;
+width: 100%;
+}
+.serviceRef{
+  padding: 0;
+}
+.service__content{
+max-width: 100%;
+}
+.card{
+  max-width: 250px;
+  margin: 20px auto;
+}
+.service__title{
+  font-family: Bebas Neue;
+font-size: 26px;
+font-style: normal;
+font-weight: 700;
+line-height: 26px; /* 100% */
+}
+.rectangle {
+max-width: 250px;
+}
+
+.vector{
+  top: 32px;
+}
+.card__title{
+  top: 0px;
+  left: 115px;
+  font-size: 15px;
+  line-height: 15px;
+  margin: 5px auto;
+  text-align: center;
+}
+
+.ellipsis {
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  top: 30px;
+  left: 111px;
+  font-family: Gilroy;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15px;
+  margin: 5px auto;
+  max-width: 150px;
+  height: 60px;
+}
+.card__image{
+  top: 0px;
+  left: 13px;
+  max-width: 93px;
+}
+.card__button{
+  top: 226px;
+    left: 140px;
+}
+}
+@media screen and (min-width: 320px) and (max-width: 499px){
+  .tech{
+    max-width: 100%;
+  }
+  .service__title{
+    color: #13171D;
+font-family: Bebas Neue;
+font-size: 26px;
+font-style: normal;
+font-weight: 700;
+line-height: 26px; /* 100% */
+max-width: 268px;
+padding-bottom: 78px;
+text-align: center;
+  }
+  .card__title{
+    color: #13171D;
+    font-family: Gilroy;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 12px;
+    top: 0;
+    left: 106px;
+  }
+  .card__subtitle{
+    position: absolute;
+  top: 40px;
+  left: 105px;
+  font-family: Gilroy;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 10px;
+  margin: 0 auto;
+  max-width: 230px;
+  }
+  .serviceRef{
+    padding: 0;
+  }
+  .card__image{
+    max-width: 100px;
+    top: 0;
+  }
+  .rectangle{
+    max-width: 285px;
+  }
+  .card__button {
+    position: absolute;
+    top: 208px;
+    left: 128px;
+  }
+  .vector{
+    width: 60px;
+    height: 60px;
+    top: 30px;
+    left: 60px;
+  }
+  .arrow-one{
+    display: none;
+  }
+  .card__button-title{
+    flex-shrink: 0;
+    top: -99px;
+    left: -101px;
+    position: absolute;
+    font-size: 14px;
+  }
+  .ellipsis{
+    position: absolute;
+    top: 35px;
+    left: 113px;
+    font-family: Gilroy;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+    margin: 0 auto;
+    max-width: 150px;
+  }
+
+}
+@media screen and (min-width: 769px) and (max-width: 1279px){
+  .card{
+    max-width: 400px;
+  }
+  .rectangle{
+    max-width: 400px;
+  }
+  .card__title {
+    position: absolute;
+    top: 0px;
+    left: 203px;
+    font-family: Gilroy;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 15px;
+    margin: 5px auto;
+}
+.ellipsis {
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  top: 40px;
+  left: 211px;
+  font-family: Gilroy;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 15px;
+  margin: 5px auto;
+  max-width: 150px;
+  
+
+}
+.arrow-one{
+  display: none;
+}
+}

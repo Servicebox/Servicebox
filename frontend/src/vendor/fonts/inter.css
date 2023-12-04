@@ -1,0 +1,44 @@
+
+@font-face {
+    font-family: 'Gilroy';
+    font-style:  normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("Gilroy-Regular.woff2?v=3.19") format("woff2"),
+         url("Gilroy-Regular.woff?v=3.19") format("woff");
+  }
+  
+  @font-face {
+    font-family: 'Gilroy';
+    font-style:  normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("Gilroy-Bold.woff2?v=3.19") format("woff2"),
+         url("Gilroy-Bold.woff?v=3.19f") format("woff");
+  }
+
+@font-face {
+    font-family: 'Bebas Neue';
+    font-style:  normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("BebasNeueBold.woff2?v=3.19") format("woff2"),
+         url("BebasNeueBold.woff?v=3.19") format("woff");
+  }
+  
+  @font-face {
+    font-family: 'Montserrat';
+    font-style:  normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("Montserrat-Bold.woff2?v=3.19") format("woff2"),
+         url("Montserrat-Bold.woff?v=3.19") format("woff");
+  }
+  @font-face {
+    font-family: 'Montserrat';
+    font-style:  normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("Montserrat-Regular.woff2?v=3.19") format("woff2"),
+         url("Montserrat-Bold.woff?v=3.19") format("woff");
+  }
