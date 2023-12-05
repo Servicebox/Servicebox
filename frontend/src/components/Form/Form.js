@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from 'react';
 import './Form.css';
-import CloseIcon from "../../images/x.svg";
-import { useState, useEffect } from 'react';
+import СloseIcon from "../../images/x.svg";
+import Modal from "../Modal/Modal";
 
 const Form = ({ toggleForm }) => {
   const [name, setName] = useState('');
@@ -11,6 +12,7 @@ const Form = ({ toggleForm }) => {
   const [phoneDirty, setPhoneDirty] = useState(false);
   const [nameError, setNameError] = useState('Имя не может быть пустым');
   const [phoneError, setPhoneError] = useState('Телефон не может быть пустым');
+
   const [formValid, setFormValid] = useState(false);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const Form = ({ toggleForm }) => {
 
   const changeHandlerPhone = (e) => {
     setPhone(e.target.value);
-    const re = /^\+?[78][-(]?\d{3}[-)]?\d{3}[-]?\d{2}[-]?\d{2}$/;
+    const re = /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/;
     if (!re.test(String(e.target.value).toLowerCase())) {
       setPhoneError('Некорректный номер телефона');
     } else {
@@ -45,13 +47,29 @@ const Form = ({ toggleForm }) => {
     setDescription(e.target.value);
   };
 
+  const [submitError, setSubmitError] = useState('');
+
   const submitData = (e) => {
     e.preventDefault();
-    sendMsg({ name, phone, description })
-      .then(response => {
-        // Handle the response
+    fetch('http://localhost:3000/telegram', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, phone, description }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.status === 'ok') {
+          toggleForm();
+        } else {
+          setSubmitError(result.message);
+        }
       })
-      .catch(error => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        setSubmitError('Ошибка соединения с сервером');
+      });
   };
 
   const blurHandler = (e) => {
@@ -73,8 +91,8 @@ const Form = ({ toggleForm }) => {
         <h2 className="form__title">
           Оставьте заявку на <span className="besplatnaya">бесплатную</span> консультацию
         </h2>
-        <form className="form" onSubmit={submitData}>
-          {nameDirty && nameError && <div className="error1">{nameError}</div>}
+        <form className="form">
+          {(nameDirty && nameError) && <div className="error1">{nameError}</div>}
           <label className="form__label">
             <input
               className="form__input"
@@ -86,7 +104,7 @@ const Form = ({ toggleForm }) => {
               placeholder="Введите ваше имя:"
             />
           </label>
-          {phoneDirty && phoneError && <div className="error3">{phoneError}</div>}
+          {(phoneDirty && phoneError) && <div className="error3">{phoneError}</div>}
           <label className="form__label">
             <input
               className="form__input"
@@ -109,13 +127,20 @@ const Form = ({ toggleForm }) => {
               rows="3"
             ></textarea>
           </label>
-          <button className="form-overlay__btn" type="submit" disabled={!formValid}>
+          <button className="form-overlay__btn" disabled={!formValid} type="submit" onClick={submitData}>
             Отправить форму
           </button>
         </form>
         <button className="close-button" onClick={toggleForm}>
-          <img className="close-button__img" src={CloseIcon} alt="Закрыть" />
+          <img className="close-button__img" src={СloseIcon} alt="Закрыть" />
         </button>
+        {submitError && (
+          <Modal onClose={() => setSubmitError('')}>
+            <h3>Ошибка отправки формы</h3>
+            <p>{submitError}</p>
+            <button onClick={() => setSubmitError('')}>Закрыть</button>
+          </Modal>
+        )}
       </div>
     </div>
   );
