@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Form.css';
-import СloseIcon from "../../images/x.svg";
-import Modal from "../Modal/Modal";
+import СloseIcon from "../../images/x.svg"
 
 const Form = ({ toggleForm }) => {
   const [name, setName] = useState('');
@@ -47,8 +46,6 @@ const Form = ({ toggleForm }) => {
     setDescription(e.target.value);
   };
 
-  const [submitError, setSubmitError] = useState('');
-
   const submitData = (e) => {
     e.preventDefault();
     fetch('http://localhost:3000/telegram', {
@@ -61,15 +58,13 @@ const Form = ({ toggleForm }) => {
       .then((response) => response.json())
       .then((result) => {
         if (result.status === 'ok') {
+          alert(result.message);
           toggleForm();
         } else {
-          setSubmitError(result.message);
+          alert(result.message);
         }
       })
-      .catch((error) => {
-        console.error(error);
-        setSubmitError('Ошибка соединения с сервером');
-      });
+      .catch((error) => console.error(error));
   };
 
   const blurHandler = (e) => {
@@ -134,13 +129,6 @@ const Form = ({ toggleForm }) => {
         <button className="close-button" onClick={toggleForm}>
           <img className="close-button__img" src={СloseIcon} alt="Закрыть" />
         </button>
-        {submitError && (
-          <Modal onClose={() => setSubmitError('')}>
-            <h3>Ошибка отправки формы</h3>
-            <p>{submitError}</p>
-            <button onClick={() => setSubmitError('')}>Закрыть</button>
-          </Modal>
-        )}
       </div>
     </div>
   );
