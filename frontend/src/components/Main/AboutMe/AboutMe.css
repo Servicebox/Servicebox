@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+
 }
 
 .about-me__title {
@@ -62,6 +62,8 @@ border-radius: 10px;
     margin: 0 auto;
     max-width: 1000px;
     width: 100%;
+    gap: 30px;
+    padding-bottom: 30px;
 }
 .about-me__next-button{
   display: inline-flex;
@@ -181,6 +183,7 @@ margin: 0 auto 20px;
 @media screen and (min-width: 768px) and (max-width: 990px) {
 .about-me{
   width: 100%;
+  padding-top: 100px;
   
 }
 .about-me__content{

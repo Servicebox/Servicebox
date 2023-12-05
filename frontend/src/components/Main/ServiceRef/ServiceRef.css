@@ -74,6 +74,10 @@ display: none;
     height: 100%;
     margin: 10px auto;
     }
+    .card:hover{
+      opacity: .8;
+    
+    }
 .card__image{
   position: absolute;
   top: 0px;
@@ -201,7 +205,7 @@ font-style: normal;
 font-weight: 700;
 line-height: 26px; /* 100% */
 max-width: 268px;
-padding-bottom: 78px;
+padding-bottom: 20px;
 text-align: center;
   }
   .card__title{

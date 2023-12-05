@@ -112,7 +112,7 @@ function MainBanner() {
           </div>
           <div className="care-about-you">
             <div className="care-about-you__info">
-              <img className="care-about-you__images" src={Cleane} alt="" />
+              <img className="care-about-you__img" src={Cleane} alt="" />
               <div className="care-about-you__text">
                 <h2 className="care-about-you__title">Незначительные поломки</h2>
                 <p className="care-about-you___subtitle">
@@ -125,7 +125,7 @@ function MainBanner() {
           </div>
           <div className="care-about-you">
             <div className="care-about-you__info">
-              <img className="care-about-you__image" src={Diagnostics} alt="диагностка бесплатная" />
+              <img className="care-about-you__img" src={Diagnostics} alt="диагностка бесплатная" />
               <div className="care-about-you__text">
                 <h2 className="care-about-you__title">Бесплатная диагностика</h2>
                 <p className="care-about-you___subtitle">

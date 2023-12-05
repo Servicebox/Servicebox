@@ -6,7 +6,7 @@ import "./Header.css";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import Status from "../../images/status.svg";
 
-function Header({ scrollTo }) {
+function Header({ scrollTo, contactsRef }) { 
  const location = useLocation();
 
  const handleShowMap = () => {
@@ -19,6 +19,9 @@ function Header({ scrollTo }) {
 
   const handleScrollTo = (target) => {
     scrollTo(target);
+  };
+  const handlePhoneCall = () => {
+    window.location.href = "tel:+7911 501 88 28"; 
   };
 
   return (
@@ -69,7 +72,8 @@ function Header({ scrollTo }) {
               </span>
               Мы на карте
             </p>
-            <p className="contact-info__number">+7 911 501 88 28</p>
+            <p className="contact-info__number" onClick={handlePhoneCall}>
+              +7 911 501 88 28</p>
           </div>
 
           <BurgerMenu scrollTo={scrollTo} />

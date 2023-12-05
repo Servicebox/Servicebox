@@ -142,9 +142,9 @@ gap: 40px;
   grid-column: 1/2;
   color: rgb(0, 0, 0);
   font-family: Bebas Neue;
-  font-size: 100px;
+  font-size: 80px;
   font-weight: 700;
-  line-height: 97px;
+  line-height: 78px;
   letter-spacing: -1.1px;
   max-width: 625px;
   margin: 0 auto;
@@ -248,7 +248,6 @@ gap: 40px;
 .care-about-you{
   display: grid;
   box-sizing: border-box;
-  margin: 0 auto;
   justify-items: center;
   grid-auto-flow: column;
   gap: 30px;
@@ -284,7 +283,7 @@ gap: 40px;
 
   background-repeat: no-repeat;
   margin: 0 auto;
-  max-width: 150px;
+  max-width: 120px;
 }
 
 .care-about-you__text {
@@ -347,6 +346,7 @@ gap: 40px;
     display: flex;
     flex-wrap: wrap;
     gap: 30px;
+    justify-content: center;
 }
 
 @media  (min-width: 1001px) {
@@ -356,7 +356,7 @@ gap: 40px;
     width: 100%;
     flex-direction: row;
     margin: 0 auto;
-    max-width: 1050px;
+    justify-content: center;
 }
 }
 
@@ -444,7 +444,10 @@ padding: 5px 10px;
     margin-bottom: 30px;
   }
   .main-banner{
-    padding: 18px;
+    padding-top: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin: 0 auto;
     background-image: url(../../../images/bagraund.png);
   }
   .care-about-you__title{
@@ -563,6 +566,12 @@ font-size: 20px;
     margin: 0 auto;
     margin-bottom: 30px;
   }
+
+  .care-about-you__img {
+    background-repeat: no-repeat;
+    margin: 0 auto;
+    max-width: 100px;
+}
   .care-about-you__text{
     max-width: 275px;
   }
@@ -636,6 +645,11 @@ line-height: 24px; /* 133.333% */
   .main-banner__circle{
     top: 70%;
     left: 106%;
+}
+.care-about-you__img {
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  max-width: 100px;
 }
 
 

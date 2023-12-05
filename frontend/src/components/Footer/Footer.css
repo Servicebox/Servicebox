@@ -1,16 +1,26 @@
 .footer__map {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  box-shadow: 1px 1px 9px #74747499;
+  border-radius: 5px;
 }
+
 .footer__map-card{
-  width:100%;
+  width:80%;
   height:500px; 
   border:0;
+}
+.footer__map-card{
+border-right: 2px solid currentColor;
 }
 
 .footer__info{
   filter: drop-shadow(0px 8px 10px rgba(76, 76, 76, 0.26)) drop-shadow(0px 20px 30px rgba(74, 74, 74, 0.26));
   border-radius: 6px;
   padding: 20px;
+  width: 80%;
 }
 .footer__title{
   color: #000000;
@@ -20,13 +30,15 @@
   font-weight: 400;
   line-height: 22px;
 }
-.footer__autho{
+.footer__author{
   color: #000000;
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 22px;
+  text-align: center;
+  margin: 10px auto;
 }
 .footer__link{
   text-decoration: none;
@@ -35,6 +47,19 @@
 }
 .footer__link:hover {
   text-decoration: underline;
+  color: #F9A92C;
 }
 
-
+@media screen and (min-width: 320px) and (max-width: 499px){
+  .footer__map{
+    flex-direction: column;
+  }
+  .footer__map-card{
+    width: 100%;
+    margin-top: -10px;
+  }
+  .footer__map-card{
+    border-bottom: 2px solid currentColor;
+    border-right: none;
+    }
+}

@@ -78,6 +78,9 @@ display: none;
   cursor: pointer;
   max-width: 150px;
 }
+.contact-info__map-link:hover {
+  color: #F9A92C;
+}
 
 .contact-info__map-link:hover {
   opacity: .8;
@@ -96,6 +99,9 @@ display: none;
   color: #000000;
   text-decoration: none;
   gap: 24px;
+}
+.navigation__list a:hover {
+  color: #F9A92C;
 }
 
 .contact-info {
@@ -126,6 +132,7 @@ display: none;
   padding: 0;
   margin: 0 auto;
   max-width: 125px;
+  cursor: pointer;
 }
 
 .location {
@@ -277,6 +284,9 @@ position: relative;
   .button span{
     font-size: 11px;
     left: 61px;
+  }
+  .contact-info__map-link:hover {
+    color: #F9A92C;
   }
 }
 

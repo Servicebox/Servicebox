@@ -16,7 +16,7 @@ function ArronService() {
     return(
 <section className="arron-service">
 <div className="arron-service__content">
-<h2 className="arron-service__title-text">наши приемущества</h2>
+<h2 className="arron-service__title-text">Наши приемущества</h2>
 
 <ul className="arron-service__list" >
      

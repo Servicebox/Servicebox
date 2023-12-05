@@ -47,7 +47,7 @@ color: black;
   padding-bottom: 10px;
   color: #13171D;
   font-family: Bebas Neue;
-  font-size: 56px;
+  font-size: 35px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -57,6 +57,10 @@ color: black;
 }
 .contacts__text{
   font-size: 14px;
+  cursor: pointer;
+}
+.contacts__text:hover {
+  color: #F9A92C;
 }
 .contacts__block-sochial{
   padding-bottom: 20px;
@@ -95,6 +99,9 @@ color: black;
     .contactsRef {
       padding: 10px;
     }
+    .contacts__list-text{
+font-size: 40px;
+    }
 
 }
 @media (max-width: 320px) {
@@ -108,6 +115,9 @@ font-size: 26px;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
+}
+.contacts__text:hover {
+  color: #F9A92C;
 }
 
 }
