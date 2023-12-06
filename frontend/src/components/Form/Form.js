@@ -48,7 +48,7 @@ const Form = ({ toggleForm }) => {
 
   const submitData = (e) => {
     e.preventDefault();
-    fetch('http://localhost:3000/telegram', {
+    fetch('https://servicebox35.ru/api/telegram', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

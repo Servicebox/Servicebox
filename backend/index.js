@@ -4,7 +4,7 @@ const index = require('./routes/index');
 const app = express();
 const cors = require('cors');
 
-app.use(cors({ origin: 'https://servicebox35.ru' }));
+app.use(cors());
 app.use(express.json());
 app.use('/', index);
 
