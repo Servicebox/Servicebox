@@ -48,24 +48,30 @@ const Form = ({ toggleForm }) => {
 
   const submitData = (e) => {
     e.preventDefault();
-    fetch('http://localhost:3000/telegram', {
+  
+    fetch('https://servicebox35.ru/api/sendMessage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, phone, description }),
+      body: JSON.stringify({
+        name: name,
+        phone: phone,
+        description: description,
+      }),
     })
       .then((response) => response.json())
       .then((result) => {
         if (result.status === 'ok') {
-          alert(result.message);
-          toggleForm();
+          alert('Сообщение успешно отправлено');
+          toggleForm(); // Предполагается, что у вас есть такая функция
         } else {
-          alert(result.message);
+          alert('Ошибка при отправке сообщения'); // В случае ошибки обработайте соответственно
         }
       })
       .catch((error) => console.error(error));
   };
+
 
   const blurHandler = (e) => {
     switch (e.target.name) {
