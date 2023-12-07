@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Form.css';
-import CloseIcon from "../../images/x.svg";
+import СloseIcon from "../../images/x.svg";
 import Modal from "../Modal/Modal";
 
 const Form = ({ toggleForm }) => {
@@ -33,9 +33,9 @@ const Form = ({ toggleForm }) => {
     }
   };
 
-  const changePhone = (e) => {
+  const changeHandlerPhone = (e) => {
     setPhone(e.target.value);
-    const re = /^(\+?[78][-\(]?\d{3}[-\)]?\d{3}-?\d{2}-?\d{2})$/;
+    const re = /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/;
     if (!re.test(String(e.target.value).toLowerCase())) {
       setPhoneError('Некорректный номер телефона');
     } else {
@@ -43,7 +43,7 @@ const Form = ({ toggleForm }) => {
     }
   };
 
-  const changeDescription = (e) => {
+  const changeHandlerDescription = (e) => {
     setDescription(e.target.value);
   };
 
@@ -51,7 +51,7 @@ const Form = ({ toggleForm }) => {
 
   const submitData = (e) => {
     e.preventDefault();
-    fetch('http://servicebox35.ru/api/telegram/send', {
+    fetch('http://servicebox35.pp.ru:3001/telegram', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,13 +61,12 @@ const Form = ({ toggleForm }) => {
       .then((response) => response.json())
       .then((result) => {
         if (result.status === 'ok') {
-          toggleForm();
+          toggleForm(); // Закрытие формы при успешной отправке
         } else {
           setSubmitError(result.message || 'Произошла ошибка при отправке формы');
         }
       })
       .catch((error) => {
-        console.error(error);
         setSubmitError('Ошибка соединения с сервером');
       });
   };
@@ -86,13 +85,13 @@ const Form = ({ toggleForm }) => {
   };
 
   return (
-    <div className="form-overlay">
+    <div className="form-overlay" onKeyDown={(e) => e.key === 'Enter' && submitData(e)}>
       <div className="form-container">
         <h2 className="form__title">
           Оставьте заявку на <span className="besplatnaya">бесплатную</span> консультацию
         </h2>
-        <form className="form">
-          {nameDirty && nameError && <div className="error">{nameError}</div>}
+        <form className="form" onSubmit={submitData}> 
+          {(nameDirty && nameError) && <div className="error1">{nameError}</div>}
           <label className="form__label">
             <input
               className="form__input"
@@ -101,38 +100,38 @@ const Form = ({ toggleForm }) => {
               name="name"
               onChange={changeName}
               onBlur={blurHandler}
-              placeholder="Введите Ваше имя"
+              placeholder="Введите ваше имя:"
             />
           </label>
-          {phoneDirty && phoneError && <div className="error">{phoneError}</div>}
+          {(phoneDirty && phoneError) && <div className="error3">{phoneError}</div>}
           <label className="form__label">
             <input
               className="form__input"
+              onChange={changeHandlerPhone}
+              onBlur={blurHandler}
               type="text"
               value={phone}
               name="phone"
-              onChange={changePhone}
-              onBlur={blurHandler}
-              placeholder="Введите номер телефона"
+              placeholder="Введите номер телефона:"
             />
           </label>
           <label className="form__label">
             <textarea
               className="form__text"
-              value={description}
+              onChange={changeHandlerDescription}
               name="description"
-              onChange={changeDescription}
-              placeholder="Опишите Вашу проблему..."
+              placeholder="Опишите вашу проблему..."
+              value={description}
               cols="30"
               rows="3"
             ></textarea>
           </label>
-          <button className="form-overlay__btn" disabled={!formValid} type="submit" onClick={submitData}>
+          <button className="form-overlay__btn" disabled={!formValid} type="submit">
             Отправить форму
           </button>
         </form>
         <button className="close-button" onClick={toggleForm}>
-          <img className="close-button__img" src={CloseIcon} alt="Закрыть" />
+          <img className="close-button__img" src={СloseIcon} alt="Закрыть" />
         </button>
         {submitError && (
           <Modal onClose={() => setSubmitError('')}>

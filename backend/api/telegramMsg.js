@@ -7,7 +7,6 @@ module.exports.sendMsg = (req, res) => {
     //каждый элемент обьекта запихиваем в массив
     let fields = [
         '<b>Name</b>: ' + reqBody.name,
-        '<b>Email</b>: ' + reqBody.email,
         '<b>Phone</b>: ' + reqBody.phone,
         '<b>Description</b>: ' + reqBody.description,
     ];
