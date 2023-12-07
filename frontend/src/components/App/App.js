@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { sendMessageToTelegram } from '../utils/Api'; // Импорт функции sendMessageToTelegram из файла api.js
 import gsap from "gsap";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 
@@ -28,7 +29,8 @@ function App() {
     gsap.to(window, { duration: 1, scrollTo: target });
 
   useEffect(() => {
-    // Удалите код, связанный с созданием и добавлением компонента CookieMessage
+    // Вызов функции sendMessageToTelegram из импортированного файла api.js
+    sendMessageToTelegram("Привет, это тестовое сообщение из приложения");
   }, []);
 
   return (
@@ -37,15 +39,15 @@ function App() {
         <div className="page__wrapper">
           <Header scrollTo={scrollTo} />
           <Main
-          aboutRef={aboutRef}
-          serviceRef={serviceRef}
-          contactsRef={contactsRef}
-/>
-<Routes>
+            aboutRef={aboutRef}
+            serviceRef={serviceRef}
+            contactsRef={contactsRef}
+          />
+          <Routes>
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           </Routes>
           {isFormOpen && <Form toggleForm={toggleForm} />}
-          <CookieMessage /> {/* Оставить только здесь */}
+          <CookieMessage /> 
           <Footer />
         </div>
       </div>
