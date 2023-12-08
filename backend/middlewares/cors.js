@@ -1,5 +1,7 @@
 const allowedCors = [
   'https://servicebox35.ru',
+  'http://servicebox35.ru',
+  'https://servicebox35.pp.ru',
   'http://servicebox35.pp.ru',
   'https://localhost:3000',
   'http://localhost:3000',
