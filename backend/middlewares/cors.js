@@ -3,10 +3,10 @@ const allowedCors = [
   'http://servicebox35.ru',
   'https://servicebox35.pp.ru',
   'http://servicebox35.pp.ru',
-  'https://localhost:3000',
-  'http://localhost:3000',
-  'https://localhost:3001',
-  'http://localhost:3001',
+  'https://localhost:5000',
+  'http://localhost:5000',
+  'https://localhost:5000',
+  'http://localhost:5000',
 ];
 
 module.exports = (req, res, next) => {

@@ -51,7 +51,7 @@ const Form = ({ toggleForm }) => {
 
   const submitData = (e) => {
     e.preventDefault();
-    fetch('https://servicebox35.pp.ru:3001/submit', {
+    fetch('https://servicebox35.pp.ru/telegram', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
