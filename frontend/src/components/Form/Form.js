@@ -16,12 +16,12 @@ const Form = ({ toggleForm }) => {
   const [formValid, setFormValid] = useState(false);
 
   useEffect(() => {
-    if (phoneError || nameError) {
+    if (phoneError || nameError || !name || !phone) {
       setFormValid(false);
     } else {
       setFormValid(true);
     }
-  }, [phoneError, nameError]);
+  }, [phoneError, nameError, name, phone]);
 
   const changeName = (e) => {
     setName(e.target.value);
@@ -64,6 +64,7 @@ const Form = ({ toggleForm }) => {
           toggleForm(); // Закрытие формы при успешной отправке
         } else {
           setSubmitError(result.message || 'Произошла ошибка при отправке формы');
+          setIsModalOpen(true)
         }
       })
       .catch((error) => {
