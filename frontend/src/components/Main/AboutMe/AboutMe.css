@@ -1,6 +1,5 @@
 .about-me__title::before,
 .about-me__title::after {
-  content: '"';
   font-size: 48px;
   color: red;
 }
@@ -143,6 +142,9 @@ height: 70px;
 
 }
 @media screen and (min-width: 400px) and (max-width: 767px) {
+  .about-me__title{
+font-size: 22px;
+  }
   .about-me__image{
     max-width: 363px;
     height: 376px;

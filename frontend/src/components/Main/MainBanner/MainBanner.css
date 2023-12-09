@@ -440,7 +440,7 @@ padding: 5px 10px;
     grid-auto-flow: row;
     gap: 0px;
     padding-top: 44px;
-    max-width: 290px;
+    max-width: 250px;
     margin-bottom: 30px;
   }
   .main-banner{
@@ -451,10 +451,10 @@ padding: 5px 10px;
     background-image: url(../../../images/bagraund.png);
   }
   .care-about-you__title{
-    color: #ffffff;
+    color: #000000;
 text-align: center;
 font-family: Gilroy;
-font-size: 16px;
+font-size: 14px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
@@ -463,10 +463,10 @@ padding-top: 16px;
   }
   .care-about-you___subtitle{
     font-family: Gilroy;
-font-size: 14px;
+font-size: 12px;
 font-style: normal;
 font-weight: 400;
-line-height: 24px;
+line-height: 18px;
 letter-spacing: 0.14px;
   }
   .care-about-you__info{
@@ -577,7 +577,7 @@ font-size: 20px;
   }
   .care-about-you__title{
 font-family: Gilroy;
-font-size: 20px;
+font-size: 18px;
 font-style: normal;
 font-weight: 600;
 line-height: normal;
@@ -585,10 +585,10 @@ line-height: normal;
   .care-about-you___subtitle{
     margin: 0 auto;
     font-family: Gilroy;
-font-size: 18px;
+font-size: 16px;
 font-style: normal;
 font-weight: 400;
-line-height: 24px; /* 133.333% */
+line-height: 20px; /* 133.333% */
   }
   .main-banner__circle{
     top: 70%;

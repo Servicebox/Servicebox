@@ -77,6 +77,12 @@
       margin-bottom: 20px;
       text-align: center;
     }
+
+    .nav__button{
+      margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    }
   
     .burger-menu__item a {
       text-decoration: none;

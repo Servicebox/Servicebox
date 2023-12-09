@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./BurgerMenu.css";
 import burgerIcon from "../../images/Burger.svg";
 import logoImage from "../../images/Servicebox6.svg";
 import closeIcon from "../../images/x.svg";
+import Status from "../../images/status.svg";
 
-function BurgerMenu({ scrollTo }) {
+
+function BurgerMenu({ scrollTo, serviceRef, aboutRef, contactsRef }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -42,8 +44,18 @@ function BurgerMenu({ scrollTo }) {
                 Контакты
               </Link>
             </li>
-            
           </ul>
+          <div className="nav__button">
+          <a
+            className="button"
+            href="https://app.helloclient.io/check.html#250362"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={Status} alt="Кнопка" />
+            <span className="button-text">CТАТУС РЕМОНТА</span>
+          </a>
+        </div>
         </nav>
       </div>
       {!isOpen && (

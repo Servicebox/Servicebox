@@ -61,9 +61,12 @@
 }
 
 .form-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Минимальная высота контейнера равна высоте видимой части страницы */
   z-index: 99;
   width: 100%;
-  height: 100%;
   border-radius: 20px;
   background: #FFF;
   position: fixed;

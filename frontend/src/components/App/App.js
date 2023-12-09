@@ -10,6 +10,7 @@ import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 import "./App.css";
+import WhatsAppButton from "../WhatsApp/WhatsApp";
 
 function App() {
   gsap.registerPlugin(ScrollToPlugin);
@@ -46,6 +47,7 @@ function App() {
           </Routes>
           {isFormOpen && <Form toggleForm={toggleForm} />}
           <CookieMessage /> {/* Оставить только здесь */}
+       
           <Footer />
         </div>
       </div>
