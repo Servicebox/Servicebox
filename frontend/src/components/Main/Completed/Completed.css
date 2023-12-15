@@ -1,18 +1,24 @@
 .completed__title {
-  color: #13171D;
-  font-family: "Bebas Neue", sans-serif;
-  font-size: 56px;
+  color: rgb(0, 0, 0);
+  font-family: Bebas Neue;
+  font-size: 66px;
   font-weight: 700;
-  text-align: center;
+  line-height: 78px;
+  letter-spacing: -1.1px;
+  max-width: 625px;
   margin: 0 auto;
-  max-width: 500px;
-  padding-bottom: 50px;
+  text-align: center;
+  padding-bottom: 30px;
 }
 
 .completed__img-container {
   position: relative;
+  
+  display: inline-block;
 }
-
+.completed__carousel-btn{
+padding: 0;
+}
 .completed__image {
   display: flex;
   flex-wrap: wrap;
@@ -68,7 +74,6 @@
 .completed__dots {
   display: flex;
   justify-content: center;
-  margin-top: 10px;
 }
 
 .completed__dot {
@@ -101,9 +106,15 @@
   }
 
   .completed__title {
+    color: #13171D;
+    font-family: Bebas Neue;
     font-size: 26px;
+    font-style: normal;
+    font-weight: 700;
     line-height: 26px;
-    padding-bottom: 50px;
+    max-width: 268px;
+    padding-bottom: 20px;
+    text-align: center;
   }
 
   .completed__image {
@@ -123,7 +134,21 @@
     width: 50px;
     height: 50px;
   }
+  .completed{
+    padding-top: 40px;
+  }
 
+  .completed__title {
+    color: #13171D;
+    font-family: Bebas Neue;
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 26px;
+    max-width: 268px;
+    padding-bottom: 20px;
+    text-align: center;
+  }
   .completted__next-image{
     width: 50px;
     height: 50px;
@@ -142,31 +167,31 @@
   }
 
   .completed__carousel{
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
     padding-bottom: 40px;
+    
+
   }
 
   .completed__carousel-controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    gap: 20px;
+display: none;
   }
-
   .completed__carousel-btn {
-
     background-color: transparent;
     color: #fff;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    padding: 10px;
+   
+   
   }
   .completed__carousel-btn:hover {
-   width: 60px;
-   height: 60px;
+    background-color: rgba(255, 255, 255, 0.3);
   }
 
   .completed__carousel-img{
@@ -217,16 +242,17 @@ object-fit: cover;
     align-items: center;
     margin: 0 auto;
     padding-bottom: 40px;
+    position: relative;
    
   }
 
   .completed__carousel-controls {
+    position: absolute;
+    top: 35%;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
-    gap: 20px;
+    gap: 318px;
   }
-
   .completed__carousel-btn {
     background-color: transparent;
     color: #fff;
@@ -240,7 +266,7 @@ object-fit: cover;
    }
 
   .completed__carousel-img{
-max-width: 450px;
+max-width: 400px;
 
 border-radius: 15px;
 object-fit: cover;
@@ -248,7 +274,15 @@ object-fit: cover;
 }
 
 @media screen and (min-width: 551px) and (max-width: 768px) {
-
+ .completed__title{
+  font-size: 48px;
+  line-height: normal;
+  grid-row: 5/2;
+  justify-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-bottom: 20px;
+ }
   .completted__prev-image{
     width: 50px;
     height: 50px;
@@ -276,15 +310,16 @@ object-fit: cover;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    padding-bottom: 40px;
+    position: relative;
    
   }
 
   .completed__carousel-controls {
+    position: absolute;
+    top: 40%;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
-    gap: 20px;
+    gap: 470px;
   }
 
   .completed__carousel-btn {

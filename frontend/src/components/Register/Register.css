@@ -1,0 +1,135 @@
+.register {
+    margin: 53px 0 0;
+    padding: 0;
+    background-color: #202020;
+    color: white;
+  }
+  
+  .form {
+    margin: 20px auto 0; 
+    display: flex;
+    flex-direction: column;
+    max-width: 396px;
+    color: white;
+  }
+  
+  .form__input {
+    padding: 0 15px 0;
+    height: 46px;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: #2f2f2f;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    color: white;
+  }
+  .form__input-invalid{
+    border-color: #EE3465;
+    color: #EE3465;
+  }
+  .form__input:focus {
+    outline: 1px solid #4285f4;
+    background-color: #2f2f2f;
+    box-shadow: inset 20px 20px 0px 20px #2f2f2f;
+  }
+  
+  .form__label {
+    margin: 20px 0 10px 0;
+    font-size: 10px;
+    color: #8b8b8b;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    display: flex;
+    gap: 6px;
+  }
+  .form__error {
+    color: #ee3465;
+    margin: 10px 0 0 0;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  .form__button {
+    margin: 81px 0 0 0;
+    max-width: 396px;
+    height: 45px;
+    text-align: center;
+    background-color: #4285f4;
+    border-radius: 3px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+  .form__button:hover {
+    opacity: 0.8;
+  }
+  .form__button-reg  {
+    color: #4285f4;
+    text-decoration: none;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: transparent;
+    border: none;
+  }
+  .form__button-reg:hover {
+    opacity: 0.7;
+  }
+  .form__button-disable{
+    background: #F8F8F8;
+    color: #C2C2C2;
+    cursor: none;
+  }
+  .register__form-span-link {
+    max-width: 250px;
+  }
+  .form__span-link {
+    font-size: 14px;
+    margin: 17px auto 70px;
+    color: #8b8b8b;
+    display: flex;
+    gap: 1px;
+  }
+  @media screen and (max-width: 768px) {
+    .form {
+      margin: 24px auto 0;
+    }
+    .form__button {
+      margin: 82px 0 0 0;
+    }
+    .form__button-reg {
+      margin: 0;
+    }
+  }
+  @media screen and (max-width: 450px) {
+    .form {
+      margin:  auto;
+      max-width: 260px;
+    }
+    .register__form-button {
+      margin: 168px 0 0 0;
+      font-size: 12px;
+    }
+    .form__button-reg {
+      margin: 0;
+      font-size: 12px;
+    }
+    .register {
+      margin: 104px auto 0;
+      padding: 0;
+    }
+    .form__span-link {
+      font-size: 12px;
+      margin: 14px auto 30px;
+    }
+  }

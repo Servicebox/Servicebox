@@ -4,7 +4,7 @@
   color: red;
 }
 .about-me{
-  padding-top: 171px;
+  padding-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -142,6 +142,9 @@ height: 70px;
 
 }
 @media screen and (min-width: 400px) and (max-width: 767px) {
+  .about-me{
+    padding-top: 40px;
+  }
   .about-me__title{
 font-size: 22px;
   }
@@ -180,6 +183,7 @@ margin: 0 auto 20px;
 .about-me__about{
   flex-direction: column;
   margin: 0 auto;
+  padding-top: 10px;
 }
 }
 @media screen and (min-width: 768px) and (max-width: 990px) {

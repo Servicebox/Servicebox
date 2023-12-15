@@ -5,9 +5,16 @@ import burgerIcon from "../../images/Burger.svg";
 import logoImage from "../../images/Servicebox6.svg";
 import closeIcon from "../../images/x.svg";
 import Status from "../../images/status.svg";
+import local from "../../images/location.svg";
+import MiniMail from "../../images/mail.svg";
+import MiniWatsapp from "../../images/whatsapp.svg";
+import MiniTelegram from "../../images/telegram.svg";
+import VkMini from "../../images/vk.svg";
+import MiniTelephone from "../../images/phonecol.svg";
 
 
-function BurgerMenu({ scrollTo, serviceRef, aboutRef, contactsRef }) {
+
+function BurgerMenu({ scrollTo }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -17,6 +24,13 @@ function BurgerMenu({ scrollTo, serviceRef, aboutRef, contactsRef }) {
   const handleScrollTo = (target) => {
     scrollTo(target);
     toggleMenu();
+  };
+  const handlePhoneCall = () => {
+    window.location.href = "tel:+7 911 501 88 28"; 
+  };
+
+  const handleMailTo = () => {
+    window.location.href = "mailto:servicebox35@gmail.com"; 
   };
 
   return (
@@ -56,6 +70,39 @@ function BurgerMenu({ scrollTo, serviceRef, aboutRef, contactsRef }) {
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
         </div>
+        <div className="burger-contacts ">
+        <div onClick={handlePhoneCall} className="contacts__block">
+          <img src={MiniTelephone} className="contacts__image" alt="Telephone" />
+          <p className="contacts__text">+7 911 501 88 28</p>
+        </div>
+        <div onClick={handleMailTo} className="contacts__block">
+          <img src={MiniMail} className="contacts__image" alt="Mail" />
+          <p className="contacts__text">servicebox35@gmail.com</p>
+        </div>
+          <div className="contacts__block">
+          <img src={local} className="contacts__image" alt="Location" />
+          <p className="contacts__text">г. Вологда, ул. Северная, 7А, офис 405</p>
+        </div>
+      </div>
+      <div className="contacts__block-sochial">
+          <ul className="contacts__icon">
+            <li className="contacts__icon-sochial pulse-one">
+              <a href="https://vk.com/servicebox35">
+                <img className="contacts__image-sochial" src={VkMini} alt="Вконтакте" />
+              </a>
+            </li>
+            <li className="contacts__icon-sochial pulse-two">
+              <a href="whatsapp://send?phone=79062960353">
+                <img className="contacts__image-sochial" src={MiniWatsapp} alt="Вотсапп" />
+              </a>
+            </li>
+            <li className="contacts__icon-sochial pulse-three">
+              <a href="tg://resolve?domain=@Tomkka">
+                <img className="contacts__image-sochial" src={MiniTelegram} alt="Телеграм" />
+              </a>
+            </li>
+          </ul>
+        </div>
         </nav>
       </div>
       {!isOpen && (
@@ -66,7 +113,9 @@ function BurgerMenu({ scrollTo, serviceRef, aboutRef, contactsRef }) {
           onClick={toggleMenu}
         />
       )}
+
     </div>
+
   );
 }
 

@@ -11,6 +11,7 @@ import ContactsRef from "./ContactsRef/ContactsRef";
 import Completed from "./Completed/Completed";
 import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
+import Gifts from "./Gifts/Gifts";
 
 
 function Main() {
@@ -44,6 +45,7 @@ function Main() {
       <ArronService />
    
       <AboutMe />
+      <Gifts />
       <Element name="contactsRef" ref={contactsRef}>
         <ContactsRef contactsRef={contactsRef} />
       </Element>

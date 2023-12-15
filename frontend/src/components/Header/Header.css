@@ -203,10 +203,10 @@ position: relative;
 .button span {
   position: absolute;
   top: 50%;
-  left: 42%;
+  left: 45%;
   transform: translate(-50%, -50%);
   color: #fff;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: bold;
 }
 .button-text {

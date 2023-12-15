@@ -12,12 +12,15 @@
   outline: none;
   color: rgb(0, 0, 0);
 }
+.form__title{
+text-align: center;
+}
 .error1 {
   font-size: 14px;
   color: red;
   position: absolute;
   width: 400px;
-  top: 196px;
+  top: 160px;
     left: 126px;
 }
 .error3{
@@ -25,7 +28,7 @@
   color: red;
   position: absolute;
   width: 400px;
-  top: 275px;
+  top: 237px;
     left: 126px;
 }
 .form {
@@ -67,7 +70,6 @@
     min-height: 100vh; /* Минимальная высота контейнера равна высоте видимой части страницы */
   z-index: 99;
   width: 100%;
-  border-radius: 20px;
   background: #FFF;
   position: fixed;
   top: 0;
@@ -88,7 +90,8 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-items: stretch;
-  border-radius: 15px;
+  border-radius: 10px;
+  padding: 20px 40px;
 }
 
 .form__text{
@@ -105,7 +108,7 @@
     color: white;
     cursor: pointer;
     border: none;
-    max-width: 32px;
+    max-width: 30px;
     width: 100%;
     min-height: 32px;
     background-color: rgba(0, 0, 0, 0);
@@ -120,7 +123,9 @@
 
 @media screen and (max-width: 490px) {
   .form-overlay__btn{
-    margin: 0 auto 20px;
+    margin: 5px auto 20px;
+ 
+    padding: 15px 30px;
   }
   .form{
 margin: 0 auto;
@@ -134,12 +139,14 @@ margin: 0 auto;
     max-width: 250px;
   }
 .form-container{
-  max-width: 250px;
+  max-width: 280px;
   top: 50%;
 }
 .form__title{
   font-size: 18px;
   margin: 10px auto 0 auto;
+  text-align: center;
+
 }
 .form__label{
   margin: 10px auto 5px auto;
@@ -159,17 +166,30 @@ margin: 0 auto;
 .error1 {
   font-size: 10px;
   position: absolute;
-  top: 101px;
-  left: 98%;
+  top: 142px;
+  left: 100%;
   transform: translateX(-50%);
   width: 400px;
 }
 .error3 {
   font-size: 10px;
   position: absolute;
-  top: 157px;
-  left: 96%;
+  top: 196px;
+  left: 100%;
   transform: translateX(-50%);
   width: 400px;
+}
+}
+@media screen and (min-width: 491px) and (max-width: 768px) {
+.form-container{
+  max-width: 400px;
+}
+.error1{
+  top: 161px;
+  left: 100px;
+}
+.error3{
+  top: 237px;
+  left: 100px;
 }
 }

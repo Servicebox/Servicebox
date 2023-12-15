@@ -1,0 +1,149 @@
+
+.profile {
+    padding: 49px 0 0 0;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    max-width: 410px;
+    box-sizing: border-box;
+  }
+  
+  .profile__form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .profile__title {
+    margin-bottom: 123px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    color: #fff;
+  }
+  
+  
+  
+  .profile__label {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 13px;
+    min-height: 30px;
+    cursor: text;
+    color: #fff;
+  }
+  
+  .profile__input {
+    margin: 0;
+    width: 350px;
+    text-align: right;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    text-align: right;
+    color: #fff;
+    border: none;
+    outline: none;
+    background: #202020;
+  }
+  
+  
+  .profile__input:focus {
+    background-color: #2f2f2f;
+  }
+  
+  
+  .profile__form-label{
+  color: white;
+  }
+  .profile__border {
+    border-bottom: 1px solid #424242;
+    margin-bottom: 10px;
+    padding-top: 17px;
+  }
+  .profile__input-error {
+    position: absolute;
+    bottom: -29px;
+    left: 0;
+    color:#EE3465;
+    font-size: 9px;
+  }
+  .profile__exit-button {
+    margin-top: 16px;
+    min-height: 16px;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    text-align: center;
+    color: #ee3465;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  .profile__button-save {
+    margin-top: 213px;
+    min-height: 16px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: none;
+    background: #202020;
+    color: #fff;
+    cursor: pointer;
+  }
+  .profile__form-item {
+    position: relative;
+  }
+  
+  .profile__exit-link {
+    text-align: center;
+  }
+  
+  @media screen and (max-width: 1023px) {
+    .profile {
+      padding-top: 236px;
+      padding-bottom: 269px;
+    }
+  
+    .profile__title {
+      margin-bottom: 96px;
+    }
+  
+    .profile__button-save {
+      margin-top: 193px;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .profile {
+      padding: 70px 30px 40px 30px;
+    }
+  
+    .profile__title {
+      margin-bottom: 80px;
+    }
+  
+    .profile__input {
+      width: 150px;
+    }
+  
+    .profile__button-save {
+      margin-top: 362px;
+      font-size: 12px;
+      line-height: 15px;
+    }
+  
+    .profile__exit-button {
+      font-size: 12px;
+      line-height: 15px;
+    }
+  }

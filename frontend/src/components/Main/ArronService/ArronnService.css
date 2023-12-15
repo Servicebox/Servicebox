@@ -11,6 +11,11 @@
 display: flex;
 gap: 125px;
 justify-content: center;
+padding-top: 50px;
+}
+.arron-service__img{
+  width: 80px;
+  height: 80px;
 }
 .arron-service__title-text{
     color: #13171D;
@@ -29,7 +34,7 @@ justify-content: center;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 30px;
   justify-content: center;
   max-width: 1000px;
   width: 100%;
@@ -42,7 +47,10 @@ justify-content: center;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
-    line-height: 24px; /* 133.333% */
+    line-height: 18px; /* 133.333% */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   
   }
   
@@ -64,6 +72,7 @@ flex-shrink: 0;
   margin: 0 auto;
   max-width: 115px;
   font-size: 14px;
+  text-align: center;
 }
 .about__image-arron-service{
     width: 35px;
@@ -188,6 +197,9 @@ line-height: 26px; /* 100% */
   top: 33%;
 }
 .arron-service__list-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 140px;
   margin: 0 auto;
   color: #444;
@@ -205,7 +217,9 @@ line-height: 20px; /* 142.857% */
 
 }
 .arron-service__img{
-  max-width: 70px;
+  max-width: 50px;
+  text-align: center;
+  line-height: 1;
 }
 .arron-servise_text{
   font-size: 12px;
@@ -231,15 +245,18 @@ padding-bottom: 40px;
 
 }
 .arron-service__list-item{
-  line-height: 20px;
-  font-size: 16px;
+  line-height: 16px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .arron-servise_text{
   font-size: 13px;
   max-width: 110px;
 }
 .arron-service__img{
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
 }
 }

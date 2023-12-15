@@ -6,7 +6,7 @@ import "./Header.css";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import Status from "../../images/status.svg";
 
-function Header({ scrollTo, contactsRef }) { 
+function Header({ scrollTo}) { 
  const location = useLocation();
 
  const handleShowMap = () => {

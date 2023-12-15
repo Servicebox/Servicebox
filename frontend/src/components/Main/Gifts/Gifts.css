@@ -1,0 +1,16 @@
+.gifts__title{
+    padding-top: 30px;
+    font-family: Bebas Neue;
+    font-size: 66px;
+    font-weight: 700;
+    line-height: 78px;
+    letter-spacing: -1.1px;
+    max-width: 625px;
+    margin: 0 auto;
+    text-align: center;
+    padding-bottom: 30px;
+    background: linear-gradient(-45deg, #00338b, #F9A92C); /* Градиент от черного к оранжевому */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text; /* Стандартное свойство для совместимости */
+}

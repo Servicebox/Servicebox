@@ -11,6 +11,7 @@ import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 import "./App.css";
 import WhatsAppButton from "../WhatsApp/WhatsApp";
+import BallData from "../Main/BallData/BallData";
 
 function App() {
   gsap.registerPlugin(ScrollToPlugin);
@@ -41,12 +42,14 @@ function App() {
           aboutRef={aboutRef}
           serviceRef={serviceRef}
           contactsRef={contactsRef}
+        
 />
 <Routes>
+ 
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           </Routes>
           {isFormOpen && <Form toggleForm={toggleForm} />}
-          <CookieMessage /> {/* Оставить только здесь */}
+          <CookieMessage /> 
        
           <Footer />
         </div>

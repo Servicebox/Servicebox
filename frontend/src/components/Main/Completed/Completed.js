@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Completed.css";
-import PrevButton from "../../../images/Down.svg"
-import NextButton from "../../../images/Up.svg"
+import PrevButton from "../../../images/Down.svg";
+import NextButton from "../../../images/Up.svg";
 import One from "../../../images/1.jpeg";
 import Two from "../../../images/2.jpeg";
 import Three from "../../../images/3.jpeg";
@@ -19,7 +19,9 @@ import Foourteen from "../../../images/15.jpeg";
 
 function Completed() {
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  let touchStartX = 0;
 
   const photos = [
     { image: One, text: "Замена аккумулятора на роботе-пылесосе" },
@@ -38,11 +40,11 @@ function Completed() {
     { image: Foourteen, text: "Комлексное обслуживание Macbook pro и замена touch bar" },
   ];
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
+  const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
 
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -50,32 +52,77 @@ function Completed() {
     };
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000); 
+
+    return () => clearInterval(interval);
+  }, [currentPhoto]);
+
   const handleNext = () => {
     setCurrentPhoto((prevPhoto) => (prevPhoto === photos.length - 1 ? 0 : prevPhoto + 1));
+    setActiveSlide((prevSlide) => (prevSlide === photos.length - 1 ? 0 : prevSlide + 1));
   };
-
+  
   const handlePrev = () => {
     setCurrentPhoto((prevPhoto) => (prevPhoto === 0 ? photos.length - 1 : prevPhoto - 1));
+    setActiveSlide((prevSlide) => (prevSlide === 0 ? photos.length - 1 : prevSlide - 1));
   };
+
+  const handleSlideClick = (index) => {
+    setActiveSlide(index);
+    setCurrentPhoto(index);
+  };
+
+  const handleSwipeLeft = () => {
+    handleNext();
+  };
+
+  const handleSwipeRight = () => {
+    handlePrev();
+  };
+
 
   return (
     <section className="completed">
-      <div className="completed__content">
-        <h2 className="completed__title">Выполненные заказы</h2>
-      </div>
+      <h2 className="completed__title">Выполненные заказы</h2>
       {windowWidth >= 320 && windowWidth <= 768 ? (
-        <div className="completed__carousel">
-          <img src={photos[currentPhoto].image} alt="фотография" className="completed__carousel-img" />
+        <div
+          className="completed__carousel"
+          onTouchStart={(e) => {
+            touchStartX = e.touches[0].clientX;
+          }}
+          onTouchMove={(e) => {
+            const touchEndX = e.touches[0].clientX;
+            if (touchEndX > touchStartX + 50) {
+              handleSwipeRight();
+            }
+            if (touchEndX < touchStartX - 50) {
+              handleSwipeLeft();
+            }
+          }}
+        >
+           <img src={photos[currentPhoto].image} alt="Фотография" className="completed__carousel-img" />
           <div className="completed__carousel-overlay">
             <span className="completed__carousel-text">{photos[currentPhoto].text}</span>
           </div>
+          <div className="completed__dots">
+          {photos.map((photo, index) => (
+            <span 
+            key={index} 
+            className={`completed__dot ${activeSlide === index ? "active" : ""}`}
+            onClick={() => handleSlideClick(index)}
+          ></span>
+           )
+            )}
+          </div>
           <div className="completed__carousel-controls">
             <button className="completed__carousel-btn" onClick={handlePrev}>
-            <img className="completted__prev-image" src={PrevButton} alt="назад" />
+              <img className="completted__prev-image" src={PrevButton} alt="Назад" />
             </button>
             <button className="completed__carousel-btn" onClick={handleNext}>
-
-            <img className="completted__next-image" src={NextButton} alt="вперед" />
+              <img className="completted__next-image" src={NextButton} alt="Вперед" />
             </button>
           </div>
         </div>
@@ -88,7 +135,7 @@ function Completed() {
               onMouseEnter={() => setCurrentPhoto(index)}
               onMouseLeave={() => setCurrentPhoto(null)}
             >
-              <img src={photo.image} alt="фотография" className="completed__img" />
+              <img src={photo.image} alt="Фотография" className="completed__img" />
               <div className="completed__img-overlay">
                 <span className="completed__img-text">{photo.text}</span>
               </div>
