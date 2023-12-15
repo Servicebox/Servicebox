@@ -206,6 +206,7 @@ font-weight: 700;
 line-height: 26px; /* 100% */
 max-width: 268px;
 padding-bottom: 20px;
+padding-top: 20px;
 text-align: center;
   }
   .card__title{

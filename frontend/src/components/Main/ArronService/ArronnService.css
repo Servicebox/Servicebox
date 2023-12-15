@@ -145,7 +145,7 @@ font-size: 26px;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
-display: none;
+
   }
   .arron-service__list-item{
     font-family: Montserrat;
@@ -166,6 +166,7 @@ padding-left: 8px;
 .arron-service{
   display: flex;
   max-width: 100%;
+  padding-top: 5px;
 }
 .arron-service__list{
   display: flex;

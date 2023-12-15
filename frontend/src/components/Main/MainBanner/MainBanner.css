@@ -291,7 +291,8 @@ gap: 40px;
   display: flex;
   flex-direction: column;
   max-width: 364px;
-  text-align: flex-start;
+  text-align: center;
+ 
 }
 
 .care-about-you__title {
@@ -337,23 +338,20 @@ gap: 40px;
 .care-about{
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 10px;
     justify-content: center;
 }
 
-@media  (min-width: 1001px) {
-  .care-about{
-    display: flex;
-    gap: 20px;
-    width: 100%;
-    flex-direction: row;
-    margin: 0 auto;
-    justify-content: center;
-}
-}
+
+
 
 /* Для экранов шириной от 320px до 480px */
 @media screen and (min-width: 320px) and (max-width: 480px) {
+  .care-about{
+display: flex;
+flex-wrap: wrap;
+gap: 0px;
+  }
   .main-banner__text,
   .main-banner__title {
     font-size: 60px;
@@ -431,9 +429,9 @@ padding: 5px 10px;
     justify-items: center;
     grid-auto-flow: row;
     gap: 0px;
-    padding-top: 44px;
     max-width: 250px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
+    padding: 10px;
   }
   .main-banner{
     padding-top: 50px;
@@ -468,13 +466,13 @@ letter-spacing: 0.14px;
     max-width: 300px;
   }
   .care-about-you__img{
-    max-width: 100px;
+    max-width: 60px;
   }
   .care-about-you__image{
     max-width: 100px;
   }
   .care-about-you__images{
-    max-width: 100px;
+    max-width: 60px;
   }
   .care-you{
     display: flex;
