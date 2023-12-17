@@ -5,8 +5,9 @@ import locationIcon from "../../images/location.svg";
 import "./Header.css";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import Status from "../../images/status.svg";
+import MiddleStatus from "../../images/status.svg"
 
-function Header({ scrollTo}) { 
+function Header({ scrollTo, contactsRef }) { 
  const location = useLocation();
 
  const handleShowMap = () => {
@@ -22,6 +23,16 @@ function Header({ scrollTo}) {
   };
   const handlePhoneCall = () => {
     window.location.href = "tel:+7911 501 88 28"; 
+  };
+
+
+  const handleStatusLink = () => {
+    console.log("handleStatusLink clicked");
+    window.open(
+      "https://app.helloclient.io/check.html#250362",
+      "_blank",
+      "noopener noreferrer"
+    );
   };
 
   return (
@@ -52,7 +63,7 @@ function Header({ scrollTo}) {
             </ul>
  
           </nav>
-          <div className="nav__btn">
+          <div className="nav__btn" onClick={handleStatusLink}>
           <a
             className="button"
             href="https://app.helloclient.io/check.html#250362"
@@ -79,16 +90,17 @@ function Header({ scrollTo}) {
           <BurgerMenu scrollTo={scrollTo} />
         </div>
 
-        <div className="header__middle">
-          <a
+        <div className="header__middle" onClick={handleStatusLink}>
+           <a
             className="button"
             href="https://app.helloclient.io/check.html#250362"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={Status} alt="Кнопка" />
+            <img src={MiddleStatus} alt="Кнопка" />
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
+       
         </div>
       </div>
     </header>

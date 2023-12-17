@@ -35,7 +35,7 @@ function AboutMe() {
         <h2 className="about-me__title">
           <span className="about-me__quote">
             В нашей компании работают лучшие специалисты, которые прекрасно разбираются в современных технологиях и имеют
-            более 10-х лет опыта работы.
+            более 10 лет опыта работы.
           </span>
         </h2>
         <div className="about-me__about">

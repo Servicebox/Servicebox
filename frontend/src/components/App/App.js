@@ -50,7 +50,6 @@ function App() {
           </Routes>
           {isFormOpen && <Form toggleForm={toggleForm} />}
           <CookieMessage /> 
-       
           <Footer />
         </div>
       </div>

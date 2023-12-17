@@ -140,17 +140,11 @@ display: none;
   height: 50px;
 }
 .header__middle{
-position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    margin: 0 auto;
-    max-width: 1200px;
-    z-index: -1;
-    
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;    
 
 }
 .header__middle-link{
@@ -196,7 +190,7 @@ position: relative;
 
 .button img {
   display: block;
-  width: 200px;
+  max-width: 200px;
 
 }
 
@@ -248,6 +242,7 @@ position: relative;
     display: inline-block;
     padding: 0;
     margin: 0 auto;
+    cursor: pointer;
 }
   .burger {
     display: inline-block;

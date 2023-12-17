@@ -31,11 +31,11 @@ function Completed() {
     { image: Five, text: "Комплексная чистка macbook pro" },
     { image: Six, text: "Замена аккумулятора на телефоне" },
     { image: Seven, text: "Замена сокета на материнской плате" },
-    { image: Eight, text: "Восстановление подсветки дисплея и заменна динамика на видеорегистраторе" },
+    { image: Eight, text: "Восстановление подсветки дисплея и замена динамика на видеорегистраторе" },
     { image: Nine, text: "Ребол процессора на материннской плате" },
     { image: Ten, text: "замена дисплейного модуля и задней крышки" },
-    { image: Eleven, text: "Комплексная чистка, замена куллера и установка драйверов на ноутбук" },
-    { image: Twelve, text: "Замена хаба на на материнской плате" },
+    { image: Eleven, text: "Комплексная чистка, замена куллера и установка драйверов на ноутбуке" },
+    { image: Twelve, text: "Замена хаба на материнской плате" },
     { image: Thirteen, text: "Замена дисплейного модуля на Iphone" },
     { image: Foourteen, text: "Комлексное обслуживание Macbook pro и замена touch bar" },
   ];
@@ -86,7 +86,7 @@ function Completed() {
 
   return (
     <section className="completed">
-      <h2 className="completed__title">Выполненные заказы</h2>
+      <h2 className="completed__title">Наши работы</h2>
       {windowWidth >= 320 && windowWidth <= 768 ? (
         <div
           className="completed__carousel"
