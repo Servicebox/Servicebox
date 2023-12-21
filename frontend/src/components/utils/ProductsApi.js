@@ -1,4 +1,3 @@
-// ProductsApi.js
 export const fetchProducts = async (authId, authKey, method, limit, page) => {
     const url = "https://optfm.ru/api/";
     const requestOptions = {
