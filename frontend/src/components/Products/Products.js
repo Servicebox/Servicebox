@@ -1,21 +1,22 @@
+// products.js
 import React, { useState, useEffect } from 'react';
 import { fetchProducts, fetchImage } from '../utils/ProductsApi';
 import "./Products.css"
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const authId = 5948;
+  const authKey = 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp';
 
   useEffect(() => {
     const loadProducts = async () => {
-      const authId = 5948;
-      const authKey = 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp';
       const method = 'catalog.getElementList';
       const limit = 500;
       const page = 1;
 
       try {
         const fetchedProducts = await fetchProducts(authId, authKey, method, limit, page);
-        setProducts(fetchedProducts);
+        setProducts(fetchedProducts.response.items);
       } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);
       }
@@ -24,10 +25,11 @@ const Products = () => {
     loadProducts();
   }, []);
 
-  const getImageUrl = async (elementId) => {
+  const loadImage = async (elementId) => {
     try {
-      const imageUrl = await fetchImage(authId, authKey, elementId);
-      return imageUrl;
+      const response = await fetchImage(authId, authKey, elementId);
+      // Обработка полученного изображения
+      return response;
     } catch (error) {
       console.error('Ошибка при получении изображения:', error);
       return null;
@@ -45,7 +47,7 @@ const Products = () => {
               <li key={price.id}>{price.name} - {price.price} {price.currency}</li>
             ))}
           </ul>
-          {product.picture && <img src={getImageUrl(product.id)} alt={product.name} />}
+          {product.picture && <img src={loadImage(product.id)} alt={product.name} />}
         </div>
       ))}
     </div>
