@@ -1,39 +1,39 @@
-import React from "react";
-import { BrowserRouter as Router, Link, useLocation } from "react-router-dom";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
+import gsap from "gsap";
+import ScrollToPlugin from "gsap/ScrollToPlugin";
 import headerLogo from "../../images/Servicebox6.svg";
 import locationIcon from "../../images/location.svg";
 import "./Header.css";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import Status from "../../images/status.svg";
-import MiddleStatus from "../../images/status.svg"
+import MiddleStatus from "../../images/status.svg";
+import ServiceRef from "../Main/ServiceRef/ServiceRef";
+import AboutRef from "../Main/AboutRef/AboutRef";
+import ContactsRef from "../Main/ContactsRef/ContactsRef";
 
-function Header({ scrollTo, contactsRef }) { 
- const location = useLocation();
+function Header() {
+  gsap.registerPlugin(ScrollToPlugin);
+  const location = useLocation();
 
- const handleShowMap = () => {
-  window.open(
-    "https://yandex.ru/maps/org/servisboks/58578899506/?ll=39.929033%2C59.216813&z=13",
-    "_blank",
-    { passive: true }
-  );
-};
-
-  const handleScrollTo = (target) => {
-    scrollTo(target);
-  };
-  const handlePhoneCall = () => {
-    window.location.href = "tel:+7911 501 88 28"; 
-  };
+  const scrollTo = (target) =>
+  gsap.to(window, { duration: 1, scrollTo: target });
 
 
-  const handleStatusLink = () => {
-    console.log("handleStatusLink clicked");
+  const handleShowMap = () => {
     window.open(
-      "https://app.helloclient.io/check.html#250362",
+      "https://yandex.ru/maps/org/servisboks/58578899506/?ll=39.929033%2C59.216813&z=13",
       "_blank",
-      "noopener noreferrer"
+      { passive: true }
     );
   };
+
+  const handlePhoneCall = () => {
+    window.location.href = "tel:+7911 501 88 28";
+  };
+  useEffect(() => {
+
+  }, []);
 
   return (
     <header className="header" id="header">
@@ -42,65 +42,53 @@ function Header({ scrollTo, contactsRef }) {
           <Link to="/" className="form__logo">
             <img src={headerLogo} alt="Логотип сайта" className="logo" />
           </Link>
-
           <nav className="navigation">
             <ul className="navigation__lists">
-              <li className={`navigation__list ${location.pathname === "/service" ? "active" : ""}`}>
-                <Link to="/service" onClick={() => handleScrollTo(serviceRef)}
-                onTouchEnd={() => handleScrollTo(serviceRef)}
-                >Наши услуги</Link>
-              </li>
+            <li className={`navigation__list ${location.pathname === "/service" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
+</li>
               <li className={`navigation__list ${location.pathname === "/about" ? "active" : ""}`}>
-                <Link to="/about" onClick={() => handleScrollTo(aboutRef)}
-                 onTouchEnd={() => handleScrollTo(aboutRef)}
-                >О компании</Link>
-              </li>
-              <li className={`navigation__list ${location.pathname === "/contacts" ? "active" : ""}`}>
-                <Link to="/contacts" onClick={() => handleScrollTo(contactsRef)}
-                 onTouchEnd={() => handleScrollTo(contactsRef)}
-                >Контакты</Link>
-              </li>
+  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
+</li>
+<li className={`navigation__list ${location.pathname === "/contacts" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
+</li>
             </ul>
- 
           </nav>
-          <div className="nav__btn" onClick={handleStatusLink}>
-          <a
-            className="button"
-            href="https://app.helloclient.io/check.html#250362"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src={Status} alt="Кнопка" />
-            <span className="button-text">CТАТУС РЕМОНТА</span>
-          </a>
+          <div className="nav__btn">
+            <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
+              <img src={Status} alt="Кнопка" />
+              <span className="button-text">CТАТУС РЕМОНТА</span>
+            </a>
           </div>
-
           <div className="contact-info">
             <img src={locationIcon} alt="Локация" className="location" />
             <p className="contact-info__map-link" onClick={handleShowMap}>
-              <span className="contact-info__location">
-                Адрес: г.Вологда, ул. Северная 7А, 405
-              </span>
+              <span className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</span>
               Мы на карте
             </p>
             <p className="contact-info__number" onClick={handlePhoneCall}>
-              +7 911 501 88 28</p>
+              +7 911 501 88 28
+            </p>
           </div>
-
           <BurgerMenu scrollTo={scrollTo} />
         </div>
-
-        <div className="header__middle" onClick={handleStatusLink}>
-           <a
-            className="button"
-            href="https://app.helloclient.io/check.html#250362"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <div className="header__middle">
+          <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
             <img src={MiddleStatus} alt="Кнопка" />
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
-       
+          <div className="header__links">
+            <NavLink to="/products" className="middle__links">
+              Каталог товаров
+            </NavLink>
+          </div>
+        </div>
+        <div className="header__middle header__middle_links">
+          {/* <Link to="/saved-products" > Товары в корзине </Link> */}
+        </div>
+        <div className="header__links">
+          {/* <Link to="/profile" className="header__account-btn"> аккаунт </Link> */}
         </div>
       </div>
     </header>

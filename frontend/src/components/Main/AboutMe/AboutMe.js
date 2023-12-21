@@ -17,7 +17,7 @@ function AboutMe() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentPhoto((prevPhoto) => (prevPhoto === photos.length - 1 ? 0 : prevPhoto + 1));
-    }, 3000);
+    }, 8080);
     return () => clearInterval(timer);
   }, []);
 

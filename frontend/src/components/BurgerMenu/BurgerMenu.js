@@ -43,22 +43,22 @@ function BurgerMenu({ scrollTo }) {
         <img className="logo-burger" src={logoImage} alt="Логотип" />
         <nav className="navigation__list">
           <ul className="burger-menu__list">
-            <li className="burger-menu__item">
-              <Link to="/service" onClick={() => handleScrollTo(serviceRef)}>
-                Наши услуги
-              </Link>
-            </li>
-            <li className="burger-menu__item">
-              <Link to="/about" onClick={() => handleScrollTo(aboutRef)}>
-                О компании
-              </Link>
-            </li>
-            <li className="burger-menu__item">
-              <Link to="/contacts" onClick={() => handleScrollTo(contactsRef)}>
-                Контакты
-              </Link>
-            </li>
+          <li className={`burger-menu__item ${location.pathname === "/service" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
+</li>
+<li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
+</li>
+<li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
+</li>
+   
           </ul>
+          <div className="header__links header__links-burger">
+          <Link to="/products" className="middle__links" >
+              Каталог товаров
+            </Link>
+          </div>
           <div className="nav__button">
           <a
             className="button"

@@ -5,7 +5,7 @@
     color: white;
   }
   
-  .form {
+  .registerform {
     margin: 20px auto 0; 
     display: flex;
     flex-direction: column;
@@ -13,7 +13,7 @@
     color: white;
   }
   
-  .form__input {
+  .form__input-one {
     padding: 0 15px 0;
     height: 46px;
     font-size: 13px;
@@ -30,13 +30,13 @@
     border-color: #EE3465;
     color: #EE3465;
   }
-  .form__input:focus {
+  .form__input-one:focus {
     outline: 1px solid #4285f4;
     background-color: #2f2f2f;
     box-shadow: inset 20px 20px 0px 20px #2f2f2f;
   }
   
-  .form__label {
+  .form__label-one {
     margin: 20px 0 10px 0;
     font-size: 10px;
     color: #8b8b8b;

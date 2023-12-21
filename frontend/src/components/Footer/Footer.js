@@ -18,7 +18,7 @@ function Footer() {
             ОГРН: 1213500018522
           </p>
          
-          <Link to="/privacy-policy" className="footer__link">Политика конфиденциальности</Link>
+          <Link to="/privacy-policy" className="footer__link"> Политика конфиденциальности</Link>
         </div>
       </div>
       <p className="footer__author">&copy;Кознова T.А. 2023</p>

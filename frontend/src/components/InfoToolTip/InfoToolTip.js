@@ -1,5 +1,5 @@
 import React from "react"
-import "./InfoToolTip/InfoToolTip.css"
+import "../InfoToolTip/InfoToolTip.css"
 
 function InfoToolTip(props) {
   return (

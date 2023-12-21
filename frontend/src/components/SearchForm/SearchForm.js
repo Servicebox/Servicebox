@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import "./SearchForm.css";
 
 function SearchForm({ getSearchProducts, onFilterProducts, isShortProducts }) {
@@ -43,10 +42,6 @@ function SearchForm({ getSearchProducts, onFilterProducts, isShortProducts }) {
         ></input>
         <button className="search__form-button" type="submit"></button>
       </form>
-      <FilterCheckbox
-        onFilterProducts={onFilterProducts}
-        isShortProducts={isShortProducts}
-      />
       {isQueryError && (
         <span className="search__form-error">Введите ключевое слово</span>
       )}

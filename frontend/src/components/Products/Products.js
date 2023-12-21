@@ -1,108 +1,43 @@
-import React, { useState, useEffect } from "react";
-import "./Products.css";
-import SearchForm from "../SearchForm/SearchForm";
-import ProductsList from "../ProductsList/ProductsList.js";
-import Footer from "../Footer/Footer";
-import Header from "../Header/Header";
-import { filterProducts, counterDurationProduct } from "../../utils/functionHelpers.js";
-import * as products from "../utils/ProductsApi.js";
+import React, { useState, useEffect } from 'react';
+import { fetchProducts } from '../utils/ProductsApi';
+import "./Products.css"
 
-function Products({ loggedIn, savedProducts, getLikeProduct, onDeleteCard }) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [initialCardsProducts, setInitialCardsProducts] = useState([]);
-  const [isShortProducts, setisShortProducts] = useState(false);
-  const [isReqError, setisReqError] = useState(false);
-  const [isNotFound, setIsNotFound] = useState(false);
+const Products = () => {
+  const [products, setProducts] = useState([]);
 
-  /** поиск продуктов */
-  function searchProducts(query) {
-    localStorage.setItem("productSearch", query);
-    localStorage.setItem("shortProducts", isShortProducts);
-    if (localStorage.getItem("allProducts")) {
-      const Products = JSON.parse(localStorage.getItem("allProducts"));
-      handleFilterProduct(Products, query, isShortProducts);
-    } else {
-      setIsLoading(true);
-      products
-        .getProducts()
-        .then((cardsSavedFilms) => {
-          handleFilterProduct(cardsSavedFilms, query, isShortProducts);
-          setisReqError(false);
-        })
-        .catch((error) => {
-          setisReqError(true);
-          console.log(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }
-
-  function shortProductsToggle() {
-    setisShortProducts(!isShortProducts);
-    if (!isShortProducts) {
-      const filteredCardsProducts = counterDurationProduct(initialCardsProducts);
-      setFilteredProducts(filteredCardsProducts);
-    } else {
-      setFilteredProducts(initialCardsProducts);
-    }
-    localStorage.setItem("shortProducts", !isShortProducts);
-  }
-
-  // Функция фильтрации продуктов
-  function handleFilterProduct(products, query, short) {
-    const productsFilmList = filterproducts(products, query);
-    setInitialCardsProducts(prProductsFilmList);
-    setFilteredProducts(
-      short ? counterDurationProduct(productsFilmList) : productsFilmList
-    );
-    localStorage.setItem("products", JSON.stringify(productsFilmList));
-    localStorage.setItem("allProducts", JSON.stringify(products));
-  }
-
-  // Получение продуктов из localStorage
   useEffect(() => {
-    if (localStorage.getItem("products")) {
-      const products = JSON.parse(localStorage.getItem("products"));
-      setInitialCardsProducts(products);
-      if (localStorage.getItem("shortProducts") === "true") {
-        setFilteredProducts(counterDurationProduct(products));
-      } else {
-        setFilteredProducts(products);
+    const loadProducts = async () => {
+      const authId = 5948; 
+      const authKey = 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp'; 
+      const method = 'catalog.getElementList'; 
+      const limit = 500; 
+      const page = 1; 
+
+      try {
+        const fetchedProducts = await fetchProducts(authId, authKey, method, limit, page);
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Ошибка при выполнении запроса:', error);
       }
-    }
+    };
+
+    loadProducts();
   }, []);
 
-  useEffect(() => {
-    if (localStorage.getItem("productSearch")) {
-      setIsNotFound(filteredProducts.length === 0);
-    } else {
-      setIsNotFound(false);
-    }
-  }, [filteredProducts]);
-
   return (
-    <section className="Poducts">
-      <Header loggedIn={loggedIn} />
-      <SearchForm
-        isShortProducts={isShortProducts}
-        onFilterProducts={shortProductsToggle}
-        getSearchProducts={searchProducts} // Передаем функцию searchProducts в качестве пропса getSearchProducts
-      />
-      <ProductsCardList
-        cards={filteredProducts}
-        isLoading={isLoading}
-        isSavedFilms={false}
-        savedProducts={savedProducts}
-        isReqError={isReqError}
-        getLikeProduct={getLikeProduct}
-        onDeleteCard={onDeleteCard}
-        isNotFound={isNotFound}
-      />
-      <Footer />
-    </section>
+    <div>
+      <h2 className="catalog-list">Каталог товаров</h2>
+      {products.map(product => (
+        <div key={product.id}>
+          <h3>{product.name}</h3>
+          <ul>
+            {product.prices.map(price => (
+              <li key={price.id}>{price.name} - {price.price} {price.currency}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }
 

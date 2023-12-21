@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react'; // Добавляем forwardRef
 import "./ContactsRef.css";
 import VkIcon from "../../../images/vk.svg";
 import Telephone from "../../../images/phonecol.svg";
@@ -7,7 +7,7 @@ import Mail from "../../../images/mail.svg";
 import Watsapp from "../../../images/whatsapp.svg";
 import Telegram from "../../../images/telegram.svg";
 
-function ContactsRef({ contactsRef }) {
+const ContactsRef = forwardRef((props, ref) => {
   const handlePhoneCall = () => {
     window.location.href = "tel:+7 911 501 88 28"; 
   };
@@ -17,7 +17,7 @@ function ContactsRef({ contactsRef }) {
   };
 
   return (
-    <section id="contactsRef" className="contactsRef" ref={contactsRef}>
+    <section id="contactsRef" className="contactsRef" ref={ref}>
       <div className="contacts__list">
         <h4 className="contacts__list-text">Наши контакты</h4>
       </div>
@@ -55,7 +55,7 @@ function ContactsRef({ contactsRef }) {
         </div>
       </div>
     </section>
-  )
-}
+  );
+});
 
 export default ContactsRef;

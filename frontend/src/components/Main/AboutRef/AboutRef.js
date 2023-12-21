@@ -1,12 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef , forwardRef} from "react";
 import "./AboutRef.css";
 import Clock from "../../../images/clock.svg";
 import Card from "../../../images/Card.svg";
 import Secure from "../../../images/secure.svg";
 
-function AboutRef({ aboutRef }) {
-  return (
-    <section id="aboutRef" className="aboutRef" ref={aboutRef}>
+const AboutRef = forwardRef((props, ref) => {
+    return (
+        <section id="aboutRef" className="aboutRef" ref={ref}>
       <div className="about__content">
 <h2 id="about-title" className="about__title">О компании ServiceBox
 </h2>
@@ -56,6 +56,7 @@ function AboutRef({ aboutRef }) {
 
 </div>
 </section>
-    )
-}
+  );
+});
+
 export default AboutRef

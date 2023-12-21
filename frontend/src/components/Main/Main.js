@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
-// eslint-disable-next-line no-unused-vars
+import React, { useEffect, useRef, forwardRef } from "react";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
+import gsap from "gsap";
+import ScrollToPlugin from "gsap/ScrollToPlugin";
 import { Element } from "react-scroll";
 import "./Main.css";
 
@@ -12,43 +13,47 @@ import Completed from "./Completed/Completed";
 import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
-
+import BallData from "./BallData/BallData";
+import Header from "../Header/Header";
 
 function Main() {
+  gsap.registerPlugin(ScrollToPlugin);
   const location = useLocation();
-  const mainRef = useRef(null);
-  const serviceRef = useRef(null);
   const aboutRef = useRef(null);
+  const serviceRef = useRef(null);
   const contactsRef = useRef(null);
 
   useEffect(() => {
-    if (location.hash) {
-      const element = document.querySelector(location.hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  }, [location]);
+    gsap.registerPlugin(ScrollToPlugin);
+  }, []);
+
+  const scrollTo = (target) => {
+    // Прокрутка до целевого элемента
+    gsap.to(window, { duration: 1, scrollTo: { y: target.current, autoKill: false } });
+  };
 
   return (
-    <main className="main" ref={mainRef}>
-      <Element name="mainBanner">
-        <MainBanner />
-      </Element>
+    <main className="main">
+    
+      <MainBanner />
+     
       <Element name="serviceRef" ref={serviceRef}>
-        <ServiceRef serviceRef={serviceRef} />
-      </Element>
-      <Element name="aboutRef" ref={aboutRef}>
-        <AboutRef aboutRef={aboutRef} />
-      </Element>
+  <ServiceRef />
+</Element>
+<Element name="aboutRef" ref={aboutRef}>
+  <AboutRef />
+  </Element>
+   
       <Completed />
       <ArronService />
-   
       <AboutMe />
       <Gifts />
-      <Element name="contactsRef" ref={contactsRef}>
-        <ContactsRef contactsRef={contactsRef} />
-      </Element>
+      
+     
+<Element name="contactsRef" ref={contactsRef}>
+  <ContactsRef />
+</Element>
+      
     </main>
   );
 }

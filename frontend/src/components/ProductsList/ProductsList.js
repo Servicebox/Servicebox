@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import ProductsCard from "../ProductsCard/ProductsCard";
-import SearchError from "../../SearchError/SearchError";
+import ProductsCard from "../Products/ProductsCard/ProductsCard";
+import SearchError from "../SearchError/SearchError";
 import {
   DESKTOP_PRODUCT_COUNT,
   TABLET_PRODUCT_COUNT,
   MOBILE_PRODUCT_COUNT,
-} from "../../../utils/constants";
-import Preloader from "../Preloader/Preloader";
-import "./ProductsCardList.css";
+} from "../utils/constants";
+import Preloader from "../Products/Preloader/Preloader";
+import "./ProductsList.css";
 
 function ProductsCardList({
   cards,

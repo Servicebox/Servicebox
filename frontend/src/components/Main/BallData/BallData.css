@@ -1,38 +1,6 @@
-#discount-block {
-    position: relative;
-    max-width: 1200px;
-   height: 600px;
- 
-    overflow: hidden;
-  }
-  #balls {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  .ball {
-    position: absolute;
-    animation-name: moveBall;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    width: 60px;
-    height: 60px;
-  }
-  
-  @keyframes moveBall {
-    0% {
-      transform: translate(0, 0);
-    }
-    25% {
-      transform: translate(50px, 0);
-    }
-    50% {
-      transform: translate(50px, 50px);
-    }
-    75% {
-      transform: translate(-50px, 50px);
-    }
-    100% {
-      transform: translate(-50px, -50px);
-    }
-  }
+canvas {
+  background-color: lightblue;
+  border: 1px solid black;
+  margin: 20px;
+  /* Другие стили, которые вы хотите добавить */
+}

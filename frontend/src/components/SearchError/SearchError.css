@@ -1,0 +1,39 @@
+.search__error {
+    margin: 0 auto;
+    color: #ee3465;
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 34px;
+    margin-top: 20px;
+    }
+    
+    .search__error_margin {
+      margin-top: 22px;
+    }
+    
+    .search__form-error {
+      text-align: center;
+      color: #ee3465;
+      margin-top: 22px;
+    }
+    .search__filterCheckbox-slider {
+      background-image: url(../../images/smalltumboff.svg);
+      background-color: transparent;
+      border: none;
+      width: 36px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .search__filterCheckbox-slider:hover{
+      opacity: .8;
+    }
+    .search__filterCheckbox-slider_on {
+      background-image: url(../../images/smalltumb.svg);
+    }
+    .search__filterCheckbox-span {
+      font-size: 13px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 18px;
+    }
+  

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+{/*import React, { useState } from "react";
 import WhatsApp from "../../images/whatsapp.svg";
 import "./WhatsApp.css";
 
@@ -39,4 +39,4 @@ const WhatsAppButton = () => {
   );
 };
 
-export default WhatsAppButton;
+export default WhatsAppButton;*/}

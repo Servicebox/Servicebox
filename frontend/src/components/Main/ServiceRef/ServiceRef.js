@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef , forwardRef} from "react";
 import "./ServiceRef.css";
 
 import Rectangle from "../../../images/Rectangle.png";
@@ -62,7 +62,7 @@ const Card = ({ title, image, subtitle, serviceRef }) => {
   );
 };
 
-const ServiceRef = () => {
+
   const cardsData = [
     {
       title: "Ноутбуками",
@@ -111,33 +111,30 @@ const ServiceRef = () => {
     },
   ];
 
-  const serviceRef = useRef(null);
-
-  return (
-    <section id="serviceRef" className="serviceRef" ref={serviceRef}>
-      <div className="service__content">
-        <h2 className="service__title">Мы работаем с устройствами:</h2>
-        <p className="service__subtitle">
-          Команда опытных специалистов обладает глубокими знаниями в области
-          ремонта цифровой техники и готова решить любые проблемы, с которыми Вы
-          столкнулись. Мы используем современное оборудование и проверенные
-          методы, чтобы обеспечить высокое качество услуг.
-        </p>
-
-        <div className="tech">
-          {cardsData.map((card, index) => (
-            <Card
-              key={index}
-              title={card.title}
-              subtitle={card.subtitle}
-              image={card.image}
-              serviceRef={serviceRef}
-            />
-          ))}
+  const ServiceRef = forwardRef((props, ref) => {
+    return (
+      <section id="serviceRef" className="serviceRef" ref={ref}>
+        <div className="service__content">
+          <h2 className="service__title">Мы работаем с устройствами:</h2>
+          <p className="service__subtitle">
+            Команда опытных специалистов обладает глубокими знаниями в области
+            ремонта цифровой техники и готова решить любые проблемы, с которыми Вы
+            столкнулись. Мы используем современное оборудование и проверенные
+            методы, чтобы обеспечить высокое качество услуг.
+          </p>
+          <div className="tech">
+            {cardsData.map((card, index) => (
+              <Card
+                key={index}
+                title={card.title}
+                subtitle={card.subtitle}
+                image={card.image}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  );
-};
-
-export default ServiceRef;
+      </section>
+    );
+  });
+  
+  export default ServiceRef;

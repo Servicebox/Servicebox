@@ -105,7 +105,21 @@
   .open .overlay {
       display: block;
     }
+    .middle__links {
+      background-color: rgb(211, 211, 211);
+      padding: 10px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      text-decoration: none;
   }
+  .header__links-burger{
+    color: white;
+    padding: 0 0 15px;
+  }
+}
 
   @media (max-width: 320px) {
     .content{
