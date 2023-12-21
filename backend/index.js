@@ -8,6 +8,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const indexRouter = require('./routes/index');
 const cors = require('cors');
 const { allowedCors, corsOptions } = require('./middlewares/cors');
+const axios = require('axios'); // Добавляем axios для выполнения запросов
 
 mongoose.set('strictQuery', true);
 
