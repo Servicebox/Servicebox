@@ -13,7 +13,7 @@ const allowedCors = [
   'http://optfm.ru/api/',
 ];
 
-const corsOptions = {  // Define the corsOptions object
+const corsOptions = { 
   origin: (origin, callback) => {
     if (allowedCors.includes(origin)) {
       callback(null, true);
@@ -24,4 +24,4 @@ const corsOptions = {  // Define the corsOptions object
   credentials: true,
 };
 
-module.exports = { allowedCors, corsOptions };  // Export allowedCors and corsOptions
+module.exports = { allowedCors, corsOptions };
