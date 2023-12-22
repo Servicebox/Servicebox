@@ -1,7 +1,6 @@
-// products.js
 import React, { useState, useEffect } from 'react';
 import { fetchProducts, fetchImage } from '../utils/ProductsApi';
-import "./Products.css"
+import "./Products.css";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -39,19 +38,23 @@ const Products = () => {
   return (
     <div>
       <h2 className="catalog-list">Каталог товаров</h2>
-      {products.map(product => (
+      {products.map(async (product) => ( // Использование async для поддержки await
         <div key={product.id}>
           <h3>{product.name}</h3>
           <ul>
-            {product.prices.map(price => (
-              <li key={price.id}>{price.name} - {price.price} {price.currency}</li>
+            {product.prices.map((price) => (
+              <li key={price.id}>
+                {price.name} - {price.price} {price.currency}
+              </li>
             ))}
           </ul>
-          {product.picture && <img src={loadImage(product.id)} alt={product.name} />}
+          {product.picture && (
+            <img src={await loadImage(product.id)} alt={product.name} /> // Использование await для ожидания получения изображения
+          )}
         </div>
       ))}
     </div>
   );
-}
+};
 
 export default Products;

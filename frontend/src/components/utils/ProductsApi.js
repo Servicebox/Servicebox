@@ -11,7 +11,7 @@ export const fetchProducts = async (authId, authKey, method, limit, page) => {
         page: page 
       })
     };
-  
+    
     try {
       const response = await fetch(url, requestOptions);
       const data = await response.json();
@@ -33,12 +33,12 @@ export const fetchProducts = async (authId, authKey, method, limit, page) => {
         element_id: elementId
       })
     };
-  
+    
     try {
       const response = await fetch(url, requestOptions);
       const data = await response.json();
       // Обработка получения изображения
-      return data;
+      return data; 
     } catch (error) {
       throw new Error('Ошибка при выполнении запроса изображения:', error);
     }
