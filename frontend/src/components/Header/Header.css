@@ -102,7 +102,8 @@ display: none;
   gap: 24px;
 }
 .navigation__list a:hover {
-  color: #F9A92C;
+  background-color: #F9A92C;
+  color: white;
 }
 
 .contact-info {
