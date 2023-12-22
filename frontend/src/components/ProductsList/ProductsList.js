@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+{/*import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProductsCard from "../Products/ProductsCard/ProductsCard";
 import SearchError from "../SearchError/SearchError";
@@ -114,4 +114,4 @@ function ProductsCardList({
   );
 }
 
-export default ProductsCardList;
+export default ProductsCardList;*/}

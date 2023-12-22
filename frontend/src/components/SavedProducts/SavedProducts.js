@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+{/*import React, { useState, useEffect } from "react";
 import ProductsList from "../ProductsList/ProductsList.js"
 import Header from "../Header/Header.js";
 import Footer from "../Footer/Footer.js";
@@ -53,4 +53,4 @@ function savedProducts({ loggedIn, onDeleteCard, savedProducts }) {
   );
 }
 
-export default savedProducts;
+export default savedProducts;*/}

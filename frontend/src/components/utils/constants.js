@@ -1,8 +1,8 @@
 
-//const BASE_URL = "https://servicebox.toma.nomoreparties.co";
-//const BASE_IMAGE_URL = "https://api.nomoreparties.co";
+//const BASE_URL = "https://servicebox35.ru";
+//const BASE_IMAGE_URL = "https://servicebox35.pp.ru";
 
-//для отображения фильмов
+//для отображения продуктов
 const DESKTOP_PRODUCT_COUNT = 3
 const TABLET_PRODUCT_COUNT = 2
 const MOBILE_PRODUCT_COUNT = 2
