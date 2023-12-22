@@ -1,15 +1,14 @@
 export const fetchProducts = async (authId, authKey, method, limit, page) => {
     const url = "https://optfm.ru/api/";
     const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
+      method: 'POST',
+      body: new URLSearchParams({ 
         auth_id: authId, 
         auth_key: authKey, 
-        method: 'catalog.getSectionList',
-        limit: 500,
-        page: 0 
+        method: method, 
+        limit: limit, 
+        page: page 
+      })
     };
     
     try {
