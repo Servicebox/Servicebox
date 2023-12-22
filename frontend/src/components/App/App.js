@@ -24,7 +24,7 @@ function App() {
   }, [isFormOpen]);
 
   useEffect(() => {
-    axios.post('https://servicebox35.ru/products.php') 
+    axios.get('https://servicebox35.ru/products.php') 
       .then(response => {
         console.log(response.data); // обработка полученных данных
       })
