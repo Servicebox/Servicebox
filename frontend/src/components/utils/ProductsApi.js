@@ -1,7 +1,10 @@
 export const fetchProducts = async (authId, authKey, method, limit, page) => {
-    const url = "https://optfm.ru/api/";
+    const url = "https://optfm.ru/api";
     const requestOptions = {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       body: new URLSearchParams({ 
         auth_id: authId, 
         auth_key: authKey, 
@@ -10,7 +13,7 @@ export const fetchProducts = async (authId, authKey, method, limit, page) => {
         page: page 
       })
     };
-    
+  
     try {
       const response = await fetch(url, requestOptions);
       const data = await response.json();
@@ -22,9 +25,12 @@ export const fetchProducts = async (authId, authKey, method, limit, page) => {
   };
   
   export const fetchImage = async (authId, authKey, elementId) => {
-    const url = "https://optfm.ru/api/";
+    const url = "https://optfm.ru/api";
     const requestOptions = {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       body: new URLSearchParams({ 
         auth_id: authId, 
         auth_key: authKey, 
@@ -32,14 +38,14 @@ export const fetchProducts = async (authId, authKey, method, limit, page) => {
         element_id: elementId
       })
     };
-    
+  
     try {
-        const response = await fetch(url, requestOptions);
-        const data = await response.json();
-        const imageUrl = data.picture; // получаем ссылку на изображение из данных
-        return imageUrl;
-      } catch (error) {
-        console.error('Ошибка при выполнении запроса изображения:', error);
-        throw error;
-      }
-    };
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      const imageUrl = data.picture; 
+      return imageUrl;
+    } catch (error) {
+      console.error('Ошибка при выполнении запроса изображения:', error);
+      throw error;
+    }
+  };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchProducts} from '../utils/ProductsApi';
+import { fetchProducts, fetchImage } from '../utils/ProductsApi';
 
 import "./Products.css";
 
@@ -17,23 +17,23 @@ const Products = () => {
       try {
         const data = await fetchProducts(authId, authKey, method, limit, page);
         if (data.status && data.status !== 1) {
-          throw new Error(data.error); // Передаем сообщение об ошибке в Error
+          throw new Error(data.error);
         }
 
-        const productsWithImages = data.response.items.map(product => ({
-          ...product,
-          imageSrc: product.picture, // Используем поле picture для изображения
-        }));
+        const productsWithImages = [];
+        for (const product of data.response.items) {
+          const imageUrl = await fetchImage(authId, authKey, product.id);
+          productsWithImages.push({ ...product, imageSrc: imageUrl });
+        }
 
         setProducts(productsWithImages);
       } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);
-        // Отобразить ошибку пользователю через уведомления или другие методы
       }
     };
 
     loadProducts();
-  }, []);
+  }, [authId, authKey]);
 
   return (
     <div>
