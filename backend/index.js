@@ -9,7 +9,6 @@ const indexRouter = require('./routes/index');
 const cors = require('cors');
 const { allowedCors, corsOptions } = require('./middlewares/cors');
 const axios = require('axios'); // Добавляем axios для выполнения запросов
-const cors = require('cors');
 
 mongoose.set('strictQuery', true);
 

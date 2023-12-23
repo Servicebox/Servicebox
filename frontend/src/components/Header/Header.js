@@ -79,7 +79,7 @@ function Header() {
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
           <div className="header__links">
-            <NavLink to="/products.php" className="middle__links" activeclassname="active">
+            <NavLink to="/products" className="middle__links" activeclassname="active">
               Каталог товаров
             </NavLink>
           </div>
