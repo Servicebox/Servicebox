@@ -12,7 +12,7 @@ function CookieMessage() {
       const cookieText = document.createElement("div");
       cookieText.classList.add("cookie-message__text");
       cookieText.innerHTML =
-        'Мы используем куки для улучшения Вашего опыта на сайте. Нажимая "Принять", Вы соглашаетесь с использованием куки.';
+        'Продолжая пользоваться сайтом, я даю согласие на использование файлов cookie.';
       cookieMessage.appendChild(cookieText);
 
       const acceptButton = document.createElement("button");

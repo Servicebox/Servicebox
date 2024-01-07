@@ -1,60 +1,42 @@
+// routes/product.js
 const express = require('express');
 const router = express.Router();
-const axios = require('axios');
+const { getProducts, getSectionList, getElementList, getImage } = require('../models/products');
 
-// Данные для авторизации в API
-const authId = 5948;
-const authKey = 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp';
-const apiUrl = 'https://optfm.ru/api/';
+router.get('/products', async (req, res) => {
+  try {
+    const productList = await getProducts();
+    res.json(productList);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-router.post('/getSectionList', async (req, res) => {
+router.post('/sections', async (req, res) => {
   try {
     const { limit, page, sectionId, includeSubsection } = req.body;
-    const response = await axios.post(apiUrl, {
-      auth_id: authId,
-      auth_key: authKey,
-      method: 'catalog.getSectionList',
-      limit,
-      page,
-      section_id: sectionId,
-      include_subsection: includeSubsection
-    });
-    res.json(response.data);
+    const sections = await getSectionList(limit, page, sectionId, includeSubsection);
+    res.json(sections);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.post('/getElementList', async (req, res) => {
+router.post('/elements', async (req, res) => {
   try {
     const { limit, page, sectionId, includeSubsection, fullUrl, noImage } = req.body;
-    const response = await axios.post(apiUrl, {
-      auth_id: authId,
-      auth_key: authKey,
-      method: 'catalog.getElementList',
-      limit,
-      page,
-      section_id: sectionId,
-      include_subsection: includeSubsection,
-      full_url: fullUrl,
-      no_image: noImage
-    });
-    res.json(response.data);
+    const elements = await getElementList(limit, page, sectionId, includeSubsection, fullUrl, noImage);
+    res.json(elements);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-router.post('/getImage', async (req, res) => {
+router.post('/images', async (req, res) => {
   try {
     const { elementId } = req.body;
-    const response = await axios.post(apiUrl, {
-      auth_id: authId,
-      auth_key: authKey,
-      method: 'catalog.getImage',
-      element_id: elementId
-    });
-    res.json(response.data);
+    const image = await getImage(elementId);
+    res.json(image);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

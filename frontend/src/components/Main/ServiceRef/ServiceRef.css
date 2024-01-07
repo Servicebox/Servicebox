@@ -22,6 +22,18 @@ padding: 100px 0 0;
   max-width: 800px;
   text-align: center;
 }
+.card__subtitle{
+  position: absolute;
+  top: 50%;
+  color: #ffffff;
+  background-color: rgb(2, 2, 2);
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.card__subtitle:hover{
+  background-color:#F9A92C ;
+}
     .rectangle {
         opacity: 0.5;
         filter: drop-shadow(0px 8px 10px rgb(201, 201, 201)) drop-shadow(0px 50px 60px rgba(141, 141, 141, 0.125));

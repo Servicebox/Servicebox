@@ -10,7 +10,15 @@ import Footer from "../Footer/Footer";
 import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
-//import Products from "../Products/Products";
+import Search from "../Search/Search";
+import AddProducts from "../AddProducts/AddProducts";
+import CardBody from "../Card/CardBody";
+import Button from "../Button/Button";
+//import { Products } from "../Products/Products";
+import ServiceRef from "../Main/ServiceRef/ServiceRef";
+import GlassReplacementPriceList from "../GlassReplacementPriceList/GlassReplacementPriceList";
+
+
 import "./App.css";
 import WhatsAppButton from "../WhatsApp/WhatsApp";
 import BallData from "../Main/BallData/BallData";
@@ -18,36 +26,81 @@ import BallData from "../Main/BallData/BallData";
 function App() {
 gsap.registerPlugin(ScrollToPlugin);
 const [isFormOpen, setIsFormOpen] = useState(false);
+const [items, setItem] = useState([]);
+const [searchValue, setSearchValue] = useState("");
+const [addedItems, setAddedItem] = useState([]);
+const [showAddProducts, setShowAddProducts] = useState(false);
 
 const toggleForm = useCallback(() => {
 setIsFormOpen(prevState => !prevState);
 }, []);
 
-useEffect(() => {
-const requestData = {
-auth_id: '5948',
-auth_key: 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp',
-method: 'catalog.getElementList',
-limit: 10,
-page: 1
-};
 
-axios.post('https://optfm.ru/api/', requestData)
-  .then(response => {
-    console.log(response.data); // Обработка полученных данных
-  })
-  .catch(error => {
-    console.error('Ошибка при получении данных:', error);
-  });
-}, []);
+useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const formData = new FormData();
+        formData.append('auth_id', '5948');
+        formData.append('auth_key', 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp');
+        formData.append('method', 'catalog.getSectionList');
+        
+        const response = await axios.post("https://optfm.ru/api/", formData);
+        console.log(response.data);
+        setItem(response.data); // assuming the response data is the items to be set
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
+  function changingSearchData(e) {
+    setSearchValue(e.target.value);
+  }
+  const itmesFilter = items.filter((item) =>
+    item.title.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  function addItem(item) {
+    item.addNumber = 1;
+    const itemArr = addedItems;
+    setAddedItem([...itemArr, item]);
+  }
+   console.log(addedItems);
+  function removeItem(item) {
+    const newItems = addedItems.filter((addedItem) => addedItem.id !== item.id);
+    setAddedItem(newItems);
+     console.log(addedItems);
+  }
 
 return (
 <Router>
 <div className="page">
 <div className="page__wrapper">
+<div className="nav">
 <Header />
+</div>
 <Routes>
 <Route exact path="/" element={<Main />} />
+<Route path="/products" element={
+          <CardBody
+            items={items}
+            searchValue={searchValue}
+            changingSearchData={changingSearchData}
+            setShowAddProducts={setShowAddProducts}
+            showAddProducts={showAddProducts}
+            addedItems={addedItems}
+            removeItem={removeItem}
+            setAddedItem={setAddedItem}
+            itmesFilter={itmesFilter}
+            addItem={addItem}
+          />
+        } />
+        <Route exact path="/" component={ServiceRef} />
+        <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
 {/*<Route path="/products" element={<Products />} />/*/}
 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 </Routes>

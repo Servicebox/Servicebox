@@ -4,7 +4,7 @@ import Clock from "../../../images/clock.svg";
 import Card from "../../../images/Card.svg";
 import Secure from "../../../images/secure.svg";
 
-const AboutRef = forwardRef((props, ref) => {
+const AboutRef = forwardRef((_props, ref) => {
     return (
         <section id="aboutRef" className="aboutRef" ref={ref}>
       <div className="about__content">

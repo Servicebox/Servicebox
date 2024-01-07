@@ -1,4 +1,5 @@
 import React, { useRef , forwardRef} from "react";
+import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 import "./ServiceRef.css";
 
 import Rectangle from "../../../images/Rectangle.png";
@@ -15,7 +16,7 @@ import Arrow from "../../../images/Up.svg";
 import Tv from "../../../images/tv.png"
 import Glass from "../../../images/Glass.png"
 
-const Card = ({ title, image, subtitle, serviceRef }) => {
+const Card = ({ title, image, subtitle, serviceRef,button }) => {
   return (
     <section className="serviceRef" ref={serviceRef}>
       <div className="card">
@@ -42,9 +43,13 @@ const Card = ({ title, image, subtitle, serviceRef }) => {
           <img src={Tv} className="card__image" alt="Tv" />
         )}
 
-        {image === "Glass" && (
-          <img src={Glass} className="card__image" alt="Glass" />
+{image === "Glass" && (
+          <Link to="/glass-replacement-price-lists">
+            <img src={Glass} className="card__image" alt="Glass" />
+            <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
+        
 
         {image === "Devices" && (
           <img src={Devices} className="card__image" alt="Devices" />
@@ -102,6 +107,8 @@ const Card = ({ title, image, subtitle, serviceRef }) => {
       title: "Замена стекла",
       subtitle: "Замена стекла от 1 часа, на любом телефоне и планшете, часах. Если у вас есть изображение и нет фантмных нажатии- то можно просто поменять стекло",
       image: "Glass",
+      linkTo: "/glass-replacement-details",
+    
     },
 
     {
@@ -111,7 +118,7 @@ const Card = ({ title, image, subtitle, serviceRef }) => {
     },
   ];
 
-  const ServiceRef = forwardRef((props, ref) => {
+  const ServiceRef = forwardRef((_props, ref) => {
     return (
       <section id="serviceRef" className="serviceRef" ref={ref}>
         <div className="service__content">
@@ -129,9 +136,11 @@ const Card = ({ title, image, subtitle, serviceRef }) => {
                 title={card.title}
                 subtitle={card.subtitle}
                 image={card.image}
+                 linkTo={card.linkTo}
               />
             ))}
           </div>
+          
         </div>
       </section>
     );

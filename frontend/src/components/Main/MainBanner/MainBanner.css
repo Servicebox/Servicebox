@@ -190,6 +190,7 @@ gap: 40px;
   line-height: 26px;
   letter-spacing: -0.16px;
   box-shadow: 1px 1px 15px rgb(60, 61, 61);
+  cursor: pointer;
 }
 .main-banner__image{
   grid-column: 3/4;

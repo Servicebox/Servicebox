@@ -36,7 +36,7 @@ function MainBanner() {
     };
   }, []);
 
-  const endDate = new Date(2023, 11, 31, 23, 59, 59);
+  const endDate = new Date(2024, 2, 31, 23, 59, 59);
   function updateCountdown() {
     const currentDate = new Date();
     const remainingTime = endDate - currentDate;
@@ -75,7 +75,7 @@ function MainBanner() {
       </div>
       {isOpen && <Form toggleForm={toggleForm} />}
       <div className="countdown">
-        <h2>Скидка 20% на комплексную чистку ноутбука</h2>
+      <h2> Акция! Комплексная чистка ноутбука всего за 900 руб</h2>
         <p>До конца акции осталось:</p>
         <div className='countdown_time'>
           <div id="timer">

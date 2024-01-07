@@ -65,6 +65,7 @@ display: none;
   line-height: normal;
   letter-spacing: -0.16px;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .contact-info__map-link {

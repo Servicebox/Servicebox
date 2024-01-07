@@ -2,5 +2,7 @@
     "telegram":{
         "token": "6875218502:AAGQyFd6PJ5HR_DtjQsu8Y6Kz0MYSJONBjM",
         "chat":"-1002016730487"
-    }
+    },
+    "auth_id": "5948",
+    "auth_key": "y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp"
 }

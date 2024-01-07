@@ -1,0 +1,30 @@
+.card__body{
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  .nav-right{
+    display: flex;
+    flex-direction: row;
+    padding: 10px 0;
+    align-items: center;
+    gap: 30px;
+  }
+  @media screen and (max-width: 1040px) {
+    .card__body {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+  }
+  @media screen and (max-width: 400px) {
+    .card__body {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media print {
+    .card__body {
+      display: none;
+    }
+  }
+  
+

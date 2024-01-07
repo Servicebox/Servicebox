@@ -1,0 +1,10 @@
+.search__input {
+    width: 300px;
+    padding: 11px 15px;
+    border-color: var(--color-primary);
+    border-radius: 0.5rem;
+  }
+  .search__input:focus {
+    outline: var(--color-primary);
+  }
+  

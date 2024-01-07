@@ -4,6 +4,20 @@ const authId = 5948;
 const authKey = 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp';
 const apiUrl = 'https://optfm.ru/api/';
 
+const getProducts = async () => {
+  try {
+    const response = await axios.post(apiUrl, {
+      auth_id: authId,
+      auth_key: authKey,
+      method: 'catalog.getProductList'
+      // Добавьте другие необходимые параметры для получения списка товаров, если они есть
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
 const getSectionList = async (limit = 500, page = 0, sectionId = null, includeSubsection = 0) => {
   try {
     const response = await axios.post(apiUrl, {
@@ -57,5 +71,6 @@ const getImage = async (elementId) => {
 module.exports = {
   getSectionList,
   getElementList,
-  getImage
+  getImage,
+  getProducts
 };
