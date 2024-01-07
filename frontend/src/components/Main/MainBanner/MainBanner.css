@@ -64,7 +64,7 @@
 .countdown span:not(:last-child)::after {
   content: ":";
   display: inline-block;
-  margin-left: 3px;
+  margin-left: 0;
   margin-right: 0;
   color: white;
 }

@@ -15,7 +15,7 @@ z-index: 1;
 :root {
   --soft-color: rgba(0, 0, 0, 0.5);
   --softer-color: rgba(0, 0, 0, 0.2);
-  --color-primary: rgb(0 216 255);
+  --color-primary: #f9a92c;
   --color-waring: green;
   --color-white: #fff;
   --color-danger: #ff0000;

@@ -24,12 +24,15 @@ padding: 100px 0 0;
 }
 .card__subtitle{
   position: absolute;
-  top: 50%;
+  top: 55%;
+  left: 26px;
   color: #ffffff;
   background-color: rgb(2, 2, 2);
   padding: 5px;
   border-radius: 10px;
   cursor: pointer;
+  font-size: 24px;
+
 }
 .card__subtitle:hover{
   background-color:#F9A92C ;
@@ -92,26 +95,26 @@ display: none;
     }
 .card__image{
   position: absolute;
-  top: 0px;
-  left: 0px;
-  max-width: 200px;
+  top: 20px;
+  left: 15px;
+  max-width: 164px;
 }
 .card__title{
-    position: absolute;
-    top: 0px;
-    left: 302px;
-    font-family: Gilroy;
-font-size: 25px;
-font-style: normal;
-font-weight: 600;
-line-height: 30px; /* 136.364% */
-margin: 5px auto;
+  position: absolute;
+  top: 16px;
+  left: 227px;
+  font-family: Gilroy;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
+  margin: 5px auto;
 
 }
 
 .ellipsis{
   position: absolute;
-  top: 70px;
+  top: 90px;
   left: 220px;
   font-family: Gilroy;
   font-size: 18px;
@@ -171,34 +174,46 @@ max-width: 250px;
   top: 32px;
 }
 .card__title{
-  top: 0px;
+  top: 20px;
   left: 115px;
-  font-size: 15px;
-  line-height: 15px;
-  margin: 5px auto;
+  font-size: 13px;
+  line-height: 14px;
+  margin: 0px -20px;
   text-align: center;
+  max-width: 120px
 }
-
+.card__subtitle{
+  position: absolute;
+  top: 65%;
+  color: #ffffff;
+  background-color: rgb(2, 2, 2);
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  max-width: 127px;
+  font-size: 9px;
+  font-family: Gilroy;
+}
 .ellipsis {
   white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
   position: absolute;
-  top: 30px;
-  left: 111px;
+  top: 50px;
+  left: 118px;
   font-family: Gilroy;
   font-size: 11px;
   font-style: normal;
   font-weight: 400;
   line-height: 15px;
-  margin: 5px auto;
-  max-width: 150px;
+  margin: 0px -25px;
+  max-width: 145px;
   height: 60px;
 }
 .card__image{
-  top: 0px;
-  left: 13px;
-  max-width: 93px;
+  top: 20px;
+  left: 10px;
+  max-width: 80px;
 }
 .card__button{
   top: 226px;
@@ -228,30 +243,31 @@ text-align: center;
     font-style: normal;
     font-weight: 600;
     line-height: 12px;
-    top: 0;
-    left: 106px;
+    top: 27px;
+    left: 131px;
   }
   .card__subtitle{
     position: absolute;
-  top: 40px;
-  left: 105px;
-  font-family: Gilroy;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 10px;
-  margin: 0 auto;
-  max-width: 230px;
+    top: 138px;
+    left: 26px;
+    font-family: Gilroy;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+    margin: 0 auto;
+    max-width: 230px
   }
   .serviceRef{
     padding: 0;
   }
   .card__image{
     max-width: 100px;
-    top: 0;
+    top: 25px;
+    left: 25px;
   }
   .rectangle{
-    max-width: 285px;
+    max-width: 290px;
   }
   .card__button {
     position: absolute;
@@ -276,8 +292,8 @@ text-align: center;
   }
   .ellipsis{
     position: absolute;
-    top: 35px;
-    left: 113px;
+    top: 57px;
+    left: 130px;
     font-family: Gilroy;
     font-size: 11px;
     font-style: normal;
@@ -297,7 +313,7 @@ text-align: center;
   }
   .card__title {
     position: absolute;
-    top: 0px;
+    top: 10px;
     left: 203px;
     font-family: Gilroy;
     font-size: 20px;
