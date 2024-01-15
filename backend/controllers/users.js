@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+{/*const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestError = require('../errors/BadRequestError');
@@ -110,4 +110,4 @@ module.exports = {
   getUserInfo,
   editUserInfo,
   loginUser,
-};
+};*/}

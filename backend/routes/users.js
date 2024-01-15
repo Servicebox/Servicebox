@@ -1,4 +1,4 @@
-// Файл маршрута users/me
+{/*// Файл маршрута users/me
 const userRouter = require('express').Router();
 
 const {
@@ -11,3 +11,4 @@ userRouter.get('/users/me', getUserInfo);
 userRouter.patch('/users/me', editUserInfoValidator, editUserInfo);
 
 module.exports = userRouter;
+*/}

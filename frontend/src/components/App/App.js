@@ -16,7 +16,15 @@ import CardBody from "../Card/CardBody";
 import Button from "../Button/Button";
 //import { Products } from "../Products/Products";
 import ServiceRef from "../Main/ServiceRef/ServiceRef";
+import NotebookService from "../NotebookService/NotebookService"
+import MonoblockService from "../MonobloсkService/MonobloсkService"
+import TelephoneService from "../TelephoneService/TelephoneService";
+import TabletService from "../TabletService/TabletService";
+import TvService from "../TvService/TvService"
 import GlassReplacementPriceList from "../GlassReplacementPriceList/GlassReplacementPriceList";
+import ApplService from "../ApplService/ApplService";
+import OtherService from "../OtherService/OtherService"
+import CreateServiceForm from "../CreateServiceForm/CreateServiceForm";
 
 
 import "./App.css";
@@ -85,6 +93,7 @@ return (
 </div>
 <Routes>
 <Route exact path="/" element={<Main />} />
+
 <Route path="/products" element={
           <CardBody
             items={items}
@@ -99,10 +108,19 @@ return (
             addItem={addItem}
           />
         } />
-        <Route exact path="/" component={ServiceRef} />
+      <Route exact path="/" component={ServiceRef} />
+        {/*<Route exact path="/services/:category" component={ServiceRef} />*/}
+        <Route path="/notebook-service" element={<NotebookService />} />/
+        <Route path="/monoblock-service" element={<MonoblockService />} />/
+        <Route path="/tv-service" element={<TvService />} />/
+        <Route path="/tablet-service" element={<TabletService />} />/
+        <Route path="/telephone-service" element={<TelephoneService />} />/
+        <Route path="/other-service" element={<OtherService />} />/
         <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
-{/*<Route path="/products" element={<Products />} />/*/}
+
+<Route path="/appl-service" element={<ApplService />} />/
 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+<Route path="CreateServiceForm" element={<CreateServiceForm />} />
 </Routes>
 {isFormOpen && <Form toggleForm={toggleForm} />}
 <Footer />

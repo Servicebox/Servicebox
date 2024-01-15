@@ -1,25 +1,35 @@
-const express = require('express');
-const router = express.Router();
-const request = require('request');
-const config = require('../config/config.json'); // содержит идентификатор и ключ для работы с API
+// api.js
 
-router.post('/getSectionList', (req, res) => {
-  const requestData = {
-    auth_id: 5948,
-    auth_key: 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp',
-    method: 'catalog.getSectionList',
-    limit: 500,
-    page: 0
-  };
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-  request.post({ url: 'https://optfm.ru/api/', form: requestData }, (error, response, body) => {
-    if (error) {
-      res.status(500).json({ error: error.message });
+// Настройка использования сессий в Express
+app.use(require('express-session')({
+  secret: 'secret key',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Настройка локальной стратегии аутентификации
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    // Здесь вы можете проверить имя пользователя и пароль в вашей базе данных
+    if (username === 'admin' && password === 'adminpassword') {
+      return done(null, { id: 1, username: 'admin', role: 'admin' }); // Возвращаем пользователя
     } else {
-      const data = JSON.parse(body);
-      res.status(200).json(data);
+      return done(null, false, { message: 'Неверное имя пользователя или пароль' }); // Ошибка аутентификации
     }
-  });
+  }
+));
+
+// Сериализация и десериализация пользователя
+passport.serializeUser(function(user, done) {
+  done(null, user.id); // Сохраняем пользователя в сессии
 });
 
-module.exports = router;
+passport.deserializeUser(function(id, done) {
+  // Загружаем пользователя из сессии
+  done(null, { id: 1, username: 'admin', role: 'admin' }); // В реальном проекте данные будут загружаться из базы данных
+});

@@ -11,10 +11,16 @@ import MiddleStatus from "../../images/status.svg";
 import ServiceRef from "../Main/ServiceRef/ServiceRef";
 import AboutRef from "../Main/AboutRef/AboutRef";
 import ContactsRef from "../Main/ContactsRef/ContactsRef";
+import CreateServiceForm from "../CreateServiceForm/CreateServiceForm"
 
-function Header() {
+
+function Header( formData, handleEdit, handleDelete ) {
   gsap.registerPlugin(ScrollToPlugin);
   const location = useLocation();
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   const scrollTo = (target) =>
   gsap.to(window, { duration: 1, scrollTo: target });
@@ -79,9 +85,18 @@ function Header() {
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
           <div className="header__links">
+            
+          <button className='create__btn' onClick={openModal}>Создать услугу</button>
+            {formData.serviceId && ( // Проверка наличия serviceId для отображения кнопок
+              <div>
+                <button onClick={handleEdit}>Редактировать</button>
+                <button onClick={handleDelete}>Удалить</button>
+              </div>
+            )}
             <NavLink to="/products" className="middle__links" activeclassname="active">
               Каталог товаров
             </NavLink>
+
           </div>
         </div>
         <div className="header__middle header__middle_links">
@@ -91,6 +106,15 @@ function Header() {
           {/* <Link to="/profile" className="header__account-btn"> аккаунт </Link> */}
         </div>
       </div>
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal__overlay" onClick={closeModal}></div> {/* Добавил overlay для закрытия popup при клике вне формы */}
+          <div className="modal__content">
+            <CreateServiceForm />
+            <button className="modal__close-btn" onClick={closeModal}>Закрыть</button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

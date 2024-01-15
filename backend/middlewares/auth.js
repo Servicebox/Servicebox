@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+{/*const jwt = require('jsonwebtoken');
 const { SECRET_KEY_DEV } = require('../utils/constants');
 
 const { NODE_ENV, SECRET_KEY } = process.env;
@@ -23,3 +23,4 @@ module.exports = (req, res, next) => {
   req.user = payload;
   next();
 };
+*/}

@@ -1,4 +1,4 @@
-// Подключение celebrate из пакета celebrate, для валидации данных
+{/*// Подключение celebrate из пакета celebrate, для валидации данных
 const { Joi, celebrate } = require('celebrate');
 const { REGEX_URL_EMAIL } = require('../utils/constants');
 
@@ -59,3 +59,4 @@ module.exports = {
   deleteProductValidator,
   editUserInfoValidator,
 };
+*/}

@@ -1,44 +1,51 @@
-// routes/product.js
 const express = require('express');
 const router = express.Router();
-const { getProducts, getSectionList, getElementList, getImage } = require('../models/products');
+const Product = require('../models/product'); // Подключаем модель продукта
+const { checkAdmin } = require('../middlewares/checkAdmin'); // Импортируем checkAdmin из middlewares
 
-router.get('/products', async (req, res) => {
+// Роут для получения всех продуктов из базы
+router.get('/', async (req, res) => {
   try {
-    const productList = await getProducts();
-    res.json(productList);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const products = await Product.find();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
-router.post('/sections', async (req, res) => {
+// Роут для добавления нового продукта в базу
+router.post('/products', async (req, res) => {
+  const product = new Product({
+    productName: req.body.productName,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category
+  });
+
   try {
-    const { limit, page, sectionId, includeSubsection } = req.body;
-    const sections = await getSectionList(limit, page, sectionId, includeSubsection);
-    res.json(sections);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const newProduct = await product.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
-router.post('/elements', async (req, res) => {
+// Роут для обновления существующего продукта в базе
+router.put('/:id', checkAdmin, async (req, res) => {
   try {
-    const { limit, page, sectionId, includeSubsection, fullUrl, noImage } = req.body;
-    const elements = await getElementList(limit, page, sectionId, includeSubsection, fullUrl, noImage);
-    res.json(elements);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.post('/images', async (req, res) => {
-  try {
-    const { elementId } = req.body;
-    const image = await getImage(elementId);
-    res.json(image);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      product.productName = req.body.productName;
+      product.description = req.body.description;
+      product.price = req.body.price;
+      product.category = req.body.category;
+      const updatedProduct = await product.save();
+      res.json(updatedProduct);
+    } else {
+      res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 

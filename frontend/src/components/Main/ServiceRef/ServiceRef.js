@@ -21,26 +21,45 @@ const Card = ({ title, image, subtitle, serviceRef,button }) => {
     <section className="serviceRef" ref={serviceRef}>
       <div className="card">
         <img src={Rectangle} className="rectangle" alt="Rectangle" />
+
         {image === "Notebook" && (
+          <Link to="/notebook-service">
           <img src={Notebook} className="card__image" alt="Clock" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
         {image === "Monoblok" && (
+          <Link to="/monoblock-service">
           <img src={Monoblok} className="card__image" alt="Clock" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
 
         {image === "Applefon" && (
+          <Link to="/appl-service">
           <img src={Applefon} className="card__image" alt="Applefon" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
 
         {image === "Android" && (
+           <Link to="/telephone-service">
           <img src={Android} className="card__image" alt="Android" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
         {image === "Tablet" && (
+          <Link to="/tablet-service">
           <img src={Tablet} className="card__image" alt="Clock" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
 
         {image === "Tv" && (
+          <Link to="/tv-service">
           <img src={Tv} className="card__image" alt="Tv" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
 
 {image === "Glass" && (
@@ -52,7 +71,10 @@ const Card = ({ title, image, subtitle, serviceRef,button }) => {
         
 
         {image === "Devices" && (
+            <Link to="/other-service">
           <img src={Devices} className="card__image" alt="Devices" />
+          <h3 className="card__subtitle">посмотреть прайс</h3>
+          </Link>
         )}
 
         <h3 className="card__title">{title}</h3>
@@ -129,6 +151,9 @@ const Card = ({ title, image, subtitle, serviceRef,button }) => {
             столкнулись. Мы используем современное оборудование и проверенные
             методы, чтобы обеспечить высокое качество услуг.
           </p>
+          <p className="service__subtitle-one">
+  <span className="priceInDevelopment">*прайс по услугам в разработке</span>
+</p> 
           <div className="tech">
             {cardsData.map((card, index) => (
               <Card

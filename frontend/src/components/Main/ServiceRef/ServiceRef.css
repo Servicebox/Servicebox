@@ -1,3 +1,13 @@
+.priceInDevelopment {
+  background-color: #F9A92C; /* Цвет фона, который вы хотите использовать */
+  color: white; /* Цвет текста */
+  padding: 5px 10px; /* Отступы вокруг текста */
+}
+.service__subtitle-one{
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 10px;
+}
 
 .service__title{
 color: #13171D;
@@ -24,14 +34,16 @@ padding: 100px 0 0;
 }
 .card__subtitle{
   position: absolute;
-  top: 55%;
+  top: 62%;
   left: 26px;
+  font-family: Gilroy;
   color: #ffffff;
-  background-color: rgb(2, 2, 2);
+  
+  background-color: rgb(0 0 0 / 33%);
   padding: 5px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 18px;
 
 }
 .card__subtitle:hover{
@@ -41,7 +53,7 @@ padding: 100px 0 0;
         opacity: 0.5;
         filter: drop-shadow(0px 8px 10px rgb(201, 201, 201)) drop-shadow(0px 50px 60px rgba(141, 141, 141, 0.125));
         max-width: 565px;
-        box-shadow: 30px 14px 30px -31px #575757;
+        box-shadow: 30px 14px 30px -13px #575757;
         grid-row: 1;
         border-radius: 20px;
         grid-row: 1;
@@ -138,6 +150,7 @@ display: none;
   margin: 50px auto 0 auto;
   box-sizing: border-box;
   justify-content: center;
+  gap: 5px;
 
 }
 
@@ -184,9 +197,9 @@ max-width: 250px;
 }
 .card__subtitle{
   position: absolute;
-  top: 65%;
+  top: 59%;
   color: #ffffff;
-  background-color: rgb(2, 2, 2);
+  background-color: rgb(0 0 0 / 33%);
   padding: 5px;
   border-radius: 10px;
   cursor: pointer;
