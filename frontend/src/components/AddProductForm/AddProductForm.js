@@ -14,7 +14,7 @@ function AddProductForm() {
   };
   useEffect(() => {
     // Выполнение запроса на сервер для проверки роли администратора
-    axios.get('http://localhost:8000/userRoleCheck', { withCredentials: true }) 
+    axios.get('http://localhost:5000/userRoleCheck', { withCredentials: true }) 
       .then((response) => {
         setIsAdmin(response.data.isAdmin);
       })

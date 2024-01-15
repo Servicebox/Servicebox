@@ -1,4 +1,4 @@
-// api.js
+{/*// api.js
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -32,4 +32,4 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(id, done) {
   // Загружаем пользователя из сессии
   done(null, { id: 1, username: 'admin', role: 'admin' }); // В реальном проекте данные будут загружаться из базы данных
-});
+});*/}

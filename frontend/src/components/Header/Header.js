@@ -14,7 +14,7 @@ import ContactsRef from "../Main/ContactsRef/ContactsRef";
 import CreateServiceForm from "../CreateServiceForm/CreateServiceForm"
 
 
-function Header( formData, handleEdit, handleDelete ) {
+function Header() {
   gsap.registerPlugin(ScrollToPlugin);
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -85,14 +85,8 @@ function Header( formData, handleEdit, handleDelete ) {
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
           <div className="header__links">
-            
-          <button className='create__btn' onClick={openModal}>Создать услугу</button>
-            {formData.serviceId && ( // Проверка наличия serviceId для отображения кнопок
-              <div>
-                <button onClick={handleEdit}>Редактировать</button>
-                <button onClick={handleDelete}>Удалить</button>
-              </div>
-            )}
+          <button className="create__btn" onClick={openModal}>Создать услугу</button>
+          
             <NavLink to="/products" className="middle__links" activeclassname="active">
               Каталог товаров
             </NavLink>
@@ -108,7 +102,7 @@ function Header( formData, handleEdit, handleDelete ) {
       </div>
       {isModalOpen && (
         <div className="modal">
-          <div className="modal__overlay" onClick={closeModal}></div> {/* Добавил overlay для закрытия popup при клике вне формы */}
+          <div className="modal__overlay" onClick={closeModal}></div> 
           <div className="modal__content">
             <CreateServiceForm />
             <button className="modal__close-btn" onClick={closeModal}>Закрыть</button>
