@@ -16,6 +16,7 @@ import Arrow from "../../../images/Up.svg";
 import Tv from "../../../images/tv.png"
 import Glass from "../../../images/Glass.png"
 
+
 const Card = ({ title, image, subtitle, serviceRef,button }) => {
   return (
     <section className="serviceRef" ref={serviceRef}>
@@ -141,9 +142,12 @@ const Card = ({ title, image, subtitle, serviceRef,button }) => {
   ];
 
   const ServiceRef = forwardRef((_props, ref) => {
+
+
     return (
       <section id="serviceRef" className="serviceRef" ref={ref}>
         <div className="service__content">
+    
           <h2 className="service__title">Мы работаем с устройствами:</h2>
           <p className="service__subtitle">
             Команда опытных специалистов обладает глубокими знаниями в области

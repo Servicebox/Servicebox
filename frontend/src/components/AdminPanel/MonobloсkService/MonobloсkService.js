@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import "./MonoblockService.css"
 import axios from 'axios';
+import Search from "../../Search/Search"
 
 const MonoblockServiceList = () => {
   const [monoblockPrices, setMonoblockPrices] = useState([]);
+
+  const [showAll, setShowAll] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
 
   useEffect(() => {
     const getCategoryMonoblockPrices = async () => {
@@ -17,10 +26,26 @@ const MonoblockServiceList = () => {
     getCategoryMonoblockPrices();
   }, []);
 
+  const handleShowAll = () => {
+    setShowAll(true);
+  };
+
+  const handleHideAll = () => {
+    setShowAll(false);
+  };
+
+
+  const filteredMonoblockPrices = monoblockPrices.filter((monoblockPrice) => {
+    return monoblockPrice.serviceName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+
   return (
     <div className='monoblock'>
       <h1 className='monoblock__title'>Цены на работу по ремноту ноутбуков </h1>
-      <span className="smaller-font">Если не нашли, что искали звоните 8911 501 88 28. Цены указаны без учета запчастей</span>
+      <span className="smaller-font">Если не нашли, что искали звоните 8911 501 88 28. Цены указаны без учета запчастей</span> 
+       <Search value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
+
       <table>
         <thead>
           <tr>
@@ -29,7 +54,7 @@ const MonoblockServiceList = () => {
           </tr>
         </thead>
         <tbody>
-          {monoblockPrices.map((monoblockPrice) => (
+        {filteredMonoblockPrices.slice(0, showAll ? filteredMonoblockPrices.length : 15).map((monoblockPrice) => (
             <tr key={monoblockPrice._id}>
               <td>{monoblockPrice.serviceName}</td>
               <td>{monoblockPrice.price}</td>
@@ -37,6 +62,11 @@ const MonoblockServiceList = () => {
           ))}
         </tbody>
       </table>
+      {!showAll ? (
+        <button className='glass__btn-active' onClick={handleShowAll}>Посмотреть прайс</button>
+      ) : (
+        <button className='glass__btn' onClick={handleHideAll}>Скрыть прайс</button>
+      )}
       <p className='glass__sabtitle-one'>* - время ремонта может меняться в зависимости от модели устройства и сложности проводимых работ</p>
         <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
     </div>

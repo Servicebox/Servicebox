@@ -1,14 +1,18 @@
 import React from "react";
 import "./Search.css";
-const Search = ({ value, onChangeData }) => {
+//import { FaSearch } from 'react-icons/fa';
+
+
+const Search = ({ value, onChange, placeholder }) => {
   return (
-    <div>
+    <div className="search">
+      <i className="fa fa-search search__icon"></i>
       <input
         className="search__input"
         type="text"
-        placeholder="Введите название"
+        placeholder={placeholder}
         value={value}
-        onChange={onChangeData}
+        onChange={onChange}
       />
     </div>
   );

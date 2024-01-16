@@ -10,8 +10,9 @@ const { allowedCors, corsOptions } = require('./middlewares/cors');
 const router = require('./routes/index');
 const cors = require('cors');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
+const productsRouter = require('./routes/products');
 
-//const productRouter = require('./routes/products');
+
 
 mongoose.set('strictQuery', true);
 
@@ -37,7 +38,7 @@ mongoose
 app.use(express.json());
 
 app.use(glassReplacementRoutes);
-//app.use(productRouter); // Используем роутер для товаров
+app.use(productsRouter); // Используем роутер для товаров
 
 app.get('/services', async (req, res) => {
   try {
@@ -96,6 +97,10 @@ router.get('/services/:category', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+//товары
+app.use('/products', productsRouter);
+
 
 app.use(cors(corsOptions));
 
