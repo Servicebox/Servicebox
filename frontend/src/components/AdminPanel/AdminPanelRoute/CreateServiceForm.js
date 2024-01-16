@@ -42,7 +42,7 @@ const CreateServiceForm = () => {
 
   return (
     <form className='create__form' onSubmit={handleSubmit}>
-      <input
+      <input className='admin__input'
         type="text"
         name="serviceName"
         value={formData.serviceName}
@@ -50,14 +50,14 @@ const CreateServiceForm = () => {
         placeholder="Название услуги"
         required
       />
-      <textarea
+      <textarea className='admin__input'
         name="description"
         value={formData.description}
         onChange={handleInputChange}
         placeholder="Описание"
         required
       />
-      <input
+      <input className='admin__input'
         type="text"
         name="price"
         value={formData.price}
@@ -65,7 +65,7 @@ const CreateServiceForm = () => {
         placeholder="Цена"
         required
       />
-      <input
+      <input className='admin__input'
         type="text"
         name="category"
         value={formData.category}

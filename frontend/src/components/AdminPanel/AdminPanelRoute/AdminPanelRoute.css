@@ -1,0 +1,21 @@
+.admin{
+    padding-top: 50px;
+    max-width: 200px;
+    padding-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    text-align: center;
+    align-items: stretch;
+    justify-content: center;
+    margin: 0 auto;
+}
+.admin__link{
+    text-decoration: none;
+    cursor: pointer;
+    background-color: #F9A92C;
+    padding: 10px;
+    color: rgb(255, 255, 255);
+    border-radius: 10px;
+}

@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/service');
+router.use(express.json());
 
 // Создание новой услуги
 router.post('/services', async (req, res) => {
@@ -52,5 +53,20 @@ router.put('/services/:serviceId', async (req, res) => {
       res.status(400).json({ error: err.message });
     }
   });
+
+  // Удаление услуги
+router.delete('/services/:serviceId', async (req, res) => {
+  const { serviceId } = req.params;
+  try {
+    const deletedService = await Service.findByIdAndDelete(serviceId);
+    if (deletedService) {
+      res.status(200).json({ message: 'Услуга успешно удалена' });
+    } else {
+      res.status(404).json({ message: 'Услуга не найдена' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;

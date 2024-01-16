@@ -16,15 +16,22 @@ import CardBody from "../Card/CardBody";
 import Button from "../Button/Button";
 //import { Products } from "../Products/Products";
 import ServiceRef from "../Main/ServiceRef/ServiceRef";
-import NotebookService from "../NotebookService/NotebookService"
-import MonoblockService from "../MonobloсkService/MonobloсkService"
-import TelephoneService from "../TelephoneService/TelephoneService";
-import TabletService from "../TabletService/TabletService";
-import TvService from "../TvService/TvService"
-import GlassReplacementPriceList from "../GlassReplacementPriceList/GlassReplacementPriceList";
+import NotebookService from "../AdminPanel/NotebookService/NotebookService"
+import MonoblockService from "../AdminPanel/MonobloсkService/MonobloсkService"
+import TelephoneService from "../AdminPanel/TelephoneService/TelephoneService";
+import TabletService from "../AdminPanel/TabletService/TabletService";
+import TvService from "../AdminPanel/TvService/TvService"
+import GlassReplacementPriceList from "../AdminPanel/GlassReplacementPriceList/GlassReplacementPriceList";
 import ApplService from "../ApplService/ApplService";
-import OtherService from "../OtherService/OtherService"
-import CreateServiceForm from "../CreateServiceForm/CreateServiceForm";
+import OtherService from "../AdminPanel/OtherService/OtherService"
+import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm";
+import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
+
+
+import DeleteService from "../AdminPanel/AdminPanelRoute/DeleteService";
+import UpdateService from "../AdminPanel/AdminPanelRoute/UpdateService";
+
+
 
 
 import "./App.css";
@@ -121,6 +128,11 @@ return (
 <Route path="/appl-service" element={<ApplService />} />/
 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 <Route path="CreateServiceForm" element={<CreateServiceForm />} />
+
+<Route path="/admin" element={<AdminPanelRoute />} />
+        <Route path="/admin/create" element={<CreateServiceForm />} />
+        <Route path="/admin/delete" element={<DeleteService />} />
+        <Route path="/admin/update" element={<UpdateService/>} />
 </Routes>
 {isFormOpen && <Form toggleForm={toggleForm} />}
 <Footer />
