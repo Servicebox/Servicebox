@@ -1,4 +1,4 @@
-//models/product.js
+{/*//models/product.js
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -20,4 +20,4 @@ const productSchema = new mongoose.Schema({
     required: true
   }
 });
-const Product = mongoose.model('Product', productSchema);
+const Product = mongoose.model('Product', productSchema);*/}

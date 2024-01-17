@@ -7,7 +7,7 @@ import Button from "../Button/Button";
 
 const CardBody = ({
   items,
-  searchValue,
+  value,
   changingSearchData,
   setShowAddProducts,
   showAddProducts,
@@ -29,14 +29,7 @@ const CardBody = ({
           addedItems={addedItems}
         />
       ))}
-      <div className="nav-right">
-        <Search
-          products={items}
-          value={searchValue}
-          onChangeData={changingSearchData}
-        />
-        <Button num={addedItems.length} click={setShowAddProducts} />
-      </div>
+      
       {showAddProducts && (
         <AddProducts
           click={setShowAddProducts}

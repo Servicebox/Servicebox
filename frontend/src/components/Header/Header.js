@@ -87,7 +87,7 @@ function Header() {
           <div className="header__links">
           {/*<button className="create__btn" onClick={openModal}>Создать услугу</button>*/}
           
-            <NavLink to="/products" className="middle__links" activeclassname="active">
+            <NavLink to="/api" className="middle__links" activeclassname="active">
               Каталог товаров
             </NavLink>
 

@@ -27,48 +27,50 @@ import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm";
 import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
 import DeleteService from "../AdminPanel/AdminPanelRoute/DeleteService";
 import UpdateService from "../AdminPanel/AdminPanelRoute/UpdateService";
+import Api from "../Api"
 import "./App.css";
 
 function App() {
   gsap.registerPlugin(ScrollToPlugin);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [items, setItems] = useState([]);
-  const [Value, setValue] = useState("");
-  const [addedItems, setAddedItems] = useState([]);
-  const [showAddProducts, setShowAddProducts] = useState(false);
-  const url = "https://servicebox35.pp.ru/products";
+ 
 
-  const toggleForm = useCallback(() => {
+ /** const toggleForm = useCallback(() => {
     setIsFormOpen(prevState => !prevState);
   }, []);
 
+  // Функция для выполнения запроса к стороннему API
+  const fetchDataFromAPI = async () => {
+    try {
+      // Данные для аутентификации в API
+      const authData = {
+        auth_id: '5948',
+        auth_key: 'y7rd32EeTZ2xej1rtsya8vSFiMC7wCdp',
+        method: 'catalog.getSectionList',
+        limit: 500,
+        page: 0
+      };
+
+      // Выполняем POST-запрос к стороннему API
+      const response = await axios.post('https://optfm.ru/api/', authData);
+
+      // Получаем данные из ответа в формате JSON
+      const data = response.data;
+
+      // Устанавливаем полученные данные в состояние вашего компонента
+      setItems(data.response.items); // предполагается, что ваш ответ включает поле response с полем items
+
+      // Другие обработки данных...
+    } catch (error) {
+      console.error('Error:', error); // Обработка ошибок
+    }
+  };
+
+  // Вызываем функцию для выполнения запроса при монтировании компонента
   useEffect(() => {
-    axios.post(url)
-      .then(response => {
-        setItems(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    fetchDataFromAPI();
   }, []);
-
-  function changingSearchData(e) {
-    setValue(e.target.value);
-  }
-
-  const itemsFilter = items.filter((item) =>
-    item.title.toLowerCase().includes(Value.toLowerCase())
-  );
-
-  function addItem(item) {
-    item.addNumber = 1;
-    setAddedItems([...addedItems, item]);
-  }
-
-  function removeItem(item) {
-    const newItems = addedItems.filter((addedItem) => addedItem.id !== item.id);
-    setAddedItems(newItems);
-  }
+**/
 
   return (
     <Router>
@@ -76,35 +78,12 @@ function App() {
         <div className="page__wrapper">
           <div className="nav">
             <Header />
-            <div className="nav-right"></div>
-            <List products={items} />
-            {showAddProducts && (
-          <AddProducts
-            click={setShowAddProducts}
-            items={addedItems}
-            removeItem={removeItem}
-            setAddedItem={setAddedItems}
-          />
-        )}
 
           </div>
           <Routes>
             <Route exact path="/" element={<Main />} />
-            <Route path="/products" element={
-          <CardBody
-            items={items}
-            Value={Value}
-            changingSearchData={changingSearchData}
-            setShowAddProducts={setShowAddProducts}
-            showAddProducts={showAddProducts}
-            addedItems={addedItems}
-            removeItem={removeItem}
-            setAddedItem={setAddedItems}
-            itmesFilter={itemsFilter}
-            addItem={addItem}
-          />
-        } />
             <Route exact path="/" component={ServiceRef} />
+            <Route path="/api" element={<Api />}  />
             <Route path="/notebook-service" element={<NotebookService />} />
             <Route path="/monoblock-service" element={<MonoblockService />} />
             <Route path="/tv-service" element={<TvService />} />

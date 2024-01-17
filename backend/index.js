@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 5000;
+const PORT = 8000;
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const limiter = require('./middlewares/rateLimiter');
@@ -10,7 +10,7 @@ const { allowedCors, corsOptions } = require('./middlewares/cors');
 const router = require('./routes/index');
 const cors = require('cors');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
-const productsRouter = require('./routes/products');
+const apiRouter = require('./routes/api');
 
 
 
@@ -37,8 +37,8 @@ mongoose
 //const app = express();
 app.use(express.json());
 
-app.use(glassReplacementRoutes);
-app.use(productsRouter); // Используем роутер для товаров
+
+
 
 app.get('/services', async (req, res) => {
   try {
@@ -99,7 +99,7 @@ router.get('/services/:category', async (req, res) => {
 });
 
 //товары
-app.use('/products', productsRouter);
+app.use('/api', apiRouter);
 
 
 app.use(cors(corsOptions));

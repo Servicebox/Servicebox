@@ -55,7 +55,7 @@ function BurgerMenu({ scrollTo }) {
    
           </ul>
           <div className="header__links header__links-burger">
-          <Link to="/products" className="middle__links" >
+          <Link to="/api" className="middle__links" >
               Каталог товаров
             </Link>
           </div>
