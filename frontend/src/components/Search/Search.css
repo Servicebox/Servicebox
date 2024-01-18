@@ -11,3 +11,8 @@
     padding-top: 20px;
     padding-bottom: 20px;
   }
+  @media screen and (max-width: 400px){
+    .search__input{
+      width: 250px;
+    }
+  }

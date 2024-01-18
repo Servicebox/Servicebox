@@ -13,7 +13,7 @@ const Api = () => {
   const [value, setValue] = useState("");
   const [addedItems, setAddedItems] = useState([]);
   const [showAddProducts, setShowAddProducts] = useState(false);
-  const url = "https://servicebox35.pp.ru/api";
+  const url = 'https://servicebox35.pp.ru/api';
 
   useEffect(() => {
     axios.get(url)
@@ -44,7 +44,7 @@ const Api = () => {
 
   return (
     <div className="body__container">
-      <div className="navigation">
+      <div className="navigation__api">
         <div className="nav-right">
           <Search
             products={items}

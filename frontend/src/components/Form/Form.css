@@ -20,7 +20,7 @@ text-align: center;
   color: red;
   position: absolute;
   width: 400px;
-  top: 160px;
+  top: 175px;
     left: 126px;
 }
 .error3{
@@ -28,7 +28,7 @@ text-align: center;
   color: red;
   position: absolute;
   width: 400px;
-  top: 237px;
+  top: 250px;
     left: 126px;
 }
 .form {
@@ -166,16 +166,16 @@ margin: 0 auto;
 .error1 {
   font-size: 10px;
   position: absolute;
-  top: 142px;
-  left: 100%;
+  top: 115px;
+  left: 90%;
   transform: translateX(-50%);
   width: 400px;
 }
 .error3 {
   font-size: 10px;
   position: absolute;
-  top: 196px;
-  left: 100%;
+  top: 170px;
+  left: 90%;
   transform: translateX(-50%);
   width: 400px;
 }
@@ -185,11 +185,11 @@ margin: 0 auto;
   max-width: 400px;
 }
 .error1{
-  top: 161px;
+  top: 211px;
   left: 100px;
 }
 .error3{
-  top: 237px;
+  top: 287px;
   left: 100px;
 }
 }

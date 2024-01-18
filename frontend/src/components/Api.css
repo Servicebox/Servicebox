@@ -9,7 +9,7 @@
     border-radius: 0.5rem;
     padding: 1rem;
   }
-  .navigation {
+  .navigation__api {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -20,7 +20,7 @@
     position: sticky;
     top: 0;
     background-color: var(--color-white);
-    z-index: 2;
+
   }
   .nav-right {
     display: flex;
@@ -29,7 +29,7 @@
   }
   @media screen and (max-width: 1040px) {
     .body__container {
-      width: 95%;
+      width: 100%;
     }
     .nav {
       flex-direction: column;
