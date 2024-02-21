@@ -6,27 +6,53 @@
     transition: 0.3s;
     display: flex;
     flex-direction: column;
+   gap: 20px;
+    max-width: 400px;
     justify-content: space-between;
   }
-  
-  .card__img {
-    width: 30%;
+  .card__text{
+    font-family: Gilroy;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 25px;
+    margin: 5px auto;
   }
-  .card p {
+  .card-text{
+    font-family: Gilroy;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 20px;
+    max-height: 5.6em; 
+    overflow: hidden;
+  text-overflow: ellipsis; /* Добавляет многоточие в конце текста, если он выходит за пределы */
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* Количество строк, которые вы хотите отобразить */
+  -webkit-box-orient: vertical;
+  
+  }
+  .card__img-product {
+   max-width: 150px;
+   max-height: 150px;
+   border-radius: 5px;
+    
+  }
+  .card__img-product p {
     color: var(--soft-color);
   }
-  .card h4,
+  .card__img-producth4,
   p {
     margin: 0.5rem auto;
   }
-  .card h2 {
+  .card__img-product h2 {
     text-decoration: underline;
   }
-  .card:hover {
+  .card__img-product:hover {
     box-shadow: 0px 0px 10px var(--softer-color);
     transform: scale(1.01);
   }
-  .card-price-add {
+  .card__img-product-price-add {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,6 +68,7 @@
     border: 2px solid var(--color-primary);
     border-radius: 0.5rem;
     cursor: pointer;
+    margin-top: 20px;
   }
   .remove-item-btn {
     border-color: var(--color-danger);
@@ -55,4 +82,34 @@
     background-color: var(--color-danger);
     color: var(--color-white);
   }
+
   
+  .modal__img {
+    max-width: 80%;
+    max-height: 80%;
+    display: block;
+    margin: auto;
+    border-radius: 10px;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 50px;
+    cursor: pointer;
+  }
+  .card__text,
+.card-text,
+.card-price-add {
+  padding: 10px; /* Отступы для текста внутри карточки */
+}
+
+.card__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* это позволит карточкам товаров адаптироваться и заполнять доступное пространство  */
+  gap: 20px; /* расстояние между карточками */
+}

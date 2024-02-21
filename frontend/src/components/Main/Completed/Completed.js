@@ -52,13 +52,6 @@ function Completed() {
     };
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000); 
-
-    return () => clearInterval(interval);
-  }, [currentPhoto]);
 
   const handleNext = () => {
     setCurrentPhoto((prevPhoto) => (prevPhoto === photos.length - 1 ? 0 : prevPhoto + 1));

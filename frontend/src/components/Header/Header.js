@@ -80,16 +80,26 @@ function Header() {
           <BurgerMenu scrollTo={scrollTo} />
         </div>
         <div className="header__middle">
+        <nav className="nav_middle">
+            <ul className="nav__lists">
+            <li className={`nav__list ${location.pathname === "/service" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
+</li>
+              <li className={`nav__list ${location.pathname === "/about" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
+</li>
+<li className={`nav__list ${location.pathname === "/contacts" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
+</li>
+            </ul>
+          </nav>
           <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
             <img src={MiddleStatus} alt="Кнопка" />
             <span className="button-text">CТАТУС РЕМОНТА</span>
           </a>
           <div className="header__links">
           {/*<button className="create__btn" onClick={openModal}>Создать услугу</button>*/}
-          
-            <NavLink to="/api" className="middle__links" activeclassname="active">
-              Каталог товаров
-            </NavLink>
+   
 
           </div>
         </div>

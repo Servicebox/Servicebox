@@ -44,20 +44,18 @@ function BurgerMenu({ scrollTo }) {
         <nav className="navigation__list">
           <ul className="burger-menu__list">
           <li className={`burger-menu__item ${location.pathname === "/service" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
-</li>
-<li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
-</li>
-<li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
-</li>
+              <a onClick={() => handleScrollTo(serviceRef)}>Наши услуги</a>
+            </li>
+            <li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
+              <a onClick={() => handleScrollTo(aboutRef)}>О компании</a>
+            </li>
+            <li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
+              <a onClick={() => handleScrollTo(contactsRef)}>Контакты</a>
+            </li>
    
           </ul>
           <div className="header__links header__links-burger">
-          <Link to="/api" className="middle__links" >
-              Каталог товаров
-            </Link>
+        
           </div>
           <div className="nav__button">
           <a

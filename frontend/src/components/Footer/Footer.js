@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
+import Oplata from "../../images/oplata1.png";
+import Sbp from "../../images/sbp.png";
+import Beznal from "../../images/beznal.png";
 //import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 
 function Footer() {
@@ -19,7 +22,23 @@ function Footer() {
           </p>
          
           <Link to="/privacy-policy" className="footer__link"> Политика конфиденциальности</Link>
+          <div className="foooter__oplata">
+       <h3 className="oplata__title"> Удобные способы оплаты </h3>
+       <ul className="oplata__list">
+         <li className="oplata__item">
+           <img className="oplata__img" src={Oplata} alt="Paypal" />
+         </li>
+         <li className="oplata__item">
+           <img className="oplata__image" src={Sbp} alt="Paypal" />
+         </li>
+         <li className="oplata__item">
+           <img className="oplata__image" src={Beznal} alt="Paypal" />
+         </li>
+      
+       </ul>
         </div>
+        </div>
+       
       </div>
       <p className="footer__author">&copy;Кознова T.А. 2023</p>
     </footer>

@@ -1,40 +1,70 @@
+import { BrowserRouter as Router, Switch, Route, useParams, Link, Routes } from 'react-router-dom';
+
 import React, { useEffect, useState } from "react";
-import Search from "./Search/Search";
+import Search from "./SearchProducts/SearchProducts";
 import AddProducts from "./AddProducts/AddProducts";
 import CardBody from "./Card/CardBody";
 import Button from "./Button/Button";
-import "./Api.css";
+import CategoryButton from "./CategoryButton/CategoryButton";
+
+
+import SearchProducts from "./SearchProducts/SearchProducts";
+
+ 
+import "./Api.css"; 
 
 import axios from 'axios';
 
 
 const Api = () => {
   const [items, setItems] = useState([]);
-  const [value, setValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [addedItems, setAddedItems] = useState([]);
   const [showAddProducts, setShowAddProducts] = useState(false);
-  const url = 'https://servicebox35.pp.ru/api';
+  const [expandedCategories, setExpandedCategories] = useState({});
+  const [categoryTree, setCategoryTree] = useState([]);
+  const [categories, setCategories] = useState({});
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [currentSection, setCurrentSection] = useState(null);
+  const [currentSubsection, setCurrentSubsection] = useState(null);
+  
+  const [value, setValue] = useState("");
+  const handleSearch = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const url = 'http://localhost:8000/products/';
 
   useEffect(() => {
     axios.get(url)
       .then(response => {
-        setItems(response.data);
+        const baseImageUrl = 'https://optfm.ru';
+        const newItems = response.data.response.items.map(item => ({
+          ...item,
+          picture: baseImageUrl + item.picture
+        }));
+        setItems(newItems);
       })
       .catch(error => {
         console.log(error);
       });
   }, []);
-  function changingSearchData(e) {
-    setValue(e.target.value);
-  }
 
+
+
+  
+  function changingSearchData(e) {
+    setSearchValue(e.target.value);
+  }
   const itemsFilter = items.filter((item) =>
     item.name.toLowerCase().includes(value.toLowerCase())
   );
 
   function addItem(item) {
     item.addNumber = 1;
-    setAddedItems([...addedItems, item]);
+    item.price = item.prices[1].price; // Добавление цены товара
+    const itemArr = addedItems;
+    setAddedItems([...itemArr, item]);
   }
 
   function removeItem(item) {
@@ -60,7 +90,7 @@ const Api = () => {
           click={setShowAddProducts}
           items={addedItems}
           removeItem={removeItem}
-          setAddedItem={setAddedItems}
+          setAddedItems={setAddedItems}
         />
       )}
       <CardBody

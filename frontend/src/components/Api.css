@@ -3,7 +3,7 @@
     display: none;
   }
   .body__container {
-    width: 90%;
+    width: 100%;
     margin: 2rem auto;
     /* border: 1px solid var(--softer-color); */
     border-radius: 0.5rem;
@@ -18,8 +18,9 @@
     border-radius: 0.5rem;
     margin-bottom: 1rem;
     position: sticky;
-    top: 0;
+    top: 0;  /* Зафиксировать элемент сверху */
     background-color: var(--color-white);
+    max-width: 600px;
 
   }
   .nav-right {
@@ -49,4 +50,44 @@
       display: none;
     }
   }
+  .add__products{
+    max-width: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+   
+  }
+
+  .active-category {
+    display: block;
+    width: 100%;
+  }
   
+  /* Стили для скрытых категорий */
+  .hidden-category {
+    display: none;
+    border: 1px solid red;
+  }
+  .hidden-category:hover {
+    display: none;
+    border: 1px solid red;
+  }
+  .active-category {
+    display: block; /* или другое значение, в зависимости от вашей верстки */
+  }
+  
+  /* Стили для отображения сайдбара с категориями сбоку */
+  .sidebar {
+    width: 200px; /* Или другая фиксированная ширина */
+    float: left; /* Сайдбар будет слева */
+  }
+  .api-row{
+    width: 150px;
+    height: 65px;
+    display: flex;
+    flex-direction: row;
+}
+.api-col{
+    display: flex;
+    flex-direction: row;
+}

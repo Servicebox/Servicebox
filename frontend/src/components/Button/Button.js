@@ -3,9 +3,10 @@ import "./Button.css";
 const Button = ({ num, click }) => {
   return (
     <button className="ui-change-btn" onClick={() => click(true)}>
-      Добавлено <span>{num}</span> {num <= 1 ? "товар" : "товаров"}
+      Всего  <span>{num}</span> {num <= 1 ? "товар" : "товара"}
     </button>
   );
 };
 
 export default Button;
+

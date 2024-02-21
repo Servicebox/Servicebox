@@ -24,6 +24,31 @@ border-right: 2px solid currentColor;
   border-radius: 6px;
   padding: 20px;
   width: 80%;
+  text-align: center;
+}
+.oplata__title{
+  color: #000000;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22px;
+  text-align: center;
+}
+.oplata__list{
+  list-style: none;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+ padding: 0;
+  justify-content: center;
+}
+.oplata__img{
+  max-width: 150px;
+ 
+}
+.oplata__image{
+  max-width: 100px;
 }
 .footer__title{
   color: #000000;
@@ -47,6 +72,9 @@ border-right: 2px solid currentColor;
   text-decoration: none;
   list-style: none;
   padding-bottom: 20px;
+  text-align: center;
+  font-size: 12px;
+  margin: 0 auto;
 }
 .footer__link:hover {
   text-decoration: underline;
@@ -54,6 +82,12 @@ border-right: 2px solid currentColor;
 }
 
 @media screen and (min-width: 320px) and (max-width: 499px){
+  .footer__info{
+    width: 100%;
+  }
+  .footer__title{
+    font-size: 12px;
+  }
   .footer__map{
     flex-direction: column;
   }
@@ -65,4 +99,62 @@ border-right: 2px solid currentColor;
     border-bottom: 2px solid currentColor;
     border-right: none;
     }
+
+    .oplata__title{
+      color: #000000;
+      font-family: Montserrat;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 22px;
+      text-align: center;
+    }
+    .oplata__list{
+      list-style: none;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .oplata__img{
+      max-width: 120px;
+     
+    }
+    .oplata__image{
+      max-width: 120px;
+    }
+}
+@media screen and (min-width: 500px) and (max-width: 768px){
+  .footer__title{
+    font-size: 14px;
+    text-align: center;
+  }
+  .oplata__title{
+    color: #000000;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px;
+    text-align: center;
+  }
+  .oplata__list{
+    list-style: none;
+    text-decoration: none;
+    display: flex;
+flex-direction: column;
+    margin: 0 auto;
+    padding: 0;
+  }
+  .oplata__img{
+    max-width: 120px;
+   
+  }
+  .oplata__image{
+    max-width: 100px;
+  }
+
 }

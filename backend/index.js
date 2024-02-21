@@ -1,16 +1,17 @@
 const express = require('express');
 const app = express();
-const PORT = 5000;
+const PORT = 8000;
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const limiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const indexRouter = require('./routes/index');
-const { allowedCors, corsOptions } = require('./middlewares/cors');
+const cors = require('./middlewares/cors');
 const router = require('./routes/index');
-const cors = require('cors');
+
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
-const apiRouter = require('./routes/api');
+const productsRouter = require('./routes/products');
+
 
 
 
@@ -37,7 +38,8 @@ mongoose
 //const app = express();
 app.use(express.json());
 
-
+app.use(cors);
+app.use(productsRouter); // Используем роутер для товаров
 
 
 app.get('/services', async (req, res) => {
@@ -99,15 +101,18 @@ router.get('/services/:category', async (req, res) => {
 });
 
 //товары
-app.use('/api', apiRouter);
+app.use('/products', productsRouter);
 
 
-app.use(cors(corsOptions));
+
 
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(requestLogger);
-
 // Роут для тестирования обработки ошибок
 app.get('/crash-test', (req, res, next) => {
   setTimeout(() => {
@@ -118,7 +123,6 @@ app.use(router);
 app.use(limiter);
 app.use(errorLogger);
 app.use('/', indexRouter);
-
 // Функция для запуска сервера на указанном порту
 const startServer = () => {
   app.listen(PORT, () => {
@@ -135,6 +139,5 @@ const startServer = () => {
     process.exit(1);
   });
 };
-
 // Запуск сервера
 startServer();

@@ -1,7 +1,14 @@
 .card__body {
+  display: flex;
+  flex-direction: column;
+}
+.card__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1.5rem;
+  /* grid-template-columns: repeat(auto-fill, minmax(293px, 0fr)); */
+  gap: 1rem;
+  padding-bottom: 30px;
+ 
+
 }
 @media screen and (max-width: 1040px) {
   .card__body {
@@ -20,3 +27,52 @@
   }
 }
 
+.card__btn{
+margin: 0 auto;
+  border-radius: 10px;
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 10px;
+  padding-left: 50px;
+  padding-right: 50px;
+}
+.card__btn:hover{
+  background-color: #F9A92C;
+}
+.sub-section {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.card__category h2 {
+  cursor: pointer;
+}
+
+.card__category h2:hover {
+  text-decoration: underline;
+}
+
+.card__category h2:focus {
+  outline: none;
+}
+.card__category{
+
+  display: grid;
+ 
+  gap: 1rem;
+  padding-bottom: 30px;
+
+  
+}
+.card-text{
+  margin: 0 auto;
+}
+.category-card{
+  display: flex;
+  flex-direction: column;
+}
+ .category-card-level-2{
+  background-color: aquamarine;
+ }

@@ -1,12 +1,13 @@
 import React from "react";
-import "./Search.css";
-const Search = ({ value, onChangeData }) => {
+import "./SearchProducts.css";
+
+const SearchProducts = ({ value, onChangeData }) => {
   return (
     <div>
       <input
         className="search__input"
         type="text"
-        placeholder="поиск"
+        placeholder="поиск товара"
         value={value}
         onChange={onChangeData}
       />
@@ -14,4 +15,4 @@ const Search = ({ value, onChangeData }) => {
   );
 };
 
-export default Search;
+export default SearchProducts;

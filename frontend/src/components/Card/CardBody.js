@@ -1,45 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../Card/Card";
 import "./CardBody.css";
-import AddProducts from "../AddProducts/AddProducts";
-import Search from "../Search/Search";
-import Button from "../Button/Button";
 
-const CardBody = ({
-  items,
-  value,
-  changingSearchData,
-  setShowAddProducts,
-  showAddProducts,
-  addedItems,
-  removeItem,
-  setAddedItem,
-  itmesFilter,
-  addItem,
-  products,
-}) => {
-  return (
-    <div className="card__body">
-      {products && products.map((product) => (
-        <Card
-          key={product.id}
-          product={product}
-          addItem={addItem}
-          removeItem={removeItem}
-          addedItems={addedItems}
-        />
-      ))}
-      
-      {showAddProducts && (
-        <AddProducts
-          click={setShowAddProducts}
-          items={addedItems}
-          removeItem={removeItem}
-          setAddedItem={setAddedItem}
-        />
-      )}
-    </div>
-  );
+const CardBody = ({ category, products, addItem, removeItem, addedItems, subsectionName }) => {
+return (
+<div className="card__category">
+<h2>{category}</h2>
+<h3>{subsectionName}</h3>
+<div className="card__grid">
+{products.map((product) => (
+<Card
+key={product.id}
+product={product}
+addItem={addItem}
+removeItem={removeItem}
+addedItems={addedItems} // Убедитесь, что addedItems передаётся сюда
+text={product.detail_text}
+price={product.prices[1].price}
+/>
+
+))}
+</div>
+</div>
+);
 };
 
 export default CardBody;
