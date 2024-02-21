@@ -30,7 +30,7 @@ function Header() {
     window.open(
       "https://yandex.ru/maps/org/servisboks/58578899506/?ll=39.929033%2C59.216813&z=13",
       "_blank",
-      { passive: true }
+      { passive: false }
     );
   };
 

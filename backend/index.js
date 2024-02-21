@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 8000;
+const PORT = 5000;
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const limiter = require('./middlewares/rateLimiter');
