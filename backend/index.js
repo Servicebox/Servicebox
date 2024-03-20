@@ -39,7 +39,7 @@ mongoose
 app.use(express.json());
 
 app.use(cors);
-app.use(productsRouter); // Используем роутер для товаров
+
 
 
 app.get('/services', async (req, res) => {
@@ -101,7 +101,7 @@ router.get('/services/:category', async (req, res) => {
 });
 
 //товары
-app.use('/products', productsRouter);
+
 
 
 

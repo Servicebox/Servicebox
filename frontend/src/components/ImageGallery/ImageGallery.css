@@ -1,0 +1,109 @@
+
+.gallery-container{
+    padding-top: 80px;
+}
+
+.gallery{
+    display: flex;
+flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    margin: 0 auto;
+    padding-bottom: 50px;
+    padding-top: 70px;
+
+}
+
+.gallery-title{
+    text-align: center;
+    margin: 0 auto;
+    font-weight: 700;
+
+    font-family: Gilroy;
+}
+.image-container {
+    position: relative;
+  }
+  .image-description {
+    position: absolute; 
+    left: 0;
+    bottom: 0;
+    width: 100%; 
+    background: rgba(255, 255, 255, 0.583);
+    padding: 10px; 
+    box-sizing: border-box;
+    font-size: 0.9em;
+  color: #000000;
+  visibility: visible;
+  font-style: normal;
+  font-weight: 700;
+  text-align: center;
+  font-family: Gilroy;
+  border-radius: 10px;
+    
+  }
+
+
+.image-card{
+  display: flex;  
+  position: relative;
+  z-index: 0;
+  
+}
+.image-gallery{
+    width: 300px;
+    height: 300px;
+    border-radius: 15px;
+    position: relative;
+    object-fit: cover;
+}
+.like-button{
+    background: none; /* Убираем стандартный фон кнопки */
+    border: none; /* Убираем границу кнопки */
+    cursor: pointer; /* Курсор в виде пальца при наведении на кнопку */
+    padding: 0; /* Убираем отступы у кнопки */
+    margin-right: 10px; /* Отступ справа от кнопки */
+    display: flex; 
+   
+
+}
+.likes-count {
+
+    position: absolute;
+    top: 300px;
+    right: 40px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: red;
+    z-index: 1;
+    font-size: 14px;
+}
+
+
+
+.btn-img{
+    width: 40px;
+    position: absolute;
+    top: 287px;
+    right: 0px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.span-img{
+    width: 45px;
+    position: absolute;
+    top: 300px;
+    right: 18px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+
+
+}
+
+

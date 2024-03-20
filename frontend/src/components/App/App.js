@@ -25,11 +25,10 @@ import ApplService from "../ApplService/ApplService";
 import OtherService from "../AdminPanel/OtherService/OtherService"
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm";
 import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
-import DeleteService from "../AdminPanel/AdminPanelRoute/DeleteService";
-import UpdateService from "../AdminPanel/AdminPanelRoute/UpdateService";
-import Api from "../Api"
+import ImageGallery from "../ImageGallery/ImageGallery";
+import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi"
 
-import Sidebar from "../Sidebar/Sidebar";
+
 
 import CardBody from "../Card/CardBody";
 
@@ -55,20 +54,13 @@ const categoryId = urlParams.get('categoryId');
           </div>
           <Routes>
             <Route exact path="/" element={<Main />} />
-            <Route path="api" element={<Api />} />
+            <Route path="image-gallery-api" element={<ImageGalleryApi />} />
         
-            
+   
     
 
             <Route exact path="/" component={ServiceRef} />
            < Route path="/card-body" element={ <CardBody />} />
-        
-           
-          
-        
-
-            <Route path="/sidebar" element={<Sidebar/>} />
-       
             <Route path="/notebook-service" element={<NotebookService />} />
             <Route path="/monoblock-service" element={<MonoblockService />} />
             <Route path="/tv-service" element={<TvService />} />
@@ -76,13 +68,12 @@ const categoryId = urlParams.get('categoryId');
             <Route path="/telephone-service" element={<TelephoneService />} />
             <Route path="/other-service" element={<OtherService />} />
             <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
+            < Route path="/image-gallery" element={ <ImageGallery  />} />
             <Route path="/appl-service" element={<ApplService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="CreateServiceForm" element={<CreateServiceForm />} />
-            <Route path="/admin" element={<AdminPanelRoute />} />
-            <Route path="/admin/create" element={<CreateServiceForm />} />
-            <Route path="/admin/delete" element={<DeleteService />} />
-            <Route path="/admin/update" element={<UpdateService />} />
+            <Route path="/admin/*" element={<AdminPanelRoute />} />
+         
           </Routes>
           {isFormOpen && <Form toggleForm={toggleForm} />}
           <Footer />

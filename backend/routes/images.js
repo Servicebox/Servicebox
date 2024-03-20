@@ -85,7 +85,7 @@ router.get('/image/:filename', (req, res) => {
   
       res.writeHead(200, {
         'Content-Type': 'image/jpeg',
-        'Access-Control-Allow-Origin': 'http://localhost:3000'
+        'Access-Control-Allow-Origin': 'https://servicebox35.pp.ru'
       }); 
       res.end(data);
     });
