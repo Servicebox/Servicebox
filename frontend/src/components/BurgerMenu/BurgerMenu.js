@@ -52,7 +52,12 @@ function BurgerMenu({ scrollTo }) {
             <li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
               <a onClick={() => handleScrollTo(contactsRef)}>Контакты</a>
             </li>
-   
+            <li className="nav__list">           
+  <Link className="burger-menu__item" to="/image-gallery-api">
+          <h3 className="card__subtitle-img">фото</h3>
+          </Link>
+
+</li>
           </ul>
           <div className="header__links header__links-burger">
         

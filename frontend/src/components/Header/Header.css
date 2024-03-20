@@ -54,7 +54,12 @@ display: none;
 .navigation {
   margin: 0 auto;
 }
-
+.nav__list-foto{
+  list-style: none;
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
+ }
 .navigation__list {
   list-style: none;
   color: #070707;
@@ -101,6 +106,8 @@ display: none;
   color: #000000;
   text-decoration: none;
   gap: 24px;
+  align-items: center;
+  list-style: none;
 }
 .navigation__list a:hover {
   background-color: #F9A92C;
@@ -261,7 +268,7 @@ display: flex;
   .contact-info {
     display: none;
   }
- 
+
   
   .nav__btn{
     display: none;
@@ -403,6 +410,11 @@ margin-right: 80px;
   .nav__list:hover{
     background-color: #F9A92C;
   }
+  .card__subtitle{
+    list-style: none;
+    text-decoration: none;
+  }
+
   
 @media (min-width: 769px) and (max-width: 990px) {
   .navigation__lists{
@@ -417,6 +429,7 @@ margin-right: 80px;
 .nav__lists{
 list-style: none;
 display: flex;
+align-items: center;
 gap: 10px;
 
 font-size: 13px;

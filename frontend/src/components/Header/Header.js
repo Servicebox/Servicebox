@@ -59,6 +59,12 @@ function Header() {
 <li className={`navigation__list ${location.pathname === "/contacts" ? "active" : ""}`}>
   <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
 </li>
+<li>           
+  <Link className="navigation__list" to="/image-gallery-api">
+          <h3 className="card__subtitle-img">фото</h3>
+          </Link>
+
+</li>
             </ul>
           </nav>
           <div className="nav__btn">
@@ -83,13 +89,19 @@ function Header() {
         <nav className="nav_middle">
             <ul className="nav__lists">
             <li className={`nav__list ${location.pathname === "/service" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
+  <a className="nav__list-foto" onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
 </li>
               <li className={`nav__list ${location.pathname === "/about" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
+  <a className="nav__list-foto" onClick={() => scrollTo(aboutRef)}>О компании</a>
 </li>
 <li className={`nav__list ${location.pathname === "/contacts" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
+  <a className="nav__list-foto" onClick={() => scrollTo(contactsRef)}>Контакты</a>
+</li>
+<li className="nav__list">           
+  <Link className="nav__list-foto" to="/image-gallery-api">
+          <h3 className="card__subtitle-img">фото</h3>
+          </Link>
+
 </li>
             </ul>
           </nav>

@@ -1,4 +1,5 @@
 var path = require("path");
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = {
   mode: "production",
@@ -10,14 +11,24 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      {
-        test: /\.css$/,
-        loader: "style-loader!css-loader"
-      }
-    ]
-  },
+    { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
+    {
+      test: /\.css$/,
+      loader: "style-loader!css-loader"
+    }
+  ]
+},
   externals: {
     react: "react"
+  },
+  devServer: {
+    historyApiFallback: true,
+    proxy: {
+      '/uploads': {
+        target: 'https://servicebox35.pp.ru',
+        changeOrigin: true,
+        pathRewrite: {'^/uploads' : ''}
+      }
+    }
   }
 };
