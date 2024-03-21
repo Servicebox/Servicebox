@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
-const PORT = 5000;
+const PORT = 8000;
+
 const mongoose = require('mongoose');
+const path = require('path');
 const helmet = require('helmet');
 const limiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -10,11 +12,10 @@ const cors = require('./middlewares/cors');
 const router = require('./routes/index');
 
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
-const productsRouter = require('./routes/products');
 
-
-
-
+const images = require('./routes/images');
+const Image = require('./models/image');
+const multer = require('multer');
 mongoose.set('strictQuery', true);
 
 mongoose
@@ -33,15 +34,33 @@ mongoose
       price: String,
       category: String
     });
+ 
 
-    
+// Multer setup for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Папка для сохранения файлов
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });   
 //const app = express();
 app.use(express.json());
 
 app.use(cors);
 
+app.use(helmet());
+
+app.use('/api/images', images);
+app.use(express.static('uploads'));
 
 
+app.use('/api', glassReplacementRoutes);
+
+///
 app.get('/services', async (req, res) => {
   try {
     const services = await Service.find({}, '_id serviceName description price category ').exec();
@@ -100,11 +119,30 @@ router.get('/services/:category', async (req, res) => {
   }
 });
 
-//товары
 
+images.post('/', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) throw new Error('Необходимо загрузить файл.');
 
+    const { path: filePath, mimetype } = req.file;
+    const { description } = req.body;
 
+    const newImage = new Image({
+      filePath,
+      description,
+      mimeType: mimetype
+    });
 
+    const savedImage = await newImage.save();
+
+    res.status(201).json({
+      message: 'Изображение успешно загружено',
+      image: savedImage
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(

@@ -17,7 +17,7 @@ const uploadDirectory = path.join(__dirname, '../uploads');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, uploadDirectory);// Папка для сохранения файлов
+      cb(null, 'uploads/'); // Папка для сохранения файлов
     },
     filename: function (req, file, cb) {
       cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 
 
   router.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'https://servicebox35.pp.ru'); // Разрешить запросы с вашего клиентского origin
+    res.header('Access-Control-Allow-Origin', 'https://servicebox35.ru'); // Разрешить запросы с вашего клиентского origin
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     if (req.method === 'OPTIONS') {
       res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
@@ -85,7 +85,7 @@ router.get('/image/:filename', (req, res) => {
   
       res.writeHead(200, {
         'Content-Type': 'image/jpeg',
-        'Access-Control-Allow-Origin': 'https://servicebox35.pp.ru'
+        'Access-Control-Allow-Origin': 'https://servicebox35.ru'
       }); 
       res.end(data);
     });

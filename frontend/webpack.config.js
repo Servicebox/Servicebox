@@ -25,7 +25,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       '/uploads': {
-        target: 'https://servicebox35.pp.ru',
+        target: 'https://servicebox35.ru',
         changeOrigin: true,
         pathRewrite: {'^/uploads' : ''}
       }
