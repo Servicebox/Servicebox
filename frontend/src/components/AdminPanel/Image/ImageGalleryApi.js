@@ -25,7 +25,6 @@ const ImageGalleryApi = () => {
 
       // Функции для лайка изображения
       const likeImage = async (id) => {
-        // ... код для обновления лайков на сервере
     
         setLikes((prevLikes) => {
             const newLikes = { ...prevLikes, [id]: true };
@@ -55,7 +54,7 @@ const ImageGalleryApi = () => {
     };
 
     useEffect(() => {
-      // Загрузите состояние лайков из localStorage
+      // Загрузка состояние лайков из localStorage
       const savedLikes = JSON.parse(localStorage.getItem('likes')) || {};
       setLikes(savedLikes);
   

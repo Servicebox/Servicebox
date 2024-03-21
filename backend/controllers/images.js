@@ -4,10 +4,6 @@ const multer = require('multer');
 
 const fs = require('fs');
 const path = require('path');
-//const imageData = fs.readFileSync(path);
-//const encodedImage = imageData.toString('base64');
-
-
 
 // Создание изображения
 exports.createImage = async (req, res) => {

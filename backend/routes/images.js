@@ -59,7 +59,7 @@ const storage = multer.diskStorage({
     } catch (error) {
         res.status(500).json({ message: error.message });
     } finally {
-        // Попробуйте удалить временный файл вне зависимости от результата операции в блоке try
+        
         if (tempFilePath) {
             try {
                 await fs.unlink(tempFilePath);

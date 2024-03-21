@@ -1,7 +1,7 @@
 //models/image
 const mongoose = require('mongoose');
 
-// Дополнить схему счетчиком лайков
+
 const imageSchema = new mongoose.Schema({
   filePath: { type: String, required: true },
   description: { type: String, required: true },
