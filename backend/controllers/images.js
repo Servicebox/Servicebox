@@ -5,36 +5,37 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
+
+const uploadDirectory = path.join(__dirname, '..', 'uploads'); 
+
+ 
 // Создание изображения
-exports.createImage = async (req, res) => {
-  try {
-      if (!req.file) {
-          throw new Error('Необходимо загрузить файл.');
-      }
-      
-      const { description } = req.body;
-      const { path, mimetype } = req.file;
-      
-      // Чтение содержимого файла и преобразование в base64
-      const imageData = fs.readFileSync(path, { encoding: 'base64' });
+ 
+exports.createImage = async (req, res) => { 
+    try {
+        if (!req.file) {
+            throw new Error('Необходимо загрузить файл.');
+        }
 
-      const newImage = new Image({
-          filePath: path,
-          description,
-          mimeType: mimetype,
-          src: `data:${mimetype};base64,${imageData}`,
-          likes: 0
-      });
+        const { description } = req.body; 
+        const { filename, mimetype } = req.file; // Используем filename из req.file
 
-      const savedImage = await newImage.save();
-      res.status(201).json(savedImage);
-      
-      // Удаление временного файла после сохранения его в базу данных
-      fs.unlinkSync(path);
-  } catch (error) {
-      res.status(500).json({ message: error.message });
-  }
+        const newImage = new Image({
+            filePath: path.join(uploadDirectory, filename), // Правильный путь к файлу
+            description,
+            mimeType: mimetype,
+            likes: 0
+        });
+
+        await newImage.save();
+
+        res.status(201).json(newImage);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
+
+
 // Обновление изображения
 exports.updateImage = async (req, res) => {
     try {
@@ -83,22 +84,38 @@ exports.getImages = async (req, res) => {
 };
 
 // Добавить функцию для лайка изображения
+
 exports.likeImage = async (req, res) => {
-  try {
     const imageId = req.params.id;
-    
-    // Поиск изображения по ID и увеличение счетчика лайков
-    const updatedImage = await Image.findByIdAndUpdate(imageId, {
-      $inc: { likes: 1 }
-    }, { new: true });
-    
-    if (!updatedImage) {
-      return res.status(404).send("Изображение не найдено.");
+    const clientId = req.cookies['client-id'];
+
+    if (!clientId) {
+        return res.status(400).json({ message: "clientId отсутствует в куках." });
     }
-    
-    // Отправить обновленные данные обратно клиенту
-    res.status(200).json(updatedImage);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
+
+    try {
+        const image = await Image.findById(imageId);
+
+        if (!image) {
+            return res.status(404).json({ message: "Изображение не найдено." });
+        }
+        
+        // Инициализируем массив likes, если он не существует
+        if (!Array.isArray(image.likes)) {
+            image.likes = [];
+        }
+
+        // Проверяем, есть ли уже clientId в массиве likes
+        if (image.likes.includes(clientId)) {
+            return res.status(400).json({ message: "Вы уже лайкали это изображение." });
+        }
+
+        // Добавляем clientId в массив likes
+        image.likes.push(clientId);
+        await image.save();
+
+        res.status(200).json(image);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };

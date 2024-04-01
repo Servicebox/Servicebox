@@ -1,22 +1,87 @@
 const express = require('express');
 const app = express();
 const PORT = 5000;
-
+const cors = require('cors');
+const allowedCors = [
+  'https://servicebox35.ru',
+  'http://servicebox35.ru',
+  'https://servicebox35.pp.ru',
+  'http://servicebox35.pp.ru',
+  'https://servicebox35.pp.ru/services',
+  'http://servicebox35.pp.ru/services', 
+  'https://servicebox35.pp.ru/api',
+  'http://servicebox35.pp.ru/api',
+  'https://localhost:5000',
+  'http://localhost:5000',
+  'https://localhost:5000',
+  'https://localhost:8000/services',
+  'http://localhost:8000/services',
+  'http://localhost:8000/products',
+  'https://localhost:8000/api/products',
+  'http://localhost:8000/api/images',
+  'http://localhost:8000/api/images/like',
+  'http://localhost:3000/send-request',
+  'http://localhost:8000/api/', 
+  'http://localhost:8000',
+  'http://localhost:5000',
+  'https://localhost:3000',
+  'http://localhost:3000',
+  'https://optfm.ru/api/',
+  'http://optfm.ru/api/',
+];
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
 const limiter = require('./middlewares/rateLimiter');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const indexRouter = require('./routes/index');
-const cors = require('./middlewares/cors');
+//const cors = require('./middlewares/cors');
 const router = require('./routes/index');
 
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 
 const images = require('./routes/images');
 const Image = require('./models/image');
+
 const multer = require('multer');
 mongoose.set('strictQuery', true);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedCors.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+module.exports = (req, res, next) => {
+  const { origin } = req.headers;
+
+  if (allowedCors.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    const { method } = req;
+
+    const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+
+    const requestHeaders = req.headers['access-control-request-headers'];
+
+    if (method === 'OPTIONS') {
+      res.setHeader('Access-Control-Allow-Origin');
+      
+      res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
+      res.header('Access-Control-Allow-Headers', requestHeaders);
+      return res.end();
+    }
+  }
+  return next();
+};
+
+app.use(cors(corsOptions));
 
 mongoose
   .connect('mongodb://127.0.0.1:27017/serviceboxdb', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -39,26 +104,78 @@ mongoose
 // Multer setup for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Папка для сохранения файлов
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
 
-const upload = multer({ storage: storage });   
-//const app = express();
+const upload = multer({ storage: storage });
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
+app.use(cookieParser());
+const generateClientId = () => `client_${Math.random().toString(36).substring(2, 15)}`;
 
-app.use(cors);
+const getClientId = () => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; client-id=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
 
-app.use(helmet());
 
-app.use('/api/images', images);
-app.use(express.static('uploads'));
 
+
+// Маршрут для запроса client-id
+app.get('/get-client-id', (req, res) => {
+  let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
+  if (!clientId) {
+      // Если нет, сгенерировать новый client-id
+      clientId = generateClientId();
+      // Установить куку с именем 'client-id' и значением clientId
+      res.cookie('client-id', clientId, {
+          httpOnly: true, // Куку можно будет использовать только в HTTP-запросах
+          maxAge: 86400 * 1000, // Кука будет валидна 1 день
+          sameSite: 'None', // Опция SameSite для кросс-доменных кук
+          secure: true // Используйте secure если доступ к вашему сайту осуществляется через HTTPS
+      });
+  }
+  // Отправляем клиенту его уникальный ID в ответе
+  res.json({ clientId });
+});
 
 app.use('/api', glassReplacementRoutes);
+
+const uploadDirectory = path.join(__dirname, 'uploads');
+fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
+  if (err && err.code !== 'EEXIST') {
+    console.error("Не могу создать папку для загрузок: ", err);
+    process.exit(1);
+  }
+});
+
+
+app.use('/api/images', images);
+
+app.post('/api/images/like/:id', async (req, res) => {
+  try {
+    const imageId = req.params.id;
+    const image = await Image.findById(imageId);
+    // Дополнительные проверки и логика...
+  } catch (error) {
+      console.error(error); // Вывод ошибки в консоль сервера
+      // Временно отправить сообщение об ошибке в ответ
+      res.status(500).json({ message: error.message });
+  }
+});
 
 ///
 app.get('/services', async (req, res) => {

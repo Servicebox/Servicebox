@@ -6,7 +6,7 @@ const CreateImage = () => {
   const [description, setDescription] = useState('');
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
+    const selectedFile = e.target.files[0]; 
     if (selectedFile && isValidFile(selectedFile)) {
       setFile(selectedFile);
       setPreviewUrl(URL.createObjectURL(selectedFile));
@@ -23,17 +23,13 @@ const CreateImage = () => {
     setDescription(e.target.value);
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!file) {
-      alert('Пожалуйста, выберите файл для загрузки');
-      return;
-    }
-
-    if (!isValidFile(file)) {
-      alert('Файл не должен превышать 5MB');
-      return;
+        alert('Пожалуйста, выберите файл для загрузки');
+        return;
     }
 
     const formData = new FormData();
@@ -41,26 +37,26 @@ const CreateImage = () => {
     formData.append('description', description);
 
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/images', {
-        method: 'POST',
-        body: formData,
-      });
+        const response = await fetch('https://servicebox35.pp/api/images', {
+            method: 'POST',
+            body: formData,
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorText = errorData.message || 'Неизвестная ошибка';
-        throw new Error(`Ошибка: ${response.status} - ${errorText}`);
-      }
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorText = errorData.message || 'Неизвестная ошибка';
+            throw new Error(`Ошибка: ${response.status} - ${errorText}`);
+        }
 
-      const result = await response.json();
-      alert('Изображение успешно загружено');
-      setFile(null);
-      setDescription('');
-      setPreviewUrl('');
+        const result = await response.json();
+        alert('Изображение успешно загружено');
+        setFile(null);
+        setDescription('');
+        setPreviewUrl('');
     } catch (error) {
-      alert(error.message);
+        alert(error.message);
     }
-  };
+};
 
   // Очистка URL предварительного просмотра при размонтировании компонента
   useEffect(() => {

@@ -1,26 +1,35 @@
-{/*const jwt = require('jsonwebtoken');
-const { SECRET_KEY_DEV } = require('../utils/constants');
+//middlewares/auth.js
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const { v4: uuidv4 } = require('uuid');
 
-const { NODE_ENV, SECRET_KEY } = process.env;
-const UnauthorizedError = require('../errors/UnauthorizedError');
+const app = express();
 
-module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization || !authorization.startsWith('Bearer')) {
-    throw new UnauthorizedError('Необходима авторизация!');
-  }
-  const token = authorization.replace('Bearer ', '');
-  let payload;
-  try {
-    payload = jwt.verify(
-      token,
-      NODE_ENV === 'production' ? SECRET_KEY : SECRET_KEY_DEV,
-    );
-  } catch (err) {
-    next(new UnauthorizedError('Необходима авторизация!'));
-    return;
-  }
-  req.user = payload;
-  next();
-};
-*/}
+app.use(cookieParser());
+
+app.use((req, res, next) => {
+    // Проверяем наличие уникального идентификатора у клиента
+    let clientId = req.cookies['client-id'];
+
+    // Если идентификатора нет, создаём его и устанавливаем в течение года
+    if (!clientId) {
+        clientId = uuidv4(); // Создаём уникальный идентификатор
+        res.cookie('client-id', clientId, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: true });
+    }
+
+    // Можно использовать clientId для дальнейшей логики в приложении
+    console.log('Client ID:', clientId);
+    
+    next();
+});
+
+// Тестовый маршрут для проверки мидлвара
+app.get('/', (req, res) => {
+    res.send('Hello, your client ID has been set if it was not present.');
+});
+
+// Запускаем приложение
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

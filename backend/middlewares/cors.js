@@ -14,8 +14,10 @@ const allowedCors = [
   'http://localhost:8000/services',
   'http://localhost:8000/products',
   'https://localhost:8000/api/products',
+  'https://servicebox35.pp.ru/get-client-id',
+  'http://localhost:8000/api/images',
   'http://localhost:3000/send-request',
-  'http://localhost:8000/api/',
+  'http://localhost:8000/api/', 
   'http://localhost:8000',
   'http://localhost:5000',
   'https://localhost:3000',
@@ -23,6 +25,7 @@ const allowedCors = [
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
 ];
+
 
 module.exports = (req, res, next) => {
   const { origin } = req.headers;
@@ -37,7 +40,8 @@ module.exports = (req, res, next) => {
     const requestHeaders = req.headers['access-control-request-headers'];
 
     if (method === 'OPTIONS') {
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Origin');
+      
       res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
       res.header('Access-Control-Allow-Headers', requestHeaders);
       return res.end();
