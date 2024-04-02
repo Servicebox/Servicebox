@@ -19,7 +19,15 @@ const ImageGalleryApi = () => {
                 throw new Error(errorText || 'Произошла ошибка при загрузке изображений');
             }
             const fetchedImages = await response.json();
-            setImages(fetchedImages);
+            const imagesWithCorrectPath = fetchedImages.map((img) => {
+                return {
+                  ...img,
+                  src: `/uploads/${img.filePath.split('/').pop()}`, // добавляем корректный относительный путь
+                };
+              });
+            
+              setImages(imagesWithCorrectPath);
+        
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка при получении списка изображений: ' + error.message);

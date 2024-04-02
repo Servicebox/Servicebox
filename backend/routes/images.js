@@ -31,7 +31,7 @@ router.use((req, res, next) => {
   next();
 });
 
-router.post('/', upload.single('image'), async (req, res) => {
+app.post('/api/images', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       throw new Error('Необходимо загрузить файл.');
@@ -41,7 +41,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     const { filename, mimetype } = req.file;
 
     const newImage = new Image({
-      filePath: path.join(uploadDirectory, filename),
+      filePath: filename,
       description,
       mimeType: mimetype,
     });

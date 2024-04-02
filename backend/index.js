@@ -107,12 +107,13 @@ mongoose
     });
  
 
+    const uploadDirectory = path.join(__dirname, 'uploads');
 // Multer setup for file uploads
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+  destination: (req, file, cb) => {
+    cb(null, uploadDirectory);
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   }
 });
@@ -161,7 +162,6 @@ app.get('/get-client-id', (req, res) => {
 
 app.use('/api', glassReplacementRoutes);
 
-const uploadDirectory = path.join(__dirname, 'uploads');
 fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   if (err && err.code !== 'EEXIST') {
     console.error("Не могу создать папку для загрузок: ", err);
@@ -171,7 +171,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 
 
 app.use('/api/images', images);
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post('/api/images/like/:id', async (req, res) => {
   try {
     const imageId = req.params.id;
