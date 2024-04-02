@@ -19,7 +19,7 @@ const fetchImages = async () => {
         throw new Error(errorText || 'Произошла ошибка при загрузке изображений');
       }
       const fetchedImages = await response.json();
-      // ОБРАТИТЕ ВНИМАНИЕ НА ИЗМЕНЕНИЯ НИЖЕ
+
       const imagesWithCorrectPath = fetchedImages.map(img => ({
         ...img,
         filePath: `/uploads/${img.filePath.split('/').pop()}` // Путь до изображений для клиента
@@ -129,7 +129,7 @@ const fetchImages = async () => {
         <div className="images-gallery">
             {images.length > 0 ? images.map((image) => (
                 <div key={image._id} className="image-item">
-                    <img className="foto__img" src={image.src} alt={image.description || "Изображение"} />
+                    <img className="foto__img"  src={image.filePath}  alt={image.description || "Изображение"} />
                     <p className="foto__description">{image.description}</p>
                     <button className="foto__btn" onClick={() => likeImage(image._id)}>
                         <img 

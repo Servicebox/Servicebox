@@ -4,7 +4,7 @@ const router = express.Router();
 const path = require('path');
 const Image = require('../models/image');
 const fs = require('fs').promises;
-
+ 
 const uploadDirectory = path.join(__dirname, '../uploads');
 
 // Настройки для multer

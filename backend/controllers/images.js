@@ -21,15 +21,25 @@ exports.createImage = async (req, res) => {
         const { filename, mimetype } = req.file; // Используем filename из req.file
 
         const newImage = new Image({
-            filePath: path.join(uploadDirectory, filename), // Правильный путь к файлу
+            // Вместо пути на файловой системе отправляем относительный URL
+            filePath: `/uploads/${filename}`,
             description,
             mimeType: mimetype,
-            likes: 0
+            likes: [] // Инициализируем как пустой массив
         });
 
         await newImage.save();
 
-        res.status(201).json(newImage);
+        res.status(201).json({
+            message: 'Изображение успешно загружено',
+            image: {
+                // Вернем клиенту объект без пути на сервере
+                _id: newImage._id,
+                filePath: newImage.filePath,
+                description: newImage.description,
+                mimeType: newImage.mimeType
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
