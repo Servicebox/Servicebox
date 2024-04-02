@@ -6,6 +6,8 @@ const allowedCors = [
   'https://servicebox35.ru',
   'http://servicebox35.ru',
   'https://servicebox35.pp.ru',
+  'https://servicebox35.ru', // Фронтенд
+  'https://servicebox35.pp.ru', // Бэкенд
   'http://servicebox35.pp.ru',
   'https://servicebox35.pp.ru/services',
   'http://servicebox35.pp.ru/services', 
@@ -29,6 +31,19 @@ const allowedCors = [
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
 ];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedCors.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
@@ -48,16 +63,7 @@ const Image = require('./models/image');
 const multer = require('multer');
 mongoose.set('strictQuery', true);
 
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedCors.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-};
+
 module.exports = (req, res, next) => {
   const { origin } = req.headers;
 
@@ -118,7 +124,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   helmet({
-    crossOriginResourcePolicy: false,
+    //crossOriginResourcePolicy: false,
+    contentSecurityPolicy: false,
   })
 );
 app.use(cookieParser());
@@ -145,7 +152,7 @@ app.get('/get-client-id', (req, res) => {
           httpOnly: true, // Куку можно будет использовать только в HTTP-запросах
           maxAge: 86400 * 1000, // Кука будет валидна 1 день
           sameSite: 'None', // Опция SameSite для кросс-доменных кук
-          secure: true // Используйте secure если доступ к вашему сайту осуществляется через HTTPS
+          secure: true // Использование secure если доступ к моему сайту осуществляется через HTTPS
       });
   }
   // Отправляем клиенту его уникальный ID в ответе
