@@ -31,7 +31,7 @@ router.use((req, res, next) => {
   next();
 });
 
-app.post('/api/images', upload.single('image'), async (req, res) => {
+router.post('/api/images', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       throw new Error('Необходимо загрузить файл.');
