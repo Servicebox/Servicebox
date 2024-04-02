@@ -54,33 +54,50 @@ exports.updateImage = async (req, res) => {
 // Удаление изображения
 exports.deleteImage = async (req, res) => {
     try {
-        const image = await Image.findByIdAndRemove(req.params.id);
-        res.json({ message: 'Image deleted successfully', image });
+        const image = await Image.findById(req.params.id);
+        if (image) {
+            // Удалить файл из файловой системы
+            const filepath = image.filePath;
+            if (fs.existsSync(filepath)) {
+                await fs.promises.unlink(filepath);
+            }
+            // Удалить запись из базы данных
+            await image.remove();
+            res.json({ message: 'Image deleted successfully'});
+        } else {
+            res.status(404).json({ message: 'Image not found' });
+        }
     } catch (error) {
         res.status(500).send(error.message);
     }
 };
 
 exports.getImages = async (req, res) => {
-  try {
-      // Здесь получаем полный список изображений из базы данных
-      const allImages = await Image.find({});
-      
-      // Маппим каждый объект Image, преобразуя filePath в base64
-      const imagesWithBase64 = await Promise.all(allImages.map(async (img) => {
-          const imageData = await fs.promises.readFile(img.filePath, { encoding: 'base64' });
-          return {
-              _id: img._id,
-              description: img.description,
-              mimeType: img.mimeType,
-              src: `data:${img.mimeType};base64,${imageData}`
-          };
-      }));
+    try {
+        const allImages = await Image.find({});
+        const imagesWithBase64 = await Promise.all(allImages.map(async (img) => {
+            if (fs.existsSync(img.filePath)) {
+                const imageData = await fs.promises.readFile(img.filePath, { encoding: 'base64' });
+                return {
+                    _id: img._id,
+                    description: img.description,
+                    mimeType: img.mimeType,
+                    src: `data:${img.mimeType};base64,${imageData}`
+                };
+            } else {
+                //  удалить запись из базы данных, если файл больше не существует
+                // await Image.findByIdAndRemove(img._id);
+                return null;
+            }
+        }));
 
-      res.status(200).json(imagesWithBase64);
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
+        // Убрать из массива все значения null перед отправкой клиенту
+        const filteredImages = imagesWithBase64.filter(image => image !== null);
+
+        res.status(200).json(filteredImages);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 // Добавить функцию для лайка изображения
