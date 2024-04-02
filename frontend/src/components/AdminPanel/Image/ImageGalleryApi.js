@@ -8,31 +8,33 @@ const ImageGalleryApi = () => {
     const [likes, setLikes] = useState({});
     const clientId = getClientId();
     
- // Функция для загрузки списка изображений 
-   const fetchImages = async () => {
-        try {
-            const response = await fetch('https://servicebox35.pp.ru/api/images', {
-                credentials: 'include'
-            });
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Произошла ошибка при загрузке изображений');
-            }
-            const fetchedImages = await response.json();
-            const imagesWithCorrectPath = fetchedImages.map((img) => {
-                return {
-                  ...img,
-                  src: `/uploads/${img.filePath.split('/').pop()}`, // добавляем корректный относительный путь
-                };
-              });
-            
-              setImages(imagesWithCorrectPath);
-        
-        } catch (error) {
-            console.error('Ошибка:', error);
-            alert('Ошибка при получении списка изображений: ' + error.message);
-        }
-    };
+// Функция для загрузки списка изображений 
+const fetchImages = async () => {
+    try {
+      const response = await fetch('https://servicebox35.pp.ru/api/images', {
+        credentials: 'include'
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Произошла ошибка при загрузке изображений');
+      }
+      const fetchedImages = await response.json();
+      // ОБРАТИТЕ ВНИМАНИЕ НА ИЗМЕНЕНИЯ НИЖЕ
+      const imagesWithCorrectPath = fetchedImages.map(img => ({
+        ...img,
+        filePath: `/uploads/${img.filePath.split('/').pop()}` // Путь до изображений для клиента
+      }));
+      
+      setImages(imagesWithCorrectPath);
+    } catch (error) {
+      console.error('Ошибка:', error);
+      alert('Ошибка при получении списка изображений: ' + error.message);
+    }
+  };
+  
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
       // Функции для лайка изображения
     
@@ -119,9 +121,7 @@ const ImageGalleryApi = () => {
 });
       });
   };
-    useEffect(() => {
-      fetchImages();
-  }, []);
+
 
   return (
     <div>
