@@ -124,8 +124,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   helmet({
-    //crossOriginResourcePolicy: false,
-    contentSecurityPolicy: false,
+    crossOriginResourcePolicy: false,
+    //contentSecurityPolicy: false,
   })
 );
 app.use(cookieParser());
