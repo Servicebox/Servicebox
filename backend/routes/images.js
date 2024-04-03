@@ -5,7 +5,7 @@ const path = require('path');
 const Image = require('../models/image');
 const fs = require('fs').promises;
  
-const uploadDirectory = path.join(__dirname, '../uploads');
+const uploadDirectory = path.join(__dirname, '../uploads'); 
 
 // Настройки для multer
 const storage = multer.diskStorage({

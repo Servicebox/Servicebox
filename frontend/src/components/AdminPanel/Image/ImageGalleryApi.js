@@ -122,7 +122,7 @@ const fetchImages = async () => {
         <div className="images-gallery">
             {images.length > 0 ? images.map((image) => (
                 <div key={image._id} className="image-item">
-                  <img className="foto__img" src={`https://servicebox35.pp.ru/${image.filePath}`} alt={image.description || "Изображение"} />
+                  <img className="foto__img" src={`https://servicebox35.pp.ru${image.filePath}`} alt={image.description || "Изображение"} />
                     {/*<p className="foto__description">{image.description}</p>*/}
                     <button className="foto__btn" onClick={() => likeImage(image._id)}>
                         <img 

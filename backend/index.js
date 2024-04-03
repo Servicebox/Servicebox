@@ -5,7 +5,7 @@ const cors = require('cors');
 const allowedCors = [
   'https://servicebox35.ru',
   'http://servicebox35.ru',
-  'https://servicebox35.pp.ru',
+  'https://servicebox35.pp.ru', 
   'https://servicebox35.ru', // Фронтенд
   'https://servicebox35.pp.ru', // Бэкенд
   'http://servicebox35.pp.ru',

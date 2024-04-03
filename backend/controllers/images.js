@@ -11,21 +11,20 @@ const uploadDirectory = path.join(__dirname, '..', 'uploads');
  
 // Создание изображения
   
-exports.createImage = async (req, res) => { 
-    try { 
+exports.createImage = async (req, res) => {
+    try {
         if (!req.file) {
             throw new Error('Необходимо загрузить файл.');
         }
 
         const { description } = req.body; 
-        const { filename, mimetype } = req.file; // Используем filename из req.file
+        const { filename, mimetype } = req.file; 
 
         const newImage = new Image({
-            // Вместо пути на файловой системе отправляем относительный URL
-            filePath: `/uploads/${filename}`,
+            filePath: `/uploads/${filename}`, // Обновляем сохранение пути
             description,
             mimeType: mimetype,
-            likes: [] // Инициализируем как пустой массив
+            likes: [] 
         });
 
         await newImage.save();
@@ -33,7 +32,6 @@ exports.createImage = async (req, res) => {
         res.status(201).json({
             message: 'Изображение успешно загружено',
             image: {
-                // Вернем клиенту объект без пути на сервере
                 _id: newImage._id,
                 filePath: newImage.filePath,
                 description: newImage.description,
