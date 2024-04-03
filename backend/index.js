@@ -175,12 +175,30 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post('/api/images/like/:id', async (req, res) => {
   try {
     const imageId = req.params.id;
+    const clientId = req.cookies['client-id']; // Получаем client-id из кукис
+
+    if (!clientId) {
+      return res.status(400).json({ message: "clientId отсутствует в куках." });
+    }
+
     const image = await Image.findById(imageId);
-    // Дополнительные проверки и логика...
+
+    if (!image) {
+      return res.status(404).json({ message: "Изображение не найдено." });
+    }
+
+    // Проверяем, добавляли ли мы уже лайк от этого clientId
+    if (image.likes.includes(clientId)) {
+      return res.status(409).json({ message: "Вы уже ставили лайк." });
+    }
+
+    // Добавляем clientId в массив лайков
+    image.likes.push(clientId);
+    await image.save();
+
+    res.status(200).json(image);
   } catch (error) {
-      console.error(error); // Вывод ошибки в консоль сервера
-      // Временно отправить сообщение об ошибке в ответ
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 

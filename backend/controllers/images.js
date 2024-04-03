@@ -12,7 +12,7 @@ const uploadDirectory = path.join(__dirname, '..', 'uploads');
 // Создание изображения
   
 exports.createImage = async (req, res) => { 
-    try {
+    try { 
         if (!req.file) {
             throw new Error('Необходимо загрузить файл.');
         }
