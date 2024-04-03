@@ -202,6 +202,32 @@ app.post('/api/images/like/:id', async (req, res) => {
   }
 });
 
+app.delete('/api/images/delete/:id', async (req, res) => {
+  try {
+    const imageId = req.params.id;
+
+    const image = await Image.findById(imageId);
+
+    if (!image) {
+      return res.status(404).json({ message: 'Изображение не найдено' });
+    }
+
+    const filePath = path.join(__dirname, 'uploads', image.filePath);
+
+    if (fs.existsSync(filePath)) {
+      // Удаляем файл из файловой системы
+      fs.unlinkSync(filePath);
+    }
+
+    // Удаляем изображение из базы данных
+    await image.remove();
+
+    res.json({ message: 'Изображение успешно удалено' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 ///
 app.get('/services', async (req, res) => {
   try {
@@ -261,7 +287,6 @@ router.get('/services/:category', async (req, res) => {
   }
 });
 
-
 images.post('/', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
@@ -269,8 +294,9 @@ images.post('/', upload.single('image'), async (req, res) => {
     const { path: filePath, mimetype } = req.file;
     const { description } = req.body;
 
+    // Добавьте полный путь к файлу, начиная с '/uploads/'
     const newImage = new Image({
-      filePath,
+      filePath: '/uploads/' + path.basename(filePath), // Изменить путь сохранения изображения
       description,
       mimeType: mimetype
     });

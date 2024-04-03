@@ -11,8 +11,7 @@ import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 import Search from "../Search/Search";
-import AddProducts from "../AddProducts/AddProducts";
-import List from "../List/List"
+
 
 import ServiceRef from "../Main/ServiceRef/ServiceRef";
 import NotebookService from "../AdminPanel/NotebookService/NotebookService"
@@ -27,6 +26,7 @@ import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm";
 import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
 import ImageGallery from "../ImageGallery/ImageGallery";
 import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi"
+import DeleteImage from "../AdminPanel/Image/DeleteImage";
 
 
 
@@ -55,6 +55,7 @@ const categoryId = urlParams.get('categoryId');
           <Routes>
             <Route exact path="/" element={<Main />} />
             <Route path="image-gallery-api" element={<ImageGalleryApi />} />
+            <Route path="delete-image" element={<DeleteImage/>} />
         
    
     
