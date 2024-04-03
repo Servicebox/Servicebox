@@ -7,7 +7,18 @@ const ImageGalleryApi = () => {
     const [images, setImages] = useState([]);
     const [likes, setLikes] = useState({});
     const clientId = getClientId();
+    const [showModal, setShowModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageClick = (image) => {
+        setSelectedImage(image);
+        setShowModal(true);
+      };
     
+      const handleCloseModal = () => {
+        setSelectedImage(null);
+        setShowModal(false);
+      };
 // Функция для загрузки списка изображений 
 const fetchImages = async () => {
     try {
@@ -122,8 +133,10 @@ const fetchImages = async () => {
         <div className="images-gallery">
             {images.length > 0 ? images.map((image) => (
                 <div key={image._id} className="image-item">
-                  <img className="foto__img" src={`https://servicebox35.pp.ru${image.filePath}`} alt={image.description || "Изображение"} />
-                    {/*<p className="foto__description">{image.description}</p>*/}
+                  <img className="foto__img" src={`https://servicebox35.pp.ru${image.filePath}`} alt={image.description || "Изображение"} 
+                  onClick={() => handleImageClick(image)}
+                  />
+                    <p className="foto__description">{image.description}</p>
                     <button className="foto__btn" onClick={() => likeImage(image._id)}>
                         <img 
                             src={likes[image._id] ? likeIconUrl : likeInactiveIconUrl} 
@@ -135,6 +148,7 @@ const fetchImages = async () => {
                 </div>
             )) : <p>Изображения не найдены.</p>}
         </div>
+        {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
     </div>
 );
 };
