@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ImageGalleryApi.css";
 import likeIconUrl from "../../../images/likeactive.png"; 
 import likeInactiveIconUrl from "../../../images/like.png";
+import ImageModal from "./ImageModal";
 
 const ImageGalleryApi = () => {
     const [images, setImages] = useState([]);
