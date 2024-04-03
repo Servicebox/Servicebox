@@ -85,13 +85,13 @@ const fetchImages = async () => {
             }
       
             // состояние prevLikes
-            // setLikes((prevLikes) => ({
-            //   ...prevLikes,
-            //   [imageId]: !prevLikes[imageId]
-            // }));
+             setLikes((prevLikes) => ({
+               ...prevLikes,
+               [imageId]: !prevLikes[imageId]
+             }));
       
             // Сохранение лайков в localStorage
-            // localStorage.setItem('likes', JSON.stringify({ ...likes, [imageId]: !prevLikes[imageId] }));
+             localStorage.setItem('likes', JSON.stringify({ ...likes, [imageId]: !prevLikes[imageId] }));
           }
         } catch (error) {
           alert(`Ошибка при попытке лайкнуть изображение: ${error.message}`);

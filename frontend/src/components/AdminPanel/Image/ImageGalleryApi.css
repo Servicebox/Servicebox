@@ -87,6 +87,8 @@
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 .foto__description{
 
@@ -95,8 +97,7 @@
   margin: 0 auto;
   max-width: 230px;
   text-align: center;
-  padding-top: 50px;
-  padding-bottom: 50px;
+
 }
 .foto__btn{
   padding: 0;
