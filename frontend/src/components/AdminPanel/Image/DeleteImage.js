@@ -6,17 +6,18 @@ const DeleteImage = () => {
     const [deleted, setDeleted] = useState(false);
   
     const handleDeleteImage = async () => {
-      try {
-        const response = await axios.delete(`https://servicebox35.pp.ru/api/images/${imageId}`);
-        if (response.status === 200) {
-          setDeleted(true);
-        } else {
-          throw new Error('Не удалось удалить изображение');
+        try {
+          const response = await axios.delete(`https://servicebox35.pp.ru/api/images/delete/${imageId}`);
+      
+          if (response.status === 200) {
+            setDeleted(true);
+          } else {
+            throw new Error('Не удалось удалить изображение');
+          }
+        } catch (error) {
+          console.error('Ошибка при удалении изображения:', error);
         }
-      } catch (error) {
-        console.error('Ошибка при удалении изображения:', error);
-      }
-    };
+      };
   
     return (
       <div className='delete'>

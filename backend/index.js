@@ -9,7 +9,7 @@ const allowedCors = [
   'https://servicebox35.ru', // Фронтенд
   'https://servicebox35.pp.ru', // Бэкенд
   'http://servicebox35.pp.ru',
-  'https://servicebox35.pp.ru/services',
+  'https://servicebox35.pp.ru/services', 
   'http://servicebox35.pp.ru/services', 
   'https://servicebox35.pp.ru/api',
   'http://servicebox35.pp.ru/api', 
@@ -204,23 +204,13 @@ app.post('/api/images/like/:id', async (req, res) => {
 
 app.delete('/api/images/delete/:id', async (req, res) => {
   try {
-    const imageId = req.params.id;
+    const { id } = req.params;
 
-    const image = await Image.findById(imageId);
+    const image = await Image.findByIdAndDelete(id);
 
     if (!image) {
       return res.status(404).json({ message: 'Изображение не найдено' });
     }
-
-    const filePath = path.join(__dirname, 'uploads', image.filePath);
-
-    if (fs.existsSync(filePath)) {
-      // Удаляем файл из файловой системы
-      fs.unlinkSync(filePath);
-    }
-
-    // Удаляем изображение из базы данных
-    await image.remove();
 
     res.json({ message: 'Изображение успешно удалено' });
   } catch (error) {
