@@ -405,14 +405,24 @@ margin-right: 80px;
   font-size: 13px;
   font-family: Montserrat;
   font-weight: bold;
+  background-image: linear-gradient(to right, #ffffff 50%, #f9a92c 50%);
+  background-size: 200% 100%;
+  transition: background-position 0.5s;
   }
 
   .nav__list:hover{
     background-color: #F9A92C;
+    background-position: -100%;
   }
   .card__subtitle{
     list-style: none;
     text-decoration: none;
+  }
+  .card__subtitle-img{
+    font-family: Montserrat;
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0;
   }
 
   

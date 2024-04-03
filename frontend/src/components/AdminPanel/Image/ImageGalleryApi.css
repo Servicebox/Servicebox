@@ -64,9 +64,13 @@
   }
   
 .foto__title{
+  padding: 50px 201px;
+  background-color: #f9a92c;
+    -webkit-clip-path: polygon(0 0,100% 0,100% 85%,75% 100%,25% 90%,0 100%);
+    clip-path: polygon(0 0,100% 0,100% 85%,75% 100%,25% 90%,0 100%);
+    color: #000;
   margin: 0 auto;
-  padding-top: 70px;
-  padding-bottom: 50px;
+
   text-align: center;
   font-weight: 700;
   font-family: Montserrat;
@@ -85,10 +89,14 @@
   justify-content: center;
 }
 .foto__description{
-  text-align: center;
-  font-size: 16px;
+
+  font-family: Montserrat;
+  font-size: 12px;
   margin: 0 auto;
-  max-width: 200px;
+  max-width: 230px;
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 .foto__btn{
   padding: 0;
@@ -98,11 +106,11 @@
 
 }
 .like-icon{
-  width: 40px;
-  height: 40px;
+  height: 33px;
   position: absolute;
+  right: -9px;
   top: 225px;
-  right: 0;
+  width: 33px;
 }
 .image-item{
   position: relative;

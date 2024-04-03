@@ -64,25 +64,34 @@ const fetchImages = async () => {
             method: 'POST',
             credentials: 'include', // include для отправки куки
           });
-    
+      
           if (!response.ok) {
             const errorData = await response.json();
             alert(`Ошибка: ${errorData.message}`);
           } else {
             const updatedImage = await response.json();
-    
+      
             setImages((prevImages) =>
               prevImages.map((img) =>
                 img._id === imageId ? { ...img, likes: updatedImage.likes } : img
               )
             );
-    
-            setLikes((prevLikes) => ({
-              ...prevLikes,
-              [imageId]: !prevLikes[imageId]
-            }));
-    
-            localStorage.setItem('likes', JSON.stringify({ ...likes, [imageId]: !prevLikes[imageId] }));
+      
+            // Функция для проверки, был ли уже поставлен лайк
+            if (updatedImage.likes.includes(getClientId())) {
+              alert("Лайк уже поставлен");
+            } else {
+              alert("Лайк поставлен");
+            }
+      
+            // состояние prevLikes
+            // setLikes((prevLikes) => ({
+            //   ...prevLikes,
+            //   [imageId]: !prevLikes[imageId]
+            // }));
+      
+            // Сохранение лайков в localStorage
+            // localStorage.setItem('likes', JSON.stringify({ ...likes, [imageId]: !prevLikes[imageId] }));
           }
         } catch (error) {
           alert(`Ошибка при попытке лайкнуть изображение: ${error.message}`);
