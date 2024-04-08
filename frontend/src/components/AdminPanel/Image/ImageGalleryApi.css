@@ -62,6 +62,9 @@
     display: block;
     width: 100%;
   }
+  .foto{
+    padding-top: 30px;
+  }
   
 .foto__title{
   padding: 50px 201px;
@@ -126,6 +129,16 @@
 @media (min-width: 320px) and (max-width: 500px) {
   .foto__title{
     font-size: 16px;
+   
+    padding: 40px 0;
+  }
+
+}
+@media (min-width: 500px) and (max-width: 800px) {
+  .foto__title{
+    font-size: 18px;
+   
+    padding: 40px 0;
   }
 
 }

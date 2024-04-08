@@ -138,7 +138,7 @@ const fetchImages = async () => {
 
 
   return (
-    <div>
+    <div className="foto">
         <h1 className="foto__title">Фотографии до и после ремонта</h1>
         <div className="images-gallery">
             {images.length > 0 ? images.map((image) => (

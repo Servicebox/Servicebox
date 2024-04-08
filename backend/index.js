@@ -6,7 +6,7 @@ const allowedCors = [
   'https://servicebox35.ru',
   'http://servicebox35.ru',
   'https://servicebox35.pp.ru', 
-  'https://servicebox35.ru', // Фронтенд
+  'https://servicebox35.ru', // Фронтенд 
   'https://servicebox35.pp.ru', // Бэкенд
   'http://servicebox35.pp.ru',
   'https://servicebox35.pp.ru/services', 
@@ -107,6 +107,9 @@ mongoose
     });
  
 
+    // Определение модели данных Image после установления соединения
+
+
     const uploadDirectory = path.join(__dirname, 'uploads');
 // Multer setup for file uploads
 const storage = multer.diskStorage({
@@ -171,7 +174,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 
 
 app.use('/api/images', images);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post('/api/images/like/:id', async (req, res) => {
   try {
     const imageId = req.params.id;
@@ -277,25 +280,27 @@ router.get('/services/:category', async (req, res) => {
   }
 });
 
-images.post('/', upload.single('image'), async (req, res) => {
+app.post('/api/images', upload.single('image'), async (req, res) => {
   try {
-    if (!req.file) throw new Error('Необходимо загрузить файл.');
+    if (!req.file) {
+        throw new Error('Необходимо загрузить файл.');
+    }
 
     const { path: filePath, mimetype } = req.file;
     const { description } = req.body;
-
-    // Добавьте полный путь к файлу, начиная с '/uploads/'
+    
     const newImage = new Image({
-      filePath: '/uploads/' + path.basename(filePath), // Изменить путь сохранения изображения
-      description,
-      mimeType: mimetype
+        filePath: '/uploads/' + path.basename(filePath),
+        description,
+        mimeType: mimetype,
+        likes: []
     });
 
     const savedImage = await newImage.save();
 
     res.status(201).json({
-      message: 'Изображение успешно загружено',
-      image: savedImage
+        message: 'Изображение успешно загружено',
+        image: savedImage
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -315,6 +320,7 @@ app.get('/crash-test', (req, res, next) => {
     next(new Error('Server will crash now'));
   }, 0);
 });
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(router);
 app.use(limiter);
 app.use(errorLogger);
