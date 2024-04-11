@@ -73,7 +73,7 @@ const fetchImages = async () => {
   
               setImages((prevImages) =>
                   prevImages.map((img) =>
-                      img._id === imageId ? { ...img, likes: updatedImage.likes } : img
+                      img._id === imageId ? updatedImage : img
                   )
               );
   

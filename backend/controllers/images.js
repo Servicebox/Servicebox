@@ -119,25 +119,20 @@ exports.likeImage = async (req, res) => {
     }
 
     try {
-        const image = await Image.findById(imageId);
+        let image = await Image.findById(imageId);
 
         if (!image) {
             return res.status(404).json({ message: "Изображение не найдено." });
         }
         
-        // Инициализируем массив likes, если он не существует
-        if (!Array.isArray(image.likes)) {
-            image.likes = [];
-        }
-
         // Проверяем, есть ли уже clientId в массиве likes
         if (image.likes.includes(clientId)) {
             return res.status(400).json({ message: "Вы уже лайкали это изображение." });
         }
 
-        // Добавляем clientId в массив likes
+        // Добавляем clientId в массив likes и обновляем общее количество лайков
         image.likes.push(clientId);
-        await image.save();
+        image = await image.save();
 
         res.status(200).json(image);
     } catch (error) {
