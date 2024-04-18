@@ -60,7 +60,7 @@ function MainBanner() {
   }, []);
 
   return (
-    <section className="main-banner">
+    <section className="section-plans" id="section-plans">
       <video className="vieo-bg" src={Video} autoPlay loop muted/>
       <div className="main-banner__content">
         <div className="main-banner__text">
@@ -69,7 +69,7 @@ function MainBanner() {
             Решаем любые проблемы! Большой склад и опытные мастера
           </h3>
           <button className="main-banner__form" onClick={toggleForm}>
-            Бесплатная консультация
+          <span>Бесплатная консультация</span> 
           </button>
         </div>
       </div>
@@ -92,50 +92,102 @@ function MainBanner() {
           <p>сек</p>
         </div>
       </div>
-      <div className="care">
-        <div className="care-about">
-          <div className="care-about-you">
-            <div className="care-about-you__info">
+      <div className="u-center-text u-margin-bottom-big">
+
+
+      <div className="row">
+        <div className="col-1-of-3">
+          <div className="card-neon">
+            <div className="card__side card__side--front-1">
+              <div className="card__titleneon card__titleneon--1">
+                <i className="fas fa-paper-plane"></i>
+                <h4 className="card__heading">Подменный телефон</h4>
+              </div>
+
+              <div className="card__details">
               <img className="care-about-you__img" src={Eplaceable} alt="" />
-              <div className="care-about-you__text">
-                <h2 className="care-about-you__title">Подменный телефон</h2>
-                <p className="care-about-you___subtitle">
+           
+              </div>
+            </div>
+            <div className="card__side card__side--back card__side--back-1">
+              <div className="card__cta">
+                <div className="card__price-box">
+                  <p className="card__price-only">Описание</p>
+                  <p className="care-about-you___subtitle">
                   Если ремонт займет некоторое время,
                   мы предоставим Вам временный телефон,
                   чтобы Вы могли оставаться на связи со своими близкими,
                   деловыми партнерами и друзьями.
                 </p>
-              </div>
-            </div>
-          </div>
-          <div className="care-about-you">
-            <div className="care-about-you__info">
-              <img className="care-about-you__img" src={Cleane} alt="" />
-              <div className="care-about-you__text">
-                <h2 className="care-about-you__title">Незначительные поломки</h2>
-                <p className="care-about-you___subtitle">
-                  Не откладывайте ремонт!
-                  Обращайтесь к нам и получите качественный бесплатный
-                  ремонт незначительных поломок Вашей цифровой техники уже сегодня.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="care-about-you">
-            <div className="care-about-you__info">
-              <img className="care-about-you__img" src={Diagnostics} alt="диагностка бесплатная" />
-              <div className="care-about-you__text">
-                <h2 className="care-about-you__title">Бесплатная диагностика</h2>
-                <p className="care-about-you___subtitle">
-                  Бесплатная диагностика для всех видов цифровой техники!
-                  Исключение составляют ноутбуки и ПК.
-                  В случае отказа от ремонта, стоимость диагностики составляет
-                  всего 500 рублей.
-                </p>
+                </div>
+                
               </div>
             </div>
           </div>
         </div>
+
+        <div className="col-1-of-3">
+          <div className="card-neon">
+            <div className="card__side card__side--front-2">
+              <div className="card__titleneon card__titleneon--2">
+                <i className="fas fa-plane"></i>
+                <h4 className="card__heading">Незначительные поломки</h4>
+              </div>
+
+              <div className="card__details">
+              <img className="care-about-you__img" src={Cleane} alt="" />
+             
+              </div>
+            </div>
+            <div className="card__side card__side--back card__side--back-2">
+              <div className="card__cta">
+                <div className="card__price-box">
+                  <p className="card__price-only">Описание</p>
+                  <p className="care-about-you___subtitle">
+                  Не откладывайте ремонт!
+                  Обращайтесь к нам и получите качественный бесплатный
+                  ремонт незначительных поломок Вашей цифровой техники уже сегодня.
+                </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-1-of-3">
+          <div className="card-neon">
+            <div className="card__side card__side--front-3">
+              <div className="card__titleneon card__titleneon--3">
+                <i className="fas fa-rocket"></i>
+                <h4 className="card__heading">Бесплатная диагностика</h4>
+              </div>
+
+              <div className="card__details">
+              <img className="care-about-you__img" src={Diagnostics} alt="диагностка бесплатная" />
+             
+              </div>
+            </div>
+            <div className="card__side card__side--back card__side--back-3">
+              <div className="card__cta">
+                <div className="card__price-box">
+                  <p className="card__price-only">Описание</p>
+                  <p className="care-about-you___subtitle">
+                  Не откладывайте ремонт!
+                  Обращайтесь к нам и получите качественный бесплатный
+                  ремонт незначительных поломок Вашей цифровой техники уже сегодня.
+                </p>
+                </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="u-center-text u-margin-top-huge">
+     
+      </div>
+
       </div>
     </section>
   );

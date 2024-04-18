@@ -24,7 +24,7 @@ import ApplService from "../ApplService/ApplService";
 import OtherService from "../AdminPanel/OtherService/OtherService"
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm";
 import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
-import ImageGallery from "../ImageGallery/ImageGallery";
+
 import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi"
 import DeleteImage from "../AdminPanel/Image/DeleteImage";
 
@@ -69,7 +69,6 @@ const categoryId = urlParams.get('categoryId');
             <Route path="/telephone-service" element={<TelephoneService />} />
             <Route path="/other-service" element={<OtherService />} />
             <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
-            < Route path="/image-gallery" element={ <ImageGallery  />} />
             <Route path="/appl-service" element={<ApplService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="CreateServiceForm" element={<CreateServiceForm />} />

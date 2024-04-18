@@ -59,30 +59,44 @@ const fetchImages = async () => {
 
     
     const likeImage = async (imageId) => {
-      try {
+        try {
           const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
-              method: 'POST',
-              credentials: 'include',
+            method: 'POST',
+            credentials: 'include', // include для отправки куки
           });
-  
+      
           if (!response.ok) {
-              const errorData = await response.json();
-              alert(`Ошибка: ${errorData.message}`);
+            const errorData = await response.json();
+            alert(`Ошибка: ${errorData.message}`);
           } else {
-              const updatedImage = await response.json();
-  
-              setImages((prevImages) =>
-                  prevImages.map((img) =>
-                      img._id === imageId ? updatedImage : img
-                  )
-              );
-  
-              alert("Лайк успешно поставлен");
+            const updatedImage = await response.json();
+      
+            setImages((prevImages) =>
+              prevImages.map((img) =>
+                img._id === imageId ? { ...img, likes: updatedImage.likes } : img
+              )
+            );
+      
+            // Функция для проверки, был ли уже поставлен лайк
+            if (updatedImage.likes.includes(getClientId())) {
+              alert("Лайк уже поставлен");
+            } else {
+              alert("Лайк поставлен");
+            }
+      
+            // состояние prevLikes
+             setLikes((prevLikes) => ({
+               ...prevLikes,
+               [imageId]: !prevLikes[imageId]
+             }));
+      
+            // Сохранение лайков в localStorage
+             localStorage.setItem('likes', JSON.stringify({ ...likes, [imageId]: !prevLikes[imageId] }));
           }
-      } catch (error) {
+        } catch (error) {
           alert(`Ошибка при попытке лайкнуть изображение: ${error.message}`);
-      }
-  };
+        }
+      };
 
     useEffect(() => {
         const fetchClientId = async () => {

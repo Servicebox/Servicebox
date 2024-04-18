@@ -13,7 +13,7 @@
 color: #13171D;
 font-family: Bebas Neue;
 text-align: left;
-font-size: 80px;
+font-size: 70px;
 font-style: normal;
 font-weight: 700;
 line-height: 84px; /* 105% */
@@ -24,12 +24,12 @@ padding: 100px 0 0;
 .service__subtitle{
   color: #444;
   font-family: Gilroy;
-  font-size: 19px;
+  font-size: 27px;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: 1000px;
   text-align: center;
 }
 .card__subtitle{
@@ -121,6 +121,7 @@ display: none;
   font-weight: 600;
   line-height: 30px;
   margin: 5px auto;
+  color: black;
 
 }
 
@@ -135,6 +136,7 @@ display: none;
   line-height: 25px;
   margin: 0 auto;
   max-width: 300px;
+  color: black;
 
 }
 .card__button{
@@ -171,6 +173,17 @@ max-width: 100%;
 .card{
   max-width: 250px;
   margin: 20px auto;
+}
+.service__subtitle{
+  color: #444;
+  font-family: Gilroy;
+  font-size: 19px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  margin: 0 auto;
+  max-width: 400px;
+  text-align: center;
 }
 .service__title{
   font-family: Bebas Neue;
@@ -236,6 +249,18 @@ max-width: 250px;
 @media screen and (min-width: 320px) and (max-width: 499px){
   .tech{
     max-width: 100%;
+  }
+
+  .service__subtitle{
+    color: #444;
+    font-family: Gilroy;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    margin: 0 auto;
+    max-width: 300px;
+    text-align: center;
   }
   .service__title{
     color: #13171D;
