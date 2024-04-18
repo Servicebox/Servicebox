@@ -69,7 +69,7 @@ function MainBanner() {
             Решаем любые проблемы! Большой склад и опытные мастера
           </h3>
           <button className="main-banner__form" onClick={toggleForm}>
-          <span>Бесплатная консультация</span> 
+          <span className='title-span'>Бесплатная консультация</span> 
           </button>
         </div>
       </div>
