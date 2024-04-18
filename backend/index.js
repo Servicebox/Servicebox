@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const PORT = 8000;
+const PORT = 5000;
 const cors = require('cors');
 const allowedCors = [
   'https://servicebox35.ru',
