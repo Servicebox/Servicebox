@@ -93,6 +93,7 @@ margin: 0 auto;
         display: flex;
         flex-direction: column;
         max-width: 263px;
+        padding-bottom: 50px;
     }
     .about__title{
         color: #13171D;

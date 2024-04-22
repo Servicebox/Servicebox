@@ -228,6 +228,18 @@ display: flex;
     padding: 0;
     margin: 0 auto;
 }
+.button::after{
+  inset: 100%;
+  background: conic-gradient(from calc(270deg-(var(--glow-spead)*0.5)),
+  var(glow)0,
+  var(--glow) var(--glow-spead),
+  transparent var(--glow-spead));
+  translate: 0 0;
+  transform: rotate(0deg);
+  width: auto;
+  animation: spin calc(var(--speed)*2s)infinite linear;
+  animation-play-state: paused;
+  }
 
 .button img {
   display: block;

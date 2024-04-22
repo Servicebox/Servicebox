@@ -1,5 +1,5 @@
 .gifts{
-    box-shadow: 1px 1px 15px gray;
+
     border-radius: 20px;
     padding-bottom: 50px;
     margin-bottom: 5px;
@@ -36,7 +36,7 @@
 }
 .form__container{
   padding: 30px;
-        box-shadow: 0px 1px 65px #c0bebe;
+  box-shadow: 1px 1px 20px skyblue;
         /* position: relative; */
         border-radius: 20px;
 }
@@ -51,7 +51,23 @@ border-radius: 15px;
 background-color: #e6e6e6;
 border: none;
 margin: 0 auto;
+margin: 0 auto;
+transition: all 0.18s ease;
+backdrop-filter: blur(40px);
+backface-visibility: hidden;
 
+}
+.form-btn:hover{
+inset: 100%;
+background: conic-gradient(from calc(270deg-(var(--glow-spead)*0.5)),
+var(glow)0,
+var(--glow) var(--glow-spead),
+transparent var(--glow-spead));
+translate: 0 0;
+transform: rotate(0deg);
+width: auto;
+animation: spin calc(var(--speed)*2s)infinite linear;
+animation-play-state: paused;
 }
 .form__label {
     margin: 20px 0 10px 0;

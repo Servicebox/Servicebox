@@ -9,8 +9,12 @@
     margin: 0 auto;
     text-align: center;
     padding-bottom: 30px;
-    background: linear-gradient(-45deg, #00338b, #F9A92C); /* Градиент от черного к оранжевому */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text; /* Стандартное свойство для совместимости */
+    /* background: linear-gradient(-45deg, #00338b, #F9A92C); */
+    /* -webkit-background-clip: text; */
+    /* -webkit-text-fill-color: transparent; */
+    /* background-clip: text; */
+    text-transform: uppercase;
+    color: rgb(45, 128, 196);
+    text-shadow: 2px 2px 2px black;
+    font-weight: bold;
 }

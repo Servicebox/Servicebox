@@ -9,7 +9,9 @@
     flex-wrap: wrap;
     margin-top: 20px;
     margin: 0 auto;
-  
+    background: transparent;
+    backdrop-filter: blur(30px);
+    border: 1px solid white;
     padding: 20px;
     flex-direction: column;
 }
@@ -117,11 +119,14 @@ gap: 40px;
   grid-template-rows: 3fr;
   grid-template-columns: 2fr;
   justify-content: space-between;
-  background-color: #ffffffd9;
+  /* background-color: #ffffffd9; */
   border-radius: 20px;
   padding: 30px 30px;
   box-shadow: 0px 0px 10px black;
   margin: 0 auto;
+  background: transparent;
+  backdrop-filter: blur(30px);
+  border: 1px solid white;
   max-width: 800px;
   
 }
@@ -142,7 +147,7 @@ gap: 40px;
 
 .main-banner__title {
   grid-column: 1/2;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-family: Bebas Neue;
   font-size: 70px;
   font-weight: 700;
@@ -160,7 +165,7 @@ gap: 40px;
 }
 
 .main-banner__subtitle {
-  color:rgb(0, 0, 0);
+  color:rgb(255, 255, 255);
   font-family: Gilroy;
   font-size: 27px;
   font-weight: 400;
@@ -399,9 +404,9 @@ gap: 40px;
 }
 
 .care-about-you___subtitle {
-  color: #ffffff;
+  color: #000000;
   font-family: Gilroy;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 24px;
   margin: 0;
@@ -467,7 +472,7 @@ gap: 0px;
   }
   .main-banner__title {
     width: 100%;
-    color: #000000;
+    color: #ffffff;
     text-align: center;
     font-family: Bebas Neue;
     font-size: 26px;
@@ -480,7 +485,7 @@ gap: 0px;
   }
   .main-banner__subtitle {
     width: 100%;
-    color: #000000;
+    color: #ffffff;
     text-align: center;
     font-family: Gilroy;
     font-size: 12px;
@@ -753,11 +758,11 @@ line-height: 18px; /* 133.333% */
           perspective: 150rem;
   -moz-perspective: 150rem;
   position: relative;
-  height: 35rem;
+  height: 17rem;
 }
 
 .card__side {
-  height: 36rem;
+  height: 25rem;
   -webkit-transition: all 0.8s ease;
   transition: all 0.8s ease;
   position: absolute;
@@ -769,7 +774,7 @@ line-height: 18px; /* 133.333% */
   border-radius: 20px;
   overflow: hidden;
   -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
-          box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 62%);
 }
 
 .card__side--front {
@@ -848,13 +853,13 @@ line-height: 18px; /* 133.333% */
 }
 
 .card__heading {
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: 600;
   text-transform: uppercase;
   text-align: center;
-  color: #fff;
+  color: #000000;
   background-color: #00000000;
-  box-shadow: 1px 1px 0px skyblue;
+  box-shadow: 1px 1px 20px skyblue;
   padding: 7px 0px;
  
 }
@@ -897,12 +902,12 @@ line-height: 18px; /* 133.333% */
 
 .card__price-box {
   text-align: center;
-  color: #fff;
+  color: #000000;
   margin-bottom: 8rem;
 }
 
 .card__price-only {
-  font-size: 2rem;
+  font-size: 1.3rem;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -918,6 +923,7 @@ line-height: 18px; /* 133.333% */
   display: flex;
   /* flex-direction: row; */
   justify-content: center;
+  gap: 18px;
 }
 
 .row:not(:last-child) {
@@ -937,7 +943,7 @@ line-height: 18px; /* 133.333% */
 }
 
 .row [class^="col-"]:not(:last-child) {
-  margin-right: 3rem;
+  margin-right: 0.1rem;
 }
 
 .row .col-1-of-3 {
@@ -1087,7 +1093,7 @@ line-height: 18px; /* 133.333% */
 
 
 .row [class^="col-"]:not(:last-child){
-  margin-right: 1.5rem;
+  margin-right: 1rem;
 }
 .card__heading {
   font-size: 1.3rem;
@@ -1106,10 +1112,11 @@ line-height: 18px; /* 133.333% */
   padding: 0px;
 }
 .card__side {
-  height: 27em;
+  height: 25em;
+    width: 110%;
 }
 .card-neon {
-  height: 22em;
+  height: 17em;
 }
 .main-banner__form {
   width: 350px;
@@ -1124,15 +1131,15 @@ font-size: 16px;
 }
 @media screen and (max-width: 768px) {
   .row .col-1-of-3 {
-    width: calc((65% - 2 * 3rem) / 2);
+    width: calc((75% - 2 * 3rem) / 2);
   }
 
  .card__side {
-  height: 20rem;
+  height: 17rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
+  gap: 20px;
 
 
  }
@@ -1140,7 +1147,7 @@ font-size: 16px;
   font-size: 0.8em;
  }
  .card-neon {
-  height: 18rem;
+  height: 10rem;
  }
  .card__price-only {
   font-size: 1em;
@@ -1159,7 +1166,7 @@ font-size: 16px;
 }
 @media screen and (max-width: 500px) {
   .row [class^="col-"]:not(:last-child) {
-    margin-right: 1rem;
+    margin-right: 0rem;
   }
   .row .col-1-of-3 {
     width: calc((100% - 2 * 2rem) / 2);
@@ -1175,18 +1182,19 @@ font-size: 16px;
     margin-right: 0;
   }
   .card__side {
-    height: 18rem;
+    height: 16rem;
+    width: 103%;
     display: flex;
     flex-direction: column;
     align-items: center;
 
  }
  .card__heading {
-  font-size: 0.9em ;
+  font-size: 0.7em ;
 
  }
  .card-neon {
-  height: 16rem;
+  height: 8.5rem;
 
  }
  .card__price-only {
@@ -1212,10 +1220,14 @@ font-size: 16px;
   .card__price-box {
     margin-bottom: 1rem;
 }
+
 }
 @media screen and (max-width: 400px) {
+  .row {
+    gap: 10px;
+  }
   .row [class^="col-"]:not(:last-child) {
-    margin-right: 0.7rem;
+    margin-right: 0.2rem;
   }
   .row .col-1-of-3 {
     width: calc((120% - 2 * 2rem) / 2);
@@ -1231,10 +1243,12 @@ font-size: 16px;
     margin-right: 0;
   }
   .card__side {
-    height: 14rem;
+    height: 11rem;
+    width: 105%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 14px;
 
  }
  .card__heading {
@@ -1248,7 +1262,8 @@ font-size: 16px;
   padding: 0.5em 1em;
 }
 .card-neon {
-  height: 12rem;
+  height: 4rem;
+  width: 105%;
 }
 .card__titleneon {
   padding: 1rem 1rem 1rem;
@@ -1258,8 +1273,9 @@ font-size: 16px;
   max-width: 300px;
 }
 .main-banner__form span {
-  font-size: 12px;
-  line-height: 13px;
+  font-size: 10px;
+  line-height: 8px;
+  padding: 10px;
 }
 .main-banner__content {
   padding:20px;
