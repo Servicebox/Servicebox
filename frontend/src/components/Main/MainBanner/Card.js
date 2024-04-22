@@ -4,7 +4,7 @@ import "./Card.css";
 
 import Tv from "../../../images/tv.png"
 import Glass from "../../../images/Glass.png"
-import Applefon from "../../../images/Applefon.svg";
+import Applefon from "../../../images/apple.png";
 import Android from "../../../images/android.png";
 import Tablet from "../../../images/tablet.png";
 import Notebook from "../../../images/notebook.png";
