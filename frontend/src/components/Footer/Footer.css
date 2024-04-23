@@ -1,5 +1,7 @@
 .footer{
 padding-top: 20px;
+position: relative;
+z-index: 2;
 }
 .footer__map {
   width: 100%;
@@ -25,6 +27,8 @@ border-right: 2px solid currentColor;
   padding: 20px;
   width: 80%;
   text-align: center;
+  background: transparent;
+  backdrop-filter: blur(20px);
 }
 .oplata__title{
   color: #000000;

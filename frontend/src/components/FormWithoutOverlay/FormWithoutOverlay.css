@@ -7,6 +7,9 @@
     flex-direction: column;
     text-align: center;
     margin: 0 auto;
+    background: transparent;
+    backdrop-filter: blur(20px);
+    border-radius: 15px;
 }
 .gifts__title{
 
@@ -49,7 +52,7 @@ align-items: flex-start;
 gap: 10px;
 border-radius: 15px;
 background-color: #e6e6e6;
-border: none;
+border: 1px solid black;
 margin: 0 auto;
 margin: 0 auto;
 transition: all 0.18s ease;

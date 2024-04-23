@@ -16,6 +16,7 @@ import Gifts from "./Gifts/Gifts";
 import BallData from "./BallData/BallData";
 import Header from "../Header/Header";
 
+
 function Main() {
   gsap.registerPlugin(ScrollToPlugin);
   const location = useLocation();
@@ -33,8 +34,10 @@ function Main() {
   };
 
   return (
+    <div>
+
     <main className="main">
-    
+
       <MainBanner />
      
       <Element name="serviceRef" ref={serviceRef}>
@@ -55,6 +58,7 @@ function Main() {
 </Element>
       
     </main>
+    </div>
   );
 }
 

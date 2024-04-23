@@ -61,7 +61,7 @@ function MainBanner() {
 
   return (
     <section className="section-plans" id="section-plans">
-      <video className="vieo-bg" src={Video} autoPlay loop muted/>
+   
       <div className="main-banner__content">
         <div className="main-banner__text">
           <h1 className="main-banner__title">Проблемы с Вашим устройством? </h1>

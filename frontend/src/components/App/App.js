@@ -5,7 +5,7 @@ import ScrollToPlugin from "gsap/ScrollToPlugin";
 import axios from 'axios';
 
 import Header from "../Header/Header";
-import Main from "../Main/Main";
+import Main from "../Main/Main"; 
 import Footer from "../Footer/Footer";
 import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
@@ -31,6 +31,7 @@ import DeleteImage from "../AdminPanel/Image/DeleteImage";
 
 
 import CardBody from "../Card/CardBody";
+import BubbleBackground from "../BubbleBackground/BubbleBackground";
 
 
 
@@ -41,46 +42,38 @@ function App() {
   gsap.registerPlugin(ScrollToPlugin);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
-const categoryId = urlParams.get('categoryId'); 
-
+  const categoryId = urlParams.get('categoryId');
 
   return (
- 
-      <div className="page">
-        <div className="page__wrapper">
-          <div className="nav">
-            <Header />
-
-          </div>
-          <Routes>
-            <Route exact path="/" element={<Main />} />
-            <Route path="image-gallery-api" element={<ImageGalleryApi />} />
-            <Route path="delete-image" element={<DeleteImage/>} />
-        
-   
-    
-
-            <Route exact path="/" component={ServiceRef} />
-           < Route path="/card-body" element={ <CardBody />} />
-            <Route path="/notebook-service" element={<NotebookService />} />
-            <Route path="/monoblock-service" element={<MonoblockService />} />
-            <Route path="/tv-service" element={<TvService />} />
-            <Route path="/tablet-service" element={<TabletService />} />
-            <Route path="/telephone-service" element={<TelephoneService />} />
-            <Route path="/other-service" element={<OtherService />} />
-            <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
-            <Route path="/appl-service" element={<ApplService />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="CreateServiceForm" element={<CreateServiceForm />} />
-            <Route path="/admin/*" element={<AdminPanelRoute />} />
-         
-          </Routes>
-          {isFormOpen && <Form toggleForm={toggleForm} />}
-          <Footer />
-          <CookieMessage />
+    <div className="page">
+      <Header />
+      <div className="page__wrapper">
+        <div className="nav">
+          <BubbleBackground />
         </div>
+        <Routes>
+          <Route exact path="/" element={<Main />} />
+          <Route path="image-gallery-api" element={<ImageGalleryApi />} />
+          <Route path="delete-image" element={<DeleteImage />} />
+          <Route exact path="/" component={ServiceRef} />
+          <Route path="/card-body" element={<CardBody />} />
+          <Route path="/notebook-service" element={<NotebookService />} />
+          <Route path="/monoblock-service" element={<MonoblockService />} />
+          <Route path="/tv-service" element={<TvService />} />
+          <Route path="/tablet-service" element={<TabletService />} />
+          <Route path="/telephone-service" element={<TelephoneService />} />
+          <Route path="/other-service" element={<OtherService />} />
+          <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
+          <Route path="/appl-service" element={<ApplService />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="CreateServiceForm" element={<CreateServiceForm />} />
+          <Route path="/admin/*" element={<AdminPanelRoute />} />
+        </Routes>
+        {isFormOpen && <Form toggleForm={toggleForm} />}
+        <Footer />
+        <CookieMessage />
       </div>
-
+    </div>
   );
 }
 

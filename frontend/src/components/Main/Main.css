@@ -1,3 +1,8 @@
 .main-banner{
     padding-top: 60px;
 }
+main {
+    display: block;
+    position: relative;
+    z-index: 2;
+}

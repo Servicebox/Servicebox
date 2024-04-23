@@ -50,14 +50,14 @@
   margin: 0 auto;
   font-size: 27px;
   margin-top: 5px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-family: Gilroy;
 }
 .countdown h2{
   margin: 0 auto;
   font-size: 34px;
   margin-top: 5px;
-  color: white;
+  color: rgb(0, 0, 0);
   font-family: Gilroy;
 }
 #text{
@@ -103,16 +103,7 @@ gap: 40px;
     padding-bottom: 50px;
     
 }
-.vieo-bg{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
 
-}
 
 .main-banner__content {
   display: grid;
@@ -147,7 +138,7 @@ gap: 40px;
 
 .main-banner__title {
   grid-column: 1/2;
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   font-family: Bebas Neue;
   font-size: 70px;
   font-weight: 700;
@@ -165,7 +156,7 @@ gap: 40px;
 }
 
 .main-banner__subtitle {
-  color:rgb(255, 255, 255);
+  color:rgb(0, 0, 0);
   font-family: Gilroy;
   font-size: 27px;
   font-weight: 400;
@@ -193,7 +184,7 @@ gap: 40px;
   background: #0c0c0c;
   color: rgba(255, 255, 255, 0.657);
   transition: 0.5s;
-  z-index: 1;
+  z-index: 2;
   padding: 30px;
   border-radius: 20px;
   display: flex;
@@ -251,7 +242,7 @@ gap: 40px;
     background-size: 400%;
     opacity: 1;
     transition: 0.5s;
-    z-index: -1;
+    z-index: 1;
     border-radius: 50px;
 }   
 
@@ -333,7 +324,7 @@ gap: 40px;
   top: 70%;
   left: 91%;
   transform: translate(-50%, -50%);
-  z-index: -1;
+  z-index: 1;
 }
 
 .care-about-you__info {
@@ -472,7 +463,7 @@ gap: 0px;
   }
   .main-banner__title {
     width: 100%;
-    color: #ffffff;
+    color: #000000;
     text-align: center;
     font-family: Bebas Neue;
     font-size: 26px;
@@ -485,7 +476,7 @@ gap: 0px;
   }
   .main-banner__subtitle {
     width: 100%;
-    color: #ffffff;
+    color: #000000;
     text-align: center;
     font-family: Gilroy;
     font-size: 12px;
@@ -950,13 +941,15 @@ line-height: 18px; /* 133.333% */
   width: calc((100% - 2 * 6rem) / 3);
 }
 .section-plans {
-  background-color: #000;
+
   display: flex;
   padding: 4rem 0 4rem 0;
   flex-direction: column;
   gap: 50px;
   position: relative;
-  z-index: 0;
+  z-index: 1;
+  background: transparent;
+  backdrop-filter: blur(10px);
 
 }
 .u-center-text {

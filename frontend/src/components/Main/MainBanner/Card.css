@@ -116,7 +116,7 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  z-index: -1;
+  z-index: 2;
   transition:
    ease all 1.3s;
   background: rgba(0, 0, 0, 0.4);
@@ -250,12 +250,7 @@ font-size: 0.9em;
     height: 300px;
     width: 30%;
   }
-  .card-back{
-  /*  max-width: 300px;
-    max-height: 65%;
-    top: 80px;
-    left: 44px;*/
-  }
+
   .card .card-back .link{
     top: 175px;
   }
