@@ -109,7 +109,7 @@
   background-position: center center;
   background-repeat: no-repeat;
 }
-.cover, .card:after {
+.cover:after {
   content: "";
   position: absolute;
   top: 0px;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./MainBanner.css";
 
 import СloseIcon from "../../../images/x.svg";
-import Video from '../../../images/video.mp4';
+
 import Diagnostics from "../../../images/notorang.svg"
 import Cleane from "../../../images/cleane.svg"
 import Eplaceable from "../../../images/telpodmena.svg"

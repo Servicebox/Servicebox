@@ -453,6 +453,7 @@ margin-right: 80px;
   }
   .nav_middle{
   display: block;
+  margin: 0 auto;
 
   }
 }
