@@ -407,7 +407,7 @@ gap: 40px;
   color: #000000;
   font-family: Gilroy;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: bold;
   line-height: 24px;
   margin: 0;
 }
@@ -563,7 +563,7 @@ padding-top: 16px;
     font-family: Gilroy;
 font-size: 9px;
 font-style: normal;
-font-weight: 400;
+font-weight: bold;
 line-height: 11px;
 letter-spacing: 0.14px;
   }
@@ -685,7 +685,7 @@ line-height: normal;
     font-family: Gilroy;
 font-size: 14px;
 font-style: normal;
-font-weight: 400;
+font-weight: bold;
 line-height: 18px; /* 133.333% */
   }
   .main-banner__circle{
@@ -1105,7 +1105,7 @@ line-height: 18px; /* 133.333% */
 }
 .care-about-you___subtitle {
   font-size: 1em ;
-  font-weight: 400;
+  font-weight: bold;
   line-height: 18px;
 }
 .card__details {

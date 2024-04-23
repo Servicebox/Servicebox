@@ -26,7 +26,7 @@
   }
   
  .card-back {
-    transform: rotateY(180deg);
+   /* transform: rotateY(180deg);*/
     backface-visibility: hidden;
     position: absolute;
     height: 100%;
@@ -37,8 +37,9 @@
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
-    transition: ease all 2.3s;
-    transition: ease transform 2.3s, ease background 0.5s;
+    backface-visibility: hidden;
+   
+    transition: ease transform 2.3s, ease background 0.3s;
     transform: translateZ(-1px) rotatey(-180deg);
     background: transparent;
     border: 1px solid white;
@@ -101,7 +102,7 @@
     transform: translateZ(60px);
   }
   .card:hover .cover  {
-    transform: translateZ(-60px) rotatey(-180deg);
+    transform: translateZ(-8px) rotatey(-180deg);
   }
 
   .card .cover {
@@ -113,7 +114,7 @@
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    background-color: black;
+    background-color: #000000c7;
   }
   .card .cover:before {
     content: "";
@@ -256,9 +257,7 @@
   
 
   }
- .is-flipped{
-    height: 60%;
-  }
+
   .card-cover{
 margin-top: 20px;
 margin-left: 30px;
