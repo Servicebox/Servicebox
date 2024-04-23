@@ -59,7 +59,7 @@ import Card from "../MainBanner/Card";
       title: "Другими устройствами",
       subtitle: " Ремонт различных устройств, включая Bluetooth-колонки, роботы-пылесосы, электронные книги, игровые приставки и видеорегистраторы.",
       image: "Devices",
-      LinkTo:"/other-service"
+      linkTo:"/other-service"
     },
   ];
 
