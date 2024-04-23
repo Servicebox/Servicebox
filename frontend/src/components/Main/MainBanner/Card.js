@@ -28,13 +28,11 @@ const Card = ({ title, subtitle, image, linkTo }) => {
       return imageMap[title];
     };
   
-    const handleCardClick = () => {
-      serviceRef.current.classList.toggle('is-flipped');
-    }
+
   
     return (
   
-      <div className="card_one" ref={serviceRef} onClick={handleCardClick}>
+      <div className="card_one" ref={serviceRef} >
        
         <div className="card">
           <div className="cover item">

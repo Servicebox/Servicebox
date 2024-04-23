@@ -2,9 +2,11 @@
   display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+
+gap: 15px;
     padding-bottom: 100px;
-    margin-top: -50px;
+    margin: 0 auto;
+  
 }
 @media screen and (min-width: 320px) and (max-width: 500px) {
   .tech{
