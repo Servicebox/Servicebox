@@ -182,13 +182,15 @@ animation-play-state: paused;
   }
   .gifts__title{
     padding-top: 40px;
-    font-size: 48px;
+    font-size: 26px;
     line-height: normal;
     grid-row: 5/2;
     justify-items: center;
     justify-content: center;
     text-align: center;
     padding-bottom: 10px;
+    box-shadow: none;
+    text-transform: none;
 }
   .error2{
     top: 66px;
@@ -204,14 +206,16 @@ animation-play-state: paused;
   }
   @media screen and (min-width: 320px) and (max-width: 490px) {
     .gifts__title{
-        color: #13171D;
+    
     font-family: Bebas Neue;
-    font-size: 26px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: 26px;
     max-width: 268px;
     padding-bottom: 20px;
     text-align: center;
+    box-shadow: none;
+    text-transform: none;
     }
   }
