@@ -7,7 +7,7 @@ const TelegramWidget = () => {
     useEffect(() => {
         const onTelegramAuth = (user) => {
             const dataCheckString = [
-                `auth_date=${user.auth_date}`,  // убедитесь что формат значения соответствует необходимому
+                `auth_date=${user.auth_date}`,
                 `id=${user.id}`,
                 `first_name=${user.first_name}`,  // optional
                 `last_name=${user.last_name}`,  // optional

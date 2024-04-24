@@ -32,7 +32,7 @@ import DeleteImage from "../AdminPanel/Image/DeleteImage";
 
 import CardBody from "../Card/CardBody";
 import BubbleBackground from "../BubbleBackground/BubbleBackground";
-import TelegramWidget from "../TelegramWidget/TelegramWidget";
+//import TelegramWidget from "../TelegramWidget/TelegramWidget";
 
 
 
@@ -48,7 +48,7 @@ function App() {
   return (
     <div className="page">
       <Header />
-      <TelegramWidget/>
+      {/*<TelegramWidget/>*/}
       <div className="page__wrapper">
         <div className="nav">
           <BubbleBackground />
