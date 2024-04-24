@@ -443,6 +443,9 @@ gap: 40px;
 
 /* Для экранов шириной от 320px до 480px */
 @media screen and (min-width: 320px) and (max-width: 480px) {
+  .main-banner__content{
+    max-width: 300px;
+  }
   .care-about{
 display: flex;
 flex-wrap: wrap;
@@ -510,8 +513,8 @@ gap: 0px;
   }
   .main-banner__form {
     grid-row: 7;
-    max-width: 233px;
-    max-height: 48px;
+    max-width: 200px;
+    max-height: 42px;
     border-radius: 15px;
 font-family: Montserrat;
 font-size: 12px;
