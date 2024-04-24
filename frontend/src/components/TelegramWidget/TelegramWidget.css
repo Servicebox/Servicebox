@@ -1,0 +1,5 @@
+.telegram-widget-container {
+    max-width: 100%; 
+    overflow: hidden; 
+    position: relative; 
+  }
