@@ -15,7 +15,7 @@ import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
 import BallData from "./BallData/BallData";
 import Header from "../Header/Header";
-
+import TelegramWidget from "../TelegramWidget/TelegramWidget";
 
 function Main() {
   gsap.registerPlugin(ScrollToPlugin);
@@ -46,11 +46,12 @@ function Main() {
 <Element name="aboutRef" ref={aboutRef}>
   <AboutRef />
   </Element>
-   
+  <TelegramWidget/>
       <Completed />
       <ArronService />
       <AboutMe />
       <Gifts />
+      
       
      
 <Element name="contactsRef" ref={contactsRef}>
