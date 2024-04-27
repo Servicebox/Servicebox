@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import "./BurgerMenu.css";
 import burgerIcon from "../../images/Burger.svg";
@@ -8,9 +8,7 @@ import closeIcon from "../../images/x.svg";
 import Status from "../../images/status.svg";
 import local from "../../images/location.svg";
 import MiniMail from "../../images/mail.svg";
-import MiniWatsapp from "../../images/whatsapp.svg";
-import MiniTelegram from "../../images/telegram.svg";
-import VkMini from "../../images/vk.svg";
+
 import MiniTelephone from "../../images/phonecol.svg";
 import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 
@@ -51,8 +49,10 @@ function BurgerMenu({ scrollTo }) {
               <li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
   <a onClick={() => scrollTo(aboutRef)}>О компании</a>
 </li>
-<li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
+<li className="navigation__list ">
+            <Link className="burger-menu__item" to="/contacts">
+          <h3 className="card__subtitle-img">контакты</h3>
+          </Link>
 </li>
 <li>           
   <Link className="burger-menu__item" to="/image-gallery-api">
