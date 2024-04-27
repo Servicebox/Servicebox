@@ -10,11 +10,12 @@
 
   .burger-icon {
     position: absolute;
-    top: -40px;
-    right: 0px;
+    top: -98px;
+    right: -47px;
     max-width: 100px;
     cursor: pointer;
     z-index: 999;
+    width: 60px;
   }
   .burger-icon::before,
 .burger-icon::after {
@@ -46,7 +47,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 60%;
+    width: 70%;
     height: 100%;
     background-color: #fff;
     transform: translateX(100%);
@@ -84,11 +85,11 @@
   
   .logo-burger {
     display: flex;
-    max-width: 150px;
+    max-width: 90px;
     padding-top: 20px;
     margin: 0 auto;
     justify-content: center;
-    animation: pulse 1s infinite;
+  
   }
 
   .burger-menu__list {
@@ -115,7 +116,7 @@
 
   .burger-menu__item a {
     text-decoration: none;
-    color: #333;
+    color: #ffffff;
     font-size: 18px;
   }
 

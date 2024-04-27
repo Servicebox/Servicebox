@@ -62,17 +62,6 @@ function MainBanner() {
   return (
     <section className="section-plans" id="section-plans">
    
-      <div className="main-banner__content">
-        <div className="main-banner__text">
-          <h1 className="main-banner__title">Проблемы с Вашим устройством? </h1>
-          <h3 className="main-banner__subtitle">
-            Решаем любые проблемы! Большой склад и опытные мастера
-          </h3>
-          <button className="main-banner__form" onClick={toggleForm}>
-          <span className='title-span'>Бесплатная консультация</span> 
-          </button>
-        </div>
-      </div>
       {isOpen && <Form toggleForm={toggleForm} />}
       <div className="countdown">
       <h2> Акция! Комплексная чистка ноутбука всего за 900 руб</h2>

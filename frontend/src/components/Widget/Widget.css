@@ -1,0 +1,70 @@
+ul {
+    list-style: none;
+}
+
+/* Стили для example-1 */
+.example-1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    position: fixed;
+    bottom: 10%;
+    right: 25px;
+    z-index: 1000;
+}
+
+/* Стили для icon-content */
+.icon-content {
+  
+}
+
+/* Стили для ссылки */
+.link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    color: #4d4d4d;
+    background-color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+
+.link svg {
+    width: 30px;
+    height: 30px;
+}
+
+.link:hover {
+    box-shadow: 3px 2px 45px 0px rgba(0, 0, 0, 0.12);
+    color: #0088cc; /* Для ссылок с data-social="telegram" */
+}
+
+/* Стили для tooltip */
+.tooltip {
+    position: absolute;
+    left: 50%;             /* Отцентрировать по горизонтале относительно родителя */
+    transform: translate(-50%, -100%); /* Сдвиг вверх включая собственные размеры */
+    background-color: #000;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 19px;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    /* Добавим немного отступа между подсказкой и ссылкой*/
+    bottom: 100%;
+    margin-bottom: 5px; /* Отступ между элементом и подсказкой */
+}
+
+/* Изменение состояния tooltip при наведении на icon-content */
+.icon-content:hover, .tooltip {
+    opacity: 1;
+
+    top: auto; /* Это свойство сбросит значение top, установленное при активации */
+}
+

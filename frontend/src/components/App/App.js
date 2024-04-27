@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import Header from "../Header/Header";
 import Main from "../Main/Main"; 
-import Footer from "../Footer/Footer";
+//import Footer from "../Footer/Footer";
 import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
@@ -27,11 +27,13 @@ import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
 
 import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi"
 import DeleteImage from "../AdminPanel/Image/DeleteImage";
+import Contacts from "../Contacts/Contacts";
 
 
 
 import CardBody from "../Card/CardBody";
 import BubbleBackground from "../BubbleBackground/BubbleBackground";
+import Widget from "../Widget/Widget";
 //import TelegramWidget from "../TelegramWidget/TelegramWidget";
 
 
@@ -70,9 +72,11 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="CreateServiceForm" element={<CreateServiceForm />} />
           <Route path="/admin/*" element={<AdminPanelRoute />} />
+          <Route path="/contacts" element={<Contacts />} />
         </Routes>
         {isFormOpen && <Form toggleForm={toggleForm} />}
-        <Footer />
+        <Widget/>
+       
         <CookieMessage />
       </div>
     </div>

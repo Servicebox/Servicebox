@@ -1,11 +1,15 @@
 import React from "react";
-// eslint-disable-next-line no-unused-vars
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./PrivacyPolicy.css";
+import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
+
+import "./PrivacyPolicy.css";
+
 
 function PrivacyPolicy() {
   return (
-    <div>
+    
+    <div className="polis__privacy" >
       <div className="privacy__subtitle">
         <h2 className="privacy__title">Политика конфиденциальности</h2>
         <p>Мы используем эти данные для следующих целей:</p>
@@ -46,7 +50,14 @@ function PrivacyPolicy() {
         <p>Изменения в политике конфиденциальности:</p>
         <p>Мы можем время от времени вносить изменения в нашу политику конфиденциальности. В случае существенных изменений мы уведомим Вас путем размещения обновленной версии нашей политики конфиденциальности на нашем веб-сайте. Это лишь общий пример политики конфиденциальности, и Вам следует учесть своеобразия Вашей организации или веб-сайта и приспособить политику к вашим потребностям и правовым требованиям.</p>
       </div>
+      <div className="back__btn"> 
+      <ul>
+      <li><Link to="/">На главную</Link>
+      </li>
+      </ul>
+      </div>
     </div>
+
   );
 }
 

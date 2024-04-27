@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import "./BurgerMenu.css";
 import burgerIcon from "../../images/Burger.svg";
 import logoImage from "../../images/Servicebox6.svg";
@@ -11,6 +12,7 @@ import MiniWatsapp from "../../images/whatsapp.svg";
 import MiniTelegram from "../../images/telegram.svg";
 import VkMini from "../../images/vk.svg";
 import MiniTelephone from "../../images/phonecol.svg";
+import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 
 
 
@@ -42,23 +44,23 @@ function BurgerMenu({ scrollTo }) {
         </button>
         <img className="logo-burger" src={logoImage} alt="Логотип" />
         <nav className="navigation__list">
-          <ul className="burger-menu__list">
-          <li className={`burger-menu__item ${location.pathname === "/service" ? "active" : ""}`}>
-              <a onClick={() => handleScrollTo(serviceRef)}>Наши услуги</a>
-            </li>
-            <li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
-              <a onClick={() => handleScrollTo(aboutRef)}>О компании</a>
-            </li>
-            <li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
-              <a onClick={() => handleScrollTo(contactsRef)}>Контакты</a>
-            </li>
-            <li className="nav__list">           
+        <ul className="burger-menu__list">
+            <li className={`burger-menu__item ${location.pathname === "/service" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
+</li>
+              <li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
+</li>
+<li className={`burger-menu__item ${location.pathname === "/contacts" ? "active" : ""}`}>
+  <a onClick={() => scrollTo(contactsRef)}>Контакты</a>
+</li>
+<li>           
   <Link className="burger-menu__item" to="/image-gallery-api">
           <h3 className="card__subtitle-img">фото</h3>
           </Link>
 
 </li>
-          </ul>
+            </ul>
           <div className="header__links header__links-burger">
         
           </div>
@@ -88,22 +90,25 @@ function BurgerMenu({ scrollTo }) {
         </div>
       </div>
       <div className="contacts__block-sochial">
-          <ul className="contacts__icon">
-            <li className="contacts__icon-sochial pulse-one">
-              <a href="https://vk.com/servicebox35">
-                <img className="contacts__image-sochial" src={VkMini} alt="Вконтакте" />
-              </a>
-            </li>
-            <li className="contacts__icon-sochial pulse-two">
-              <a href="whatsapp://send?phone=79062960353">
-                <img className="contacts__image-sochial" src={MiniWatsapp} alt="Вотсапп" />
-              </a>
-            </li>
-            <li className="contacts__icon-sochial pulse-three">
-              <a href="tg://resolve?domain=@Tomkka">
-                <img className="contacts__image-sochial" src={MiniTelegram} alt="Телеграм" />
-              </a>
-            </li>
+      <ul className="contacts__icon">
+          <li className="contacts__icon-sochial pulse-one">
+            <a href="https://vk.com/servicebox35">
+              <FontAwesomeIcon icon={faVk} />
+              <span>VK</span>
+            </a>
+          </li>
+          <li className="contacts__icon-sochial pulse-two">
+            <a href="whatsapp://send?phone=79062960353">
+              <FontAwesomeIcon icon={faWhatsapp} />
+              <span>Watsapp</span>
+            </a>
+          </li>
+          <li className="contacts__icon-sochial pulse-three">
+            <a href="tg://resolve?domain=@Tomkka">
+              <FontAwesomeIcon icon={faTelegram} />
+              <span>Telegram</span>
+            </a>
+          </li>
           </ul>
         </div>
         </nav>

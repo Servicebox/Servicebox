@@ -116,9 +116,9 @@ gap: 40px;
   box-shadow: 0px 0px 10px black;
   margin: 0 auto;
   background: transparent;
-  backdrop-filter: blur(30px);
+
   border: 1px solid white;
-  max-width: 800px;
+  max-width: 600px;
   
 }
 
@@ -175,22 +175,30 @@ gap: 40px;
 }
 .main-banner__form span {
   position: absolute;
-  display: block;
+  /* display: block; */
   top: 1px;
   left: 1px;
   right: 1px;
   bottom: 1px;
   text-align: center;
-  background: #0c0c0c;
-  color: rgba(255, 255, 255, 0.657);
   transition: 0.5s;
   z-index: 2;
-  padding: 30px;
+  padding: 7px;
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 20px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
+  color: white;
+  /* padding-block: 15px; */
+  /* margin: 20px auto; */
+  border-radius: 5px;
+  border: none;
+  transition: all 0.2s ease-in-out;
 
 }  
 
@@ -207,7 +215,7 @@ gap: 40px;
   grid-row: 3;
   position: relative;
   width: 400px;
-  height: 100px;     line-height: 100px;
+  height: 70px;     line-height: 100px;
   
   margin: 10px;
   text-transform: uppercase;
@@ -224,7 +232,7 @@ gap: 40px;
   text-transform: uppercase;
   cursor: pointer;
   position: relative;
-  border-radius: 20px;
+  border-radius: 5px;
 
 }
 .title-span{
@@ -243,7 +251,7 @@ gap: 40px;
     opacity: 1;
     transition: 0.5s;
     z-index: 1;
-    border-radius: 50px;
+    border-radius: 5px;
 }   
 
 .main-banner__form::after{
@@ -260,7 +268,7 @@ gap: 40px;
   filter: blur(4px);
   opacity: 1;
   transition: 0.5s;
-  border-radius: 20px;
+  border-radius: 5px;
 }    
 
 @keyframes animate{
@@ -600,6 +608,18 @@ font-size: 20px;
   .vieo-bg{
     display: none;
   }
+  .main-banner__form{
+    width: 150px;
+  }
+  .main-banner__form{
+width: 200px;
+  }
+  .main-banner__form span {
+    font-size: 10px;
+  }
+  .row{
+    row-gap: 123px;
+  }
 }
 
 /* Для экранов шириной от 481px до 768px */
@@ -696,7 +716,10 @@ line-height: 18px; /* 133.333% */
 
   }
   .main-banner__form {
-    grid-row: 7;
+    grid-row: 7;   
+    width: 200px;
+    height: 55px;
+
   }
   .main-banner__img {
     width: 100%;
@@ -710,6 +733,12 @@ line-height: 18px; /* 133.333% */
   }
   .vieo-bg{
     display: none;
+  }
+  .main-banner__form span {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 19px;
   }
 }
 
@@ -768,7 +797,8 @@ line-height: 18px; /* 133.333% */
   border-radius: 20px;
   overflow: hidden;
   -webkit-box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
-  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 62%);
+  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 16%);
+  border-radius: 5px;
 }
 
 .card__side--front {
@@ -776,15 +806,15 @@ line-height: 18px; /* 133.333% */
 }
 
 .card__side--front-1 {
-  background: linear-gradient(-45deg, #f403d1, #64b5f6);
+  background: linear-gradient(1deg, #ffffff, #119bd2);
 }
 
 .card__side--front-2 {
-  background: linear-gradient(-45deg, #f321d7, #ffec61);
+  background: linear-gradient(1deg, #ffffff, #119bd2);
 }
 
 .card__side--front-3 {
-  background: linear-gradient(-45deg, #24ff72, #9a4eff);
+  background: linear-gradient(1deg, #ffffff, #119bd2);
 }
 
 .card__side--back {
@@ -793,15 +823,15 @@ line-height: 18px; /* 133.333% */
 }
 
 .card__side--back-1 {
-  background: linear-gradient(-45deg, #64b5f6, #f403d1);
+  background: linear-gradient(5deg, #ffffff, #f9a92c);
 }
 
 .card__side--back-2 {
-  background: linear-gradient(-45deg, #ffec61, #f321d7);
+  background: linear-gradient(5deg, #ffffff, #f9a92c);
 }
 
 .card__side--back-3 {
-  background: linear-gradient(-45deg, #9a4eff, #24ff72);
+  background: linear-gradient(5deg, #ffffff, #f9a92c);
 }
 
 .card-neon:hover .card__side--front-1,
@@ -853,7 +883,7 @@ line-height: 18px; /* 133.333% */
   text-align: center;
   color: #000000;
   background-color: #00000000;
-  box-shadow: 1px 1px 20px skyblue;
+
   padding: 7px 0px;
  
 }
@@ -952,7 +982,7 @@ line-height: 18px; /* 133.333% */
   position: relative;
   z-index: 1;
   background: transparent;
-  backdrop-filter: blur(10px);
+
 
 }
 .u-center-text {
@@ -1178,7 +1208,7 @@ font-size: 16px;
     margin-right: 0;
   }
   .card__side {
-    height: 16rem;
+    height: 13rem;
     width: 103%;
     display: flex;
     flex-direction: column;
@@ -1206,9 +1236,7 @@ font-size: 16px;
     width: 250px;
     margin: 0 auto;
   }
-  .main-banner__form span {
-    font-size: 14px;
-  }
+
   .card__titleneon {
     padding: 2rem 1rem 1rem;
   }
@@ -1219,9 +1247,7 @@ font-size: 16px;
 
 }
 @media screen and (max-width: 400px) {
-  .row {
-    gap: 10px;
-  }
+
   .row [class^="col-"]:not(:last-child) {
     margin-right: 0.2rem;
   }

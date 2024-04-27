@@ -26,7 +26,7 @@ font-size: 20px;
 font-style: normal;
 font-weight: 500;
 line-height: normal;
-  color:rgb(0, 0, 0);
+  color:rgb(255, 255, 255);
     align-items: center;
     justify-content: center;
     margin: 0 auto;
@@ -37,17 +37,17 @@ line-height: normal;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-color: black;
-  border-radius: 29px;
-  background-color: #fffffff2;
-  filter: drop-shadow(0px 8px 10px rgba(76, 76, 76, 0.26)) drop-shadow(0px 20px 30px rgba(74, 74, 74, 0.26));
+color: rgb(255, 255, 255);
+  border-radius: 10px;
+  background-color: #041e42;
+ 
 }
 
 .contacts__list-text{
   margin: 0 auto;
   text-align: center;
   padding-bottom: 10px;
-  color: #13171D;
+  color: #ffffff;
   font-family: Bebas Neue;
   font-size: 70px;
   font-style: normal;

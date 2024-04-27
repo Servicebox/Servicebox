@@ -15,6 +15,7 @@ import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
 import BallData from "./BallData/BallData";
 import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 
 function Main() {
@@ -59,6 +60,7 @@ function Main() {
 </Element>
       
     </main>
+    <Footer />
     </div>
   );
 }

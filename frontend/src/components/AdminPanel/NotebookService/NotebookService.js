@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./NotebookService.css"
 import Search from "../../Search/Search"
+import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 
 const NotebookServiceList = () => {
   const [notebookPrices, setNotebookPrices] = useState([]);
@@ -69,7 +70,14 @@ const NotebookServiceList = () => {
       )}
       <p className='glass__sabtitle-one'>* - время ремонта может меняться в зависимости от модели устройства и сложности проводимых работ</p>
         <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
+        <div className="back__btn"> 
+      <ul>
+      <li><Link to="/">На главную</Link>
+      </li>
+      </ul>
+      </div>
     </div>
+    
   );
 }
 

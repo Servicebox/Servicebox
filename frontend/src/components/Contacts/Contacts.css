@@ -1,0 +1,45 @@
+.footer__links{
+    padding-top: 30px;
+    background: #041e42;
+}
+.contacts{
+    position: relative;
+    padding-top: 60px;
+}
+.contacts-text {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: white;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+  }
+  
+  @media (min-width: 768px) {
+    .contacts-text {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .contacts-text {
+      font-size: 20px;
+      margin-bottom: 40px;
+      max-width: 700px;
+    }
+  }
+  
+  @media (min-width: 1440px) {
+    .contacts-text {
+      font-size: 22px;
+      margin-bottom: 50px;
+    }
+  }
+  
+  .contacts-text p {
+    margin-bottom: 15px;
+    text-align: justify; /* Добавляем выравнивание по ширине */
+  }

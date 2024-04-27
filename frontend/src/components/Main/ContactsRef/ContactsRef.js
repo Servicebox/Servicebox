@@ -1,11 +1,12 @@
 import React, { forwardRef } from 'react'; // Добавляем forwardRef
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import "./ContactsRef.css";
-import VkIcon from "../../../images/vk.svg";
+
 import Telephone from "../../../images/phonecol.svg";
 import location from "../../../images/location.svg";
 import Mail from "../../../images/mail.svg";
-import Watsapp from "../../../images/whatsapp.svg";
-import Telegram from "../../../images/telegram.svg";
+
+import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 
 const ContactsRef = forwardRef((props, ref) => {
   const handlePhoneCall = () => {
@@ -35,25 +36,29 @@ const ContactsRef = forwardRef((props, ref) => {
           <p className="contacts__text">г. Вологда, ул. Северная, 7А, офис 405</p>
         </div>
         <div className="contacts__block-sochial">
-          <ul className="contacts__icon">
-            <li className="contacts__icon-sochial pulse-one">
-              <a href="https://vk.com/servicebox35">
-                <img className="contacts__image-sochial" src={VkIcon} alt="Вконтакте" />
-              </a>
-            </li>
-            <li className="contacts__icon-sochial pulse-two">
-              <a href="whatsapp://send?phone=79062960353">
-                <img className="contacts__image-sochial" src={Watsapp} alt="Вотсапп" />
-              </a>
-            </li>
-            <li className="contacts__icon-sochial pulse-three">
-              <a href="tg://resolve?domain=@Tomkka">
-                <img className="contacts__image-sochial" src={Telegram} alt="Телеграм" />
-              </a>
-            </li>
+        <ul className="contacts__icon">
+          <li className="contacts__icon-sochial pulse-one">
+            <a href="https://vk.com/servicebox35">
+              <FontAwesomeIcon icon={faVk} />
+              <span>VK</span>
+            </a>
+          </li>
+          <li className="contacts__icon-sochial pulse-two">
+            <a href="whatsapp://send?phone=79062960353">
+              <FontAwesomeIcon icon={faWhatsapp} />
+              <span>Watsapp</span>
+            </a>
+          </li>
+          <li className="contacts__icon-sochial pulse-three">
+            <a href="tg://resolve?domain=@Tomkka">
+              <FontAwesomeIcon icon={faTelegram} />
+              <span>Telegram</span>
+            </a>
+          </li>
           </ul>
         </div>
       </div>
+    
     </section>
   );
 });
