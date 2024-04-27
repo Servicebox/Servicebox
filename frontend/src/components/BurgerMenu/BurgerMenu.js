@@ -33,6 +33,10 @@ function BurgerMenu({ scrollTo }) {
     window.location.href = "mailto:servicebox35@gmail.com"; 
   };
 
+
+
+
+
   return (
     <div className={`burger-menu ${isOpen ? "open" : ""}`}>
       <div className="overlay" onClick={toggleMenu}></div>
@@ -50,12 +54,12 @@ function BurgerMenu({ scrollTo }) {
   <a onClick={() => scrollTo(aboutRef)}>О компании</a>
 </li>
 <li className="navigation__list ">
-            <Link className="burger-menu__item" to="/contacts">
+            <Link className="burger-menu__item" to="/contacts" onClick={toggleMenu}>
           <h3 className="card__subtitle-img">контакты</h3>
           </Link>
 </li>
 <li>           
-  <Link className="burger-menu__item" to="/image-gallery-api">
+  <Link className="burger-menu__item" to="/image-gallery-api" onClick={toggleMenu}>
           <h3 className="card__subtitle-img">фото</h3>
           </Link>
 
