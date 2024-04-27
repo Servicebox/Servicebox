@@ -447,16 +447,6 @@ font-size: 62.5%
 }
 
 
-
-
-
-
-
-
-
-
-
-
 .container__contacts{
   position: sticky;
   height: 58px;
@@ -515,9 +505,6 @@ font-size: 62.5%
 .contacts__icon-sochial a:hover span {
   display: block;
 }
-
-
-
 
 
 .logo {
