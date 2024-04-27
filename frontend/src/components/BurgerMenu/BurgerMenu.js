@@ -54,12 +54,12 @@ function BurgerMenu({ scrollTo }) {
   <a onClick={() => scrollTo(aboutRef)}>О компании</a>
 </li>
 <li className="navigation__list ">
-            <Link className="burger-menu__item" to="/contacts" onClick={toggleMenu}>
+        <Link className="burger-menu__item" to="/contacts" onClick={toggleMenu}>
           <h3 className="card__subtitle-img">контакты</h3>
           </Link>
 </li>
 <li>           
-  <Link className="burger-menu__item" to="/image-gallery-api" onClick={toggleMenu}>
+        <Link className="burger-menu__item" to="/image-gallery-api" onClick={toggleMenu}>
           <h3 className="card__subtitle-img">фото</h3>
           </Link>
 
