@@ -19,6 +19,7 @@ import Form from '../Form/Form';
 import Contacts from "../Contacts/Contacts";
 
 
+
 function Header() {
 
   gsap.registerPlugin(ScrollToPlugin);
@@ -142,11 +143,15 @@ if(isFirefox){
           <h3 className="card__subtitle-img">контакты</h3>
           </Link>
 </li>
-              <li className={`navigation__list ${location.pathname === "/about" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
+<li className="navigation__list ">
+            <Link className="navigation__list" to="/about">
+          <h3 className="card__subtitle-img">О нас</h3>
+          </Link>
 </li>
-<li className={`nav__list ${location.pathname === "/service" ? "active" : ""}`}>
-  <a className="nav__list-foto" onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
+<li className="navigation__list ">
+            <Link className="navigation__list" to="/service">
+          <h3 className="card__subtitle-img">Услуги</h3>
+          </Link>
 </li>
 <li>           
   <Link className="navigation__list" to="/image-gallery-api">
@@ -211,16 +216,6 @@ if(isFirefox){
 </div>
 </div>
 
-      
-          <div className="header__links">
-          {/*<button className="create__btn" onClick={openModal}>Создать услугу</button>*/}
-   
-
-          </div>
-        </div>
-
-        <div className="header__links">
-          {/* <Link to="/profile" className="header__account-btn"> аккаунт </Link> */}
         </div>
    
       {isModalOpen && (

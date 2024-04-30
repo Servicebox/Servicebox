@@ -36,7 +36,7 @@ function MainBanner() {
     };
   }, []);
 
-  const endDate = new Date(2024, 3, 31, 23, 59, 59);
+  const endDate = new Date(2024, 4, 31, 23, 59, 59);
   function updateCountdown() {
     const currentDate = new Date();
     const remainingTime = endDate - currentDate;

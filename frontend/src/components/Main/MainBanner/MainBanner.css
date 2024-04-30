@@ -615,7 +615,7 @@ font-size: 20px;
 width: 200px;
   }
   .main-banner__form span {
-    font-size: 10px;
+    font-size: 7px;
   }
   .row{
     row-gap: 123px;
@@ -735,7 +735,7 @@ line-height: 18px; /* 133.333% */
     display: none;
   }
   .main-banner__form span {
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 600;
     line-height: 1;
     padding: 19px;
@@ -1145,10 +1145,10 @@ line-height: 18px; /* 133.333% */
   height: 17em;
 }
 .main-banner__form {
-  width: 350px;
+  width: 300px;
 }
 .main-banner__form span {
-font-size: 16px;
+font-size: 13px;
 }
 .btn, .btn:link, .btn:visited {
   font-size: 1.1em;
@@ -1233,7 +1233,7 @@ font-size: 16px;
 
  }
  .main-banner__form {
-    width: 250px;
+    width: 140px;
     margin: 0 auto;
   }
 
@@ -1295,7 +1295,7 @@ font-size: 16px;
   max-width: 300px;
 }
 .main-banner__form span {
-  font-size: 10px;
+  font-size: 7px;
   line-height: 8px;
   padding: 10px;
 }

@@ -171,6 +171,7 @@
   .card-cover{
     width: 60%;
   }
+
   card__title-one{
     font-size: 0.9em;
   }
@@ -215,14 +216,25 @@ font-size: 0.9em;
 }
 
 @media screen and (max-width: 501px) and (min-width: 400px) {
+  .card, .cover:before {
+    border: 3px solid #ffffff80;
+    border-radius: 15px;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    top: 20px;
+    transform: translateZ(0);
+    transform-style: preserve-3d;
+    transition: all 2.3s ease;
+}
 
   .card-cover{
   
     width: 45%;
   }
   .card .cover{
-    height: 80%;
-    top: 33px;
+    height: 101%;
+    top: -1px;
   
   }
   .card .card-back .link-card{
@@ -309,6 +321,11 @@ text-align: center;
   }
 }
 @media screen and (min-width: 320px) and (max-width: 399px) {
+  .card{
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: all 1.3s ease;
+  }
   .card_one{
     height: 250px;
     width: 80%;
@@ -342,7 +359,7 @@ text-align: center;
 @media screen and (min-width: 502px) and (max-width:795px) {
   .card_one{
     height: 250px;
-    width: 40%;
+    width: 45%;
   }
   .card__title-one{
     position: fixed;
@@ -411,7 +428,7 @@ top: 70%;
 .card_one {
   align-items: center;
   height: 400px;
-  width: 25%;
+  width: 50%;
   margin: 0;
   perspective: 1000px;
   position: relative;

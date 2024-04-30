@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 import "./Card.css";
 
 // import { AddRemoveBtn } from "../addremoveBtn/AddRemoveBtn";
@@ -80,6 +81,12 @@ alt=""
   {isAdded ? "Удалить" : "Добавить"}
 </button>
 </div>
+<div className="back__btn"> 
+      <ul>
+      <li><Link to="/">На главную</Link>
+      </li>
+      </ul>
+      </div>
 </div>
 );
 };

@@ -28,6 +28,8 @@ import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
 import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi"
 import DeleteImage from "../AdminPanel/Image/DeleteImage";
 import Contacts from "../Contacts/Contacts";
+import Service from "../Service/Service";
+import About from "../About/About";
 
 
 
@@ -73,6 +75,8 @@ function App() {
           <Route path="CreateServiceForm" element={<CreateServiceForm />} />
           <Route path="/admin/*" element={<AdminPanelRoute />} />
           <Route path="/contacts" element={<Contacts />} />
+          <Route path="/service" element={<Service />} />
+          <Route path="/about" element={<About />} />
         </Routes>
         {isFormOpen && <Form toggleForm={toggleForm} />}
         <Widget/>

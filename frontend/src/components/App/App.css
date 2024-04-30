@@ -21,6 +21,9 @@ height: 0px;
   --color-waring: green;
   --color-white: #fff;
   --color-danger: #ff0000;
+  --dur: all 550ms ease-in-out; 
+  --dur-a: all 650ms ease-in-out;
+  --dur-b: all 750ms ease-in-out;
 }
 root{
   box-sizing: border-box;

@@ -1,0 +1,21 @@
+.tech{
+    display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  
+  gap: 15px;
+      padding-bottom: 100px;
+      margin: 0 auto;
+    
+  }
+  @media screen and (min-width: 320px) and (max-width: 500px) {
+    .tech{
+      padding-bottom: 25px;
+    }
+    .service__content{
+        padding-top: 0;
+    }
+  }
+  .service{
+    position: relative;
+  }
