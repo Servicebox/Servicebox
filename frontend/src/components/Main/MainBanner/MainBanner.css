@@ -1,6 +1,5 @@
 .main-form{
-position: absolute;
-/* display: block; */
+
 bottom: 0;
 right: 40%;
 text-align: center;
@@ -88,7 +87,26 @@ margin-bottom: 5px;
   background: none;
 }
 
+.btn-form {
+  text-align: center; /* выравнивание содержимого по центру */
+  margin-top: 20px; /* добавляем немного отступа сверху */
+}
 
+/* Стили для кнопки */
+.main-form {
+  padding: 10px 20px; /* паддинги для размера кнопки */
+  font-size: 16px; /* размер шрифта текста в кнопке */
+  cursor: pointer; /* курсор в виде указателя */
+  border: none; /* убираем границу */
+  background-color: #007BFF; /* цвет фона кнопки */
+  color: white; /* цвет текста кнопки */
+  border-radius: 5px; /* закругление углов */
+  transition: background-color 0.3s; /* анимация изменения фона */
+}
+
+.main-form:hover {
+  background-color: #0056b3; /* изменение цвета фона при наведении */
+}
 
 
 
@@ -107,7 +125,7 @@ margin-bottom: 5px;
 
   display: flex;
   padding-bottom: 75px;
-  width: 350px;
+  width: 295px;
 
 }
 .dot {
@@ -670,19 +688,19 @@ gap: 40px;
 
     display: flex;
     padding-bottom: 75px;
-    width: 250px;
+    width: 220px;
   }
   #hours {
-    font-size: 16px;
+    font-size: 18px;
   }
   #days {
-    font-size: 16px;
+    font-size: 18px;
   }
   #minutes {
-    font-size: 16px;
+    font-size: 18px;
   }
   #seconds {
-    font-size: 16px;
+    font-size: 18px;
   }
   .promotion-carousel{
     max-width: 300px;
