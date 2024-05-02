@@ -88,7 +88,6 @@ function Countdown({ endDate }) {
           <Countdown endDate={promotions[currentPromotionIndex].endDate} />
         </div>
         <button className='btn-main' onClick={nextPromotion}>&#9654;</button>
-
         <div className='btn-form'>
           <button className="main-form" onClick={() => alert('Booking form opens!')}>
             Записаться
