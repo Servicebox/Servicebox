@@ -9,15 +9,13 @@ ul {
     align-items: center;
     position: relative;
     position: fixed;
-    bottom: 10%;
-    right: 25px;
+    bottom: 13%;
+    right: 23px;
     z-index: 1000;
 }
 
 /* Стили для icon-content */
-.icon-content {
-  
-}
+
 
 /* Стили для ссылки */
 .link {

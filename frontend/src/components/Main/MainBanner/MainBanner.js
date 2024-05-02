@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import "./MainBanner.css";
 
 import СloseIcon from "../../../images/x.svg";
@@ -9,78 +10,137 @@ import Eplaceable from "../../../images/telpodmena.svg"
 import Form from '../../Form/Form';
 
 
-function MainBanner() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [seconds, setSeconds] = useState(0);
 
-  const toggleForm = () => {
-    setIsOpen(!isOpen);
-    if (!isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
+
+function Countdown({ endDate }) {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0, hours: 0, minutes: 0, seconds: 0
+  });
+
+  
+    useEffect(() => {
+      const timer = setInterval(() => {
+        const now = new Date();
+        const difference = endDate - now;
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        setTimeLeft({ days, hours, minutes, seconds });
+      }, 1000);
+      return () => clearInterval(timer);
+    }, [endDate]);
+  
+    function formatTime(unit, singular, few, plural) {
+      if (unit === 1) return `${unit} ${singular}`;
+      else if (unit > 1 && unit < 5) return `${unit} ${few}`;
+      else return `${unit} ${plural}`;
     }
-  };
-
-  const handleEsc = (event) => {
-    if (event.keyCode === 27) {
-      setIsOpen(false);
-      document.body.style.overflow = 'auto';
+  
+    return (
+      <div className='countdown_time'>
+         <div id="timer">
+         <span id="days">{formatTime(timeLeft.days, 'день', 'дня', 'дней')}</span>
+      <span id="hours">{formatTime(timeLeft.hours, 'час', 'часа', 'часов')}</span>
+      <span id="minutes">{formatTime(timeLeft.minutes, 'минута', 'минуты', 'минут')}</span>
+      <span id="seconds">{formatTime(timeLeft.seconds, 'секунда', 'секунды', 'секунд')}</span>
+      </div>
+      </div>
+    );
+  }
+  function PromotionCarousel() {
+    const promotions = [
+      {
+        title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
+        endDate: new Date('2024-05-31T23:59:59'),
+        description: "До конца акции осталось:"
+      },
+      {
+        title: "Акция! При установке оригинального дисплейного модуля, гидрогелевая пленка в подарок,",
+        endDate: new Date('2024-06-30T23:59:59'),
+        description: "До конца акции осталось:"
+      }
+    ];
+  
+    const [currentPromotionIndex, setCurrentPromotionIndex] = useState(0);
+  
+    function nextPromotion() {
+      setCurrentPromotionIndex((currentPromotionIndex + 1) % promotions.length);
     }
-  };
+  
+    function previousPromotion() {
+      const newIndex = currentPromotionIndex - 1;
+      setCurrentPromotionIndex(newIndex < 0 ? promotions.length - 1 : newIndex);
+    }
+    useEffect(() => {
+      const intervalId = setInterval(() => {
+        setCurrentPromotionIndex(prevIndex => (prevIndex + 1) % promotions.length);
+      }, 4000); // Change promotion every 3 seconds
+      return () => clearInterval(intervalId);
+    }, [promotions.length]);
+    
+    return (
+      <div className="promotion-carousel">
+        <button className='btn-main' onClick={previousPromotion}>&#9664;</button>
+        <div>
+          <h2 className='promotion-title'>{promotions[currentPromotionIndex].title}</h2>
+          <p>{promotions[currentPromotionIndex].description}</p>
+          <Countdown endDate={promotions[currentPromotionIndex].endDate} />
+        </div>
+        <button className='btn-main' onClick={nextPromotion}>&#9654;</button>
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleEsc);
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-  }, []);
-
-  const endDate = new Date(2024, 4, 31, 23, 59, 59);
-  function updateCountdown() {
-    const currentDate = new Date();
-    const remainingTime = endDate - currentDate;
-
-    const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-
-    document.getElementById('days').innerText = days;
-    document.getElementById('hours').innerText = hours;
-    document.getElementById('minutes').innerText = minutes;
-    document.getElementById('seconds').innerText = seconds;
-
-    setSeconds(seconds);
+        <div className='btn-form'>
+          <button className="main-form" onClick={() => alert('Booking form opens!')}>
+            Записаться
+          </button>
+        </div>
+        <div className='dots'>
+  {promotions.map((_, idx) => (
+    <span key={idx}
+          className={`dot ${idx === currentPromotionIndex ? 'active' : ''}`}
+          onClick={() => setCurrentPromotionIndex(idx)} />
+  ))}
+</div>
+      </div>
+      
+    );
+    
   }
 
-  useEffect(() => {
-    const interval = setInterval(updateCountdown, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <section className="section-plans" id="section-plans">
-   
-      {isOpen && <Form toggleForm={toggleForm} />}
-      <div className="countdown">
-      <h2> Акция! Комплексная чистка ноутбука всего за 900 руб</h2>
-        <p>До конца акции осталось:</p>
-        <div className='countdown_time'>
-          <div id="timer">
-            <span id="days"></span>
-            <span id="hours"></span>
-            <span id="minutes"></span>
-            <span id="seconds"></span>
+  function MainBanner() {
+    const [isOpen, setIsOpen] = useState(false);
+  
+    const toggleForm = () => {
+      setIsOpen(!isOpen);
+      document.body.style.overflow = isOpen ? 'auto' : 'hidden';
+    };
+  
+    useEffect(() => {
+      const handleEsc = (event) => {
+        if (event.keyCode === 27) {
+          setIsOpen(false);
+          document.body.style.overflow = 'auto';
+        }
+      };
+      document.addEventListener('keydown', handleEsc);
+      return () => {
+        document.removeEventListener('keydown', handleEsc);
+      };
+    }, []);
+  
+    return (
+      <section className="section-plans" id="section-plans">
+        <div className="main-form__plans">
+        
+        {isOpen && <Form toggleForm={toggleForm} />}
+        <PromotionCarousel />
+        <div className='btn-form'>
+        <button className="main-form" onClick={toggleForm}>
+          <span className='title-span'>записаться</span> 
+          </button>
           </div>
-        </div>
-        <div className='countingdown'>
-          <p>дней</p>
-          <p>часов</p>
-          <p>минут</p>
-          <p>сек</p>
-        </div>
-      </div>
+     </div>
+    
       <div className="u-center-text u-margin-bottom-big">
 
 
@@ -181,5 +241,6 @@ function MainBanner() {
     </section>
   );
 }
+
 
 export default MainBanner;

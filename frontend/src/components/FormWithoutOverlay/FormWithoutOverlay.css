@@ -8,7 +8,7 @@
     text-align: center;
     margin: 0 auto;
     background: transparent;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(3px);
     border-radius: 15px;
 }
 .gifts__title{

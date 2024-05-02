@@ -22,7 +22,7 @@ const Widget = ({ link, imageName }) => {
       </a>
       </li>
       </ul>
-      <div className="tooltip">Telegram</div>
+   
         </div>
 
     );

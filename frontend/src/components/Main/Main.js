@@ -19,20 +19,9 @@ import Footer from "../Footer/Footer";
 
 
 function Main() {
-  gsap.registerPlugin(ScrollToPlugin);
+
   const location = useLocation();
-  const aboutRef = useRef(null);
-  const serviceRef = useRef(null);
-  const contactsRef = useRef(null);
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollToPlugin);
-  }, []);
-
-  const scrollTo = (target) => {
-    // Прокрутка до целевого элемента
-    gsap.to(window, { duration: 1, scrollTo: { y: target.current, autoKill: false } });
-  };
 
   return (
     <div>
@@ -40,14 +29,8 @@ function Main() {
     <main className="main">
 
       <MainBanner />
-     
-      <Element name="serviceRef" ref={serviceRef}>
-  <ServiceRef />
-</Element>
-<Element name="aboutRef" ref={aboutRef}>
+    
   <AboutRef />
-  </Element>
-
       <Completed />
       <ArronService />
       <AboutMe />
@@ -55,9 +38,9 @@ function Main() {
       
       
      
-<Element name="contactsRef" ref={contactsRef}>
+
   <ContactsRef />
-</Element>
+
       
     </main>
     <Footer />

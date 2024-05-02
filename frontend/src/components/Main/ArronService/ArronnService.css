@@ -14,12 +14,12 @@ justify-content: center;
 padding-top: 50px;
 padding-bottom: 20px;
 background: transparent;
-backdrop-filter: blur(20px);
+
 border-radius: 15px;
 }
 .arron-service__img{
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
 }
 .arron-service__title-text{
     color: #13171D;
@@ -75,8 +75,10 @@ flex-shrink: 0;
 .arron-servise_text{
   margin: 0 auto;
   max-width: 115px;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 10px;
   text-align: center;
+  line-height: normal;
 }
 .about__image-arron-service{
     width: 35px;
@@ -227,8 +229,9 @@ line-height: 20px; /* 142.857% */
   line-height: 1;
 }
 .arron-servise_text{
-  font-size: 12px;
+  font-size: 8px;
   max-width: 100px;
+  line-height: normal;
 }
 }
 @media screen and (min-width: 450px) and (max-width: 768px){
@@ -257,11 +260,13 @@ padding-bottom: 40px;
   align-items: center;
 }
 .arron-servise_text{
-  font-size: 13px;
-  max-width: 110px;
+  font-size: 10px;
+  font-weight: 600;
+
 }
 .arron-service__img{
-  width: 60px;
-  height: 60px;
+  width: 35px;
+  height: 35px;
+
 }
 }

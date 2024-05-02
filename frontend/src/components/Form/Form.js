@@ -25,7 +25,7 @@ const Form = ({ toggleForm }) => {
 
   const changeName = (e) => {
     setName(e.target.value);
-    const re = /^([а-я]{1}[а-яё]{2,23}|[a-z]{1}[a-z]{2,23})$/;
+    const re = /^([а-я]{1}[а-яё]{2,23}|[a-z]{1}[a-z]{1,23})$/;
     if (!re.test(String(e.target.value).toLowerCase())) {
       setNameError('Некорректное имя');
     } else {
@@ -95,19 +95,19 @@ const Form = ({ toggleForm }) => {
           {(nameDirty && nameError) && <div className="error1">{nameError}</div>}
           <label className="form__label">
             <input
-              className="form__input"
+              className="input"
               type="text"
               value={name}
               name="name"
               onChange={changeName}
               onBlur={blurHandler}
-              placeholder="Введите ваше имя:"
+              placeholder="Введите Ваше имя:"
             />
           </label>
-          {(phoneDirty && phoneError) && <div className="error3">{phoneError}</div>}
+          {(phoneDirty && phoneError) && <div className="error4">{phoneError}</div>}
           <label className="form__label">
             <input
-              className="form__input"
+              className="input"
               onChange={changeHandlerPhone}
               onBlur={blurHandler}
               type="text"
@@ -118,10 +118,10 @@ const Form = ({ toggleForm }) => {
           </label>
           <label className="form__label">
             <textarea
-              className="form__text"
+              className="input"
               onChange={changeHandlerDescription}
               name="description"
-              placeholder="Опишите вашу проблему..."
+              placeholder="Опишите Вашу проблему..."
               value={description}
               cols="30"
               rows="3"
@@ -131,9 +131,11 @@ const Form = ({ toggleForm }) => {
             Отправить форму
           </button>
         </form>
+       
         <button className="close-button" onClick={toggleForm}>
           <img className="close-button__img" src={СloseIcon} alt="Закрыть" />
         </button>
+
         {submitError && (
           <Modal onClose={() => setSubmitError('')}>
             <h3>Ошибка отправки формы</h3>

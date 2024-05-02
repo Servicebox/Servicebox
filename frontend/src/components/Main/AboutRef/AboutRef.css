@@ -12,7 +12,7 @@
     width: 100%;
     margin: 0 auto;
     background: transparent;
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(1px);
 }
 .about__title{
 color: #13171D;
@@ -60,7 +60,7 @@ padding-top: 50px;
     max-width: 364px;
     border-radius: 20px;
     box-shadow: 4px 4px 10px rgb(149, 149, 149);
-    border-radius: 20px;
+    border-radius: 5px;
 
 }
 

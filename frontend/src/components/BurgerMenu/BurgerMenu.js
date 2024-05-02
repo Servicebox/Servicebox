@@ -45,21 +45,25 @@ function BurgerMenu({ scrollTo }) {
           <img src={closeIcon} alt="Закрыть" />
         </button>
         <img className="logo-burger" src={logoImage} alt="Логотип" />
-        <nav className="navigation__list">
+        <nav className="navigation-lists">
         <ul className="burger-menu__list">
-            <li className={`burger-menu__item ${location.pathname === "/service" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(serviceRef)}>Наши услуги</a>
-</li>
-              <li className={`burger-menu__item ${location.pathname === "/about" ? "active" : ""}`}>
-  <a onClick={() => scrollTo(aboutRef)}>О компании</a>
-</li>
-<li className="navigation__list ">
-        <Link className="burger-menu__item" to="/contacts" onClick={toggleMenu}>
+        <li className="navigation__list ">
+            <Link className="navigation__list" to="/contacts">
           <h3 className="card__subtitle-img">контакты</h3>
           </Link>
 </li>
-<li>           
-        <Link className="burger-menu__item" to="/image-gallery-api" onClick={toggleMenu}>
+<li className="navigation__list ">
+            <Link className="navigation__list" to="/about">
+          <h3 className="card__subtitle-img">О нас</h3>
+          </Link>
+</li>
+<li className="navigation__list ">
+            <Link className="navigation__list" to="/service">
+          <h3 className="card__subtitle-img">Услуги</h3>
+          </Link>
+</li>
+<li  className="navigation__list ">           
+  <Link className="navigation__list" to="/image-gallery-api">
           <h3 className="card__subtitle-img">фото</h3>
           </Link>
 

@@ -118,14 +118,14 @@ background: #FFF;
 .about-me__dot {
   width: 10px;
   height: 10px;
-  background-color: #1a6df2;
+  background-color: #1295d3;
   margin: 0 5px;
   cursor: pointer;
   border-radius: 15px;
 }
 
 .about-me__dot.active {
-  background-color: #79c3ff;
+  background-color: #041e42;
 }
 .about-me__gallery{
 position: relative;
@@ -146,7 +146,9 @@ height: 70px;
     padding-top: 40px;
   }
   .about-me__title{
-font-size: 22px;
+    font-size: 18px;
+    font-weight: bold;
+    max-width: 400px;
   }
   .about-me__image{
     max-width: 363px;
