@@ -430,7 +430,7 @@ const uploads = multer({ storage: productstorage });
       console.log(req.file); // Для проверки содержимого
       res.json({
         success: 1,
-        image_url: `http://localhost:${PORT}/images/${req.file.filename}`
+        image_url: `https://servicebox35.pp.ru/images/${req.file.filename}`
       });
     } else {
       res.status(400).send('No file uploaded.');
