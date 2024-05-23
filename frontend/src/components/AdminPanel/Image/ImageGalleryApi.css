@@ -28,6 +28,9 @@
     align-items: center;
     gap: 1rem;
   }
+  .nav{
+    padding-top: 50px;
+  }
   @media screen and (max-width: 1040px) {
     .body__container {
       width: 100%;

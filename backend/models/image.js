@@ -8,4 +8,4 @@ const imageSchema = new mongoose.Schema({
   likes: { type: [String], default: [] } //  лайки будут массивом ID пользователей
 });
 
-module.exports = mongoose.model('Image', imageSchema); 
+module.exports = mongoose.model('Image', imageSchema);  

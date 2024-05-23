@@ -29,8 +29,9 @@ line-height: normal;
   color:rgb(255, 255, 255);
     align-items: center;
     justify-content: center;
-    margin: 0 auto;
-    max-width: 250px;
+    margin: 0;
+    
+    padding: 10px 15px;
 }
 .contactsRef {
   display: flex;
@@ -69,7 +70,7 @@ color: rgb(255, 255, 255);
   display: flex;
   flex-direction: row;
   margin: 0 auto;
-  border-top: 1px solid black;
+  border-top: 1px solid #f9a92c;
 }
 .contacts__image-sochial{
   max-width: 50px;
@@ -106,10 +107,14 @@ font-size: 40px;
     }
 
 }
-@media (max-width: 320px) {
+
+@media (min-width: 320px) and (max-width: 500px) {
 .contacts__info{
  flex-direction: column;
 }
+.contacts__block{
+    padding: 0;
+  }
 .footer__contacts{
   text-align: center;
 font-family: Bebas Neue;

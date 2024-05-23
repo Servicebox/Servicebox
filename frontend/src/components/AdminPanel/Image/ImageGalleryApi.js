@@ -32,9 +32,9 @@ const fetchImages = async () => {
       }
       const fetchedImages = await response.json();
 
-      const imagesWithCorrectPath = fetchedImages.map(img => ({
+      imagesWithCorrectPath = fetchedImages.map(img => ({
         ...img,
-        filePath: `/uploads/${img.filePath.split('/').pop()}` // Путь до изображений для клиента
+        filePath: `https://servicebox35.pp.ru/uploads/${img.filePath.split('/').pop()}`
       }));
       
       setImages(imagesWithCorrectPath);
@@ -62,9 +62,8 @@ const fetchImages = async () => {
         try {
           const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
             method: 'POST',
-            credentials: 'include', // include для отправки куки
+            credentials: 'include',
           });
-      
           if (!response.ok) {
             const errorData = await response.json();
             alert(`Ошибка: ${errorData.message}`);
@@ -78,17 +77,18 @@ const fetchImages = async () => {
             );
       
             // Функция для проверки, был ли уже поставлен лайк
-            if (updatedImage.likes.includes(getClientId())) {
-              alert("Лайк уже поставлен");
-            } else {
-              alert("Лайк поставлен");
+            if (imageId.likes.includes(clientId)) {
+              return res.status(409).json({ message: "Вы уже ставили лайк." });
             }
+            
+            imageId.likes.push(clientId);
+            await imageId.save();
       
             // состояние prevLikes
-             setLikes((prevLikes) => ({
-               ...prevLikes,
-               [imageId]: !prevLikes[imageId]
-             }));
+            setLikes((prevLikes) => ({
+              ...prevLikes,
+              [imageId]: !(prevLikes[imageId])
+            }));
       
             // Сохранение лайков в localStorage
              localStorage.setItem('likes', JSON.stringify({ ...likes, [imageId]: !prevLikes[imageId] }));
@@ -98,18 +98,21 @@ const fetchImages = async () => {
         }
       };
 
-    useEffect(() => {
-        const fetchClientId = async () => {
+      useEffect(() => {
+        const checkClientId = async () => {
             const response = await fetch('https://servicebox35.pp.ru/get-client-id', {
-                credentials: 'include' // включить куки в запрос
+                credentials: 'include'
             });
+            if (!response.ok) {
+                console.error('Не удалось получить clientId');
+                return;
+            }
             const data = await response.json();
-            console.log(data.clientId); // Здесь  будет client-id, который можно сохранить в стейт или использовать как нужно
+            console.log('Client ID:', data.clientId);
         };
     
-        fetchClientId();
-    }, []);    
-
+        checkClientId();
+    }, []);
     useEffect(() => {
       // Загрузите состояние лайков из localStorage
       const savedLikes = JSON.parse(localStorage.getItem('likes')) || {};

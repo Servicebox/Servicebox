@@ -27,6 +27,13 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+   <script src="https://api-maps.yandex.ru/2.0-stable/?load=package.full&lang=ru-RU" type="text/javascript"></script>
+<script>
+function onLoad (ymaps) {
+    var suggestView = new ymaps.SuggestView('suggest', {results: 1, offset: [20, 30]});
+}
+</script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=861b9258-9411-4580-8524-6ead04fc0195" type="text/javascript"></script>
     <title>СЦ ServiceBox - Ремонт ноутбуков, компьютеров, телефонов в Вологде</title>
   </head>
   <body>
@@ -62,6 +69,9 @@
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/96048268" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   <!-- /Yandex.Metrika counter -->
+
     <script src="//code.jivosite.com/widget.js" data-jv-id="fc25MrGEYS" async></script>
+    <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js"></script>
+    <script src="https://w.tb.ru/open-messenger/widget?wId=W-B457EE660E934C759E1AF5DE5A99C087"></script>
   </body>
 </html>

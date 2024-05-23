@@ -125,7 +125,7 @@ margin-bottom: 5px;
 
   display: flex;
   padding-bottom: 75px;
-  width: 295px;
+max-width: 400px;
 
 }
 .dot {
@@ -248,13 +248,14 @@ z-index:999;
 }
 
 #days {
-  background-color: rgb(64 63 63);
-
+ background-color: #f9a92c;
+display: flex;
+flex-direction: column;
 
   border: 2px solid #000;
   border-radius: 5px;
   box-shadow: 5px 5px 3px #000;
-  display: inline-block;
+
   font-family: Gilroy;
   font-size: 26px;
   font-weight: 700;
@@ -262,12 +263,12 @@ z-index:999;
   line-height: 50px;
   margin: 5px;
   text-align: center;
-  width: 90px;
+
   color: #000000;
 }
 
 #hours {
-  background-color: #595858;
+  background-color: #f9a92c;
 
   border: 2px solid #000;
   border-radius: 5px;
@@ -280,12 +281,13 @@ z-index:999;
   line-height: 50px;
   margin: 5px;
   text-align: center;
-  width: 90px;
+display: flex;
+  flex-direction: column;
   color: #000000;
 }
 
 #minutes {
-  background-color: #747271;
+  background-color: #f9a92c;
 
   border: 2px solid #000;
   border-radius: 5px;
@@ -298,12 +300,13 @@ z-index:999;
   line-height: 50px;
   margin: 5px;
   text-align: center;
-  width: 90px;
+display: flex;
+flex-direction: column;
   color: #000000;
 }
 
 #seconds {
-  background-color: #9c9b9b;
+background-color: #f9a92c;
 
   border: 2px solid #000;
   border-radius: 5px;
@@ -316,7 +319,8 @@ z-index:999;
   line-height: 50px;
   margin: 5px;
   text-align: center;
-  width: 90px;
+display: flex;
+flex-direction: column;
   color: #000000;
 }
 
@@ -610,7 +614,7 @@ gap: 40px;
   margin: 0 auto;
   max-width: 220px;
   background-color: #00000000;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 10px;
 }
 
@@ -688,7 +692,7 @@ gap: 40px;
 
     display: flex;
     padding-bottom: 75px;
-    width: 220px;
+
   }
   #hours {
     font-size: 18px;
@@ -1243,7 +1247,7 @@ line-height: 18px; /* 133.333% */
   display: flex;
   padding: 1rem 0 4rem 0;
   flex-direction: column;
-  gap: 50px;
+  gap: 100px;
   position: relative;
   z-index: 1;
   background: transparent;

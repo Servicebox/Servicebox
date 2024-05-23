@@ -29,7 +29,7 @@ function Main() {
     <main className="main">
 
       <MainBanner />
-    
+    <ServiceRef />
   <AboutRef />
       <Completed />
       <ArronService />

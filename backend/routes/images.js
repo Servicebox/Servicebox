@@ -1,3 +1,4 @@
+//routes/images.js
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-  }
+  } 
 });
 
 const upload = multer({ storage: storage });
@@ -47,6 +48,7 @@ router.post('/api/images', upload.single('image'), async (req, res) => {
     });
 
     const savedImage = await newImage.save();
+    console.log(savedImage);
     res.status(201).json(savedImage);
   } catch (error) {
     res.status(500).json({ message: error.message });

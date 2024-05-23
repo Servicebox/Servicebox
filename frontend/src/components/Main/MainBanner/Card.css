@@ -24,22 +24,22 @@
 
 }
 
-.card {
+.cards {
   width: 100%;
   height: 100%;
   position: relative;
   transition: transform 0.8s;
   transform-style: preserve-3d;
   cursor: pointer;
-  background:#041e42;
+      background: #ebf6fb;
   border-radius: 5px;
 }
 
-.card:hover {
+.cards:hover {
   transform: rotateY(180deg);
 }
 
-.cover, .card-back {
+.cover-item, .card-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -55,7 +55,7 @@
   
 }
 
-.cover {
+.cover-item {
   background: #ffffff;
   color: rgb(255, 255, 255);
 }
@@ -69,7 +69,7 @@
   position: absolute;
   bottom: 55px;
   left: 50px;
-  color: white;
+  color: rgb(29, 29, 29);
   transform-style: preserve-3d;
   transition: ease all 2.3s;
   z-index: 3;
@@ -92,14 +92,18 @@
 }
 
 .card__subtitle-one {
-  margin-bottom: 15px;
-  font-size: 20px;
+ margin-bottom: 15px;
+    font-size: 12px;
+    color: black;
+    text-align: center;
+    /* padding: 5px; */
+    width: 200px;
 
 }
-.card:hover .cover, .card__title-one {
+.cards:hover .cover-item, .card__title-one {
   transform: translateZ(100px);
 }
-.cover {
+.cover-item {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -109,7 +113,7 @@
   background-position: center center;
   background-repeat: no-repeat;
 }
-.cover:after {
+.cover-item:after {
   content: "";
   position: absolute;
   top: 0px;
@@ -119,14 +123,14 @@
   z-index: 2;
   transition:
    ease all 1.3s;
-   background: rgb(0 0 0 / 35%);
+  background: #ffffff29;
   border-radius: 5px;
 }
 
-.card, .cover:before {
+.cards, .cover-item:before {
   content: "";
   position: absolute;
-  border: 3px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgb(225, 214, 214);
 
   top: 20px;
   left: 20px;
@@ -136,14 +140,14 @@
   transition: ease all 2.3s;
   transform-style: preserve-3d;
   transform: translateZ(0px);
-  border-radius: 15px;
+  border-radius: 5px;
 }
 .link-card {
   display: block;
-  width: 100%;
+  width: 80%;
   font-weight: bold;
   background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
-  color: white;
+  color: rgb(0, 0, 0);
   padding-block: 15px;
   margin: 20px auto;
   border-radius: 5px;
@@ -175,10 +179,10 @@
   card__title-one{
     font-size: 0.9em;
   }
-  .card .cover{
+  .cards .cover-item{
     height: 100%;
   }
-  .card .card-back .link-card{
+  .cards .card-back .link-card{
     top: 220px;
   }
 
@@ -190,7 +194,7 @@
   }
 
 
-  .card {
+  .cards {
     position: relative;
     transition: ease all 1.3s;
     perspective: 1000px;
@@ -216,7 +220,7 @@ font-size: 0.9em;
 }
 
 @media screen and (max-width: 501px) and (min-width: 400px) {
-  .card, .cover:before {
+  .cards, .cover-item:before {
     border: 3px solid #ffffff80;
     border-radius: 15px;
     bottom: 20px;
@@ -232,12 +236,12 @@ font-size: 0.9em;
   
     width: 45%;
   }
-  .card .cover{
+  .cards .cover-item{
     height: 101%;
     top: -1px;
   
   }
-  .card .card-back .link-card{
+  .cards .card-back .link-card{
     top: 155px;
   }
 
@@ -268,7 +272,7 @@ font-size: 0.9em;
     width: 30%;
   }
 
-  .card .card-back .link-card{
+  .cards .card-back .link-card{
     top: 175px;
   }
   .card__subtitle-one{
@@ -278,11 +282,11 @@ text-align: center;
   }
   .card__title-one{
     position: fixed;
-    top: 61%;
-    right: 8%;
-    font-size: 0.9em;
-    z-index: 2;
-    width: 156px;
+    top: 81%;
+    left: 39px;
+    font-size: 0.8em;
+    font-size: -0.1em;
+    max-width: 220px;
     font-weight: bold;
   
   }
@@ -298,30 +302,30 @@ font-size: 0.8em;
 font-weight: normal;
 text-align: center;
   }
-  .card .card-back {
+  .cards .card-back {
     height: 57%;
     top: 70px;
     width: 74%;
     left: 33px;
   }
-  .card .card-back .link-card{
+  .cards .card-back .link-card{
     top: 155px;
     font-size: 16px;
     padding: 10px;
   }
   .card__title-one{
     position: fixed;
-    top: 70%;
-    right: 8%;
+    top: 85%;
+    left: 30px;
     font-size: 0.8em;
     z-index: 2;
-    width: 156px;
+    max-width: 220px;
     font-weight: bold;
   
   }
 }
 @media screen and (min-width: 320px) and (max-width: 399px) {
-  .card{
+  .cards{
     height: 100%;
     transform-style: preserve-3d;
     transition: all 1.3s ease;
@@ -335,7 +339,7 @@ text-align: center;
     padding-top: 35px;
   }
 
-  .card .card-back .link-card {
+  .cards .card-back .link-card {
     top: 160px;
     padding: 5px;
     font-size: 0.7em;
@@ -362,11 +366,11 @@ text-align: center;
     width: 45%;
   }
   .card__title-one{
-    position: fixed;
-top: 70%;
+position: fixed;
+    top: 78%;
     font-size: 0.6em;
     z-index: 2;
-  max-width: 120px;
+    max-width: 150px;
     font-weight: bold;
   
   }
@@ -375,7 +379,7 @@ top: 70%;
     font-weight: normal;
 
   }
-  .card .card-back .link-card {
+  .cards .card-back .link-card {
     top: 149px;
   }
   .service__title{
@@ -389,10 +393,10 @@ top: 70%;
 }
 
   @media screen and (max-width: 1215px) and (min-width: 950px) {
-    .card .card-back .link-card{
+    .cards .card-back .link-card{
       top: 185px;
     }
-    .card .card-back {
+    .cards .card-back {
       height: 60%;
       width: 78%;
       top: 100px;
@@ -412,17 +416,17 @@ top: 70%;
 
 .card__title-one{
   position: fixed;
-  top: 61%;
-  right: 8%;
+  top: 78%;
+  left: 30px;
   font-size: 0.8em;
   z-index: 2;
-  width: 156px;
+  max-width: 220px;
   font-weight: 600;
 
 }
 }
 @media (min-width: 1281px) { 
-.card{
+.cards{
   width: 100%;
 }
 .card_one {

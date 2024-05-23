@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { BrowserRouter as Router, Link, useLocation, NavLink} from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import "./BurgerMenu.css";
 import burgerIcon from "../../images/Burger.svg";
 import logoImage from "../../images/Servicebox6.svg";
 import closeIcon from "../../images/x.svg";
 import Status from "../../images/status.svg";
-import local from "../../images/location.svg";
-import MiniMail from "../../images/mail.svg";
-
-import MiniTelephone from "../../images/phonecol.svg";
+import { faBasketShopping, faMobilePhone, faMailBulk, faMapLocation} from '@fortawesome/free-solid-svg-icons';
 import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
+
+import { ShopContext } from '../Contexst/ShopContext';
 
 
 
 function BurgerMenu({ scrollTo }) {
   const [isOpen, setIsOpen] = useState(false);
-
+const [burgerOpen, setBurgerOpen] = useState(false);
+    const [menu, setMenu] = useState("shop");
+  const {getTotalCartItems} = useContext(ShopContext);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -33,7 +34,14 @@ function BurgerMenu({ scrollTo }) {
     window.location.href = "mailto:servicebox35@gmail.com"; 
   };
 
-
+const toggleBurgerMenu = () => {
+  setBurgerOpen(!burgerOpen);
+  if (!burgerOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
+};
 
 
 
@@ -47,27 +55,33 @@ function BurgerMenu({ scrollTo }) {
         <img className="logo-burger" src={logoImage} alt="Логотип" />
         <nav className="navigation-lists">
         <ul className="burger-menu__list">
-        <li className="navigation__list ">
+        <li className="navigation__list-brg ">
             <Link className="navigation__list" to="/contacts">
           <h3 className="card__subtitle-img">контакты</h3>
           </Link>
 </li>
-<li className="navigation__list ">
+<li className="navigation__list-brg  ">
             <Link className="navigation__list" to="/about">
           <h3 className="card__subtitle-img">О нас</h3>
           </Link>
 </li>
-<li className="navigation__list ">
+<li className="navigation__list-brg  ">
             <Link className="navigation__list" to="/service">
           <h3 className="card__subtitle-img">Услуги</h3>
           </Link>
 </li>
-<li  className="navigation__list ">           
+<li  className="navigation__list-brg ">
   <Link className="navigation__list" to="/image-gallery-api">
           <h3 className="card__subtitle-img">фото</h3>
           </Link>
 
 </li>
+ <ul className='nav-menu-brg'>
+    <li onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='/Shop'>Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Запчасти</Link>{menu==="parts"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Электроника</Link>{menu==="electronics"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>
+  </ul>
             </ul>
           <div className="header__links header__links-burger">
         
@@ -85,16 +99,20 @@ function BurgerMenu({ scrollTo }) {
         </div>
         <div className="burger-contacts ">
         <div onClick={handlePhoneCall} className="contacts__block">
-          <img src={MiniTelephone} className="contacts__image" alt="Telephone" />
-          <p className="contacts__text">+7 911 501 88 28</p>
+    <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
+  +7 911 501 88 28
+</p>
         </div>
         <div onClick={handleMailTo} className="contacts__block">
-          <img src={MiniMail} className="contacts__image" alt="Mail" />
-          <p className="contacts__text">servicebox35@gmail.com</p>
+  <p className="contacts__text">
+        <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
+          servicebox35@gmail.com</p>
         </div>
           <div className="contacts__block">
-          <img src={local} className="contacts__image" alt="Location" />
-          <p className="contacts__text">г. Вологда, ул. Северная, 7А, офис 405</p>
+  <p className="contacts__text">
+          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
+         г. Вологда, ул. Северная, 7А, офис 405</p>
         </div>
       </div>
       <div className="contacts__block-sochial">

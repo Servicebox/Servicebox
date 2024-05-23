@@ -19,7 +19,7 @@ exports.createImage = async (req, res) => {
 
         const { description } = req.body; 
         const { filename, mimetype } = req.file; 
-
+ 
         const newImage = new Image({
             filePath: `/uploads/${filename}`, // Обновляем сохранение пути
             description,

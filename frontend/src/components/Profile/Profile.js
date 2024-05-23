@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import "./Profile.css";
 import { Link } from "react-router-dom"
-import  CurrentUserContext  from "../contexts/CurrentUserContext"
+import  CurrentUserContext  from "../Сontexts/CurrentUserContext"
 import Header from "../Header/Header"
 import { EMAIL_REGEX } from "../utils/constants"
 import useForm from "../hooks/useForm"

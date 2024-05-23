@@ -1,10 +1,12 @@
 import React, { forwardRef } from 'react'; // Добавляем forwardRef
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
 import "./ContactsRef.css";
 
 import Telephone from "../../../images/phonecol.svg";
 import location from "../../../images/location.svg";
 import Mail from "../../../images/mail.svg";
+import { faMobilePhone, faMailBulk, faMapLocation} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 
@@ -24,16 +26,21 @@ const ContactsRef = forwardRef((props, ref) => {
       </div>
       <div className="contacts__list-info">
         <div onClick={handlePhoneCall} className="contacts__block">
-          <img src={Telephone} className="contacts__image" alt="Telephone" />
-          <p className="contacts__text">+7 911 501 88 28</p>
+        
+    <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
+  +7 911 501 88 28
+</p>
         </div>
         <div onClick={handleMailTo} className="contacts__block">
-          <img src={Mail} className="contacts__image" alt="Mail" />
-          <p className="contacts__text">servicebox35@gmail.com</p>
+        <p className="contacts__text">
+        <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
+          servicebox35@gmail.com</p>
         </div>
         <div className="contacts__block">
-          <img src={location} className="contacts__image" alt="Location" />
-          <p className="contacts__text">г. Вологда, ул. Северная, 7А, офис 405</p>
+         <p className="contacts__text">
+          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
+         г. Вологда, ул. Северная, 7А, офис 405</p>
         </div>
         <div className="contacts__block-sochial">
         <ul className="contacts__icon">

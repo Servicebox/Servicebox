@@ -34,8 +34,8 @@ const Card = ({ title, subtitle, image, linkTo }) => {
   
       <div className="card_one" ref={serviceRef} >
        
-        <div className="card">
-          <div className="cover item">
+        <div className="cards">
+          <div className="cover-item">
             <h3 className="card__title-one" >{title}</h3>
             <img className="card-cover" src={getImageByTitle(image)} alt={image} />
           </div>

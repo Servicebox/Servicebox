@@ -1,27 +1,22 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import React, { useState, useCallback, useRef, useEffect, useContext } from "react";
+import { BrowserRouter as Router, Link, useLocation, NavLink} from "react-router-dom";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faBasketShopping, faMobilePhone} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import gsap from "gsap";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 import headerLogo from "../../images/Servicebox6.svg";
-import locationIcon from "../../images/location.svg";
 import "./Header.css";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import Status from "../../images/status.svg";
-import MiddleStatus from "../../images/status.svg";
-import ServiceRef from "../Main/ServiceRef/ServiceRef";
-import AboutRef from "../Main/AboutRef/AboutRef";
-import ContactsRef from "../Main/ContactsRef/ContactsRef";
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm"
-
+import { ShopContext } from '../Contexst/ShopContext';
 import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
-import Form from '../Form/Form';
-import Contacts from "../Contacts/Contacts";
-
 
 
 function Header() {
-
+  const [menu, setMenu] = useState("shop");
+  const {getTotalCartItems} = useContext(ShopContext);
   gsap.registerPlugin(ScrollToPlugin);
   const location = useLocation();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -29,6 +24,7 @@ function Header() {
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
 
   const scrollTo = (target) =>
   gsap.to(window, { duration: 1, scrollTo: target });
@@ -56,66 +52,6 @@ function Header() {
   }, []);
 
 
-
-
-  ///
-  let isFirefox = typeof InstallTrigger !== 'undefined';
-const words = "SERVICEBOXSERVICEBOX";
-
-let ANGLE = 360;
-const ANIMATION_DURATION = 4000;
-
-const animation = () => {
-  ANGLE -= 1; // Incremento do ângulo
-  document.querySelectorAll(".spiral *").forEach((el, i) => {
-    
-    const translateY = Math.sin(ANGLE * (Math.PI / 120)) * 100;
-    const scale = Math.cos(ANGLE * (Math.PI / 120)) * 0.5 + 0.5;
-    
-    
-    const offset = parseInt(el.dataset.offset);
-    const delay = i * (ANIMATION_DURATION / 16) - offset;
-
-    setTimeout(() => {
-      el.style.transform = `translateY(${translateY}px) scale(${scale})`;
-    }, delay);
-  });
-
-  requestAnimationFrame(animation);
-};
-
-
-
-useEffect(() => {
-  const isFirefox = typeof InstallTrigger !== 'undefined';
-  const words = "SERVICEBOXSERVICEBOX";
-  let ANGLE = 360;
-  const ANIMATION_DURATION = 4000;
-
-  const createElements = () => {
-    words.split("").forEach((char, i) => {
-      const createElement = (offset) => {
-        const div = document.createElement("div");
-        div.innerText = char;
-        div.classList.add("character");
-        div.setAttribute("data-offset", offset);
-        div.style.animationDelay = `-${i * (ANIMATION_DURATION / 16) - offset}ms`;
-        return div;
-      };
-
-      document.querySelector("#spiral").append(createElement(0));
-      document.querySelector("#spiral2").append(createElement((isFirefox ? 1 : -1) * (ANIMATION_DURATION / 2)));
-    });
-  };
-
-  createElements();
-}, []);
-// @property CSS doesn't work in Firefox, so it must be animated using JavaScript.
-if(isFirefox){
-  animation();
-}
-///
-
   const handleShowMap = () => {
     window.open(
       "https://yandex.ru/maps/org/servisboks/58578899506/?ll=39.929033%2C59.216813&z=13",
@@ -127,6 +63,7 @@ if(isFirefox){
   const handlePhoneCall = () => {
     window.location.href = "tel:+7911 501 88 28";
   };
+
   useEffect(() => {
 
   }, []);
@@ -136,32 +73,10 @@ if(isFirefox){
 
       <div className="container container__main">
         <div className="container__contacts" > 
-        <nav className="navigation">
-            <ul className="navigation__lists">
-            <li className="navigation__list ">
-            <Link className="navigation__list" to="/contacts">
-          <h3 className="card__subtitle-img">контакты</h3>
+          <li><Link to="/"  className="form__logo" >
+            <img src={headerLogo} alt="Логотип сайта" className="logo" />
           </Link>
-</li>
-<li className="navigation__list ">
-            <Link className="navigation__list" to="/about">
-          <h3 className="card__subtitle-img">О нас</h3>
-          </Link>
-</li>
-<li className="navigation__list ">
-            <Link className="navigation__list" to="/service">
-          <h3 className="card__subtitle-img">Услуги</h3>
-          </Link>
-</li>
-<li>           
-  <Link className="navigation__list" to="/image-gallery-api">
-          <h3 className="card__subtitle-img">фото</h3>
-          </Link>
-
-</li>
-            </ul>
-
-          </nav>
+          </li>
         
           <div className="contacts__block">
           <ul className="contacts__icon">
@@ -185,39 +100,23 @@ if(isFirefox){
           </li>
           </ul>
         </div>
+        
         <div className="content-holder"><span className="heading-span">Часы работы</span><br /><span>Понедельник-Пятница <br />(10:00 - 19:00)</span></div>
-        </div>
-        <div className="header__top">
-        <div className="header__links">
-        <li><Link to="/"  className="form__logo" >
-            <img src={headerLogo} alt="Логотип сайта" className="logo" />
-          </Link>
-          </li>
-          </div>
-          <div className="contact-info">
-            <img src={locationIcon} alt="Локация" className="location" />
+                <div className="contact-info">
             <p className="contact-info__map-link" onClick={handleShowMap}>
               <span className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</span>
-              Мы на карте
-            </p>
-            <p className="contact-info__number" onClick={handlePhoneCall}>
-          
-              +7 911 501 88 28
+              Мы на карте! ЖМИ
             </p>
           </div>
-            <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
-              <img src={Status} alt="Кнопка" />
-              <span className="button-text">CТАТУС РЕМОНТА</span>
-            </a>
-            <div className="">
- 
-
- <BurgerMenu scrollTo={scrollTo} />
+                    <div className="nav-login-cart">
+            {localStorage.getItem('auth-token')
+            ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/shop')}}>выйти</button>
+            :<Link to='/login'><button>Вход</button></Link>}           
+              <Link to='/cart'> <FontAwesomeIcon icon={faBasketShopping} /></Link>
+              <div className="nav-cart-count">{getTotalCartItems()}</div>    
+      </div>
+      <BurgerMenu scrollTo={scrollTo} />
 </div>
-</div>
-
-        </div>
-   
       {isModalOpen && (
         <div className="modal">
           <div className="modal__overlay" onClick={closeModal}></div> 
@@ -229,27 +128,49 @@ if(isFirefox){
           </div>
         </div>
 )}
-          
-          
-        <div className="mainHeading__content">
-      <article className="mainHeading__text">
-         <p className="mainHeading__preTitle">всегда на связи с вами</p>
-         <h2 className="mainHeading__title">Проблемы с утройством?</h2>
-         <p className="mainHeading__description">
-         Решаем любые проблемы! Большой склад и опытные мастера
-         </p>
-         <button className="main-banner__form" onClick={toggleForm}>
-          <span className='title-span'>Бесплатная консультация</span> 
-          </button>
-      </article>
-      {isOpen && <Form toggleForm={toggleForm} />}
-
-  <div className="mainHeading__image" >
-      <div  className="spiral__anim" id="spiral"></div>
-<div className="spiral__anim" id="spiral2"></div>
-  </div>  
-   </div>
-
+        </div>
+        <div className="header__top">
+          <nav className="navigation">
+  <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
+  +7 911 501 88 28
+</p>
+<ul className="navigation__lists">
+  <li className="navigation__list" onClick={() => setMenu("contacts")}>
+    <Link className="navigation__list" to="/contacts">
+      Контакты {menu === "contacts" && <hr/>}
+    </Link>
+  </li>
+  <li className="navigation__list" onClick={() => setMenu("about")}>
+    <Link className="navigation__list" to="/about">
+      О нас {menu === "about" && <hr/>}
+    </Link>
+  </li>
+  <li className="navigation__list" onClick={() => setMenu("service")}>
+    <Link className="navigation__list" to="/service">
+      Услуги {menu === "service" && <hr/>}
+    </Link>
+  </li>
+  <li className="navigation__list" onClick={() => setMenu("gallery")}>
+    <Link className="navigation__list" to="/image-gallery-api">
+      Фото {menu === "gallery" && <hr/>}
+    </Link>
+  </li>
+</ul>
+    <ul className='nav-menu'>
+    <li onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='/Shop'>Каталог</Link>{menu==="shop"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Запчасти</Link>{menu==="parts"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Акксессуары</Link>{menu==="electronics"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>
+  </ul>
+    <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
+              <img src={Status} alt="Кнопка" />
+              <span className="button-text">CТАТУС РЕМОНТА</span>
+            </a>
+          </nav>
+        <div className="list-header">
+          </div>
+</div>
     </header>
   );
 }

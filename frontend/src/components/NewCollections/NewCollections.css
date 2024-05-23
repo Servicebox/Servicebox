@@ -1,0 +1,115 @@
+.newcollections {
+    width: 100%; /* Устанавливаем ширину контейнера */
+    max-width: 1200px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрируем контейнер */
+    padding: 20px; /* Добавляем паддинги для отступов */
+    box-sizing: border-box; /* Включает padding в общую ширину */
+    
+}
+
+.collections .item {
+    flex-basis: calc(33.333% - 20px); /* Ширина элемента, равная трети контейнера минус отступ */
+    margin-bottom: 20px; /* Отступ снизу для каждого товара */
+}
+.newcollections-text{
+text-align: center;
+    font-family: Gilroy;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: Montserrat;
+    padding: 5px;
+    color: white;
+    background: #f9a92c;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px #9fabb7;
+    border-radius: 10px;
+}
+
+
+.newcollections-main {
+    width: 100%; /* Устанавливаем ширину контейнера */
+    max-width: 1200px; /* Максимальная ширина контейнера */
+    margin: 0 auto; /* Центрирование контейнера */
+   
+    box-sizing: border-box; /* Включает padding в общую ширину */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+}
+
+.newcollections-text {
+    text-align: center;
+    font-family: Montserrat, sans-serif;
+    font-size: 30px;
+    font-weight: 600;
+    padding: 5px;
+    color: white;
+    background: #f9a92c;
+    box-sizing: border-box;
+    box-shadow: 0 15px 25px #9fabb7;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.newcollections {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.collections {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    width: 100%;
+    justify-items: center;
+}
+
+/* Адаптивные стили */
+@media screen and (max-width: 480px) {
+    .collections {
+        grid-template-columns: 1fr;
+    }
+    .newcollections-text {
+        font-size: 18px;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 767px) {
+    .collections {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .newcollections-text{
+        font-size: 18px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .collections {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .newcollections-text {
+        font-size: 20px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .collections {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+/* Стиль для элемента коллекции (Item) */
+.collections .item {
+    box-sizing: border-box;
+}
+
+.collections .item img {
+    width: 100%; /* Ширина изображения соответствует ширине элемента */
+    height: auto; /* Высота изображения автоматически регулируется */
+    display: block; /* Убираем лишние отступы */
+}

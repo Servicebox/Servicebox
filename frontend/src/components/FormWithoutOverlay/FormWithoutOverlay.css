@@ -100,20 +100,20 @@ animation-play-state: paused;
       top: -30px;
   }
   .error2 {
-    font-size: 14px;
+font-size: 10px;
     color: red;
     position: absolute;
     width: 200px;
-    top: 65px;
-    left: 43px;
+    top: 79px;
+    left: 32px;
   }
   .error4{
-    font-size: 14px;
+  font-size: 10px;
     color: red;
     position: absolute;
     width: 200px;
-    top: 140px;
-    left: 80px;
+    top: 175px;
+    left: 25px;
   }
 
   @media screen and (max-width: 490px) {
@@ -160,20 +160,20 @@ animation-play-state: paused;
     right: -5px;
   }
   .error2 {
-    font-size: 10px;
+    font-size: 9px;
     position: absolute;
-    top: 50px;
+    top: 69px;
     left: 50%;
     transform: translateX(-50%);
     width: 125px;
   }
   .error4 {
-    font-size: 10px;
+font-size: 9px;
     position: absolute;
-    top: 105px;
+    top: 149px;
     left: 50%;
     transform: translateX(-50%);
-    width: 134px;
+    width: 139px;
   }
   }
   @media screen and (min-width: 491px) and (max-width: 768px) {
@@ -193,15 +193,17 @@ animation-play-state: paused;
     text-transform: none;
 }
   .error2{
-    top: 66px;
-    left: 34px;
+ top: 77px;
+    left: 54px;
     width: 164px;
+    font-size: 11px;
 
   }
   .error4{
-    top: 142px;
+  top: 177px;
     width: 200px;
-    left: 56px;
+    left: 16px;
+    font-size: 11px;
   }
   }
   @media screen and (min-width: 320px) and (max-width: 490px) {
@@ -244,6 +246,7 @@ animation-play-state: paused;
 
 .form {
   margin-top: 20px;
+  position: relative;
 }
 
 .form .input {

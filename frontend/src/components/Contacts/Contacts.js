@@ -8,6 +8,7 @@ import location from "../../images/location.svg";
 import Mail from "../../images/mail.svg";
 import Footer from '../Footer/Footer';
 
+import {  faMobilePhone} from '@fortawesome/free-solid-svg-icons';
 import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 
 const Contacts = forwardRef((props, ref) => {
@@ -34,8 +35,10 @@ const Contacts = forwardRef((props, ref) => {
       </div>
       <div className="contacts__list-info">
         <div onClick={handlePhoneCall} className="contacts__block">
-          <img src={Telephone} className="contacts__image" alt="Telephone" />
-          <p className="contacts__text">+7 911 501 88 28</p>
+        <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
+  +7 911 501 88 28
+</p>
         </div>
         <div onClick={handleMailTo} className="contacts__block">
           <img src={Mail} className="contacts__image" alt="Mail" />

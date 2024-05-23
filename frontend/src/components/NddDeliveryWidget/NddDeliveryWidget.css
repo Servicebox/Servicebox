@@ -1,0 +1,25 @@
+
+#ya-delivery-widget {
+  width: 100%;
+  height: 500px;
+}
+
+input {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: calc(100% - 20px);
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+#delivery-widget {
+  width: 100%;
+  height: 450px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

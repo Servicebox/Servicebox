@@ -24,6 +24,7 @@ const allowedCors = [
   'http://localhost:3000',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
+  'http://localhost:3000/api/user/auth',
 ];
 
 

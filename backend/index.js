@@ -1,5 +1,10 @@
 const express = require('express');
 const app = express();
+const crypto = require('crypto');
+const axios = require('axios');
+require('dotenv').config()
+console.log(process.env.SECRET); 
+const jwt = require('jsonwebtoken');
 const PORT = 5000;
 const cors = require('cors');
 const allowedCors = [
@@ -10,7 +15,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru', // Бэкенд
   'http://servicebox35.pp.ru',
   'https://servicebox35.pp.ru/services', 
-  'http://servicebox35.pp.ru/services', 
+  'http://servicebox35.pp.ru/services',  
   'https://servicebox35.pp.ru/api',
   'http://servicebox35.pp.ru/api', 
   'https://localhost:5000',
@@ -30,6 +35,20 @@ const allowedCors = [
   'http://localhost:3000',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
+  'http://localhost:8000/uploads',
+  'http://localhost:5173',
+  'https://servicebox35.pp.ru/addproduct',
+  'https://servicebox35.pp.ru/allproduct',
+  'https://servicebox35.pp.ru/removeproduct',
+  'https://servicebox35.pp.ru/signup',
+  'https://servicebox35.pp.ru/signup',
+  'http://192.168.1.38:5173',
+  'https://servicebox35.pp.ru/popularinpart',
+  'https://servicebox35.pp.ru/allproducts',
+  'https://servicebox35.pp.ru/newcollections',
+  'https://servicebox35.pp.ru/init-payment',
+  'http://localhost:3000/init-paymen',
+
 ];
 
 const corsOptions = {
@@ -61,24 +80,32 @@ const images = require('./routes/images');
 const Image = require('./models/image');
 
 const multer = require('multer');
+const { type } = require('os');
+const { errors } = require('celebrate');
+
+
+const TINKOFF_API_URL = 'https://securepay.tinkoff.ru/rest/Init';
+const TERMINAL_KEY = process.env.TERMINAL_KEY || process.env.TERMINAL_KEY_ENV;
+const PASSWORD = process.env.PASSWORD || "yobi02j0ncflhk79";
+const SECRET_KEY = "200000001280581";
+
+//яндекс
+const YANDEX_API_URL = 'https://b2b.taxi.yandex.net';
+const OAUTH_TOKEN = process.env.OAUTH_TOKEN;
 mongoose.set('strictQuery', true);
 
 
+// Middleware для CORS
 module.exports = (req, res, next) => {
   const { origin } = req.headers;
-
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
     const { method } = req;
-
     const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
-
     const requestHeaders = req.headers['access-control-request-headers'];
-
     if (method === 'OPTIONS') {
       res.setHeader('Access-Control-Allow-Origin');
-      
       res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
       res.header('Access-Control-Allow-Headers', requestHeaders);
       return res.end();
@@ -88,6 +115,7 @@ module.exports = (req, res, next) => {
 };
 
 app.use(cors(corsOptions));
+app.use(express.json()); 
 
 mongoose
   .connect('mongodb://127.0.0.1:27017/serviceboxdb', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -98,6 +126,11 @@ mongoose
     console.error('Не удалось подключиться к базе данных', error);
   });
 
+
+app.get("./",(req, res) => {
+  res.send("Express App is runing")
+})
+
     // Определение модели данных Service после установления соединения
     const Service = mongoose.model('Service', {
       serviceName: String,
@@ -106,8 +139,264 @@ mongoose
       category: String
     });
  
+    // Определение модели данных Products после установления соединения
+const Product = mongoose.model('Product', {
+  id:{
+    type:Number,
+    required:true,
+  },
+  name:{
+    type:String,
+    required:true,
+  },
+  image:{
+    type:String,
+    required:true,
+  },
+  category:{
+    type:String,
+    required:true,
+  },
+  new_price:{
+    type:Number,
+    required:true,
+  },
+  old_price:{
+    type:Number,
+    required:true,
+  },
+  date:{
+  type:Date,
+  default:Date.now,
+  },
+  avilable:{
+    type:Boolean,
+    default:true,
+  },
+
+})
+
+
+
+app.post('/addproduct', async (req, res) => {
+  let products = await Product.find({})
+  let id;
+  if(products.length > 0){
+    let last_product_array = products.slice(-1);
+    let last_produt = last_product_array[0];
+    id = last_produt.id + 1;
+
+  }
+  else{
+    id = 1;
+  }
+  const product = new Product({
+    id:id,
+    name:req.body.name,
+    image:req.body.image,
+    category:req.body.category,
+    new_price:req.body.new_price,
+    old_price:req.body.old_price,
+  });
+
+  console.log(product);
+  await product.save();
+  console.log("Saved");
+  res.json({
+    success: true,
+    name: req.body.name,
+  });
+});
+
+
+
+//Creating api for deleting Products
+
+app.post('/removeproduct',async(req,res)=>{
+  await Product.findOneAndDelete({id:req.body.id});
+  console.log("Removed");
+  res.json({
+    success: true,
+    name: req.body.name,
+  });
+
+})
+
+//Creating api for getting all Products
+
+app.get('/allproducts', async (req, res) => {
+  let products = await Product.find({});
+  console.log("all products fetched");
+  res.send(products);
+});
+
+//Shema creating for user model
+
+const Users = mongoose.model('Users',{
+  name:{
+    type:String,
+    
+  },
+  email:{
+    type:String,
+    unique:true,
+  },
+  password:{
+    type:String,
+   
+  },
+  cartData:{
+    type:Object,
+   
+  }, 
+  date:{
+    type:Date,
+    default:Date.now,
+  }
+})
+
+//creating enpoint for register
+app.post('/signup', async(req,res)=>{
+
+  let check = await Users.findOne({email:req.body.email});
+    if (check){
+      return res.status(400).json({success:false,errors:"existing user found with same email adress"})
+    }
+    let cart = {};
+    for (let i = 0; i < 300; i++){
+    cart[i]=0;
+    }
+    const user = new Users({
+      name:req.body.username,
+      email:req.body.email,
+      password:req.body.password,
+      cartData:cart,
+    })
+    await user.save();
+
+    const data = {
+      user:{
+        id:user.id
+      }
+    }
+    const token = jwt.sign(data,'secret_ecom');
+    res.json({
+      success:true,token})
+    })
+
+//creating enpoint user login
+
+app.post('/login',async(req,res)=>{
+  let user = await Users.findOne({email:req.body.email});
+  if (user) {
+    const passCompare = req.body.password === user.password;
+    if (passCompare) {
+      const data = {
+        user:{
+          id:user.id
+        }
+      }
+      const token = jwt.sign(data,'secret_ecom');
+      res.json({
+        success:true,token
+      });
+    }
+    else{
+      res.json({success:false,errors:"Wrong password"})
+    }
+    }
+    else{
+      res.json({success:false,errors:"Wrong email id"})
+    
+  }
+})
+
+//creating enpoint for new collection data
+
+app.get('/newcollections',async(req,res)=>{
+let products = await Product.find({});
+let newCollection = products.slice(1).slice(-8);
+console.log("newCollection feched");
+res.send(newCollection);
+})
+
+//creating enpoint for popular parts
+
+app.get('/popularinpart',async(req,res)=>{
+  let products = await Product.find({category:"part"});
+  let popular_in_part = products.slice(0,4);
+  console.log("popular_in_part feched");
+  res.send(popular_in_part);
+})
+
+
+//creating middleware to fetch user
+const fechUser = async(req,res,next)=>{
+const token = req.header('auth-token');
+if (!token){
+  res.status(401).send({errors:"пожалуйста авторизуйтесь"})
+}
+else{
+  try{
+const data = jwt.verify(token,'secret_ecom');
+req.user = data.user;
+next();
+  }catch(error){
+res.status(401).send({errors:"пожалуйста, пройдите аутентификацию"})
+  }
+}
+}
+
+//creating enpoint for adding products in carta
+
+app.post('/addtocart',fechUser,async(req,res)=>{
+  console.log("added",req.body.itemId);
+let userData = await Users.findOne({_id:req.user.id});
+userData.cartData[req.body.itemId] += 1;
+await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+res.json({ message: "Adedid" });
+})
+
+//creating enpoint for removing products from cart
+
+app.post('/removefromcart',fechUser,async(req,res)=>{
+  console.log("removed",req.body.itemId);
+  let userData = await Users.findOne({_id:req.user.id});
+  if(userData.cartData[req.body.itemId]>0)
+  userData.cartData[req.body.itemId] -= 1;
+  await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+  res.json({ message: "Removed" });
+  })
+
+  //creating enpoint to get cartdata
+  app.post('/getcart',fechUser,async (req,res)=>{
+    console.log("GetCart");
+    let userData = await Users.findOne({_id:req.user.id});
+    res.json(userData.cartData);
+
+  })
+
+  //middleware для проверки прав администратора
+  const adminAuth = (req, res, next) => {
+    try {
+      const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded.role !== 'admin') {
+        throw new Error('Нет доступа');
+      }
+      req.user = decoded; // добавляем информацию о пользователе в объект запроса
+      next();
+    } catch (error) {
+      return res.status(403).json({ message: 'Нет доступа' });
+    }
+  };
+  app.get('/admin/dashboard', adminAuth, (req, res) => {
+    res.send('Добро пожаловать на админскую панель');
+  });
+
 
     // Определение модели данных Image после установления соединения
+
 
 
     const uploadDirectory = path.join(__dirname, 'uploads');
@@ -122,8 +411,39 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+
+
+const productstorage = multer.diskStorage({
+  destination: './uploads/images',
+  filename: (req, file, cb) => {
+    return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+const uploads = multer({ storage: productstorage });
+  //creating uploadsProduct Endpoint for imagess
+  app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')))
+  
+  
+  app.post("/uploads", uploads.single('product'), (req, res) => {
+    if (req.file) {
+      console.log(req.file); // Для проверки содержимого
+      res.json({
+        success: 1,
+        image_url: `http://localhost:${PORT}/images/${req.file.filename}`
+      });
+    } else {
+      res.status(400).send('No file uploaded.');
+    }
+  });
+
+
+
+
+
 app.use(cors(corsOptions));
-app.use(express.json());
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
@@ -133,7 +453,7 @@ app.use(
   })
 );
 app.use(cookieParser());
-const generateClientId = () => `client_${Math.random().toString(36).substring(2, 15)}`;
+{/*const generateClientId = () => `client_${Math.random().toString(36).substring(2, 15)}`;*/}
 
 const getClientId = () => {
   const value = `; ${document.cookie}`;
@@ -176,26 +496,28 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 app.use('/api/images', images);
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post('/api/images/like/:id', async (req, res) => {
+  if (!req.params.id) {
+    return res.status(400).json({ message: "ID is required" });
+  }
+  
   try {
     const imageId = req.params.id;
-    const clientId = req.cookies['client-id']; // Получаем client-id из кукис
+    const clientId = req.cookies['client-id']; 
 
     if (!clientId) {
       return res.status(400).json({ message: "clientId отсутствует в куках." });
     }
 
     const image = await Image.findById(imageId);
-
+    
     if (!image) {
       return res.status(404).json({ message: "Изображение не найдено." });
     }
 
-    // Проверяем, добавляли ли мы уже лайк от этого clientId
     if (image.likes.includes(clientId)) {
       return res.status(409).json({ message: "Вы уже ставили лайк." });
     }
 
-    // Добавляем clientId в массив лайков
     image.likes.push(clientId);
     await image.save();
 
@@ -325,6 +647,83 @@ app.use(router);
 app.use(limiter);
 app.use(errorLogger);
 app.use('/', indexRouter);
+
+//тинькофф
+// тинькофф
+const generateToken = (paymentData) => {
+  const paramsToSign = {
+    TerminalKey: paymentData.TerminalKey,
+    Amount: paymentData.Amount,
+    OrderId: paymentData.OrderId,
+    Description: paymentData.Description,
+    Password: PASSWORD,
+  };
+
+  const sortedKeys = Object.keys(paramsToSign).sort();
+  const signString = sortedKeys.map((key) => paramsToSign[key]).join('');
+
+  return crypto.createHash('sha256').update(signString).digest('hex');
+};
+
+app.post('/init-payment', async (req, res) => {
+  if (!TERMINAL_KEY) {
+    return res.status(500).json({ success: false, message: 'TerminalKey is not configured' });
+  }
+  
+  const amountInKopecks = req.body.amount * 100;
+  console.log('Received request for payment initialization:', req.body);
+
+  const paymentData = {
+    TerminalKey: TERMINAL_KEY,
+    Amount: amountInKopecks,
+    OrderId: req.body.orderId,
+    Description: req.body.description,
+    CustomerKey: req.body.customerKey,
+    DATA: {
+      orderId: req.body.orderId,
+      email: req.body.email
+    }
+  };
+
+  paymentData.Token = generateToken(paymentData);
+
+  try {
+    console.log('Sending payment data to Tinkoff:', paymentData);
+
+    const response = await axios.post(TINKOFF_API_URL, paymentData);
+
+    console.log('Received response from Tinkoff:', response.data);
+
+    const data = response.data;
+    if (data.Success === 'true') {
+      res.json({ success: true, paymentURL: data.PaymentURL });
+    } else {
+      console.error('Tinkoff API returned an error:', data);
+      res.json({ success: false, message: data.Message, details: data.Details });
+    }
+  } catch (error) {
+    console.error('Error occurred during payment initialization:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+});
+
+
+//яндекс
+app.post('/offers/calculate', async (req, res) => {
+  try {
+    const response = await axios.post(`${YANDEX_API_URL}/b2b/cargo/integration/v1/calculate`, req.body, {
+      headers: {
+        'Authorization': `Bearer ${OAUTH_TOKEN}`
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error calculating delivery options:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Error calculating delivery options' });
+  }
+});
+
+
 // Функция для запуска сервера на указанном порту
 const startServer = () => {
   app.listen(PORT, () => {
