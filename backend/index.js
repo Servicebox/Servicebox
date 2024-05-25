@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const PORT = 5000;
 const cors = require('cors');
 const allowedCors = [
+    'http://localhost:5173',
   'https://servicebox35.ru',
   'http://servicebox35.ru',
   'https://servicebox35.pp.ru', 
@@ -116,7 +117,8 @@ module.exports = (req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json()); 
-
+// Middleware for serving static files
+app.use('/admin', express.static(path.join(__dirname, 'admin')));
 mongoose
   .connect('mongodb://127.0.0.1:27017/serviceboxdb', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -376,23 +378,23 @@ app.post('/removefromcart',fechUser,async(req,res)=>{
 
   })
 
-  //middleware для проверки прав администратора
-  const adminAuth = (req, res, next) => {
-    try {
-      const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (decoded.role !== 'admin') {
-        throw new Error('Нет доступа');
-      }
-      req.user = decoded; // добавляем информацию о пользователе в объект запроса
-      next();
-    } catch (error) {
-      return res.status(403).json({ message: 'Нет доступа' });
+const adminAuth = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role !== 'admin') {
+      throw new Error('Нет доступа');
     }
-  };
-  app.get('/admin/dashboard', adminAuth, (req, res) => {
-    res.send('Добро пожаловать на админскую панель');
-  });
+    req.user = decoded; // добавляем информацию о пользователе в объект запроса
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: 'Нет доступа' });
+  }
+};
+
+app.get('/admin/dashboard', adminAuth, (req, res) => {
+  res.send('Добро пожаловать на админскую панель');
+});
 
 
     // Определение модели данных Image после установления соединения
@@ -649,79 +651,6 @@ app.use(errorLogger);
 app.use('/', indexRouter);
 
 //тинькофф
-// тинькофф
-const generateToken = (paymentData) => {
-  const paramsToSign = {
-    TerminalKey: paymentData.TerminalKey,
-    Amount: paymentData.Amount,
-    OrderId: paymentData.OrderId,
-    Description: paymentData.Description,
-    Password: PASSWORD,
-  };
-
-  const sortedKeys = Object.keys(paramsToSign).sort();
-  const signString = sortedKeys.map((key) => paramsToSign[key]).join('');
-
-  return crypto.createHash('sha256').update(signString).digest('hex');
-};
-
-app.post('/init-payment', async (req, res) => {
-  if (!TERMINAL_KEY) {
-    return res.status(500).json({ success: false, message: 'TerminalKey is not configured' });
-  }
-  
-  const amountInKopecks = req.body.amount * 100;
-  console.log('Received request for payment initialization:', req.body);
-
-  const paymentData = {
-    TerminalKey: TERMINAL_KEY,
-    Amount: amountInKopecks,
-    OrderId: req.body.orderId,
-    Description: req.body.description,
-    CustomerKey: req.body.customerKey,
-    DATA: {
-      orderId: req.body.orderId,
-      email: req.body.email
-    }
-  };
-
-  paymentData.Token = generateToken(paymentData);
-
-  try {
-    console.log('Sending payment data to Tinkoff:', paymentData);
-
-    const response = await axios.post(TINKOFF_API_URL, paymentData);
-
-    console.log('Received response from Tinkoff:', response.data);
-
-    const data = response.data;
-    if (data.Success === 'true') {
-      res.json({ success: true, paymentURL: data.PaymentURL });
-    } else {
-      console.error('Tinkoff API returned an error:', data);
-      res.json({ success: false, message: data.Message, details: data.Details });
-    }
-  } catch (error) {
-    console.error('Error occurred during payment initialization:', error);
-    res.status(500).json({ success: false, message: 'Internal server error' });
-  }
-});
-
-
-//яндекс
-app.post('/offers/calculate', async (req, res) => {
-  try {
-    const response = await axios.post(`${YANDEX_API_URL}/b2b/cargo/integration/v1/calculate`, req.body, {
-      headers: {
-        'Authorization': `Bearer ${OAUTH_TOKEN}`
-      }
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error('Error calculating delivery options:', error.response ? error.response.data : error.message);
-    res.status(500).json({ error: 'Error calculating delivery options' });
-  }
-});
 
 
 // Функция для запуска сервера на указанном порту
