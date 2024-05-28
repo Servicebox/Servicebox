@@ -37,7 +37,7 @@ const CreateImage = () => {
     formData.append('description', description);
 
     try {
-      const response = await fetch('http:localhost:8000/api/images', {
+      const response = await fetch('https://servicebox35.pp.ru/api/images', {
         method: 'POST',
         body: formData,
         credentials: 'include', // Добавляем куки, если требуется для аутентификации
