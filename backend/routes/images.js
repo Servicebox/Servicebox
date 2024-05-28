@@ -8,7 +8,6 @@ const fetchUser = require('../middlewares/fetchUser');
 const fs = require('fs').promises;
 
 const uploadDirectory = path.join(__dirname, '../uploads/gallery');
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDirectory);
@@ -17,18 +16,44 @@ const storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
 });
-
 const upload = multer({ storage: storage });
 
+// Загрузка изображения
+router.post('/', fetchUser, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) throw new Error('Необходимо загрузить файл.');
 
+    const { description } = req.body;
+    const { filename, mimetype } = req.file;
 
-// Fetch images
+    const newImage = new Image({
+      filePath: `/uploads/gallery/${filename}`,
+      description,
+      mimeType: mimetype,
+      likes: [],
+    });
+
+    await newImage.save();
+
+    res.status(201).json({
+      message: 'Изображение успешно загружено',
+      image: {
+        _id: newImage._id,
+        filePath: newImage.filePath,
+        description: newImage.description,
+        mimeType: newImage.mimeType,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Получение изображений
 router.get('/', fetchUser, async (req, res) => {
   try {
     const userId = req.user.id;
     const images = await Image.find().exec();
-
-    // Отправляем данные, включая состояние лайков для пользователя
     const responseImages = images.map(image => ({
       ...image.toObject(),
       hasLiked: image.likes.includes(userId),

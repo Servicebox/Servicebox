@@ -68,7 +68,6 @@
     "@types/bonjour": "^3.5.13",
     "@types/graceful-fs": "^4.1.9",
     "eslint": "^8.55.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "source-map-loader": "^5.0.0"
+    "eslint-plugin-react-hooks": "^4.6.0"
   }
 }

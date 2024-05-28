@@ -4,7 +4,7 @@ import './CartItems.css';
 import { ShopContext } from '../Contexst/ShopContext'; 
 import remove_icon from '../Assets/cart_cross_icon.png';
 import TinkoffPayForm from '../TinkoffPayForm/TinkoffPayForm';
-import DeliveryForm from '../NddDeliveryWidget/NddDeliveryWidget';
+
 
 
 

@@ -23,13 +23,12 @@ const CreateImage = () => {
     setDescription(e.target.value);
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!file) {
-        alert('Пожалуйста, выберите файл для загрузки');
-        return;
+      alert('Пожалуйста, выберите файл для загрузки');
+      return;
     }
 
     const formData = new FormData();
@@ -40,29 +39,31 @@ const CreateImage = () => {
       const response = await fetch('https://servicebox35.pp.ru/api/images', {
         method: 'POST',
         body: formData,
-        credentials: 'include', // Добавляем куки, если требуется для аутентификации
+        credentials: 'include',
+        headers: {
+          'auth-token': localStorage.getItem('auth-token'), // Добавление токена
+        },
       });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            const errorText = errorData.message || 'Неизвестная ошибка';
-            throw new Error(`Ошибка: ${response.status} - ${errorText}`);
-        }
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorText = errorData.message || 'Неизвестная ошибка';
+        throw new Error(`Ошибка: ${response.status} - ${errorText}`);
+      }
 
-        const result = await response.json();
-        alert('Изображение успешно загружено');
-        setFile(null);
-        setDescription('');
-        setPreviewUrl('');
+      const result = await response.json();
+      alert('Изображение успешно загружено');
+      setFile(null);
+      setDescription('');
+      setPreviewUrl('');
     } catch (error) {
-        alert(error.message);
+      alert(error.message);
     }
-};
+  };
 
-  // Очистка URL предварительного просмотра при размонтировании компонента
   useEffect(() => {
     return () => {
-      if(previewUrl) {
+      if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
     };
