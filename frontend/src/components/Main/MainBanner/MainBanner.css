@@ -1247,7 +1247,7 @@ line-height: 18px; /* 133.333% */
   display: flex;
   padding: 1rem 0 4rem 0;
   flex-direction: column;
-  gap: 100px;
+  gap: 20px;
   position: relative;
   z-index: 1;
   background: transparent;

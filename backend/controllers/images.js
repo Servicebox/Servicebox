@@ -1,48 +1,53 @@
 //controllers/images
-const Image = require('../models/image');
-const multer = require('multer');
 
-const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
+const Image = require('../models/image');
+const fs = require('fs');
 
+const uploadGalleryDir = path.join(__dirname, '..', 'uploads', 'gallery');
 
-const uploadDirectory = path.join(__dirname, '..', 'uploads'); 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadGalleryDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); 
+  },
+}); 
 
- 
-// Создание изображения
-  
+const upload = multer({ storage: storage });
+
+// Function to create an image
 exports.createImage = async (req, res) => {
-    try {
-        if (!req.file) {
-            throw new Error('Необходимо загрузить файл.');
-        }
+  try {
+    if (!req.file) throw new Error('Необходимо загрузить файл.');
 
-        const { description } = req.body; 
-        const { filename, mimetype } = req.file; 
- 
-        const newImage = new Image({
-            filePath: `/uploads/${filename}`, // Обновляем сохранение пути
-            description,
-            mimeType: mimetype,
-            likes: [] 
-        });
+    const { description } = req.body;
+    const { filename, mimetype } = req.file;
 
-        await newImage.save();
+    const newImage = new Image({
+      filePath: `/uploads/gallery/${filename}`,
+      description,
+      mimeType: mimetype,
+      likes: [],
+    });
 
-        res.status(201).json({
-            message: 'Изображение успешно загружено',
-            image: {
-                _id: newImage._id,
-                filePath: newImage.filePath,
-                description: newImage.description,
-                mimeType: newImage.mimeType
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    await newImage.save();
+
+    res.status(201).json({
+      message: 'Изображение успешно загружено',
+      image: {
+        _id: newImage._id,
+        filePath: newImage.filePath,
+        description: newImage.description,
+        mimeType: newImage.mimeType,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
-
 
 // Обновление изображения
 exports.updateImage = async (req, res) => {
@@ -110,9 +115,9 @@ exports.getImages = async (req, res) => {
 
 // Добавить функцию для лайка изображения
 
-exports.likeImage = async (req, res) => {
-    const imageId = req.params.id;
-    const clientId = req.cookies['client-id'];
+exports.likeImage = async (req, res, next) => {
+    const {imageId} = req.params.id;
+    const {clientId} = req.cookies['client-id'];
 
     if (!clientId) {
         return res.status(400).json({ message: "clientId отсутствует в куках." });

@@ -198,7 +198,7 @@ display: none;
   }
 
   .completed__carousel-img{
-max-width: 300px;
+width: 300px;
 
 border-radius: 15px;
 object-fit: cover;

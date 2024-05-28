@@ -1,36 +1,18 @@
 //vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import dns from 'node:dns'
 
-// Отключить изменение порядка DNS
-dns.setDefaultResultOrder('verbatim')
-
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: '/admin/',  // или '/', если не используется подкаталог
   server: {
-    host: '0.0.0.0', // или true для прослушивания всех адресов
-    port: 5173,
-    open: true, // Открывает браузер автоматически при запуске
     proxy: {
       '/api': {
-        target: 'https://servicebox35.pp.ru', // Адрес вашего удалённого бэкенда
+        target: 'https://servicebox35.pp.ru',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    },
-    cors: {
-      origin: '*', // Разрешает все источники
-      credentials: true
-    }
-  },
-  // Корневая директория для административной панели
-  root: './',
-  build: {
-    outDir: 'dist',
-    rollupOptions: {
-      input: {
-        main: 'public/index.html'
+        secure: false,  // Если ваш сервер использует самоподписанный сертификат
+        rewrite: (path) => path.replace(/^\/api/, '')  // Переписывание пути, если необходимо
       }
     }
   }

@@ -14,7 +14,7 @@ const AdminPanelRoute = () => {
     // Отправка запроса на загрузку товара
   }
   return (
-    <div className='admin'>
+    <div className='admin-panel'>
 
       <Link className='admin__link' to="/admin/create">Cоздание</Link>
       <Link className='admin__link' to="/admin/delete">Удаление</Link>

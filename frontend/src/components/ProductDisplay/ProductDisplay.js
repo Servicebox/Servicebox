@@ -3,6 +3,7 @@ import './ProductDisplay.css'
 import star_icon from '../Assets/star_icon.png'
 import star_dull_icon from '../Assets/star_dull_icon.png'
 import { ShopContext } from '../Contexst/ShopContext'
+import { Link } from 'react-router-dom';
 
 const ProductDisplay = (props) => {
   const { product } = props;
@@ -49,7 +50,7 @@ const ProductDisplay = (props) => {
       </div>
            <div className="back__btn"> 
       <ul>
-      <li><Link to="/">На главную</Link>
+      <li><Link to="/shop">На главную</Link>
       </li>
       </ul>
       </div>

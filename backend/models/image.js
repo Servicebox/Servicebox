@@ -1,11 +1,12 @@
 //models/image
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const imageSchema = new mongoose.Schema({
+const imageSchema = new Schema({
   filePath: { type: String, required: true },
   description: { type: String },
   mimeType: { type: String, required: true },
-  likes: { type: [String], default: [] } //  лайки будут массивом ID пользователей
+  likes: { type: [String], default: [] },
 });
 
-module.exports = mongoose.model('Image', imageSchema);  
+module.exports = mongoose.model('Image', imageSchema); 

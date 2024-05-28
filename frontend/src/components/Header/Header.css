@@ -873,7 +873,8 @@ max-width: 320px;
     display: none;
   }
   .logo {
-    display: none;
+        width: 30px;
+    height: 30px;
   }
   .contacts__block{
     padding: 0;
@@ -1018,6 +1019,9 @@ width: 40px;
     right: 5px;
     top: -182px
 }
+.container__contacts{
+  gap: 0px;
+}
 }
 
 @media (min-width: 501px) and (max-width: 768px) {
@@ -1063,7 +1067,7 @@ width: 40px;
     font-family: Gilroy;
 font-size: 10px;
 font-style: normal;
-font-weight: normal;
+font-weight: 600;
 line-height: normal;
 letter-spacing: -0.2px;
 

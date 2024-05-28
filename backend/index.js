@@ -7,7 +7,12 @@ console.log(process.env.SECRET);
 const jwt = require('jsonwebtoken');
 const PORT = 5000;
 const cors = require('cors');
+
+
 const allowedCors = [
+  'http://localhost:5173',
+'https://servicebox35.pp.ru/get-client-id',
+  'http://192.168.1.99:5173',
     'http://localhost:5173',
   'https://servicebox35.ru',
   'http://servicebox35.ru',
@@ -60,7 +65,7 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -74,9 +79,10 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const indexRouter = require('./routes/index');
 //const cors = require('./middlewares/cors');
 const router = require('./routes/index');
+//const fetchUser = require('./middlewares/fetchUser')
 
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
-
+const imageRoutes = require('./routes/images');
 const images = require('./routes/images');
 const Image = require('./models/image');
 
@@ -117,69 +123,65 @@ module.exports = (req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json()); 
-// Middleware for serving static files
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
-mongoose
-  .connect('mongodb://127.0.0.1:27017/serviceboxdb', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Соединение с базой данных установлено');
-  })
-  .catch((error) => {
-    console.error('Не удалось подключиться к базе данных', error);
-  });
 
+
+// Serve static files
+app.use('/admin', express.static(path.join(__dirname, 'admin')));
+app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
+app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
+
+app.use(cors(corsOptions));
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+    //contentSecurityPolicy: false,
+  })
+);
+app.use(cookieParser());
+mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb', { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+})
+  .then(() => console.log('Соединение с базой данных установлено'))
+  .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
 app.get("./",(req, res) => {
   res.send("Express App is runing")
 })
 
-    // Определение модели данных Service после установления соединения
-    const Service = mongoose.model('Service', {
-      serviceName: String,
-      description: String,
-      price: String,
-      category: String
-    });
- 
-    // Определение модели данных Products после установления соединения
+ const uploadDirectory = path.join(__dirname, 'uploads');
+fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
+  if (err && err.code !== 'EEXIST') {
+    console.error("Не могу создать папку для загрузок: ", err);
+    process.exit(1);
+  }
+});
+
+// Define the Image model
+
+const Service = mongoose.model('Service', {
+  serviceName: String,
+  description: String,
+  price: String,
+  category: String,
+});
 const Product = mongoose.model('Product', {
-  id:{
-    type:Number,
-    required:true,
-  },
-  name:{
-    type:String,
-    required:true,
-  },
-  image:{
-    type:String,
-    required:true,
-  },
-  category:{
-    type:String,
-    required:true,
-  },
-  new_price:{
-    type:Number,
-    required:true,
-  },
-  old_price:{
-    type:Number,
-    required:true,
-  },
-  date:{
-  type:Date,
-  default:Date.now,
-  },
-  avilable:{
-    type:Boolean,
-    default:true,
-  },
-
-})
+  id: { type: Number, required: true },
+  name: { type: String, required: true },
+  image: { type: String, required: true },
+  category: { type: String, required: true },
+  new_price: { type: Number, required: true },
+  old_price: { type: Number, required: true },
+  date: { type: Date, default: Date.now },
+  available: { type: Boolean, default: true },
+});
 
 
-
+// Add new product
 app.post('/addproduct', async (req, res) => {
   let products = await Product.find({})
   let id;
@@ -201,7 +203,6 @@ app.post('/addproduct', async (req, res) => {
     old_price:req.body.old_price,
   });
 
-  console.log(product);
   await product.save();
   console.log("Saved");
   res.json({
@@ -258,6 +259,7 @@ const Users = mongoose.model('Users',{
 })
 
 //creating enpoint for register
+//creating enpoint for register
 app.post('/signup', async(req,res)=>{
 
   let check = await Users.findOne({email:req.body.email});
@@ -312,7 +314,6 @@ app.post('/login',async(req,res)=>{
     
   }
 })
-
 //creating enpoint for new collection data
 
 app.get('/newcollections',async(req,res)=>{
@@ -321,6 +322,7 @@ let newCollection = products.slice(1).slice(-8);
 console.log("newCollection feched");
 res.send(newCollection);
 })
+
 
 //creating enpoint for popular parts
 
@@ -332,26 +334,28 @@ app.get('/popularinpart',async(req,res)=>{
 })
 
 
+
 //creating middleware to fetch user
-const fechUser = async(req,res,next)=>{
-const token = req.header('auth-token');
-if (!token){
-  res.status(401).send({errors:"пожалуйста авторизуйтесь"})
-}
-else{
-  try{
-const data = jwt.verify(token,'secret_ecom');
-req.user = data.user;
-next();
-  }catch(error){
-res.status(401).send({errors:"пожалуйста, пройдите аутентификацию"})
+const fetchUser = async (req, res, next) => {
+  const token = req.header('auth-token');
+  console.log('Received token:', token); // Логирование токена
+  if (!token) {
+    return res.status(401).send({ errors: "пожалуйста, пройдите аутентификацию" });
   }
-}
-}
+  try {
+    const data = jwt.verify(token, 'secret_ecom');
+    console.log('Decoded data:', data); // Логирование результата декодирования
+    req.user = data.user;
+    next();
+  } catch (error) {
+    console.error('Token verification error:', error.message); // Логирование ошибки декодирования
+    return res.status(401).send({ errors: "пожалуйста, пройдите аутентификацию" });
+  }
+};
 
 //creating enpoint for adding products in carta
 
-app.post('/addtocart',fechUser,async(req,res)=>{
+app.post('/addtocart',fetchUser,async(req,res)=>{
   console.log("added",req.body.itemId);
 let userData = await Users.findOne({_id:req.user.id});
 userData.cartData[req.body.itemId] += 1;
@@ -359,9 +363,10 @@ await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
 res.json({ message: "Adedid" });
 })
 
+
 //creating enpoint for removing products from cart
 
-app.post('/removefromcart',fechUser,async(req,res)=>{
+app.post('/removefromcart',fetchUser,async(req,res)=>{
   console.log("removed",req.body.itemId);
   let userData = await Users.findOne({_id:req.user.id});
   if(userData.cartData[req.body.itemId]>0)
@@ -370,8 +375,8 @@ app.post('/removefromcart',fechUser,async(req,res)=>{
   res.json({ message: "Removed" });
   })
 
-  //creating enpoint to get cartdata
-  app.post('/getcart',fechUser,async (req,res)=>{
+ //creating enpoint to get cartdata
+  app.post('/getcart',fetchUser,async (req,res)=>{
     console.log("GetCart");
     let userData = await Users.findOne({_id:req.user.id});
     res.json(userData.cartData);
@@ -396,12 +401,10 @@ app.get('/admin/dashboard', adminAuth, (req, res) => {
   res.send('Добро пожаловать на админскую панель');
 });
 
+app.use('/api/images', imageRoutes);
 
-    // Определение модели данных Image после установления соединения
+// Multer setup for product images
 
-
-
-    const uploadDirectory = path.join(__dirname, 'uploads');
 // Multer setup for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -415,46 +418,90 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-const productstorage = multer.diskStorage({
-  destination: './uploads/images',
+const productstorage= multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, 'uploads', 'images');
+    cb(null, uploadPath);
+  },
   filename: (req, file, cb) => {
-    return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+    cb(null, `product_${Date.now()}${path.extname(file.originalname)}`);
   }
 });
 
 const uploads = multer({ storage: productstorage });
   //creating uploadsProduct Endpoint for imagess
   app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')))
-  
-  
-  app.post("/uploads", uploads.single('product'), (req, res) => {
-    if (req.file) {
-      console.log(req.file); // Для проверки содержимого
-      res.json({
-        success: 1,
-        image_url: `https://servicebox35.pp.ru/images/${req.file.filename}`
-      });
-    } else {
-      res.status(400).send('No file uploaded.');
-    }
-  });
+  // Multer setup для загрузки изображений продуктов
+const productStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, 'uploads', 'images');
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `product_${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+ const productUpload = multer({ storage: productStorage }); 
+// Маршрут для загрузки изображений продуктов
+app.post('/uploads', productUpload.single('product'), (req, res) => {
+  if (req.file) {
+    res.json({
+      success: 1,
+      image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    });
+  } else {
+    res.status(400).send('No file uploaded.');
+  }
+});
+
+// Multer setup для загрузки изображений галереи
+const galleryStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, 'uploads', 'gallery');
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `gallery_${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+const galleryUpload = multer({ storage: galleryStorage });
+// Маршрут для загрузки изображений галереи
+app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) throw new Error('Необходимо загрузить файл.');
+    
+    const { description } = req.body;
+    const { filename, mimetype } = req.file;
+
+    const newImage = new Image({
+      filePath: `/uploads/gallery/${filename}`,
+      description,
+      mimeType: mimetype,
+      likes: [],
+    });
+    
+    await newImage.save();
+    
+    res.status(201).json({
+      message: 'Изображение успешно загружено',
+      image: {
+        _id: newImage._id,
+        filePath: newImage.filePath,
+        description: newImage.description,
+        mimeType: newImage.mimeType,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 
 
 
-app.use(cors(corsOptions));
-
-
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-    //contentSecurityPolicy: false,
-  })
-);
-app.use(cookieParser());
 {/*const generateClientId = () => `client_${Math.random().toString(36).substring(2, 15)}`;*/}
 
 const getClientId = () => {
@@ -464,24 +511,17 @@ const getClientId = () => {
   return null;
 };
 
-
-
-
-// Маршрут для запроса client-id
 app.get('/get-client-id', (req, res) => {
   let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
   if (!clientId) {
-      // Если нет, сгенерировать новый client-id
-      clientId = generateClientId();
-      // Установить куку с именем 'client-id' и значением clientId
-      res.cookie('client-id', clientId, {
-          httpOnly: true, // Куку можно будет использовать только в HTTP-запросах
-          maxAge: 86400 * 1000, // Кука будет валидна 1 день
-          sameSite: 'None', // Опция SameSite для кросс-доменных кук
-          secure: true // Использование secure если доступ к моему сайту осуществляется через HTTPS
-      });
+    clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
+    res.cookie('client-id', clientId, {
+      httpOnly: true,
+      maxAge: 86400 * 1000,
+      sameSite: 'None',
+      secure: true,
+    });
   }
-  // Отправляем клиенту его уникальный ID в ответе
   res.json({ clientId });
 });
 
@@ -497,14 +537,13 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 
 app.use('/api/images', images);
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.post('/api/images/like/:id', async (req, res) => {
-  if (!req.params.id) {
-    return res.status(400).json({ message: "ID is required" });
-  }
-  
+app.post('/api/images/like/:id', fetchUser, async (req, res) => {
+  console.log(`Received token: ${req.header('auth-token')}`);
+  console.log(`User ID from token: ${req.user.id}`);
+
   try {
     const imageId = req.params.id;
-    const clientId = req.cookies['client-id']; 
+    const clientId = req.user.id; 
 
     if (!clientId) {
       return res.status(400).json({ message: "clientId отсутствует в куках." });
@@ -516,7 +555,7 @@ app.post('/api/images/like/:id', async (req, res) => {
       return res.status(404).json({ message: "Изображение не найдено." });
     }
 
-    if (image.likes.includes(clientId)) {
+    if (Array.isArray(image.likes) && image.likes.includes(clientId)) {
       return res.status(409).json({ message: "Вы уже ставили лайк." });
     }
 
@@ -525,6 +564,7 @@ app.post('/api/images/like/:id', async (req, res) => {
 
     res.status(200).json(image);
   } catch (error) {
+    console.error(`Error liking image: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 });
@@ -545,20 +585,19 @@ app.delete('/api/images/delete/:id', async (req, res) => {
   }
 });
 
-///
+// Service CRUD operations
 app.get('/services', async (req, res) => {
   try {
-    const services = await Service.find({}, '_id serviceName description price category ').exec();
+    const services = await Service.find({}, '_id serviceName description price category').exec();
     res.json(services);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-
 app.post('/services', async (req, res) => {
   try {
-    const { serviceName, description, price, category} = req.body;
+    const { serviceName, description, price, category } = req.body;
     const newService = new Service({ serviceName, description, price, category });
     await newService.save();
     res.status(201).json(newService);
@@ -604,56 +643,18 @@ router.get('/services/:category', async (req, res) => {
   }
 });
 
-app.post('/api/images', upload.single('image'), async (req, res) => {
-  try {
-    if (!req.file) {
-        throw new Error('Необходимо загрузить файл.');
-    }
-
-    const { path: filePath, mimetype } = req.file;
-    const { description } = req.body;
-    
-    const newImage = new Image({
-        filePath: '/uploads/' + path.basename(filePath),
-        description,
-        mimeType: mimetype,
-        likes: []
-    });
-
-    const savedImage = await newImage.save();
-
-    res.status(201).json({
-        message: 'Изображение успешно загружено',
-        image: savedImage
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-app.use(express.urlencoded({ extended: true }));
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
-app.use(requestLogger);
-// Роут для тестирования обработки ошибок
+// Route for testing error handling
 app.get('/crash-test', (req, res, next) => {
   setTimeout(() => {
     next(new Error('Server will crash now'));
   }, 0);
 });
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(router);
-app.use(limiter);
-app.use(errorLogger);
 app.use('/', indexRouter);
 
-//тинькофф
-
-
-// Функция для запуска сервера на указанном порту
+// Start server
 const startServer = () => {
   app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
@@ -669,5 +670,5 @@ const startServer = () => {
     process.exit(1);
   });
 };
-// Запуск сервера
+
 startServer();

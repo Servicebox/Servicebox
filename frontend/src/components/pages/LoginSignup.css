@@ -64,7 +64,7 @@ width: 459px;
     display: flex;
     align-items: center;
     margin-top: 25px;
-
+width: 350px;
     color: #5c5c5c;
     font-size: 18px;
     font-weight: 500;
@@ -72,28 +72,38 @@ width: 459px;
 @media (min-width: 320px) and (max-width: 500px) {
     .loginsignup-container {
     width: 320px;
-    height: 600px;
+    height: 550px;
     background: white;
     margin: auto;
-    padding: 40px 60px;
+    padding: 33px 33px;
     border: 1px solid black;
 }
 .loginsignup-container button {
     width: 200px;
+    height: 50px;
 }
 .loginsignup-agree {
     font-size: 12px;
+    width: 200px;
+}
+.loginsignup-fields input{
+    height: 40px;
 }
 }
 @media (min-width: 501px) and (max-width: 768px) {
     .loginsignup-container{
-        width: 400px;
-        height: 600px;
+        width: 450px;
+        height: 550px;
     }
     .loginsignup-container button {
     width: 280px;
+    height: 50px;
+}
+.loginsignup-fields input{
+    height: 40px;
 }
 .loginsignup-agree {
     font-size: 12px;
+    width: 220px;
 }
 }

@@ -124,7 +124,7 @@ const App = () => {
           <Route path="/appl-service" element={<ApplService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="CreateServiceForm" element={<CreateServiceForm />} />
-          <Route path="/admin/*" element={<AdminPanelRoute />} />
+          <Route path="/admin-panel/*" element={<AdminPanelRoute />} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/service" element={<Service />} />
           <Route path="/about" element={<About />} />
