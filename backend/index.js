@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config()
 console.log(process.env.SECRET); 
 const jwt = require('jsonwebtoken');
-const PORT = 5000;
+const PORT = 8000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
@@ -54,6 +54,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/newcollections',
   'https://servicebox35.pp.ru/init-payment',
   'http://localhost:3000/init-paymen',
+  ' http://localhost:5000/api/gallery ',
 
 ];
 
@@ -83,9 +84,8 @@ const router = require('./routes/index');
 
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 const imageRoutes = require('./routes/images');
-const images = require('./routes/images');
-const Image = require('./models/image');
 
+const galleryRoutes = require('./routes/gallery');
 const multer = require('multer');
 const { type } = require('os');
 const { errors } = require('celebrate');
@@ -115,9 +115,11 @@ module.exports = (req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json()); 
-
+app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
+const uploadDirectory = path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(uploadDirectory));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
@@ -145,7 +147,7 @@ app.get("./",(req, res) => {
   res.send("Express App is runing")
 })
 
- const uploadDirectory = path.join(__dirname, 'uploads');
+
 fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   if (err && err.code !== 'EEXIST') {
     console.error("Не могу создать папку для загрузок: ", err);
@@ -449,6 +451,7 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
 });
 
 // Multer setup для загрузки изображений галереи
+// Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, 'uploads', 'gallery');
@@ -527,8 +530,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   }
 });
 
-
-app.use('/api/images', images);
+app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post('/api/images/like/:id', fetchUser, async (req, res) => {
   console.log(`Received token: ${req.header('auth-token')}`);

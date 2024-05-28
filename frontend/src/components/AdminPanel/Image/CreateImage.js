@@ -36,7 +36,7 @@ const CreateImage = () => {
     formData.append('description', description);
 
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/images', {
+      const response = await fetch('https://servicebox35.pp.ru/api/gallery', {
         method: 'POST',
         body: formData,
         credentials: 'include',
