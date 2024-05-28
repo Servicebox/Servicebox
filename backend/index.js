@@ -375,6 +375,7 @@ app.post('/removefromcart',fetchUser,async(req,res)=>{
 
   })
 
+
 const adminAuth = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
