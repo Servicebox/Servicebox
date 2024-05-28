@@ -7,7 +7,7 @@ console.log(process.env.SECRET);
 const jwt = require('jsonwebtoken');
 const PORT = 5000;
 const cors = require('cors');
-
+const bcrypt = require('bcrypt');
 
 const allowedCors = [
   'http://localhost:5173',
@@ -91,14 +91,6 @@ const { type } = require('os');
 const { errors } = require('celebrate');
 
 
-const TINKOFF_API_URL = 'https://securepay.tinkoff.ru/rest/Init';
-const TERMINAL_KEY = process.env.TERMINAL_KEY || process.env.TERMINAL_KEY_ENV;
-const PASSWORD = process.env.PASSWORD || "yobi02j0ncflhk79";
-const SECRET_KEY = "200000001280581";
-
-//яндекс
-const YANDEX_API_URL = 'https://b2b.taxi.yandex.net';
-const OAUTH_TOKEN = process.env.OAUTH_TOKEN;
 mongoose.set('strictQuery', true);
 
 

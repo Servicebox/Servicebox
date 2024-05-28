@@ -38,6 +38,7 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/node-fetch": "^2.6.10",
     "http-proxy-middleware": "^2.0.6"
   }
