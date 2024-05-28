@@ -16,11 +16,11 @@ const AdminPanelRoute = () => {
   return (
     <div className='admin-panel'>
 
-      <Link className='admin__link' to="/admin/create">Cоздание</Link>
-      <Link className='admin__link' to="/admin/delete">Удаление</Link>
-      <Link className='admin__link' to="/admin/update">Обновление</Link>
-      <Link className='admin__link' to="/admin/create-image">Загрузка Изображения</Link>
-      <Link className='admin__link' to="/admin/delete-image">Удаление Изображения</Link>
+      <Link className='admin__link' to="/admin-panel/create">Cоздание</Link>
+      <Link className='admin__link' to="/admin-panel/delete">Удаление</Link>
+      <Link className='admin__link' to="/admin-panel/update">Обновление</Link>
+      <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
+      <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>
   
       <Routes>
         <Route path="create-image" element={<CreateImage />} />
