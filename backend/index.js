@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config()
 console.log(process.env.SECRET); 
 const jwt = require('jsonwebtoken');
-const PORT = 5000;
+const PORT = 8000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
@@ -16,6 +16,8 @@ const allowedCors = [
   'http://localhost:5173',
   'https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js',
 'https://servicebox35.pp.ru/get-client-id',
+'http://localhost:8000/api/images/delete/',
+'http://localhost:3000/admin-panel/delete-image',
   'http://192.168.1.99:5173',
     'http://localhost:5173',
   'https://servicebox35.ru',
@@ -567,7 +569,7 @@ app.post('/api/images/like/:id', fetchUser, async (req, res) => {
   }
 });
 
-app.delete('/api/images/delete/:id', async (req, res) => {
+app.delete('/api/gallery/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -669,4 +671,4 @@ const startServer = () => {
   });
 };
 
-startServer();
+startServer(); 

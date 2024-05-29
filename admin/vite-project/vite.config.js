@@ -5,14 +5,14 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/admin/',  // или '/', если не используется подкаталог
+  base: '/admin/',
   server: {
     proxy: {
       '/api': {
-        target: 'https://servicebox35.pp.ru',
+        target: 'http://localhost:8000',
         changeOrigin: true,
-        secure: false,  // Если ваш сервер использует самоподписанный сертификат
-        rewrite: (path) => path.replace(/^\/api/, '')  // Переписывание пути, если необходимо
+        secure: false, 
+        rewrite: (path) => path.replace(/^\/api/, '')  
       }
     }
   }

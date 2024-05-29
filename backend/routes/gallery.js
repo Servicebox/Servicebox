@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
     const newImage = new Image({
       filePath: `/uploads/gallery/${filename}`,
       description,
-      mimeType: mimetype,
+      mimeType: mimetype, 
       likes: [],
     });
 

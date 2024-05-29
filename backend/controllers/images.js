@@ -69,19 +69,23 @@ exports.deleteImage = async (req, res) => {
     try {
         const image = await Image.findById(req.params.id);
         if (image) {
-            // Удалить файл из файловой системы
-            const filepath = image.filePath;
+            const filepath = path.join(__dirname, '..', image.filePath); // Корректный путь к файлу
+
+            // Убедимся, что файл существует
             if (fs.existsSync(filepath)) {
-                await fs.promises.unlink(filepath);
+                await fs.promises.unlink(filepath); // Удаление файла
+            } else {
+                console.warn(`Файл ${filepath} не существует.`);
             }
-            // Удалить запись из базы данных
-            await image.remove();
-            res.json({ message: 'Image deleted successfully'});
+
+            await image.remove(); // Удаление документа из базы данных
+            res.json({ message: 'Image deleted successfully' });
         } else {
             res.status(404).json({ message: 'Image not found' });
         }
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error(`Ошибка при удалении изображения: ${error.message}`); // Детальная ошибка
+        res.status(500).send({ message: 'Внутренняя ошибка сервера', error: error.message });
     }
 };
 

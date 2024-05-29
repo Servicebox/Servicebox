@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const uploadDirectory = path.join(__dirname, '../uploads/gallery');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDirectory);
+    cb(null, uploadDirectory); 
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 
 // Загрузка изображения
 router.post('/', fetchUser, upload.single('image'), async (req, res) => {
-  try {
+  try { 
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
     const { description } = req.body;
@@ -103,19 +103,28 @@ router.put('/:id', upload.single('image'), async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
 
-    const image = await Image.findById(id);
-    if (!image) throw new Error('Image not found');
+        const image = await Image.findById(id);
+        if (!image) throw new Error('Image not found');
 
-    await image.remove();
+        const filepath = path.join(__dirname, '..', image.filePath);
 
-    res.status(200).json({ message: 'Image deleted' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+        // Убедимся, что файл существует
+        if (fs.existsSync(filepath)) {
+            await fs.promises.unlink(filepath); // Удаление файла
+        } else {
+            console.warn(`Файл ${filepath} не существует.`);
+        }
+
+        await image.remove();
+
+        res.json({ message: 'Изображение успешно удалено' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
 // Лайк/дизлайк изображения
