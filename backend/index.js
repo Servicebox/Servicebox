@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config()
 console.log(process.env.SECRET); 
 const jwt = require('jsonwebtoken');
-const PORT = 8000;
+const PORT = 5000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
