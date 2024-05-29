@@ -14,7 +14,6 @@ useEffect(() => {
     
 },[])
 
-
   return (
       <div  className='newcollections-main'>
         <h1 className='newcollections-text'>Новое поступление</h1>
