@@ -39,28 +39,17 @@ import Contacts from "../Contacts/Contacts";
 import Service from "../Service/Service";
 import About from "../About/About";
 import NotFound from "../NotFound/NotFound";
-
 import Cart from "../pages/Cart";
-
 import LoginSignup from "../pages/LoginSignup"
-import men_banner from '../Assets/banner_mens.png'
-import parts_banner from '../Assets/banner_mens.png'
-import kids_banner from '../Assets/banner_kids.png'
-
 import ShopCategory from "../pages/ShopCategory";
 import Product from "../pages/Product";
 import CartItems from "../CartItems/CartItems";
-
 import { ShopContext } from "../Contexst/ShopContext";
 import BubbleBackground from "../BubbleBackground/BubbleBackground";
 import Widget from "../Widget/Widget";
 //import TelegramWidget from "../TelegramWidget/TelegramWidget";
 import BreadCrums from "../Breadcrums/Breadcrum";
 import ProductDisplay from "../ProductDisplay/ProductDisplay";
-
-
-
-
 import { useParams } from 'react-router-dom';
 import "./App.css";
 import Navbar from "../NavBar";
@@ -93,27 +82,19 @@ const App = () => {
 
   return (
     <div className="">
-        
       <Header />
-  
-      {/*<ShopContextProvaider>*/}
-      {/*<TelegramWidget/>*/}
       <div className="page__wrapper">
         <div className="nav">
-       
           <BubbleBackground />
 
         </div>
-      
         <Routes>
 
           <Route exact path="/" element={<Main />} />
-          
           <Route path="header" element={<Header/>} />
           <Route path="image-gallery-api" element={<ImageGalleryApi />} />
           <Route path="delete-image" element={<DeleteImage />} />
           <Route exact path="/" component={ServiceRef} />
- 
           <Route path="/notebook-service" element={<NotebookService />} />
           <Route path="/monoblock-service" element={<MonoblockService />} />
           <Route path="/tv-service" element={<TvService />} />
@@ -131,14 +112,13 @@ const App = () => {
           <Route path="/loginsignup" element={<LoginSignup />} />
       <Route path="/cart-items" element={<CartItems />} />
           <Route path="/shop" element={<Shop />} />
-         
             <Route path="/widget" element={<Widget />} />
           <Route path="/nav-bar" element={<Navbar />} />
           <Route path="/product-display" element={<ProductDisplay />} />
         <Route path="/parts" element={<ShopCategory  category="part" />} />
         <Route path="/electronics" element={<ShopCategory category="electronic" />} />
         <Route path="/usedspareparts" element={<ShopCategory   category="usedsparepart"/>} />
-         <Route path="/bread-crums" element={<BreadCrums/>} />
+        <Route path="/bread-crums" element={<BreadCrums/>} />
         <Route path='/product' element={<Product />} >
           <Route path=':productId' element={<Product />} />
         </Route>
@@ -150,10 +130,7 @@ const App = () => {
         {isFormOpen && <Form toggleForm={toggleForm} />}
 
         <CookieMessage />
-        
       </div>
-    
-      {/*</ShopContextProvaider>*/}
     </div>
   )
 

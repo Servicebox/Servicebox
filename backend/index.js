@@ -5,9 +5,12 @@ const axios = require('axios');
 require('dotenv').config()
 console.log(process.env.SECRET); 
 const jwt = require('jsonwebtoken');
-const PORT = 8000;
+const PORT = 5000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+
+
+
 
 const allowedCors = [
   'http://localhost:5173',
@@ -49,6 +52,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/removeproduct',
   'https://servicebox35.pp.ru/signup',
   'https://servicebox35.pp.ru/signup',
+  'https://servicebox35.ru/login',
   'http://192.168.1.38:5173',
   'https://servicebox35.pp.ru/popularinpart',
   'https://servicebox35.pp.ru/allproducts',
@@ -125,9 +129,6 @@ app.use('/uploads', express.static(uploadDirectory));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
-
-app.use(cors(corsOptions));
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
