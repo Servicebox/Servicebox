@@ -14,6 +14,7 @@ const bcrypt = require('bcrypt');
 
 const allowedCors = [
   'http://localhost:5173',
+  'http://localhost:4173',
   'https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js',
 'https://servicebox35.pp.ru/get-client-id',
 'http://localhost:8000/api/images/delete/',
@@ -63,6 +64,7 @@ const allowedCors = [
   'http://localhost:3000/init-paymen',
   ' http://localhost:5000/api/gallery ',
   'https://servicebox35.pp.ru/api/gallery',
+  'https://servicebox35.pp.ru/uploads',
 
 ];
 

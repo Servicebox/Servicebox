@@ -1,3 +1,4 @@
+//components/listproduct
 // eslint-disable-next-line no-unused-vars
 import React,{useState, useEffect} from 'react'
 import './ListProduct.css';
@@ -8,7 +9,7 @@ const ListProduct = () => {
 const [allproducts, setAllProducts] = useState([]);
 
 const fetchInfo = async ()=>{
-    await fetch('https://servicebox35.pp.ru/api/allproducts')
+    await fetch('https://servicebox35.pp.ru/allproducts')
     .then((res)=>res.json())
     .then((data)=>{setAllProducts(data)});
 }
@@ -16,7 +17,7 @@ useEffect(()=>{
     fetchInfo();
 },[])
     const remove_product = async (id)=>{
-         await fetch('https://servicebox35.pp.ru/api/removeproduct', {
+         await fetch('https://servicebox35.pp.ru/removeproduct', {
             method:'POST',
             headers:{
                 Accept:'application/json',
