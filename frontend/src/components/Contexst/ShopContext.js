@@ -19,19 +19,25 @@ const ShopContextProvider = (props) => {
             .then((response) => response.json())
             .then((data) => setAll_Product(data))
 
-        if(localStorage.getItem('auth-token')){
-            fetch('https://servicebox35.pp.ru/getcart', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/form-data',
-                    'auth-token': `${localStorage.getItem('auth-token')}`,
-                    'Content-Type': 'application/json', 
-                },
-                body: "",
-            })
-            .then((response) => response.json())
-            .then((data) => setCartItems(data));
+if(localStorage.getItem('auth-token')){
+    fetch('https://servicebox35.pp.ru/getcart', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'auth-token': localStorage.getItem('auth-token'),
+            'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({}),
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
         }
+        return response.json();
+    })
+    .then((data) => setCartItems(data))
+    .catch((error) => console.error('Fetch error:', error));
+}
     }, [])
 
 

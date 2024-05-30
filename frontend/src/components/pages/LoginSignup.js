@@ -66,7 +66,6 @@ else{
         <h1>{state}</h1>
         <div className='loginsignup-fields'>
           {state==="Sign Up"?<input name='username' value={formData.username} onChange={changeHandler} type='text' placeholder='Имя' />:<></>}
-         
                     <input name='email' value={formData.email} onChange={changeHandler} type="email" placeholder="Email Address" />
                     <input name='password' value={formData.password} onChange={changeHandler} type="password" placeholder="Password" />
 

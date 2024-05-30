@@ -9,7 +9,7 @@ const DeleteImage = () => {
     const handleDeleteImage = async () => {
         setError(null); // Сброс ошибки перед новым запросом
         try {
-            const response = await axios.delete(`http://localhost:8000/api/images/delete/${imageId}`);
+            const response = await axios.delete(`https://servicebox35.pp.ru/api/images/delete/${imageId}`);
 
             if (response.status === 200) {
                 setDeleted(true);

@@ -14,6 +14,8 @@ const bcrypt = require('bcrypt');
 
 const allowedCors = [
   'http://localhost:5173',
+  'http://localhost:4173/listproduct',
+  'http://localhost:4173/admin/',
   'http://localhost:4173',
   'https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js',
 'https://servicebox35.pp.ru/get-client-id',
@@ -65,8 +67,10 @@ const allowedCors = [
   ' http://localhost:5000/api/gallery ',
   'https://servicebox35.pp.ru/api/gallery',
   'https://servicebox35.pp.ru/uploads',
+  'http://localhost:8000/addtocart',
 
 ];
+
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -204,6 +208,7 @@ app.post('/addproduct', async (req, res) => {
     old_price:req.body.old_price,
   });
 
+  console.log(product);
   await product.save();
   console.log("Saved");
   res.json({
@@ -225,7 +230,6 @@ app.post('/removeproduct',async(req,res)=>{
   });
 
 })
-
 //Creating api for getting all Products
 
 app.get('/allproducts', async (req, res) => {
@@ -249,7 +253,7 @@ const Users = mongoose.model('Users',{
     type:String,
    
   },
-  cartData:{
+ cartData:{
     type:Object,
    
   }, 
@@ -355,18 +359,30 @@ const fetchUser = async (req, res, next) => {
 };
 
 //creating enpoint for adding products in carta
+app.post('/addtocart', fetchUser, async (req, res) => {
+  try {
+    console.log("added", req.body.itemId);
+    let userData = await Users.findOne({_id: req.user.id});
+    
+    if (!userData) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
 
-app.post('/addtocart',fetchUser,async(req,res)=>{
-  console.log("added",req.body.itemId);
-let userData = await Users.findOne({_id:req.user.id});
-userData.cartData[req.body.itemId] += 1;
-await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
-res.json({ message: "Adedid" });
-})
+    if (!userData.cartData) {
+      return res.status(404).json({ message: "Данные о корзине не найдены" });
+    }
+
+    userData.cartData[req.body.itemId] += 1;
+    await Users.findOneAndUpdate({_id: req.user.id},{cartData: userData.cartData});
+    res.json({ message: "Added" });
+  } catch (error) {
+    console.error('Error while adding to cart:', error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
 
 
 //creating enpoint for removing products from cart
-
 app.post('/removefromcart',fetchUser,async(req,res)=>{
   console.log("removed",req.body.itemId);
   let userData = await Users.findOne({_id:req.user.id});
@@ -376,14 +392,31 @@ app.post('/removefromcart',fetchUser,async(req,res)=>{
   res.json({ message: "Removed" });
   })
 
+
  //creating enpoint to get cartdata
-  app.post('/getcart',fetchUser,async (req,res)=>{
-    console.log("GetCart");
-    let userData = await Users.findOne({_id:req.user.id});
-    res.json(userData.cartData);
+app.post('/getcart', fetchUser, async (req, res) => {
+  console.log("GetCart request received");
+  try {
+      console.log(`Fetching cart data for user with ID: ${req.user.id}`);
+      let userData = await Users.findOne({_id: req.user.id});
+      
+      if (!userData) {
+          console.log(`User with ID ${req.user.id} not found`);
+          return res.status(404).json({ message: "Пользователь не найден" });
+      }
 
-  })
+      if (!userData.cartData) {
+          console.log(`Cart data not found for user with ID: ${req.user.id}`);
+          return res.status(404).json({ message: "Данные о корзине не найдены" });
+      }
 
+      console.log(`Cart data retrieved successfully for user with ID: ${req.user.id}`);
+      res.json(userData.cartData);
+  } catch (error) {
+      console.error('Ошибка при получении данных корзины:', error.message);
+      res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
 
 const adminAuth = (req, res, next) => {
   try {
