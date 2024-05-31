@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config()
 console.log(process.env.SECRET); 
 const jwt = require('jsonwebtoken');
-const PORT = 5000;
+const PORT = 3000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
@@ -19,7 +19,7 @@ const allowedCors = [
   'http://localhost:4173',
   'https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js',
 'https://servicebox35.pp.ru/get-client-id',
-'http://localhost:8000/api/images/delete/',
+'http://localhost:3000/api/images/delete/',
 'http://localhost:3000/admin-panel/delete-image',
   'http://192.168.1.99:5173',
     'http://localhost:5173',
@@ -36,21 +36,21 @@ const allowedCors = [
   'https://localhost:5000',
   'http://localhost:5000',
   'https://localhost:5000',
-  'https://localhost:8000/services',
-  'http://localhost:8000/services',
-  'http://localhost:8000/products',
-  'https://localhost:8000/api/products',
-  'http://localhost:8000/api/images',
-  'http://localhost:8000/api/images/like',
+  'https://localhost:3000/services',
+  'http://localhost:3000/services',
+  'http://localhost:3000/products',
+  'https://localhost:3000/api/products',
+  'http://localhost:3000/api/images',
+  'http://localhost:3000/api/images/like',
   'http://localhost:3000/send-request',
-  'http://localhost:8000/api/', 
-  'http://localhost:8000',
+  'http://localhost:3000/api/', 
+  'http://localhost:3000',
   'http://localhost:5000',
   'https://localhost:3000',
   'http://localhost:3000',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
-  'http://localhost:8000/uploads',
+  'http://localhost:3000/uploads',
   'http://localhost:5173',
   'https://servicebox35.pp.ru/addproduct',
   'https://servicebox35.pp.ru/allproduct',
@@ -67,7 +67,7 @@ const allowedCors = [
   ' http://localhost:5000/api/gallery ',
   'https://servicebox35.pp.ru/api/gallery',
   'https://servicebox35.pp.ru/uploads',
-  'http://localhost:8000/addtocart',
+  'http://localhost:3000/addtocart',
 
 ];
 
