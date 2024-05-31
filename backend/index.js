@@ -133,7 +133,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 const uploadDirectory = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadDirectory));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
@@ -479,7 +479,7 @@ const productStorage = multer.diskStorage({
 
  const productUpload = multer({ storage: productStorage }); 
 // Маршрут для загрузки изображений продуктов
-app.post('/uploads', productUpload.single('product'), (req, res) => {
+app.post('api/uploads', productUpload.single('product'), (req, res) => {
   if (req.file) {
     res.json({
       success: 1,
