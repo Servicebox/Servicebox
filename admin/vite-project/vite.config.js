@@ -8,7 +8,7 @@ export default defineConfig({
   base: '/admin/',
   server: {
     proxy: {
-      '/api': {
+      '/': {
         target: 'https://servicebox35.pp.ru',
         changeOrigin: true,
         secure: false, 
