@@ -52,7 +52,7 @@ function PromotionCarousel({ toggleForm }) {
   const promotions = [
     {
       title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
-      endDate: new Date('2024-05-31T23:59:59'),
+      endDate: new Date('2024-06-29T23:59:59'),
       description: "До конца акции осталось:"
     },
     {
