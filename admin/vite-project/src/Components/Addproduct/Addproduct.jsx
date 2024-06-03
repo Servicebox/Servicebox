@@ -31,7 +31,7 @@ let product = productDetalis;
 let formData = new FormData();
 formData.append('product',image);
 
-await fetch('https://servicebox35.pp.ru/uploads',{
+await fetch('https://servicebox35.pp.ru/api/uploads',{
     method:'POST',
     headers:{
         Accept:'apllication/json',
@@ -42,7 +42,7 @@ if(responseData.success)
     {
         product.image = responseData.image_url;
         console.log(product);
-        await fetch('https://servicebox35.pp.ru/addproduct',{
+        await fetch('https://servicebox35.pp.ru/api/addproduct',{
             method:'POST',
             headers:{
                 Accept:'application/json',
