@@ -72,6 +72,12 @@ const allowedCors = [
   'http://localhost:8000/api/uploads',
   'http://localhost:3001/listproduct',
   'http://localhost:3001',
+  'https://servicebox35.pp.ru/api/uploads',
+  'http://localhost:8000/api/uploads',
+  'http://localhost:3001/listproduct',
+  'http://localhost:3001',
+  'https://servicebox35.pp.ru/api/uploads',
+  'http://localhost:3001/admin/addproduct',
 
 ];
 
@@ -137,15 +143,19 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 const uploadDirectory = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
-app.use('/admin', express.static(path.join(__dirname, 'dist')));
+app.use('/admin/assets', express.static(path.join(__dirname, 'dist/assets')));
+
 app.use('/static', express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
@@ -159,12 +169,10 @@ app.use(
   })
 );
 app.use(cookieParser());
-mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb', { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
+mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb')
   .then(() => console.log('Соединение с базой данных установлено'))
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
+
 
 app.get("./",(req, res) => {
   res.send("Express App is runing")
@@ -249,10 +257,10 @@ app.post('/removeproduct',async(req,res)=>{
 })
 //Creating api for getting all Products
 
-app.get('/allproducts', async (req, res) => {
-  let products = await Product.find({});
-  console.log("all products fetched");
-  res.send(products);
+app.get('/api/allproducts', async (req, res) => {
+   let products = await Product.find({});
+   console.log("all products fetched");
+   res.json(products);
 });
 
 //Shema creating for user model

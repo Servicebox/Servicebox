@@ -8,16 +8,23 @@ import cross_icon from '../../Assets/cross_icon.png'
 const ListProduct = () => {
 const [allproducts, setAllProducts] = useState([]);
 
-const fetchInfo = async ()=>{
-    await fetch('api/allproducts')
-    .then((res)=>res.json())
-    .then((data)=>{setAllProducts(data)});
-}
+const fetchInfo = async () => {
+  try {
+    const response = await fetch('/api/allproducts');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    setAllProducts(data);
+  } catch (error) {
+    console.error('Fetch error: ', error.message);
+  }
+};
 useEffect(()=>{
     fetchInfo();
 },[])
     const remove_product = async (id)=>{
-         await fetch('api/removeproduct', {
+         await fetch('/api/removeproduct', {
             method:'POST',
             headers:{
                 Accept:'application/json',
