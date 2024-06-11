@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config()
 console.log(process.env.SECRET); 
 const jwt = require('jsonwebtoken');
-const PORT = 3000;
+const PORT = 8000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
@@ -68,6 +68,10 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/gallery',
   'https://servicebox35.pp.ru/uploads',
   'http://localhost:3000/addtocart',
+  'https://servicebox35.pp.ru/api/uploads',
+  'http://localhost:8000/api/uploads',
+  'http://localhost:3001/listproduct',
+  'http://localhost:3001',
 
 ];
 
@@ -134,13 +138,17 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files
 const uploadDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
+
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
-app.use('/static', express.static(path.join(__dirname, 'dist')))
+
+app.use('/admin', express.static(path.join(__dirname, 'dist')));
+app.use('/static', express.static(path.join(__dirname, 'dist')));
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'))
-})
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -192,33 +200,38 @@ const Product = mongoose.model('Product', {
 
 // Add new product
 app.post('/addproduct', async (req, res) => {
-  let products = await Product.find({})
-  let id;
-  if(products.length > 0){
-    let last_product_array = products.slice(-1);
-    let last_produt = last_product_array[0];
-    id = last_produt.id + 1;
+    let products = await Product.find({});
+    let id;
+    if (products.length > 0) {
+        let last_product_array = products.slice(-1);
+        let last_product = last_product_array[0];
+        id = last_product.id + 1;
+    } else {
+        id = 1;
+    }
+    const product = new Product({
+        id: id,
+        name: req.body.name,
+        image: req.body.image,
+        category: req.body.category,
+        new_price: req.body.new_price,
+        old_price: req.body.old_price,
+    });
 
-  }
-  else{
-    id = 1;
-  }
-  const product = new Product({
-    id:id,
-    name:req.body.name,
-    image:req.body.image,
-    category:req.body.category,
-    new_price:req.body.new_price,
-    old_price:req.body.old_price,
-  });
-
-  console.log(product);
-  await product.save();
-  console.log("Saved");
-  res.json({
-    success: true,
-    name: req.body.name,
-  });
+    try {
+        await product.save();
+        console.log("Saved");
+        res.json({
+            success: true,
+            name: req.body.name,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({
+            success: false,
+            error: error.message,
+        });
+    }
 });
 
 

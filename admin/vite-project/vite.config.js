@@ -12,8 +12,8 @@ export default defineConfig({
         target: 'https://servicebox35.pp.ru',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '')  
-      }
-    }
-  }
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
 });

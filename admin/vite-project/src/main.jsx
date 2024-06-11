@@ -1,15 +1,18 @@
-//main.jsx
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { BrowserRouter } from 'react-router-dom'
-import 'vite/modulepreload-polyfill'
-ReactDOM.createRoot(document.getElementById('root')).render(
- 
-  <React.StrictMode>
-     <BrowserRouter>
+import React from 'react';
+import ReactDOM from 'react-dom/client'; // Импортируйте createRoot из react-dom/client
+import { BrowserRouter } from 'react-router-dom';
+import App from './App.jsx';
+import './index.css';
+
+//  корневой элемент в DOM
+const rootElement = document.getElementById('root');
+
+// рутовый элемент используя createRoot
+const root = ReactDOM.createRoot(rootElement);
+
+//  метод render на рутовом элементе
+root.render(
+  <BrowserRouter basename="/admin">
     <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-)
+  </BrowserRouter>
+);

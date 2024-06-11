@@ -50,16 +50,10 @@ router.post('/', fetchUser, upload.single('image'), async (req, res) => {
 });
 
 // Получение изображений
-router.get('/', fetchUser, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const userId = req.user.id;
     const images = await Image.find().exec();
-    const responseImages = images.map(image => ({
-      ...image.toObject(),
-      hasLiked: image.likes.includes(userId),
-    }));
-
-    res.json(responseImages);
+    res.json(images);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

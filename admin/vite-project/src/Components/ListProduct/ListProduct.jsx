@@ -9,7 +9,7 @@ const ListProduct = () => {
 const [allproducts, setAllProducts] = useState([]);
 
 const fetchInfo = async ()=>{
-    await fetch('https://servicebox35.pp.ru/allproducts')
+    await fetch('api/allproducts')
     .then((res)=>res.json())
     .then((data)=>{setAllProducts(data)});
 }
@@ -17,7 +17,7 @@ useEffect(()=>{
     fetchInfo();
 },[])
     const remove_product = async (id)=>{
-         await fetch('https://servicebox35.pp.ru/removeproduct', {
+         await fetch('api/removeproduct', {
             method:'POST',
             headers:{
                 Accept:'application/json',
