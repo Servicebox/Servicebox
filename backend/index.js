@@ -143,7 +143,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 const uploadDirectory = path.join(__dirname, 'uploads');
-app.use('api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
@@ -257,7 +257,7 @@ app.post('/removeproduct',async(req,res)=>{
 })
 //Creating api for getting all Products
 
-app.get('/api/allproducts', async (req, res) => {
+app.get('/allproducts', async (req, res) => {
    let products = await Product.find({});
    console.log("all products fetched");
    res.json(products);
