@@ -16,7 +16,7 @@ const ShopContextProvider = (props) => {
   
 useEffect(() => {
     // Fetch all products
-    fetch('https://servicebox35.pp.ru/api/allproducts')
+    fetch('https://servicebox35.pp.ru/allproducts')
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`Network response was not ok ${response.statusText}`);
