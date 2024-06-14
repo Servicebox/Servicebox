@@ -14,31 +14,38 @@ const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
   
-    useEffect(() => {
-        fetch('https://servicebox35.pp.ru/allproducts')
-            .then((response) => response.json())
-            .then((data) => setAll_Product(data))
-
-if(localStorage.getItem('auth-token')){
-    fetch('https://servicebox35.pp.ru/getcart', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'auth-token': localStorage.getItem('auth-token'),
-            'Content-Type': 'application/json', 
-        },
-        body: JSON.stringify({}),
-    })
-    .then((response) => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then((data) => setCartItems(data))
-    .catch((error) => console.error('Fetch error:', error));
-}
-    }, [])
+useEffect(() => {
+    // Fetch all products
+    fetch('https://servicebox35.pp.ru/api/allproducts')
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then((data) => setAll_Product(data))
+        .catch((error) => console.error('Fetch allproducts error:', error));
+    
+    if (localStorage.getItem('auth-token')) {
+        fetch('https://servicebox35.pp.ru/getcart', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'auth-token': localStorage.getItem('auth-token'),
+                'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify({}),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then((data) => setCartItems(data))
+        .catch((error) => console.error('Fetch getcart error:', error));
+    }
+}, []);
 
 
     const addToCart = (itemId) => {

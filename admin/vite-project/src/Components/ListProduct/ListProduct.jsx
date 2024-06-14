@@ -9,33 +9,54 @@ const ListProduct = () => {
 const [allproducts, setAllProducts] = useState([]);
 
 const fetchInfo = async () => {
-  try {
-    const response = await fetch('/api/allproducts');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    setAllProducts(data);
-  } catch (error) {
-    console.error('Fetch error: ', error.message);
-  }
-};
-useEffect(()=>{
-    fetchInfo();
-},[])
-    const remove_product = async (id)=>{
-         await fetch('/api/removeproduct', {
-            method:'POST',
-            headers:{
-                Accept:'application/json',
-                'Content-Type':'application/json',
-            },
-            body:JSON.stringify({id:id}),
-        })
-        await fetchInfo();
-   
-    }
+    try {
+      const response = await fetch('/api/allproducts', {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
 
+      console.log('Response status: ', response.status); // Для отладки статуса ответа
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setAllProducts(data);
+    } catch (error) {
+      console.error('Fetch error: ', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchInfo();
+  }, []);
+
+  const remove_product = async (id) => {
+    try {
+      const response = await fetch('/api/removeproduct', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: id }),
+      });
+
+      console.log('Response status for remove_product: ', response.status); // Для отладки статуса ответа
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      await fetchInfo();
+    } catch (error) {
+      console.error('Remove product error: ', error.message);
+    }
+  };
 
   return (
     <div className='list-product'>

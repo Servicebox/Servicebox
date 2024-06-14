@@ -16,12 +16,15 @@
     "plugin:react-hooks/recommended"
   ],
   "dependencies": {
+    "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"
   },
   "compilerOptions": {
-    "types": ["vite/client"]
+    "types": [
+      "vite/client"
+    ]
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
@@ -32,5 +35,26 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "vite": "^5.2.0"
+  },
+  "baseUrl": "./src",
+  "paths": {
+    "@assets/*": [
+      "assets/* "
+    ],
+    "@components/*": [
+      "components/*"
+    ],
+    "@features/*": [
+      "features/*"
+    ],
+    "@pages/*": [
+      "pages/*"
+    ],
+    "@theme/*": [
+      "@theme/*"
+    ],
+    "@utils/*": [
+      "@utils/*"
+    ]
   }
 }

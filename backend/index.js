@@ -33,7 +33,7 @@ const allowedCors = [
   'http://servicebox35.pp.ru/services',  
   'https://servicebox35.pp.ru/api',
   'http://servicebox35.pp.ru/api', 
-  'https://localhost:5000',
+  'https://localhost:000',
   'http://localhost:5000',
   'https://localhost:5000',
   'https://localhost:3000/services',
@@ -48,6 +48,8 @@ const allowedCors = [
   'http://localhost:5000',
   'https://localhost:3000',
   'http://localhost:3000',
+   'https://localhost:8000',
+  'http://localhost:8000',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
   'http://localhost:3000/uploads',
@@ -90,10 +92,14 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
   credentials: true,
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
@@ -165,7 +171,7 @@ app.use(cookieParser());
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
-    //contentSecurityPolicy: false,
+    contentSecurityPolicy: false,
   })
 );
 app.use(cookieParser());
