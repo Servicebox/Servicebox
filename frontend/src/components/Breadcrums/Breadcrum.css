@@ -11,6 +11,9 @@
 
         padding: 0 10px 0 10px;
 }
+.breadcrum-img{
+    width: 5px;
+}
 @media (min-width: 320px) and (max-width: 500px){
     .breadcrum {
         font-size: 7px;

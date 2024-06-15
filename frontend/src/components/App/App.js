@@ -53,6 +53,8 @@ import ProductDisplay from "../ProductDisplay/ProductDisplay";
 import { useParams } from 'react-router-dom';
 import "./App.css";
 import Navbar from "../NavBar";
+import Addproduct from "../AdminPanel/Addproduct";
+import ListProduct from "../AdminPanel/ListProduct";
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -112,6 +114,8 @@ const App = () => {
           <Route path="/loginsignup" element={<LoginSignup />} />
       <Route path="/cart-items" element={<CartItems />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/addproduct" element={<Addproduct />} />
+          <Route path="/listproduct" element={<ListProduct />} />
             <Route path="/widget" element={<Widget />} />
           <Route path="/nav-bar" element={<Navbar />} />
           <Route path="/product-display" element={<ProductDisplay />} />

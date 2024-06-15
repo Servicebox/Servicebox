@@ -4,7 +4,7 @@ import './Addproduct.css'
 import upload_area from '../../Assets/upload_area.svg'
 
 const Addproduct = () => {
- const API_BASE_URL = 'https://servicebox35.pp.ru';
+
     const [image, setImage] = useState(null);
     const [productDetalis, setProductDetalis] = useState({
         name: "",
@@ -14,72 +14,71 @@ const Addproduct = () => {
         old_price: "",      
     });
     
-     const imageHandler = (e) => {
-    setImage(e.target.files[0]);
-  };
+    const imageHandler = (e) => {
+        setImage(e.target.files[0]);
+    };
 
-  const changeHandler = (e) => {
-    setProductDetalis({
-      ...productDetalis,
-      [e.target.name]: e.target.value,
+const changeHandler = (e) => {
+    setProductDetalis({ 
+        ...productDetalis,
+        [e.target.name]: e.target.value,
     });
-  };
+};
 
-  const Add_Product = async () => {
+const Add_Product = async () => {
     if (!productDetalis.category) {
-      alert("Please select a category.");
-      return;
+        alert("Please select a category.");
+        return;
     }
 
     let responseData;
     const formData = new FormData();
     if (image) {
-      formData.append('product', image);
+        formData.append('product', image);
 
-      try {
-        const uploadResponse = await fetch(`${API_BASE_URL}/uploads`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-          },
-          body: formData,
-        });
+        try {
+            const uploadResponse = await fetch('/api/uploads', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                },
+                body: formData,
+            });
 
-        if (!uploadResponse.ok) {
-          throw new Error(`Upload failed: ${uploadResponse.statusText}`);
+            if (!uploadResponse.ok) {
+                throw new Error(`Upload failed: ${uploadResponse.statusText}`);
+            }
+
+            responseData = await uploadResponse.json();
+
+            if (responseData.success) {
+                productDetalis.image = responseData.image_url;
+                console.log(productDetalis);
+
+                const addProductResponse = await fetch('/api/addproduct', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(productDetalis),
+                });
+
+                if (!addProductResponse.ok) {
+                    throw new Error(`Add product failed: ${addProductResponse.statusText}`);
+                }
+
+                const addProductResponseData = await addProductResponse.json();
+                addProductResponseData.success ? alert("Product added") : alert("Failed");
+            }
+        } catch (error) {
+            console.error("Error during product addition:", error);
+            alert("Something went wrong. Please try again.");
         }
-
-        responseData = await uploadResponse.json();
-
-        if (responseData.success) {
-          productDetalis.image = responseData.image_url;
-          console.log(productDetalis);
-
-          const addProductResponse = await fetch(`${API_BASE_URL}/addproduct`, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(productDetalis),
-          });
-
-          if (!addProductResponse.ok) {
-            throw new Error(`Add product failed: ${addProductResponse.statusText}`);
-          }
-
-          const addProductResponseData = await addProductResponse.json();
-          addProductResponseData.success ? alert("Product added") : alert("Failed");
-        }
-      } catch (error) {
-        console.error("Error during product addition:", error);
-        alert("Something went wrong. Please try again.");
-      }
     } else {
-      alert("Please upload an image.");
+        alert("Please upload an image.");
     }
-  };
-
+};
 
     return (
         <div className='add-product'>

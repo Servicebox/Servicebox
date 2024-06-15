@@ -6,6 +6,8 @@ import { Link, Route, Routes } from 'react-router-dom';
 import DeleteService from './DeleteService';
 import UpdateService from './UpdateService';
 import DeleteImage from '../Image/DeleteImage';
+import ListProduct from '../ListProduct';
+import Addproduct from '../Addproduct';
 
 const AdminPanelRoute = () => {
   const handleUpload = (e) => {
@@ -21,8 +23,12 @@ const AdminPanelRoute = () => {
       <Link className='admin__link' to="/admin-panel/update">Обновление</Link>
       <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
       <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>
+        <Link className='admin__link' to="/admin-panel/listproduct">товары</Link>
+                <Link className='admin__link' to="/admin-panel/addproduct">добавить товар</Link>
   
       <Routes>
+        <Route path="addproduct" element={<Addproduct/>} />
+        <Route path="listproduct" element={<ListProduct/>} />
         <Route path="create-image" element={<CreateImage />} />
         <Route path="delete-image" element={<DeleteImage />} />
         <Route path="create" element={<CreateServiceForm />} />

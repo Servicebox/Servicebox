@@ -200,6 +200,9 @@ const Service = mongoose.model('Service', {
   price: String,
   category: String,
 });
+
+
+
 const Product = mongoose.model('Product', {
   id: { type: Number, required: true },
   name: { type: String, required: true },
@@ -207,6 +210,7 @@ const Product = mongoose.model('Product', {
   category: { type: String, required: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
+  description: { type: String, required: true },  
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
 });
@@ -230,6 +234,7 @@ app.post('/addproduct', async (req, res) => {
         category: req.body.category,
         new_price: req.body.new_price,
         old_price: req.body.old_price,
+        description: req.body.description, 
     });
 
     try {

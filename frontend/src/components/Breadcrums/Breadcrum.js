@@ -13,7 +13,7 @@ const BreadCrum = (props) => {
 
   return (
     <div className="breadcrum">
-      Домашняя <img src={arrow_icon} alt="" /> Каталог <img src={arrow_icon} alt="" /> {product.category} <img src={arrow_icon} alt="" /> {product.name}
+      Домашняя <img className='breadcrum-img' src={arrow_icon} alt="" /> Каталог <img className='breadcrum-img' src={arrow_icon} alt="" /> {product.category} <img className='breadcrum-img' src={arrow_icon} alt="" /> {product.name}
     </div>
   );
 }

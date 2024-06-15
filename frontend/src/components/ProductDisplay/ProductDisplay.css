@@ -91,8 +91,8 @@
 
 .productdisplay-right button {
     padding: 20px  40px;
-    width: 200px;
-    font-size: 16px;
+      width: 150px;
+    font-size: 14px;
     font-weight: 600;
     color: white;
     background: #FF4141;
@@ -115,6 +115,7 @@
   .productdisplay {
     flex-direction: row;
     margin: 0;
+    max-width: 490px;
   }
 
   .productdisplay-left,
