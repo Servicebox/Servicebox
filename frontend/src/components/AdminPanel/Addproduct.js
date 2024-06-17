@@ -10,7 +10,7 @@ const Addproduct = () => {
         category: "",
         new_price: "",
         old_price: "",
-        description: "",  
+        description: "",  // новое поле для описания
         quantity: "", // Поле для количества
     });
 
@@ -19,7 +19,7 @@ const Addproduct = () => {
     };
 
     const changeHandler = (e) => {
-        setProductDetails({
+        setProductDetails({ 
             ...productDetails, 
             [e.target.name]: e.target.value
         });
@@ -79,7 +79,8 @@ const Addproduct = () => {
         }
     };
 
-    return (
+
+ return (
         <div className='add-product'>
             <div className='addproduct-itemfield'>
                 <p>название товара</p>
@@ -99,7 +100,8 @@ const Addproduct = () => {
                 <p>описание товара</p>
                 <textarea value={productDetails.description} onChange={changeHandler} name='description' placeholder='Type here'></textarea>
             </div>
-            <div className='addproduct-itemfield'>
+
+   <div className='addproduct-itemfield'>
                 <p>количество на складе</p>
                 <input value={productDetails.quantity} onChange={changeHandler} type='number' name='quantity' placeholder='Type here' />
             </div>
@@ -124,3 +126,5 @@ const Addproduct = () => {
 };
 
 export default Addproduct;
+
+

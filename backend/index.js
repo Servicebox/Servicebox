@@ -11,7 +11,6 @@ const bcrypt = require('bcrypt');
 
 
 
-
 const allowedCors = [
   'http://localhost:5173',
   'http://localhost:4173/listproduct',
@@ -175,9 +174,12 @@ app.use(
   })
 );
 app.use(cookieParser());
-mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb')
-  .then(() => console.log('Соединение с базой данных установлено'))
-  .catch((error) => console.error('Ошибка подключения к базе данных:', error));
+mongoose.connect(process.env.URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 
 app.get("./",(req, res) => {
@@ -210,15 +212,43 @@ const Product = mongoose.model('Product', {
   category: { type: String, required: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
-  description: { type: String, required: true },
-  quantity: { type: Number, required: true, default: 0 }, // поле количества
+  description: { type: String, required: false },  // сделать необязательным
+  quantity: { type: Number, required: true, default: 0 },
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
 });
 
 
+const updateQuantities = async () => {
+  try {
+    const products = await Product.find({});
+
+    for (let product of products) {
+      const quantity = parseInt(product.quantity, 10);
+
+      if (isNaN(quantity)) {
+        console.log(`Non-numeric quantity for product ID ${product.id}, setting to 0.`);
+        product.quantity = 0;
+      } else {
+        product.quantity = quantity;
+      }
+
+      await product.save();
+    }
+
+    console.log('Quantities updated successfully.');
+    mongoose.connection.close();
+  } catch (err) {
+    console.error('Error updating quantities:', err);
+    mongoose.connection.close();
+  }
+};
+
+updateQuantities();
+
 // Add new product
 app.post('/addproduct', async (req, res) => {
+   console.log("Request body:", req.body);
     let products = await Product.find({});
     let id;
     if (products.length > 0) {
@@ -276,6 +306,24 @@ app.get('/allproducts', async (req, res) => {
    res.json(products);
 });
 
+
+app.get('/product/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).exec();
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Log the product data to check if the quantity is present
+    console.log('Product data sent:', product);
+
+    res.json(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+});
 //Shema creating for user model
 
 const Users = mongoose.model('Users',{

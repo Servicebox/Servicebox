@@ -13,9 +13,10 @@ const ProductDisplay = (props) => {
     return <div>Loading product information...</div>;
   }
 
+ console.log('Product data:', product);
 
  return (
-    <div className="productdisplay">
+ <div className="productdisplay">
       <div className="productdisplay-left">
         <div className="productdisplay-img-list">
           {[...Array(4)].map((_, i) => (
@@ -35,9 +36,9 @@ const ProductDisplay = (props) => {
           <h1>Описание</h1>
           <p>{product.description}</p>
         </div>
-        <div className="productdisplay-quantity">
+             <div className="productdisplay-quantity">
           <p>Остаток на складе: {product.quantity}</p>
-        </div>
+</div>
         <button onClick={() => addToCart(product.id)}>в корзину</button>
         <p className="productdisplay-right-category"><span>Категория :</span> {product.category}</p>
         <div className="back__btn"> 
