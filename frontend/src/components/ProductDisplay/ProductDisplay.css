@@ -7,6 +7,9 @@
     position: relative;
 
 }
+.productdisplay-right-description{
+  padding-bottom: 30px;
+}
 
 .productdisplay-left {
     display: flex;
@@ -33,6 +36,7 @@
     margin: 0px 50px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .productdisplay-right h1 {

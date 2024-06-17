@@ -24,7 +24,7 @@ const fetchImages = async () => {
     console.log('Отправка запроса к серверу для получения изображений...');
     const token = localStorage.getItem('auth-token'); // Получить токен из localStorage
     
-    if (!token) throw new Error('Token is missing');
+    if (!token) throw new Error('Авторизуйтесь для просмотра');
     
     const response = await fetch('https://servicebox35.pp.ru/api/images', {
       headers: { 'auth-token': token },
@@ -44,7 +44,7 @@ const fetchImages = async () => {
     setImages(imagesWithCorrectPath);
   } catch (error) {
     console.error('Ошибка при получении изображений:', error);
-    alert('Error fetching images: ' + error.message);
+    alert('Ошибка загрузки фото: ' + error.message);
   }
 };
 
@@ -115,7 +115,7 @@ const fetchImages = async () => {
               <span className="foto__sum">{Array.isArray(image.likes) ? image.likes.length : 0}</span>
             </button>
           </div>
-        )) : <p>Изображения не найдены.</p>}
+        )) : <p>Для просмотра фото, авторизуйтесь.</p>}
       </div>
       {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
     </div>

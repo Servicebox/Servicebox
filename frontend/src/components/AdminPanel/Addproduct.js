@@ -10,7 +10,8 @@ const Addproduct = () => {
         category: "",
         new_price: "",
         old_price: "",
-        description: "",  // новое поле для описания
+        description: "",  
+        quantity: "", // Поле для количества
     });
 
     const imageHandler = (e) => {
@@ -18,7 +19,7 @@ const Addproduct = () => {
     };
 
     const changeHandler = (e) => {
-        setProductDetails({ 
+        setProductDetails({
             ...productDetails, 
             [e.target.name]: e.target.value
         });
@@ -97,6 +98,10 @@ const Addproduct = () => {
             <div className='addproduct-itemfield'>
                 <p>описание товара</p>
                 <textarea value={productDetails.description} onChange={changeHandler} name='description' placeholder='Type here'></textarea>
+            </div>
+            <div className='addproduct-itemfield'>
+                <p>количество на складе</p>
+                <input value={productDetails.quantity} onChange={changeHandler} type='number' name='quantity' placeholder='Type here' />
             </div>
             <div className='addproduct-itemfield'>
                 <p>product category</p>

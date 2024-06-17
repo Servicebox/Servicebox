@@ -13,14 +13,14 @@ const ProductDisplay = (props) => {
     return <div>Loading product information...</div>;
   }
 
-  return (
+
+ return (
     <div className="productdisplay">
       <div className="productdisplay-left">
         <div className="productdisplay-img-list">
-          <img src={product.image} alt={product.name} />
-          <img src={product.image} alt={product.name} />
-          <img src={product.image} alt={product.name} />
-          <img src={product.image} alt={product.name} />
+          {[...Array(4)].map((_, i) => (
+            <img key={i} src={product.image} alt={product.name} />
+          ))}
         </div>
         <div className="productdisplay-img">
           <img className="productdisplay-main-img" src={product.image} alt={product.name} />
@@ -28,23 +28,23 @@ const ProductDisplay = (props) => {
       </div>
       <div className="productdisplay-right">
         <h1>{product.name}</h1>
-
         <div className="productdisplay-right-prices">
-
           <div className="productdisplay-right-price-new">₽{product.new_price}</div>
         </div>
         <div className="productdisplay-right-description">
-          <h1>Product Description</h1>
+          <h1>Описание</h1>
           <p>{product.description}</p>
         </div>
+        <div className="productdisplay-quantity">
+          <p>Остаток на складе: {product.quantity}</p>
+        </div>
         <button onClick={() => addToCart(product.id)}>в корзину</button>
-        <p className="productdisplay-right-category"><span>Category :</span>part</p>
-      </div>
-           <div className="back__btn"> 
-      <ul>
-      <li><Link to="/shop">На главную</Link>
-      </li>
-      </ul>
+        <p className="productdisplay-right-category"><span>Категория :</span> {product.category}</p>
+        <div className="back__btn"> 
+          <ul>
+            <li><Link to="/">На главную</Link></li>
+          </ul>
+        </div>
       </div>
     </div>
   );

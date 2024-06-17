@@ -210,7 +210,8 @@ const Product = mongoose.model('Product', {
   category: { type: String, required: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
-  description: { type: String, required: true },  
+  description: { type: String, required: true },
+  quantity: { type: Number, required: true, default: 0 }, // поле количества
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
 });
@@ -234,7 +235,8 @@ app.post('/addproduct', async (req, res) => {
         category: req.body.category,
         new_price: req.body.new_price,
         old_price: req.body.old_price,
-        description: req.body.description, 
+        description: req.body.description,
+        quantity: req.body.quantity // поле количества
     });
 
     try {
@@ -408,15 +410,23 @@ app.post('/addtocart', fetchUser, async (req, res) => {
       return res.status(404).json({ message: "Данные о корзине не найдены" });
     }
 
-    userData.cartData[req.body.itemId] += 1;
-    await Users.findOneAndUpdate({_id: req.user.id},{cartData: userData.cartData});
-    res.json({ message: "Added" });
+    // Уменьшаем количество товара на складе
+    let product = await Product.findOne({id: req.body.itemId});
+    if (product.quantity > 0) {
+      product.quantity -= 1;
+      await product.save();
+      
+      userData.cartData[req.body.itemId] += 1;
+      await Users.findOneAndUpdate({_id: req.user.id},{cartData:userData.cartData});
+      res.json({ message: "Added" });
+    } else {
+      res.status(400).json({ message: "Товар закончился" });
+    }
   } catch (error) {
     console.error('Error while adding to cart:', error.message);
     res.status(500).json({ message: "Ошибка сервера" });
   }
 });
-
 
 //creating enpoint for removing products from cart
 app.post('/removefromcart',fetchUser,async(req,res)=>{
