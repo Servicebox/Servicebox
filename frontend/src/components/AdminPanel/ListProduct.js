@@ -63,7 +63,9 @@ const fetchInfo = async () => {
         <p>All product List</p>
       <div className='listproduct-format-main'>
         <p>Товар</p>
+      
         <p>Описание</p>
+          <p>Остаток</p>
         <p>Старая цена</p>
         <p>Новая цена</p>
         <p>Категория</p>
@@ -76,6 +78,7 @@ const fetchInfo = async () => {
         <div key={product.id} className='listproduct-format-main listproduct-format'>
             <img className='listproduct-product-icon' src={product.image} alt='' />
             <p>{product.name}</p>
+            <p>{product.quantity}</p>
             <p>₽{product.old_price}</p>
             <p>₽{product.new_price}</p>
             <p>{product.category}</p>

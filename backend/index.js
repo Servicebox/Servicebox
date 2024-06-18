@@ -47,7 +47,7 @@ const allowedCors = [
   'http://localhost:5000',
   'https://localhost:3000',
   'http://localhost:3000',
-   'https://localhost:8000',
+  'https://localhost:8000',
   'http://localhost:8000',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
@@ -212,12 +212,11 @@ const Product = mongoose.model('Product', {
   category: { type: String, required: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
-  description: { type: String, required: false },  // сделать необязательным
-  quantity: { type: Number, required: true, default: 0 },
+  description: { type: String, required: false },  // описание необязательное
+  quantity: { type: Number, required: true, default: 0 },  //  Number и поле обязательное
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
 });
-
 
 const updateQuantities = async () => {
   try {
@@ -249,12 +248,13 @@ updateQuantities();
 // Add new product
 app.post('/addproduct', async (req, res) => {
    console.log("Request body:", req.body);
-    let products = await Product.find({});
+    console.log("Quantity in request body:", req.body.quantity);
+      let products = await Product.find({});
     let id;
     if (products.length > 0) {
         let last_product_array = products.slice(-1);
         let last_product = last_product_array[0];
-        id = last_product.id + 1;
+        id = last_product._id + 1;
     } else {
         id = 1;
     }

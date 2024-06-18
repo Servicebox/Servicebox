@@ -25,60 +25,62 @@ const Addproduct = () => {
         });
     };
 
-    const Add_Product = async () => {
-        if (!productDetails.category) {
-            alert("Please select a category.");
-            return;
-        }
+const Add_Product = async () => {
+    if (!productDetails.category) {
+        alert("Please select a category.");
+        return;
+    }
 
-        let responseData;
-        const formData = new FormData();
-        if (image) {
-            formData.append('product', image);
+    let responseData;
+    const formData = new FormData();
+    if (image) {
+        formData.append('product', image);
 
-            try {
-                const uploadResponse = await fetch('https://servicebox35.pp.ru/uploads', {
+        try {
+            const uploadResponse = await fetch('https://servicebox35.pp.ru/uploads', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                },
+                body: formData,
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error(`Upload failed: ${uploadResponse.statusText}`);
+            }
+
+            responseData = await uploadResponse.json();
+
+            if (responseData.success) {
+                productDetails.image = responseData.image_url;
+
+                // Логирование отправляемых данных
+                console.log("Product details being sent:", productDetails);
+
+                const addProductResponse = await fetch('https://servicebox35.pp.ru/addproduct', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
+                        'Content-Type': 'application/json',
                     },
-                    body: formData,
+                    body: JSON.stringify(productDetails),
                 });
 
-                if (!uploadResponse.ok) {
-                    throw new Error(`Upload failed: ${uploadResponse.statusText}`);
+                if (!addProductResponse.ok) {
+                    throw new Error(`Add product failed: ${addProductResponse.statusText}`);
                 }
 
-                responseData = await uploadResponse.json();
-
-                if (responseData.success) {
-                    productDetails.image = responseData.image_url;
-
-                    const addProductResponse = await fetch('https://servicebox35.pp.ru/addproduct', {
-                        method: 'POST',
-                        headers: {
-                            Accept: 'application/json',
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(productDetails),
-                    });
-
-                    if (!addProductResponse.ok) {
-                        throw new Error(`Add product failed: ${addProductResponse.statusText}`);
-                    }
-
-                    const addProductResponseData = await addProductResponse.json();
-                    addProductResponseData.success ? alert("Product added") : alert("Failed");
-                }
-            } catch (error) {
-                console.error("Error during product addition:", error);
-                alert("Something went wrong. Please try again.");
+                const addProductResponseData = await addProductResponse.json();
+                addProductResponseData.success ? alert("Product added") : alert("Failed");
             }
-        } else {
-            alert("Please upload an image.");
+        } catch (error) {
+            console.error("Error during product addition:", error);
+            alert("Something went wrong. Please try again.");
         }
-    };
-
+    } else {
+        alert("Please upload an image.");
+    }
+};
 
  return (
         <div className='add-product'>
