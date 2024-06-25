@@ -6,9 +6,9 @@ import cross_icon from '../Assets/cross_icon.png'
 
 
 const ListProduct = () => {
-const [allproducts, setAllProducts] = useState([]);
+  const [allproducts, setAllProducts] = useState([]);
 
-const fetchInfo = async () => {
+  const fetchInfo = async () => {
     try {
       const response = await fetch('https://servicebox35.pp.ru/allproducts', {
         method: 'GET',
@@ -60,35 +60,34 @@ const fetchInfo = async () => {
 
   return (
     <div className='list-product'>
-        <p>All product List</p>
+      <p>All product List</p>
       <div className='listproduct-format-main'>
         <p>Товар</p>
-      
-        <p>Описание</p>
-          <p>Остаток</p>
+        <p>Название</p>
+        <p>Остаток</p>
         <p>Старая цена</p>
         <p>Новая цена</p>
         <p>Категория</p>
         <p>Удалить</p>
       </div>
       <div className='listproduct-allproducts'>
-<hr/>
-{allproducts.map((product)=>{
-    return (
-        <div key={product.id} className='listproduct-format-main listproduct-format'>
-            <img className='listproduct-product-icon' src={product.image} alt='' />
-            <p>{product.name}</p>
-            <p>{product.quantity}</p>
-            <p>₽{product.old_price}</p>
-            <p>₽{product.new_price}</p>
-            <p>{product.category}</p>
-            <img onClick={()=>{remove_product(product.id)}} className='listproduct-remove-icon' src={cross_icon} alt='' />
-        </div>
-    );
-})}
+        <hr/>
+        {allproducts.map((product) => {
+          return (
+            <div key={product.id} className='listproduct-format-main listproduct-format'>
+              <img className='listproduct-product-icon' src={product.image} alt='иконка листа продукта' />
+              <p>{product.name}</p>
+              <p>{product.quantity}</p>
+              <p>₽{product.old_price}</p>
+              <p>₽{product.new_price}</p>
+              <p>{product.category}</p>
+              <img onClick={() => { remove_product(product.id) }} className='listproduct-remove-icon' src={cross_icon} alt='удаление ' />
+            </div>
+          );
+        })}
       </div>
     </div>
-  )
+  );
 }
 
-export default ListProduct
+export default ListProduct;

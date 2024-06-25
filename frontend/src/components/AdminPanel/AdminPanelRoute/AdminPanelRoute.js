@@ -8,6 +8,8 @@ import UpdateService from './UpdateService';
 import DeleteImage from '../Image/DeleteImage';
 import ListProduct from '../ListProduct';
 import Addproduct from '../Addproduct';
+import AdminLogin from '../AdminLogin/AdminLogin'
+import PrivateRoute from '../AdminLogin/PrivateRoute';
 
 const AdminPanelRoute = () => {
   const handleUpload = (e) => {
@@ -27,6 +29,8 @@ const AdminPanelRoute = () => {
                 <Link className='admin__link' to="/admin-panel/addproduct">добавить товар</Link>
   
       <Routes>
+      <Route path="/admin/login" element={<AdminLogin />} />
+       <Route path="/admin-panel/*" element={<PrivateRoute><AdminPanelRoute /></PrivateRoute>} />
         <Route path="addproduct" element={<Addproduct/>} />
         <Route path="listproduct" element={<ListProduct/>} />
         <Route path="create-image" element={<CreateImage />} />

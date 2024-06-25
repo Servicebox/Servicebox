@@ -45,7 +45,7 @@ return (
 <img
 className="card__img-product"
 src={product.picture}
-alt=""
+alt="изо"
 onClick={openModal}
 />
 {isModalOpen && (
@@ -54,7 +54,7 @@ onClick={openModal}
 <img
 className="modal__img"
 src={product.picture}
-alt=""
+alt="модал"
 />
 <button className="close-modal" onClick={closeModal}>
 ×

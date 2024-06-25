@@ -16,8 +16,7 @@ import "./Shop.css"
  
     return (
         <div className=''>
-   <NewCollections />
-   <Popular />   
+ <a href="https://ru.servicebox.shop/" className="link"  />
    </div>
     );
 }

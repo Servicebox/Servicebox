@@ -234,7 +234,7 @@ function MainBanner() {
                   <h4 className="card__heading">Незначительные поломки</h4>
                 </div>
                 <div className="card__details">
-                  <img className="care-about-you__img" src={Cleane} alt="" />
+                  <img className="care-about-you__img" src={Cleane} alt="удаление" />
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-2">

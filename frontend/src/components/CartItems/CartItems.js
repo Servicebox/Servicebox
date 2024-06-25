@@ -9,7 +9,7 @@ import TinkoffPayForm from '../TinkoffPayForm/TinkoffPayForm';
 
 
 const CartItems = (props) => {
-  const { getTotalCartAmount, all_product, cartItems, removeFromCart, addToCart } = useContext(ShopContext);
+  const { getTotalCartAmount, all_product, cartItems, removeFromCart, addToCart, quantity } = useContext(ShopContext);
   const [isPaid, setIsPaid] = useState(false);
 
   useEffect(() => {
@@ -24,6 +24,7 @@ const CartItems = (props) => {
       name: product.name, 
       price: product.new_price,
       quantity: cartItems[product.id],
+      quantity: product.quantity,
     }));
 
   if (isPaid) {
@@ -47,8 +48,9 @@ const CartItems = (props) => {
           return (
             <div key={index}>
               <div className="cartitems-format cartitems-format-main">
-                <img src={e.image} alt="" className="cartitems-product-icon" />
+                <img src={e.image} alt="изо товара" className="cartitems-product-icon" />
                 <p>{e.name}</p>
+                <p>{e.quantity}</p>
                 <p>₽{e.new_price}</p>
                 <button className="cartitems-quantity">{cartItems[e.id]}</button>
                 <p>₽{e.new_price * cartItems[e.id]}</p>
