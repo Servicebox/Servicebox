@@ -1,5 +1,5 @@
 //models/Type.js
-const mongoose = require('mongoose');
+{/*const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const typeSchema = new Schema({
@@ -8,4 +8,4 @@ const typeSchema = new Schema({
 });
 
 const Type = mongoose.model('Type', typeSchema);
-module.exports = Type; 
+module.exports = Type;*/}

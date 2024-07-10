@@ -1,5 +1,5 @@
 // adminAuthMiddleware.js
-const jwt = require('jsonwebtoken');
+{/*const jwt = require('jsonwebtoken');
 
 const adminAuth = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -20,4 +20,4 @@ const adminAuth = (req, res, next) => {
   }
 };
 
-module.exports = adminAuth;
+module.exports = adminAuth;*/}

@@ -1,5 +1,5 @@
 //controllers/brandController.js
-const Brand = require('../models/Brand');
+{/*const Brand = require('../models/Brand');
 class BrandController {
     async create(req, res) {
       try {
@@ -22,4 +22,4 @@ class BrandController {
     }
   }
   
-  module.exports = new BrandController();
+  module.exports = new BrandController();*/}

@@ -13,7 +13,8 @@ const ImageModal = ({ image, onClose }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [handleKeyPress]);
+  }, 
+  [handleKeyPress]);
 
   return (
     <div className="image-modal-overlay" onClick={onClose}>

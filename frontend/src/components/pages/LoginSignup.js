@@ -73,7 +73,7 @@ else{
         <button onClick={()=>{state==="Login"?login():signup()}} >Войти</button>
         {state==="Sign Up"
         ?<p className='loginsignup-login'> Уже есть аккаунт? <span onClick={()=>{setState("Login")}} >Войти</span></p> 
-        :<p className='loginsignup-login'> У вас нет аккаунта? <span onClick={()=>{setState("Sign Up")}} >Зарегистрироватся</span></p>}
+        :<p className='loginsignup-login'> У вас нет аккаунта? <span onClick={()=>{setState("Sign Up")}} >Зарегистрироваться</span></p>}
       
         <div className='loginsignup-agree'>
               <input type='checkbox' name='' id='' />
