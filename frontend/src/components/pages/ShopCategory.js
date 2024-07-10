@@ -1,4 +1,3 @@
-
 import React, { useContext,useState } from 'react'
 import { Link } from'react-router-dom'
 
@@ -17,45 +16,34 @@ const ShopCategory = (props) => {
   };
 
   // Фильтруем товары по категории и строке поиска, и отображаем только видимые
-    const filteredProducts = all_product
-    .filter((item) => props.category === item.category && item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filteredProducts = all_product
+    .filter(item => props.category === item.category && item.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .slice(0, visibleCount);
 
   return (
     <div className='shop-category'>
-      <img className='shopcategory-banner' src={props.banner} alt='баннер' />
-      <div className='shopcategory-indexSort'>
-        <input
-          className='shopcategory-input'
-          type='text'
-          placeholder='Поиск товаров...'
+      <img className="shopcategory-banner" src={props.banner} alt="" />
+      <div className="shopcategory-indexSort">
+        <input className='shopcategory-input'
+          type="text"
+          placeholder="Поиск товаров..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <div className='shopcategory-products'>
+      <div className="shopcategory-products">
         {filteredProducts.map((item, i) => (
-          <Item
-            key={i}
-            id={item.id}
-            name={item.name}
-            image={item.image}
-            new_price={item.new_price}
-            old_price={item.old_price}
-            quantity={item.quantity} // Передаем количество товара
-          />
+          <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
         ))}
       </div>
-      {visibleCount < all_product.filter((item) => props.category === item.category && item.name.toLowerCase().includes(searchTerm.toLowerCase())).length && (
-        <div className='shopcategory-loadmore' onClick={handleLoadMore}>
+      {visibleCount < all_product.filter(item => props.category === item.category && item.name.toLowerCase().includes(searchTerm.toLowerCase())).length && (
+        <div className="shopcategory-loadmore" onClick={handleLoadMore}>
           Ещё
         </div>
       )}
-      <div className='back__btn'>
+      <div className="back__btn"> 
         <ul>
-          <li>
-            <Link to='/'>На главную</Link>
-          </li>
+          <li><Link to="/">На главную</Link></li>
         </ul>
       </div>
     </div>

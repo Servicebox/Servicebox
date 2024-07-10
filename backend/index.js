@@ -118,7 +118,7 @@ const galleryRoutes = require('./routes/gallery');
 const multer = require('multer');
 const { type } = require('os');
 const { errors } = require('celebrate');
-const adminAuth = require('./middlewares/adminAuthMiddleware');
+
 
 mongoose.set('strictQuery', true);
 
@@ -246,7 +246,7 @@ const updateQuantities = async () => {
 updateQuantities();
 
 // Add new product
-app.post('/admin/addproduct', async (req, res) => {
+app.post('/addproduct', async (req, res) => {
    console.log("Request body:", req.body);
     console.log("Quantity in request body:", req.body.quantity);
       let products = await Product.find({});
@@ -286,29 +286,6 @@ app.post('/admin/addproduct', async (req, res) => {
 });
 
 
-app.put('/updateproduct/:id', adminAuth, async (req, res) => {
-  try {
-    const { name, image, category, new_price, old_price, description, quantity } = req.body;
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, {
-      name,
-      image,
-      category,
-      new_price,
-      old_price,
-      description,
-      quantity
-    }, { new: true });
-
-    if (!updatedProduct) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
-    res.json(updatedProduct);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 
 //Creating api for deleting Products
 
@@ -347,35 +324,30 @@ app.get('/product/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+//Shema creating for user model
 
-// Модель Users уже существует, просто добавим поле `role`
-const Users = mongoose.model('Users', {
-  name: String,
-  email: String,
-  password: String,
-  cartData: Object,
-  role: { type: String, default: 'user' }, // по умолчанию роль `user`
-  date: { type: Date, default: Date.now }
-});
-
-// Ваш файл маршрутов, например app.js или routes.js
-
-app.post('/admin/login', async (req, res) => {
-  const { email, password } = req.body;
-  const admin = await Users.findOne({ email, role: 'admin' });
-
-  if (!admin) {
-    return res.status(401).json({ message: 'Invalid credentials' });
+const Users = mongoose.model('Users',{
+  name:{
+    type:String,
+    
+  },
+  email:{
+    type:String,
+    unique:true,
+  },
+  password:{
+    type:String,
+   
+  },
+ cartData:{
+    type:Object,
+   
+  }, 
+  date:{
+    type:Date,
+    default:Date.now,
   }
-
-  const passCompare = req.body.password === admin.password; // Замени на bcrypt.compare, если используешь его
-  if (!passCompare) {
-    return res.status(401).json({ message: 'Invalid credentials' });
-  }
-
-  const token = jwt.sign({ user: { id: admin._id, role: admin.role } }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  res.json({ token });
-});
+})
 
 //creating enpoint for register
 //creating enpoint for register
@@ -540,9 +512,23 @@ app.post('/getcart', fetchUser, async (req, res) => {
   }
 });
 
+const adminAuth = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role !== 'admin') {
+      throw new Error('Нет доступа');
+    }
+    req.user = decoded; // добавляем информацию о пользователе в объект запроса
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: 'Нет доступа' });
+  }
+};
 
-
-
+app.get('/admin/dashboard', adminAuth, (req, res) => {
+  res.send('Добро пожаловать на админскую панель');
+});
 
 app.use('/api/images', imageRoutes);
 
@@ -814,4 +800,4 @@ const startServer = () => {
   });
 };
 
-startServer(); 
+startServer();
