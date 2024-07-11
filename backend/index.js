@@ -9,17 +9,9 @@ const PORT = 8000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
-
-
 const allowedCors = [
   'http://localhost:5173',
-  'http://localhost:4173/listproduct',
-  'http://localhost:4173/admin/',
-  'http://localhost:4173',
-  'https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js',
 'https://servicebox35.pp.ru/get-client-id',
-'http://localhost:3000/api/images/delete/',
-'http://localhost:3000/admin-panel/delete-image',
   'http://192.168.1.99:5173',
     'http://localhost:5173',
   'https://servicebox35.ru',
@@ -32,56 +24,38 @@ const allowedCors = [
   'http://servicebox35.pp.ru/services',  
   'https://servicebox35.pp.ru/api',
   'http://servicebox35.pp.ru/api', 
-  'https://localhost:000',
+  'https://localhost:5000',
   'http://localhost:5000',
   'https://localhost:5000',
-  'https://localhost:3000/services',
-  'http://localhost:3000/services',
-  'http://localhost:3000/products',
-  'https://localhost:3000/api/products',
-  'http://localhost:3000/api/images',
-  'http://localhost:3000/api/images/like',
+  'https://localhost:8000/services',
+  'https://servicebox35.pp.ru/services',
+  'https://servicebox35.pp.ru/products',
+  'https://localhost:8000/api/products',
+  'https://servicebox35.pp.ru/api/images',
+  'https://servicebox35.pp.ru/api/images/like',
   'http://localhost:3000/send-request',
-  'http://localhost:3000/api/', 
-  'http://localhost:3000',
+  'https://servicebox35.pp.ru/api/', 
+  'https://servicebox35.pp.ru',
   'http://localhost:5000',
   'https://localhost:3000',
   'http://localhost:3000',
-  'https://localhost:8000',
-  'http://localhost:8000',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
-  'http://localhost:3000/uploads',
+  'https://servicebox35.pp.ru/uploads',
   'http://localhost:5173',
   'https://servicebox35.pp.ru/addproduct',
   'https://servicebox35.pp.ru/allproduct',
   'https://servicebox35.pp.ru/removeproduct',
   'https://servicebox35.pp.ru/signup',
   'https://servicebox35.pp.ru/signup',
-  'https://servicebox35.ru/login',
   'http://192.168.1.38:5173',
   'https://servicebox35.pp.ru/popularinpart',
   'https://servicebox35.pp.ru/allproducts',
   'https://servicebox35.pp.ru/newcollections',
   'https://servicebox35.pp.ru/init-payment',
   'http://localhost:3000/init-paymen',
-  ' http://localhost:5000/api/gallery ',
-  'https://servicebox35.pp.ru/api/gallery',
-  'https://servicebox35.pp.ru/uploads',
-  'http://localhost:3000/addtocart',
-  'https://servicebox35.pp.ru/api/uploads',
-  'http://localhost:8000/api/uploads',
-  'http://localhost:3001/listproduct',
-  'http://localhost:3001',
-  'https://servicebox35.pp.ru/api/uploads',
-  'http://localhost:8000/api/uploads',
-  'http://localhost:3001/listproduct',
-  'http://localhost:3001',
-  'https://servicebox35.pp.ru/api/uploads',
-  'http://localhost:3001/admin/addproduct',
 
 ];
-
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -91,14 +65,10 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
 const mongoose = require('mongoose');
 const path = require('path');
 const helmet = require('helmet');
@@ -113,8 +83,9 @@ const router = require('./routes/index');
 
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 const imageRoutes = require('./routes/images');
+const images = require('./routes/images');
+const Image = require('./models/image');
 
-const galleryRoutes = require('./routes/gallery');
 const multer = require('multer');
 const { type } = require('os');
 const { errors } = require('celebrate');
@@ -144,25 +115,14 @@ module.exports = (req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
+
 
 // Serve static files
-const uploadDirectory = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
-app.use('/admin/assets', express.static(path.join(__dirname, 'dist/assets')));
-
-app.use('/static', express.static(path.join(__dirname, 'dist')));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
+app.use(cors(corsOptions));
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -170,23 +130,22 @@ app.use(cookieParser());
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
-    contentSecurityPolicy: false,
+    //contentSecurityPolicy: false,
   })
 );
 app.use(cookieParser());
-mongoose.connect(process.env.URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb', { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
 })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
-
+  .then(() => console.log('Соединение с базой данных установлено'))
+  .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
 app.get("./",(req, res) => {
   res.send("Express App is runing")
 })
 
-
+ const uploadDirectory = path.join(__dirname, 'uploads');
 fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   if (err && err.code !== 'EEXIST') {
     console.error("Не могу создать папку для загрузок: ", err);
@@ -202,9 +161,6 @@ const Service = mongoose.model('Service', {
   price: String,
   category: String,
 });
-
-
-
 const Product = mongoose.model('Product', {
   id: { type: Number, required: true },
   name: { type: String, required: true },
@@ -212,77 +168,42 @@ const Product = mongoose.model('Product', {
   category: { type: String, required: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
-  description: { type: String, required: false },  // описание необязательное
-  quantity: { type: Number, required: true, default: 0 },  //  Number и поле обязательное
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
 });
 
-const updateQuantities = async () => {
-  try {
-    const products = await Product.find({});
-
-    for (let product of products) {
-      const quantity = parseInt(product.quantity, 10);
-
-      if (isNaN(quantity)) {
-        console.log(`Non-numeric quantity for product ID ${product.id}, setting to 0.`);
-        product.quantity = 0;
-      } else {
-        product.quantity = quantity;
-      }
-
-      await product.save();
-    }
-
-    console.log('Quantities updated successfully.');
-    mongoose.connection.close();
-  } catch (err) {
-    console.error('Error updating quantities:', err);
-    mongoose.connection.close();
-  }
-};
-
-updateQuantities();
 
 // Add new product
 app.post('/addproduct', async (req, res) => {
-   console.log("Request body:", req.body);
-    console.log("Quantity in request body:", req.body.quantity);
-      let products = await Product.find({});
-    let id;
-    if (products.length > 0) {
-        let last_product_array = products.slice(-1);
-        let last_product = last_product_array[0];
-        id = last_product._id + 1;
-    } else {
-        id = 1;
-    }
-    const product = new Product({
-        id: id,
-        name: req.body.name,
-        image: req.body.image,
-        category: req.body.category,
-        new_price: req.body.new_price,
-        old_price: req.body.old_price,
-        description: req.body.description,
-        quantity: req.body.quantity // поле количества
-    });
+  let products = await Product.find({})
+  let id;
+  if(products.length > 0){
+    let last_product_array = products.slice(-1);
+    let last_produt = last_product_array[0];
+    id = last_produt.id + 1;
 
-    try {
-        await product.save();
-        console.log("Saved");
-        res.json({
-            success: true,
-            name: req.body.name,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(400).json({
-            success: false,
-            error: error.message,
-        });
-    }
+  }
+  else{
+    id = 1;
+  }
+  const product = new Product({
+    id:id,
+    name:req.body.name,
+    image:req.body.image,
+    category:req.body.category,
+    new_price:req.body.new_price,
+    old_price:req.body.old_price,
+    quantity:req.body.quantity,
+    description:req.body.description,
+    
+  });
+
+  await product.save();
+  console.log("Saved");
+  res.json({
+    success: true,
+    name: req.body.name,
+  });
 });
 
 
@@ -298,32 +219,15 @@ app.post('/removeproduct',async(req,res)=>{
   });
 
 })
+
 //Creating api for getting all Products
 
 app.get('/allproducts', async (req, res) => {
-   let products = await Product.find({});
-   console.log("all products fetched");
-   res.json(products);
+  let products = await Product.find({});
+  console.log("all products fetched");
+  res.send(products);
 });
 
-
-app.get('/product/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id).exec();
-
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-
-    // Log the product data to check if the quantity is present
-    console.log('Product data sent:', product);
-
-    res.json(product);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: err.message });
-  }
-});
 //Shema creating for user model
 
 const Users = mongoose.model('Users',{
@@ -339,7 +243,7 @@ const Users = mongoose.model('Users',{
     type:String,
    
   },
- cartData:{
+  cartData:{
     type:Object,
    
   }, 
@@ -445,38 +349,18 @@ const fetchUser = async (req, res, next) => {
 };
 
 //creating enpoint for adding products in carta
-app.post('/addtocart', fetchUser, async (req, res) => {
-  try {
-    console.log("added", req.body.itemId);
-    let userData = await Users.findOne({_id: req.user.id});
-    
-    if (!userData) {
-      return res.status(404).json({ message: "Пользователь не найден" });
-    }
 
-    if (!userData.cartData) {
-      return res.status(404).json({ message: "Данные о корзине не найдены" });
-    }
+app.post('/addtocart',fetchUser,async(req,res)=>{
+  console.log("added",req.body.itemId);
+let userData = await Users.findOne({_id:req.user.id});
+userData.cartData[req.body.itemId] += 1;
+await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData});
+res.json({ message: "Adedid" });
+})
 
-    // Уменьшаем количество товара на складе
-    let product = await Product.findOne({id: req.body.itemId});
-    if (product.quantity > 0) {
-      product.quantity -= 1;
-      await product.save();
-      
-      userData.cartData[req.body.itemId] += 1;
-      await Users.findOneAndUpdate({_id: req.user.id},{cartData:userData.cartData});
-      res.json({ message: "Added" });
-    } else {
-      res.status(400).json({ message: "Товар закончился" });
-    }
-  } catch (error) {
-    console.error('Error while adding to cart:', error.message);
-    res.status(500).json({ message: "Ошибка сервера" });
-  }
-});
 
 //creating enpoint for removing products from cart
+
 app.post('/removefromcart',fetchUser,async(req,res)=>{
   console.log("removed",req.body.itemId);
   let userData = await Users.findOne({_id:req.user.id});
@@ -486,31 +370,13 @@ app.post('/removefromcart',fetchUser,async(req,res)=>{
   res.json({ message: "Removed" });
   })
 
-
  //creating enpoint to get cartdata
-app.post('/getcart', fetchUser, async (req, res) => {
-  console.log("GetCart request received");
-  try {
-      console.log(`Fetching cart data for user with ID: ${req.user.id}`);
-      let userData = await Users.findOne({_id: req.user.id});
-      
-      if (!userData) {
-          console.log(`User with ID ${req.user.id} not found`);
-          return res.status(404).json({ message: "Пользователь не найден" });
-      }
+  app.post('/getcart',fetchUser,async (req,res)=>{
+    console.log("GetCart");
+    let userData = await Users.findOne({_id:req.user.id});
+    res.json(userData.cartData);
 
-      if (!userData.cartData) {
-          console.log(`Cart data not found for user with ID: ${req.user.id}`);
-          return res.status(404).json({ message: "Данные о корзине не найдены" });
-      }
-
-      console.log(`Cart data retrieved successfully for user with ID: ${req.user.id}`);
-      res.json(userData.cartData);
-  } catch (error) {
-      console.error('Ошибка при получении данных корзины:', error.message);
-      res.status(500).json({ message: "Ошибка сервера" });
-  }
-});
+  })
 
 const adminAuth = (req, res, next) => {
   try {
@@ -585,7 +451,6 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
 });
 
 // Multer setup для загрузки изображений галереи
-// Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, 'uploads', 'gallery');
@@ -664,7 +529,8 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   }
 });
 
-app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
+
+app.use('/api/images', images);
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.post('/api/images/like/:id', fetchUser, async (req, res) => {
   console.log(`Received token: ${req.header('auth-token')}`);
@@ -698,7 +564,7 @@ app.post('/api/images/like/:id', fetchUser, async (req, res) => {
   }
 });
 
-app.delete('/api/gallery/delete/:id', async (req, res) => {
+app.delete('/api/images/delete/:id', async (req, res) => {
   try {
     const { id } = req.params;
 

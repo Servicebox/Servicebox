@@ -3,13 +3,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 // Подключение к базе данных MongoDB
-mongoose.connect('mongodb://localhost/myapp', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((error) => {
-    console.error('Error connecting to MongoDB:', error);
-  });
+mongoose.set('strictQuery', true);
+mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb')
+  .then(() => console.log('Соединение с базой данных установлено'))
+  .catch((error) => console.error('Ошибка подключения к базе данных:', error));
+
 
 // Определение схемы данных
 const dataSchema = new mongoose.Schema({
