@@ -123,7 +123,6 @@ app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
 app.use(cors(corsOptions));
 
-
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
@@ -153,7 +152,6 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 });
 
 // Define the Image model
-
 const Service = mongoose.model('Service', {
   serviceName: String,
   description: String,
@@ -208,7 +206,6 @@ app.post('/addproduct', async (req, res) => {
 
 
 //Creating api for deleting Products
-
 app.post('/removeproduct',async(req,res)=>{
   await Product.findOneAndDelete({id:req.body.id});
   console.log("Removed");
@@ -220,7 +217,6 @@ app.post('/removeproduct',async(req,res)=>{
 })
 
 //Creating api for getting all Products
-
 app.get('/allproducts', async (req, res) => {
   let products = await Product.find({});
   console.log("all products fetched");
