@@ -139,6 +139,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb', {
   .then(() => console.log('Соединение с базой данных установлено'))
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
+
+
 app.get("./",(req, res) => {
   res.send("Express App is runing")
 })
