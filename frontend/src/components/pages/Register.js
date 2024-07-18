@@ -1,5 +1,5 @@
 // components/Register.js
-import React from 'react';
+{/*import React from 'react';
 
 const Register = async (email, password) => {
   try {
@@ -21,3 +21,4 @@ const Register = async (email, password) => {
 Register('newuser@example.com', 'password123');
 
 export default Register;
+*/}

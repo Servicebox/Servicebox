@@ -4,82 +4,93 @@ export const ShopContext = createContext(null);
 
 const getDefaultCart = () => {
     let cart = {};
-    for (let index = 0; index < 300+1; index++) {
+    for (let index = 0; index < 301; index++) {
         cart[index] = 0;
     }
     return cart;
-}
+};
 
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
-  
-useEffect(() => {
-    // Fetch all products
-    fetch('https://servicebox35.pp.ru/allproducts')
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok ${response.statusText}`);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                let response = await fetch('https://servicebox35.pp.ru/allproducts');
+                if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
+                let data = await response.json();
+                setAll_Product(data);
+            } catch (error) {
+                console.error('Fetch allproducts error:', error);
             }
-            return response.json();
-        })
-        .then((data) => setAll_Product(data))
-        .catch((error) => console.error('Fetch allproducts error:', error));
-    
-    if (localStorage.getItem('auth-token')) {
-        fetch('https://servicebox35.pp.ru/getcart', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'auth-token': localStorage.getItem('auth-token'),
-                'Content-Type': 'application/json', 
-            },
-            body: JSON.stringify({}),
-        })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok ${response.statusText}`);
+        };
+
+        const fetchCartItems = async () => {
+            if (localStorage.getItem('auth-token')) {
+                try {
+                    let response = await fetch('https://servicebox35.pp.ru/getcart', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'auth-token': localStorage.getItem('auth-token'),
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({}),
+                    });
+                    if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
+                    let data = await response.json();
+                    setCartItems(data);
+                } catch (error) {
+                    console.error('Fetch getcart error:', error);
+                }
             }
-            return response.json();
-        })
-        .then((data) => setCartItems(data))
-        .catch((error) => console.error('Fetch getcart error:', error));
-    }
-}, []);
+        };
 
+        fetchProducts();
+        fetchCartItems();
+    }, []);
 
-    const addToCart = (itemId) => {
-        setCartItems((prev) => ({...prev, [itemId]:prev[itemId]+1}));
-        if(localStorage.getItem('auth-token')){
-            fetch('https://servicebox35.pp.ru/addtocart', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/form-data',
-                    'auth-token': `${localStorage.getItem('auth-token')}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({"itemId": itemId}),
-            })
-            .then((response) => response.json())
-            .then((data) => console.log(data));
+    const addToCart = async (itemId) => {
+        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+        if (localStorage.getItem('auth-token')) {
+            try {
+                let response = await fetch('https://servicebox35.pp.ru/addtocart', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/form-data',
+                        'auth-token': `${localStorage.getItem('auth-token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ "itemId": itemId }),
+                });
+                let data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Add to cart error:', error);
+            }
         }
-    }
+    };
 
-    const removeFromCart = (itemId) => {
-        setCartItems((prev) => ({...prev, [itemId]:prev[itemId]-1}));
-        if(localStorage.getItem('auth-token')){
-            fetch('https://servicebox35.pp.ru/removefromcart', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/form-data',
-                    'auth-token': `${localStorage.getItem('auth-token')}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({"itemId": itemId}),
-            })
-            .then((response) => response.json())
+    const removeFromCart = async (itemId) => {
+        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+        if (localStorage.getItem('auth-token')) {
+            try {
+                let response = await fetch('https://servicebox35.pp.ru/removefromcart', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/form-data',
+                        'auth-token': `${localStorage.getItem('auth-token')}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ "itemId": itemId }),
+                });
+                await response.json();
+            } catch (error) {
+                console.error('Remove from cart error:', error);
+            }
         }
-    }
+    };
 
     const getTotalCartAmount = () => {
         let totalAmount = 0;
