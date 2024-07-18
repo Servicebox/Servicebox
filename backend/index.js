@@ -7,6 +7,7 @@ console.log(process.env.SECRET);
 const jwt = require('jsonwebtoken');
 const PORT = 8000;
 const cors = require('cors');
+
 const bcrypt = require('bcrypt');
 const allowedCors = [
   'http://localhost:5173',
