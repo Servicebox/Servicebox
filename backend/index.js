@@ -74,11 +74,11 @@ const helmet = require('helmet');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const limiter = require('./middlewares/rateLimiter');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+
 const indexRouter = require('./routes/index');
 //const cors = require('./middlewares/cors');
 const router = require('./routes/index');
-//const fetchUser = require('./middlewares/fetchUser')
+const fetchUser = require('./middlewares/fetchUser')
 
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 const imageRoutes = require('./routes/images');
@@ -86,8 +86,7 @@ const images = require('./routes/images');
 const Image = require('./models/image');
 
 const multer = require('multer');
-const { type } = require('os');
-const { errors } = require('celebrate');
+
 
 
 mongoose.set('strictQuery', true);
@@ -111,17 +110,17 @@ module.exports = (req, res, next) => {
   }
   return next();
 };
+app.use('/api', router);
 
-app.use(cors(corsOptions));
 app.use(express.json()); 
 
 
 // Serve static files
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
+//app.use('/admin', express.static(path.join(__dirname, 'admin')));
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
-app.use(cors(corsOptions));
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -140,10 +139,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb', {
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
 
-
 app.get("./",(req, res) => {
-  res.send("Express App is runing")
+res.send("Express App is runing")
 })
+
+
 
  const uploadDirectory = path.join(__dirname, 'uploads');
 fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
@@ -328,22 +328,7 @@ app.get('/popularinpart',async(req,res)=>{
 
 
 //creating middleware to fetch user
-const fetchUser = async (req, res, next) => {
-  const token = req.header('auth-token');
-  console.log('Received token:', token); // Логирование токена
-  if (!token) {
-    return res.status(401).send({ errors: "пожалуйста, пройдите аутентификацию" });
-  }
-  try {
-    const data = jwt.verify(token, 'secret_ecom');
-    console.log('Decoded data:', data); // Логирование результата декодирования
-    req.user = data.user;
-    next();
-  } catch (error) {
-    console.error('Token verification error:', error.message); // Логирование ошибки декодирования
-    return res.status(401).send({ errors: "пожалуйста, пройдите аутентификацию" });
-  }
-};
+
 
 //creating enpoint for adding products in carta
 
@@ -375,23 +360,7 @@ app.post('/removefromcart',fetchUser,async(req,res)=>{
 
   })
 
-const adminAuth = (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.role !== 'admin') {
-      throw new Error('Нет доступа');
-    }
-    req.user = decoded; // добавляем информацию о пользователе в объект запроса
-    next();
-  } catch (error) {
-    return res.status(403).json({ message: 'Нет доступа' });
-  }
-};
 
-app.get('/admin/dashboard', adminAuth, (req, res) => {
-  res.send('Добро пожаловать на админскую панель');
-});
 
 app.use('/api/images', imageRoutes);
 
@@ -496,26 +465,8 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
 
 {/*const generateClientId = () => `client_${Math.random().toString(36).substring(2, 15)}`;*/}
 
-const getClientId = () => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; client-id=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-  return null;
-};
 
-app.get('/get-client-id', (req, res) => {
-  let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
-  if (!clientId) {
-    clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
-    res.cookie('client-id', clientId, {
-      httpOnly: true,
-      maxAge: 86400 * 1000,
-      sameSite: 'None',
-      secure: true,
-    });
-  }
-  res.json({ clientId });
-});
+
 
 app.use('/api', glassReplacementRoutes);
 
