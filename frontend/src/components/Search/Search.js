@@ -1,17 +1,22 @@
-import React from "react";
-import "./Search.css";
-const Search = ({ value, onChangeData }) => {
-  return (
-    <div>
-      <input
-        className="search__input"
-        type="text"
-        placeholder="поиск"
-        value={value}
-        onChange={onChangeData}
-      />
-    </div>
-  );
+import React from 'react';
+
+const Search = () => {
+    const [query, setQuery] = React.useState('');
+
+    const handleInputChange = (e) => {
+        setQuery(e.target.value);
+    };
+
+    return (
+        <div>
+            <input
+                type="text"
+                value={query}
+                onChange={handleInputChange}
+                placeholder="поиск..."
+            />
+        </div>
+    );
 };
 
 export default Search;

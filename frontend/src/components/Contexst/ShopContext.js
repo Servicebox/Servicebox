@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useEffect } from "react";
 
 export const ShopContext = createContext(null);
@@ -73,7 +74,7 @@ const ShopContextProvider = (props) => {
     };
 
     const removeFromCart = async (itemId) => {
-        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+        setCartItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
         if (localStorage.getItem('auth-token')) {
             try {
                 let response = await fetch('https://servicebox35.pp.ru/removefromcart', {
@@ -108,7 +109,7 @@ const ShopContextProvider = (props) => {
     const getTotalCartItems = () => {
         let totalItem = 0;
         for (const item in cartItems) {
-            if(cartItems[item] > 0) {
+            if (cartItems[item] > 0) {
                 totalItem += cartItems[item];
             }
         }

@@ -54,7 +54,7 @@ const allowedCors = [
   'https://localhost:3000',
   'http://localhost:3000',
    'https://localhost:8000',
-  'http://localhost:8000',
+  'https://servicebox35.pp.ru',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
   'https://servicebox35.pp.ru/uploads',
@@ -134,6 +134,7 @@ app.use((req, res, next) => {
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
+ 
     const { method } = req;
     const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
     const requestHeaders = req.headers['access-control-request-headers'];
