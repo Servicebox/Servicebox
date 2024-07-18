@@ -28,6 +28,11 @@ build
 # DS_store
 .DS_Store
 
+backend/uploads/gallery/*.jpeg
+backend/uploads/gallery/*.jpg
+backend/uploads/images/*.jpeg
+backend/uploads/images/*.jpg
+backend/uploads/images/*.png
 # env
 .env 
 
