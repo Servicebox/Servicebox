@@ -16,6 +16,9 @@ const limiter = require('./middlewares/rateLimiter');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
+
+
+const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
@@ -188,6 +191,7 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
   }
 });
 
+// Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadPath = path.join(__dirname, 'uploads', 'gallery');
@@ -206,13 +210,14 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
     
     const { description } = req.body;
     const { filename, mimetype } = req.file;
-    
+
     const newImage = new Image({
       filePath: `/uploads/gallery/${filename}`,
       description,
       mimeType: mimetype,
       likes: [],
     });
+    
     
     await newImage.save();
     
@@ -225,6 +230,63 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
         mimeType: newImage.mimeType,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
+  if (err && err.code !== 'EEXIST') {
+    console.error("Не могу создать папку для загрузок: ", err);
+    process.exit(1);
+  }
+});
+
+app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
+//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.post('/api/images/like/:id', fetchUser, async (req, res) => {
+  console.log(`Received token: ${req.header('auth-token')}`);
+  console.log(`User ID from token: ${req.user.id}`);
+
+  try {
+    const imageId = req.params.id;
+    const clientId = req.user.id; 
+
+    if (!clientId) {
+      return res.status(400).json({ message: "clientId отсутствует в куках." });
+    }
+
+    const image = await Image.findById(imageId);
+    
+    if (!image) {
+      return res.status(404).json({ message: "Изображение не найдено." });
+    }
+
+    if (Array.isArray(image.likes) && image.likes.includes(clientId)) {
+      return res.status(409).json({ message: "Вы уже ставили лайк." });
+    }
+
+    image.likes.push(clientId);
+    await image.save();
+
+    res.status(200).json(image);
+  } catch (error) {
+    console.error(`Error liking image: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.delete('/api/gallery/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const image = await Image.findByIdAndDelete(id);
+
+    if (!image) {
+      return res.status(404).json({ message: 'Изображение не найдено' });
+    }
+
+    res.json({ message: 'Изображение успешно удалено' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -383,25 +445,34 @@ app.get('/popularinpart', async (req, res) => {
 
 // Endpoints для корзины
 app.post('/addtocart', fetchUser, async (req, res) => {
-  console.log("Added to cart", req.body.itemId);
-  let userData = await Users.findOne({ _id: req.user.id });
-  userData.cartData[req.body.itemId] += 1;
-  await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData });
-  res.json({ message: "Added to cart" });
-});
+  try {
+    console.log("added", req.body.itemId);
+    let userData = await Users.findOne({_id: req.user.id});
+    
+    if (!userData) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
 
-app.post('/removefromcart', fetchUser, async (req, res) => {
-  console.log("Removed from cart", req.body.itemId);
-  let userData = await Users.findOne({ _id: req.user.id });
-  if (userData.cartData[req.body.itemId] > 0) userData.cartData[req.body.itemId] -= 1;
-  await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData });
-  res.json({ message: "Removed from cart" });
-});
+    if (!userData.cartData) {
+      return res.status(404).json({ message: "Данные о корзине не найдены" });
+    }
 
-app.post('/getcart', fetchUser, async (req, res) => {
-  console.log("GetCart");
-  let userData = await Users.findOne({ _id: req.user.id });
-  res.json(userData.cartData);
+    // Уменьшаем количество товара на складе
+    let product = await Product.findOne({id: req.body.itemId});
+    if (product.quantity > 0) {
+      product.quantity -= 1;
+      await product.save();
+      
+      userData.cartData[req.body.itemId] += 1;
+      await Users.findOneAndUpdate({_id: req.user.id},{cartData:userData.cartData});
+      res.json({ message: "Added" });
+    } else {
+      res.status(400).json({ message: "Товар закончился" });
+    }
+  } catch (error) {
+    console.error('Error while adding to cart:', error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
 });
 
 // Маршруты для изображений
