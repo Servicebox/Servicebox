@@ -20,7 +20,7 @@ const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
 const router = express.Router();
-
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const PORT = 8000;
 //const bcrypt = require('bcrypt');
 const allowedCors = [
@@ -60,7 +60,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/uploads',
   'http://localhost:5173',
   'https://servicebox35.pp.ru/addproduct',
-  'https://servicebox35.pp.ru/allproduct',
+  'https://servicebox35.pp.ru/allproducts',
   'https://servicebox35.pp.ru/removeproduct',
   'https://servicebox35.pp.ru/signup',
   'https://servicebox35.pp.ru/signup',
@@ -89,19 +89,18 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(helmet({
-  crossOriginResourcePolicy: false,
-  //contentSecurityPolicy: false,
-}));
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 
 app.use('/api', glassReplacementRoutes);
 
 // База данных
+
 mongoose.set('strictQuery', true);
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(MONGODB_URI)
   .then(() => console.log('Соединение с базой данных установлено'))
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
@@ -482,6 +481,8 @@ app.get('/services/:category', async (req, res) => {
   }
 });
 
+app.use(requestLogger);
+app.use(errorLogger);
 // Тестирование обработки ошибок
 app.get('/crash-test', (req, res, next) => {
   setTimeout(() => next(new Error('Server will crash now')), 0);

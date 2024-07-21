@@ -104,8 +104,7 @@ function Header() {
         <div className="content-holder"><span className="heading-span">Часы работы</span><br /><span>Понедельник-Пятница <br />(10:00 - 19:00)</span></div>
                 <div className="contact-info">
             <p className="contact-info__map-link" onClick={handleShowMap}>
-              <span className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</span>
-              Мы на карте! ЖМИ
+              <span className="contact-info__location">Адреса: г.Вологда, ул. Северная 7А, 405 и ул.Ленина 6</span>
             </p>
           </div>
                     <div className="nav-login-cart">

@@ -1,4 +1,4 @@
-const clientId = '51768409';
+{/*const clientId = '51768409';
 const scope = 'offline,messages';
 
 const getToken = () => {
@@ -11,4 +11,4 @@ const getToken = () => {
   window.location.href = url;
 }
 
-export default getToken;
+export default getToken;*/}

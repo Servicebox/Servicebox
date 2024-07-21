@@ -55,6 +55,7 @@ import "./App.css";
 import Navbar from "../NavBar";
 import Addproduct from "../AdminPanel/Addproduct";
 import ListProduct from "../AdminPanel/ListProduct";
+import Footer from "../Footer/Footer";
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -134,6 +135,7 @@ const App = () => {
         {isFormOpen && <Form toggleForm={toggleForm} />}
 
         <CookieMessage />
+        <Footer />
       </div>
     </div>
   )

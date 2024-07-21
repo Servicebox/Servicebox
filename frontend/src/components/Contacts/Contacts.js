@@ -72,7 +72,7 @@ const Contacts = forwardRef((props, ref) => {
         </div>
       </div>
  <div className="footer__contacts">
- < Footer/> 
+
  </div>
  <div className="back__btn"> 
       <ul>

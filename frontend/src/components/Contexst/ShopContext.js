@@ -2,7 +2,6 @@
 import React, { createContext, useState, useEffect } from "react";
 
 export const ShopContext = createContext(null);
-
 const getDefaultCart = () => {
     let cart = {};
     for (let index = 0; index < 301; index++) {
