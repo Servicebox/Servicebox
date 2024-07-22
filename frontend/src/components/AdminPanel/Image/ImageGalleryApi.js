@@ -1,123 +1,94 @@
-// ImageGalleryApi.js
-import React, { useState, useEffect } from "react";
-import "./ImageGalleryApi.css";
-import likeIconUrl from "../../../images/likeactive.png"; 
-import likeInactiveIconUrl from "../../../images/like.png";
-import ImageModal from "./ImageModal";
+import React, { useState, useEffect } from 'react';
 
-const getClientId = () => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; client-id=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-  return null;
-};
+const CreateImage = () => {
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [description, setDescription] = useState('');
 
-const ImageGalleryApi = () => {
-  const [images, setImages] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0]; 
+    if (selectedFile && isValidFile(selectedFile)) {
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    } else {
+      alert('Выбран некорректный файл.');
+    }
+  };
+  
+  const isValidFile = (file) => {
+    return file.type.startsWith('image/') && file.size < 5 * 1024 * 1024; // Проверка типа и размера файла
+  };
 
-  // Fetch images from server
-  const fetchImages = async () => {
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      alert('Пожалуйста, выберите файл для загрузки');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('description', description);
+
     try {
-      console.log('Отправка запроса к серверу для получения изображений...');
-      const response = await fetch('https://servicebox35.pp.ru/api/images', {
+      const response = await fetch('https://servicebox35.pp.ru/api/gallery', {
+        method: 'POST',
+        body: formData,
         credentials: 'include',
+        headers: {
+          'auth-token': localStorage.getItem('auth-token'), // Добавление токена
+        },
       });
 
       if (!response.ok) {
-        const errResponse = await response.json();
-        throw new Error(errResponse.errors || 'Ошибка при получении изображений');
+        const errorData = await response.json();
+        const errorText = errorData.message || 'Неизвестная ошибка';
+        throw new Error(`Ошибка: ${response.status} - ${errorText}`);
       }
 
-      const fetchedImages = await response.json();
-      const imagesWithCorrectPath = fetchedImages.map(img => ({
-        ...img,
-        filePath: `https://servicebox35.pp.ru/uploads/gallery/${img.filePath.split('/').pop()}`, // Исправление пути к файлу
-      }));
-      setImages(imagesWithCorrectPath);
+      const result = await response.json();
+      alert('Изображение успешно загружено');
+      setFile(null);
+      setDescription('');
+      setPreviewUrl('');
     } catch (error) {
-      console.error('Ошибка при получении изображений:', error);
-      alert('Ошибка загрузки изображений: ' + error.message);
+      alert(error.message);
     }
   };
 
   useEffect(() => {
-    fetchImages();
-  }, []);
-
-  // Handle like operation
-  const toggleLikeImage = async (imageId, hasLiked) => {
-    try {
-      const token = localStorage.getItem('auth-token');
-      if (!token) {
-        alert('Пожалуйста, авторизуйтесь для выполнения этого действия');
-        return;
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
       }
-      
-      const method = hasLiked ? 'DELETE' : 'POST';
-      const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
-        method,
-        headers: {
-          'Accept': 'application/json',
-          'auth-token': token,
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-      });
-
-      if (response.ok) {
-        const updatedImage = await response.json();
-
-        // Update likes status and local storage
-        const newImages = images.map(img => 
-          img._id === imageId ? { ...img, likes: updatedImage.likes, hasLiked: !hasLiked } : img
-        );
-        setImages(newImages);
-
-        alert(hasLiked ? 'Лайк успешно удален!' : 'Лайк успешно поставлен!');
-      } else {
-        const errorData = await response.json();
-        alert(`Ошибка: ${errorData.message}`);
-      }
-    } catch (error) {
-      alert(`Ошибка переключения лайка: ${error.message}`);
-    }
-  };
-
-  const handleImageClick = (image) => {
-    setSelectedImage(image);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedImage(null);
-    setShowModal(false);
-  };
+    };
+  }, [previewUrl]);
 
   return (
-    <div className="foto">
-      <h1 className="foto__title">Фотографии до и после ремонта</h1>
-      <div className="images-gallery">
-        {images.length > 0 ? images.map(image => (
-          <div key={image._id} className="image-item">
-            <img className="foto__img" src={image.filePath} alt={image.description || "Изображение"}
-              onClick={() => handleImageClick(image)} />
-            <p className="foto__description">{image.description}</p>
-            <button className="foto__btn" onClick={() => toggleLikeImage(image._id, image.hasLiked)}>
-              <img
-                src={image.hasLiked ? likeIconUrl : likeInactiveIconUrl}
-                alt="Like"
-                className={`like-icon ${image.hasLiked ? 'liked' : ''}`}
-              />
-              <span className="foto__sum">{Array.isArray(image.likes) ? image.likes.length : 0}</span>
-            </button>
-          </div>
-        )) : <p>Фотографии будут загружены скоро...</p>}
-      </div>
-      {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
+    <div>
+      <h1>Загрузка изображения с описанием</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept="image/*"
+        />
+        {previewUrl && <img src={previewUrl} alt="Preview" width="200" />}
+        <input
+          type="text"
+          value={description}
+          onChange={handleDescriptionChange}
+          placeholder="Описание изображения"
+        />
+        <button type="submit">Загрузить</button>
+      </form>
     </div>
   );
 };
 
-export default ImageGalleryApi;
+export default CreateImage;
