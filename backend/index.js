@@ -148,14 +148,16 @@ app.use((req, res, next) => {
   }
   next();
 });
-
+app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
 // Обработка форм
 app.use('/api/images', imageRoutes);
-
+app.get("./",(req, res) => {
+  res.send("Express App is runing")
+})
 // Настройки для загрузок файлов
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -191,6 +193,28 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
   }
 });
 
+// клиент 
+
+const getClientId = () => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; client-id=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+};
+
+app.get('/get-client-id', (req, res) => {
+  let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
+  if (!clientId) {
+    clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
+    res.cookie('client-id', clientId, {
+      httpOnly: true,
+      maxAge: 86400 * 1000,
+      sameSite: 'None',
+      secure: true,
+    });
+  }
+  res.json({ clientId });
+});
 // Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -203,7 +227,7 @@ const galleryStorage = multer.diskStorage({
 });
 
 const galleryUpload = multer({ storage: galleryStorage });
-
+// Маршрут для загрузки изображений галереи
 app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
   try {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
@@ -217,7 +241,6 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
       mimeType: mimetype,
       likes: [],
     });
-    
     
     await newImage.save();
     
@@ -234,7 +257,6 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   if (err && err.code !== 'EEXIST') {
     console.error("Не могу создать папку для загрузок: ", err);
@@ -356,15 +378,30 @@ app.post('/signup', async (req, res) => {
   res.json({ success: true, token });
 });
 
-app.post('/login', async (req, res) => {
-  let user = await Users.findOne({ email: req.body.email });
-  if (user && (req.body.password === user.password)) {
-    const token = jwt.sign({ user: { id: user.id } }, JWT_SECRET);
-    res.json({ success: true, token });
-  } else {
-    res.json({ success: false, errors: "Wrong email or password" });
+app.post('/login',async(req,res)=>{
+  let user = await Users.findOne({email:req.body.email});
+  if (user) {
+    const passCompare = req.body.password === user.password;
+    if (passCompare) {
+      const data = {
+        user:{
+          id:user.id
+        }
+      }
+      const token = jwt.sign(data,'secret_ecom');
+      res.json({
+        success:true,token
+      });
+    }
+    else{
+      res.json({success:false,errors:"Wrong password"})
+    }
+    }
+    else{
+      res.json({success:false,errors:"Wrong email id"})
+    
   }
-});
+})
 
 
 // Service CRUD operations
@@ -474,6 +511,46 @@ app.post('/addtocart', fetchUser, async (req, res) => {
     res.status(500).json({ message: "Ошибка сервера" });
   }
 });
+
+ //creating enpoint to get cartdata
+app.post('/getcart', fetchUser, async (req, res) => {
+  console.log("GetCart request received");
+  try {
+      console.log(`Fetching cart data for user with ID: ${req.user.id}`);
+      let userData = await Users.findOne({_id: req.user.id});
+      
+      if (!userData) {
+          console.log(`User with ID ${req.user.id} not found`);
+          return res.status(404).json({ message: "Пользователь не найден" });
+      }
+
+      if (!userData.cartData) {
+          console.log(`Cart data not found for user with ID: ${req.user.id}`);
+          return res.status(404).json({ message: "Данные о корзине не найдены" });
+      }
+
+      console.log(`Cart data retrieved successfully for user with ID: ${req.user.id}`);
+      res.json(userData.cartData);
+  } catch (error) {
+      console.error('Ошибка при получении данных корзины:', error.message);
+      res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+
+const adminAuth = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (decoded.role !== 'admin') {
+      throw new Error('Нет доступа');
+    }
+    req.user = decoded; // добавляем информацию о пользователе в объект запроса
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: 'Нет доступа' });
+  }
+};
 
 // Маршруты для изображений
 app.post('/api/images/like/:id', fetchUser, async (req, res) => {

@@ -1,3 +1,4 @@
+// ImageGalleryApi.js
 import React, { useState, useEffect } from "react";
 import "./ImageGalleryApi.css";
 import likeIconUrl from "../../../images/likeactive.png"; 
@@ -15,48 +16,45 @@ const ImageGalleryApi = () => {
   const [images, setImages] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  
-  const clientId = getClientId();
 
   // Fetch images from server
-const fetchImages = async () => {
-  try {
-    console.log('Отправка запроса к серверу для получения изображений...');
-    const token = localStorage.getItem('auth-token'); // Получить токен из localStorage
-    
-    if (!token) throw new Error('Авторизуйтесь для просмотра');
-    
-    const response = await fetch('https://servicebox35.pp.ru/api/images', {
-      headers: { 'auth-token': token },
-      credentials: 'include',
-    });
-    
-    if (!response.ok) {
-      const errResponse = await response.json();
-      throw new Error(errResponse.errors || 'Error fetching images');
-    }
-    
-    const fetchedImages = await response.json();
-    const imagesWithCorrectPath = fetchedImages.map(img => ({
-      ...img,
-      filePath: `https://servicebox35.pp.ru/uploads/gallery/${img.filePath.split('/').pop()}`,
-    }));
-    setImages(imagesWithCorrectPath);
-  } catch (error) {
-    console.error('Ошибка при получении изображений:', error);
-    alert('Ошибка загрузки фото: ' + error.message);
-  }
-};
+  const fetchImages = async () => {
+    try {
+      console.log('Отправка запроса к серверу для получения изображений...');
+      const response = await fetch('https://servicebox35.pp.ru/api/images', {
+        credentials: 'include',
+      });
 
-  // Initialize component
+      if (!response.ok) {
+        const errResponse = await response.json();
+        throw new Error(errResponse.errors || 'Ошибка при получении изображений');
+      }
+
+      const fetchedImages = await response.json();
+      const imagesWithCorrectPath = fetchedImages.map(img => ({
+        ...img,
+        filePath: `https://servicebox35.pp.ru/uploads/gallery/${img.filePath.split('/').pop()}`, // Исправление пути к файлу
+      }));
+      setImages(imagesWithCorrectPath);
+    } catch (error) {
+      console.error('Ошибка при получении изображений:', error);
+      alert('Ошибка загрузки изображений: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     fetchImages();
-  }, [clientId]);
+  }, []);
 
   // Handle like operation
   const toggleLikeImage = async (imageId, hasLiked) => {
     try {
-      const token = localStorage.getItem('auth-token'); // Assuming token is stored in localStorage
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        alert('Пожалуйста, авторизуйтесь для выполнения этого действия');
+        return;
+      }
+      
       const method = hasLiked ? 'DELETE' : 'POST';
       const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
         method,
@@ -70,7 +68,7 @@ const fetchImages = async () => {
 
       if (response.ok) {
         const updatedImage = await response.json();
-        
+
         // Update likes status and local storage
         const newImages = images.map(img => 
           img._id === imageId ? { ...img, likes: updatedImage.likes, hasLiked: !hasLiked } : img
@@ -80,10 +78,10 @@ const fetchImages = async () => {
         alert(hasLiked ? 'Лайк успешно удален!' : 'Лайк успешно поставлен!');
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        alert(`Ошибка: ${errorData.message}`);
       }
     } catch (error) {
-      alert(`Error toggling like: ${error.message}`);
+      alert(`Ошибка переключения лайка: ${error.message}`);
     }
   };
 
@@ -115,7 +113,7 @@ const fetchImages = async () => {
               <span className="foto__sum">{Array.isArray(image.likes) ? image.likes.length : 0}</span>
             </button>
           </div>
-        )) : <p>Для просмотра фото, авторизуйтесь.</p>}
+        )) : <p>Фотографии будут загружены скоро...</p>}
       </div>
       {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
     </div>

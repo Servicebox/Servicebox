@@ -109,7 +109,7 @@ function Header() {
           </div>
                     <div className="nav-login-cart">
             {localStorage.getItem('auth-token')
-            ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/shop')}}>выйти</button>
+            ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/')}}>выйти</button>
             :<Link to='/login'><button>Вход</button></Link>}           
               <Link to='/cart'> <FontAwesomeIcon icon={faBasketShopping} /></Link>
               <div className="nav-cart-count">{getTotalCartItems()}</div>    

@@ -14,7 +14,7 @@ const CreateImage = () => {
       alert('Выбран некорректный файл.');
     }
   };
-  
+
   const isValidFile = (file) => {
     return file.type.startsWith('image/') && file.size < 5 * 1024 * 1024; // Проверка типа и размера файла
   };
@@ -37,13 +37,13 @@ const CreateImage = () => {
 
     try {
       const response = await fetch('https://servicebox35.pp.ru/api/gallery', {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-        headers: {
-          'auth-token': localStorage.getItem('auth-token'), // Добавление токена
-        },
-      });
+  method: 'POST',
+      body: formData,
+      credentials: 'include',
+      headers: {
+        'auth-token': localStorage.getItem('auth-token'), // Добавление токена
+      },
+    });
 
       if (!response.ok) {
         const errorData = await response.json();

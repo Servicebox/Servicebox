@@ -33,7 +33,7 @@ const LoginSignup = () => {
       const responseData = await response.json();
       if (responseData.success) {
         localStorage.setItem('auth-token', responseData.token);
-        window.location.replace("./shop");
+        window.location.replace("./");
       } else {
         alert(responseData.errors);
       }
@@ -62,7 +62,7 @@ const LoginSignup = () => {
       const responseData = await response.json();
       if (responseData.success) {
         localStorage.setItem('auth-token', responseData.token);
-        window.location.replace("./shop");
+        window.location.replace("./");
       } else {
         alert(responseData.errors);
       }
