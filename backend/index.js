@@ -99,7 +99,7 @@ app.use(
 );
 
 app.use('/api', glassReplacementRoutes);
-
+app.use('/api/gallery', galleryRoutes);
 // База данных
 
 mongoose.set('strictQuery', true);
