@@ -6,17 +6,15 @@ const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+
 const multer = require('multer');
 const fs = require('fs');
 require('dotenv').config();
 
 const fetchUser = require('./middlewares/fetchUser');
-const limiter = require('./middlewares/rateLimiter');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
-
 
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
@@ -25,7 +23,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
 const router = express.Router();
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const PORT = 8000;
-//const bcrypt = require('bcrypt');
+
 const allowedCors = [
   'http://localhost:5173',
 'https://servicebox35.pp.ru/get-client-id',
@@ -107,14 +105,6 @@ mongoose.connect(MONGODB_URI)
   .then(() => console.log('Соединение с базой данных установлено'))
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
-// Создать папку для загрузок, если она не существует
-const uploadDirectory = path.join(__dirname, 'uploads');
-fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
-  if (err && err.code !== 'EEXIST') {
-    console.error("Не могу создать папку для загрузок: ", err);
-    process.exit(1);
-  }
-});
 
 // Определение моделей
 const Image = require('./models/image');
@@ -148,6 +138,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+const uploadDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
@@ -168,7 +159,6 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
 
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -195,12 +185,6 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
 
 // клиент 
 
-const getClientId = () => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; client-id=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-  return null;
-};
 
 app.get('/get-client-id', (req, res) => {
   let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
@@ -350,13 +334,28 @@ app.get('/allproducts', async (req, res) => {
 
 
 // CRUD операций для пользователей
-const Users = mongoose.model('Users', {
-  name: String,
-  email: { type: String, unique: true },
-  password: String,
-  cartData: Object,
-  date: { type: Date, default: Date.now },
-});
+const Users = mongoose.model('Users',{
+  name:{
+    type:String,
+    
+  },
+  email:{
+    type:String,
+    unique:true,
+  },
+  password:{
+    type:String,
+   
+  },
+ cartData:{
+    type:Object,
+   
+  }, 
+  date:{
+    type:Date,
+    default:Date.now,
+  }
+})
 
 app.post('/signup', async (req, res) => {
   let check = await Users.findOne({ email: req.body.email });
@@ -538,19 +537,6 @@ app.post('/getcart', fetchUser, async (req, res) => {
 });
 
 
-const adminAuth = (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1]; // 'Bearer TOKEN'
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.role !== 'admin') {
-      throw new Error('Нет доступа');
-    }
-    req.user = decoded; // добавляем информацию о пользователе в объект запроса
-    next();
-  } catch (error) {
-    return res.status(403).json({ message: 'Нет доступа' });
-  }
-};
 
 // Маршруты для изображений
 app.post('/api/images/like/:id', fetchUser, async (req, res) => {
