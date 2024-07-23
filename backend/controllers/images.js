@@ -1,25 +1,24 @@
-//controllers/images
-
-const path = require('path');
+{/*const express = require('express');
 const multer = require('multer');
+const router = express.Router();
+const path = require('path');
 const Image = require('../models/image');
-const fs = require('fs');
+const fetchUser = require('../middlewares/fetchUser');
+const fs = require('fs').promises;
 
-const uploadGalleryDir = path.join(__dirname, '..', 'uploads', 'gallery');
-
+const uploadDirectory = path.join(__dirname, '../uploads/gallery');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadGalleryDir);
+    cb(null, uploadDirectory);
   },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); 
+    cb(null, `gallery_${Date.now()}${path.extname(file.originalname)}`);
   },
-}); 
+});
+const upload = multer({ storage });
 
-const upload = multer({ storage: storage });
-
-// Function to create an image
-exports.createImage = async (req, res) => {
+// Загрузка изображения
+router.post('/', upload.single('image'), async (req, res) => {
   try {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
@@ -34,7 +33,6 @@ exports.createImage = async (req, res) => {
     });
 
     await newImage.save();
-
     res.status(201).json({
       message: 'Изображение успешно загружено',
       image: {
@@ -47,104 +45,123 @@ exports.createImage = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-};
+});
+
+// Получение изображений
+router.get('/', async (req, res) => {
+  try {
+    const images = await Image.find().exec();
+    res.json(images);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Получение изображения по имени файла
+router.get('/image/:filename', async (req, res) => {
+  const filename = req.params.filename;
+  const imagePath = path.join(uploadDirectory, filename);
+  try {
+    const data = await fs.readFile(imagePath);
+    res.writeHead(200, { 'Content-Type': 'image/jpeg' });
+    res.end(data);
+  } catch (error) {
+    res.status(500).json({ message: 'Error loading image' });
+  }
+});
 
 // Обновление изображения
-exports.updateImage = async (req, res) => {
-    try {
-        const { src, description, likes } = req.body;
-        const updatedImage = await Image.findByIdAndUpdate(req.params.id, {
-            src,
-            description,
-            likes
-        }, { new: true });
-        res.json(updatedImage);
-    } catch (error) {
-        res.status(500).send(error.message);
+router.put('/:id', upload.single('image'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description } = req.body;
+    const { filename, mimetype } = req.file;
+
+    const image = await Image.findById(id);
+    if (!image) throw new Error('Image not found');
+
+    if (filename) {
+      image.filePath = path.join(uploadDirectory, filename);
     }
-};
+
+    image.description = description;
+    image.mimeType = mimetype;
+
+    await image.save();
+    res.status(200).json(image);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Удаление изображения
-exports.deleteImage = async (req, res) => {
-    try {
-        const image = await Image.findById(req.params.id);
-        if (image) {
-            const filepath = path.join(__dirname, '..', image.filePath); // Корректный путь к файлу
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
 
-            // Убедимся, что файл существует
-            if (fs.existsSync(filepath)) {
-                await fs.promises.unlink(filepath); // Удаление файла
-            } else {
-                console.warn(`Файл ${filepath} не существует.`);
-            }
+    const image = await Image.findById(id);
+    if (!image) throw new Error('Image not found');
 
-            await image.remove(); // Удаление документа из базы данных
-            res.json({ message: 'Image deleted successfully' });
-        } else {
-            res.status(404).json({ message: 'Image not found' });
-        }
-    } catch (error) {
-        console.error(`Ошибка при удалении изображения: ${error.message}`); // Детальная ошибка
-        res.status(500).send({ message: 'Внутренняя ошибка сервера', error: error.message });
-    }
-};
-
-exports.getImages = async (req, res) => {
-    try {
-        const allImages = await Image.find({});
-        const imagesWithBase64 = await Promise.all(allImages.map(async (img) => {
-            if (fs.existsSync(img.filePath)) {
-                const imageData = await fs.promises.readFile(img.filePath, { encoding: 'base64' });
-                return {
-                    _id: img._id,
-                    description: img.description,
-                    mimeType: img.mimeType,
-                    src: `data:${img.mimeType};base64,${imageData}`
-                };
-            } else {
-                //  удалить запись из базы данных, если файл больше не существует
-                // await Image.findByIdAndRemove(img._id);
-                return null;
-            }
-        }));
-
-        // Убрать из массива все значения null перед отправкой клиенту
-        const filteredImages = imagesWithBase64.filter(image => image !== null);
-
-        res.status(200).json(filteredImages);
-    } catch (error) {
-        res.status(500).send(error.message);
-    }
-};
-
-// Добавить функцию для лайка изображения
-
-exports.likeImage = async (req, res, next) => {
-    const {imageId} = req.params.id;
-    const {clientId} = req.cookies['client-id'];
-
-    if (!clientId) {
-        return res.status(400).json({ message: "clientId отсутствует в куках." });
+    const filepath = path.join(__dirname, '..', image.filePath);
+    // Убедимся, что файл существует
+    if (await fs.exists(filepath)) {
+      await fs.unlink(filepath); // Удаление файла
+    } else {
+      console.warn(`Файл ${filepath} не существует.`);
     }
 
-    try {
-        let image = await Image.findById(imageId);
+    await image.remove();
+    res.json({ message: 'Изображение успешно удалено' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
-        if (!image) {
-            return res.status(404).json({ message: "Изображение не найдено." });
-        }
-        
-        // Проверяем, есть ли уже clientId в массиве likes
-        if (image.likes.includes(clientId)) {
-            return res.status(400).json({ message: "Вы уже лайкали это изображение." });
-        }
+// Лайк/дизлайк изображения
+router.post('/like/:id', fetchUser, async (req, res) => {
+  const imageId = req.params.id;
+  const userId = req.user.id;
 
-        // Добавляем clientId в массив likes и обновляем общее количество лайков
-        image.likes.push(clientId);
-        image = await image.save();
+  try {
+    const image = await Image.findById(imageId);
+    if (!image) return res.status(404).json({ message: 'Изображение не найдено' });
 
-        res.status(200).json(image);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    if (image.likes.includes(userId)) {
+      image.likes = image.likes.filter(id => id !== userId); // Удаление лайка
+    } else {
+      image.likes.push(userId); // Добавление лайка
     }
-};
+
+    await image.save();
+    res.status(200).json(image);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
+
+// Удаление лайка изображения
+router.delete('/like/:id', fetchUser, async (req, res) => {
+  const imageId = req.params.id;
+  const userId = req.user.id;
+
+  try {
+    const image = await Image.findById(imageId);
+    if (!image) return res.status(404).json({ message: 'Изображение не найдено' });
+
+    // Если пользователь уже лайкнул изображение, удаляем лайк
+    if (image.likes.includes(userId)) {
+      image.likes = image.likes.filter(id => id !== userId);
+      await image.save();
+      res.status(200).json(image);
+    } else {
+      res.status(400).json({ message: 'Вы не лайкали это изображение' });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
+
+module.exports = router;
+*/}

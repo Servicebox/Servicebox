@@ -32,18 +32,22 @@ const CreateImage = () => {
     }
 
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('image', file); // Поле 'image' соответствует полю на сервере
     formData.append('description', description);
+
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
 
     try {
       const response = await fetch('https://servicebox35.pp.ru/api/gallery', {
-  method: 'POST',
-      body: formData,
-      credentials: 'include',
-      headers: {
-        'auth-token': localStorage.getItem('auth-token'), // Добавление токена
-      },
-    });
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+        headers: {
+          'auth-token': localStorage.getItem('auth-token'), // Добавление токена
+        },
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

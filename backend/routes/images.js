@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Загрузка изображения
-router.post('/', fetchUser, upload.single('image'), async (req, res) => {
+router.post('/',  upload.single('image'), async (req, res) => {
   try { 
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
