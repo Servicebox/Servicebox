@@ -41,6 +41,11 @@ const ContactsRef = forwardRef((props, ref) => {
          <p className="contacts__text">
           <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
          г. Вологда, ул. Северная, 7А, офис 405</p>
+          <div className="contacts__block"></div>
+         <p className="contacts__text">
+          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
+         г. Вологда, ул. Ленина, 6</p>
+        
         </div>
         <div className="contacts__block-sochial">
         <ul className="contacts__icon">

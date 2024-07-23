@@ -107,10 +107,15 @@ function PromotionCarousel({ toggleForm }) {
 
 function MainBanner() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isNewsOpen, setIsNewsOpen] = useState(true); // Новое состояние для отображения новости
 
   const toggleForm = () => {
     setIsOpen(!isOpen);
     document.body.style.overflow = isOpen ? 'auto' : 'hidden';
+  };
+
+  const closeNews = () => {
+    setIsNewsOpen(false);
   };
 
   useEffect(() => {
@@ -197,7 +202,16 @@ function MainBanner() {
         </div>
       </div>
 
-      <div className="u-center-text u-margin-bottom-big">
+      {isNewsOpen && (
+        <div className="news-popup">
+          <button onClick={closeNews} className="news-popup__close">&times;</button>
+          <h2 className='news__title'>Внимание!</h2>
+          <p className='news-subtitle'>Открыли второй отдел по ремонту!!Теперь вы можете посетить нас еще и  по адресу:</p>
+          <p className='news-title'>Вологда, ул. Ленина, д. 6</p>
+        </div>
+      )}
+
+     <div className="u-center-text u-margin-bottom-big">
         <div className="row">
           <div className="col-1-of-3">
             <div className="card-neon">
@@ -207,7 +221,7 @@ function MainBanner() {
                   <h4 className="card__heading">Подменный телефон</h4>
                 </div>
                 <div className="card__details">
-                  <img className="care-about-you__img" src={Eplaceable} alt="" />
+                  <img className="care-about__youimg" src={Eplaceable} alt="" />
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-1">
@@ -234,7 +248,7 @@ function MainBanner() {
                   <h4 className="card__heading">Незначительные поломки</h4>
                 </div>
                 <div className="card__details">
-                  <img className="care-about-you__img" src={Cleane} alt="удаление" />
+                  <img className="care-about__youimg" src={Cleane} alt="удаление" />
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-2">
@@ -260,7 +274,7 @@ function MainBanner() {
                   <h4 className="card__heading">Бесплатная диагностика</h4>
                 </div>
                 <div className="card__details">
-                  <img className="care-about-you__img" src={Diagnostics} alt="диагностка бесплатная" />
+                  <img className="care-about__youimg" src={Diagnostics} alt="диагностка бесплатная" />
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-3">

@@ -103,9 +103,10 @@ function Header() {
         
         <div className="content-holder"><span className="heading-span">Часы работы</span><br /><span>Понедельник-Пятница <br />(10:00 - 19:00)</span></div>
                 <div className="contact-info">
-            <p className="contact-info__map-link" onClick={handleShowMap}>
-              <span className="contact-info__location">Адреса: г.Вологда, ул. Северная 7А, 405 и ул.Ленина 6</span>
-            </p>
+            
+         <p className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</p>
+         <p className="contact-info__location">Адрес: г.Вологда, ул.Ленина 6</p>
+      
           </div>
                     <div className="nav-login-cart">
             {localStorage.getItem('auth-token')
@@ -158,9 +159,9 @@ function Header() {
 </ul>
     <ul className='nav-menu'>
     <li onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Запчасти для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Акксессуары</Link>{menu==="electronics"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>каталог товаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
+    {/*<li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Акксессуары</Link>{menu==="electronics"?<hr/>:<></>} </li>
+    <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>*/}
   </ul>
     <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
               <img src={Status} alt="Кнопка" />

@@ -26,7 +26,47 @@ height: 30px;
 margin-bottom: 5px;
 }
 
+.news-popup {
+  position: fixed;
+  right: 30px;
+  width: 300px;
+  padding: 20px;
+  background-color: white;
+ box-shadow: 0px 0px 8px #00c8ff;
+  border-radius: 10px;
+  z-index: 100;
+  background: transparent;
+  backdrop-filter: blur(30px);
+}
 
+.news-popup__close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+.news-title{
+  color: #0000ff;
+  font-size: 25px;
+  font-family: Bebas Neue;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 15px;
+}
+.news__title{
+  color: red;
+    font-size: 25px;
+  font-family: Bebas Neue;
+  font-weight: bold;
+}
+.news-subtitle{
+  font-size: 25px;
+  font-family: Bebas Neue;
+  font-weight: bold;
+}
 
 .promotion-carousel {
   position: relative;
@@ -608,7 +648,7 @@ gap: 40px;
 
 }
 
-.care-about-you__img {
+.care-about__youimg {
   box-shadow: 3px 3px 8px black;
   background-repeat: no-repeat;
   margin: 0 auto;
@@ -685,6 +725,20 @@ gap: 40px;
 
 /* Для экранов шириной от 320px до 480px */
 @media screen and (min-width: 320px) and (max-width: 480px) {
+  .news-title{
+
+  font-size: 15px;
+
+}
+.news__title{
+
+    font-size: 15px;
+
+}
+.news-subtitle{
+  font-size: 15px;
+
+}
   .main-banner__content{
     max-width: 300px;
   }
@@ -836,8 +890,8 @@ letter-spacing: 0.14px;
   .care-about-you__text{
     max-width: 300px;
   }
-  .care-about-you__img{
-    max-width: 80px;
+  .care-about__youimg{
+    width: 100px;
   }
   .care-about-you__image{
     max-width: 100px;
@@ -881,6 +935,10 @@ width: 200px;
   }
   .row{
     row-gap: 123px;
+  }
+  .news-popup {
+ 
+  width: 200px;
   }
 }
 
@@ -948,7 +1006,7 @@ width: 200px;
     margin-bottom: 30px;
   }
 
-  .care-about-you__img {
+  .care-about__youimg {
     background-repeat: no-repeat;
     margin: 0 auto;
     max-width: 120px;
@@ -1036,7 +1094,7 @@ line-height: 18px; /* 133.333% */
     top: 70%;
     left: 106%;
 }
-.care-about-you__img {
+.care-about__youimg {
   background-repeat: no-repeat;
   margin: 0 auto;
   max-width: 200px;
@@ -1214,15 +1272,16 @@ line-height: 18px; /* 133.333% */
   max-width: 114rem;
   margin: 0 auto;
   display: flex;
-  /* flex-direction: row; */
-  justify-content: center;
-  gap: 18px;
+
+
 }
 
 .row:not(:last-child) {
   margin-bottom: 2rem;
   margin-top: 2rem;
   padding: 0 10px;
+      display: flex;
+    justify-content: center;
 }
 
 .row::after {
@@ -1236,11 +1295,11 @@ line-height: 18px; /* 133.333% */
 }
 
 .row [class^="col-"]:not(:last-child) {
-  margin-right: 0.1rem;
+  margin-right: 0.8rem;
 }
 
 .row .col-1-of-3 {
-  width: calc((100% - 2 * 6rem) / 3);
+  width: calc((80% - 2 * 6rem) / 3);
 }
 .section-plans {
 
@@ -1383,12 +1442,12 @@ line-height: 18px; /* 133.333% */
 
 @media screen and (min-width: 769px) and (max-width: 1100px) {
 .row .col-1-of-3 {
-  width: calc((75% - 2 * 5rem) / 2);
+  width: calc((70% - 2 * 5rem) / 2);
 }
 
 
 .row [class^="col-"]:not(:last-child){
-  margin-right: 1rem;
+  margin-right: 3rem;
 }
 .card__heading {
   font-size: 1.3rem;
@@ -1461,7 +1520,7 @@ font-size: 13px;
 }
 @media screen and (max-width: 500px) {
   .row [class^="col-"]:not(:last-child) {
-    margin-right: 0rem;
+    margin-right: 1rem;
   }
   .row .col-1-of-3 {
     width: calc((100% - 2 * 2rem) / 2);
@@ -1477,7 +1536,7 @@ font-size: 13px;
     margin-right: 0;
   }
   .card__side {
-    height: 13rem;
+    height: 16rem;
     width: 103%;
     display: flex;
     flex-direction: column;

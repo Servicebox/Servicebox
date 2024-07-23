@@ -71,6 +71,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/newcollections',
   'https://servicebox35.pp.ru/init-payment',
   'http://localhost:3000/init-paymen',
+  'https://servicebox35.pp.ru/api/search',
 
 ];
 
@@ -510,7 +511,33 @@ app.post('/addtocart', fetchUser, async (req, res) => {
     res.status(500).json({ message: "Ошибка сервера" });
   }
 });
+// Эндпоинт для поиска данных
+app.get('/api/search', async (req, res) => {
+  const query = req.query.query;
+  
+  if (!query) {
+    return res.status(400).json({ message: 'Необходимо указать параметр запроса' });
+  }
 
+  try {
+    // Пример поиска по коллекциям из базы данных MongoDB
+    const services = await Service.find({ $text: { $search: query } }).exec();
+    const products = await Product.find({ $text: { $search: query } }).exec();
+    const images = await Image.find({ $text: { $search: query } }).exec();
+
+    // Объединение всех результатов
+    const results = [
+      ...services.map(service => ({ id: service._id, title: service.serviceName, type: 'Service', description: service.description })),
+      ...products.map(product => ({ id: product._id, title: product.name, type: 'Product', description: product.category })),
+      ...images.map(image => ({ id: image._id, title: image.description, type: 'Image', description: image.filePath }))
+    ];
+    
+    res.json(results);
+  } catch (error) {
+    console.error('Search error:', error.message);
+    res.status(500).json({ message: 'Ошибка сервера', error: error.message });
+  }
+});
  //creating enpoint to get cartdata
 app.post('/getcart', fetchUser, async (req, res) => {
   console.log("GetCart request received");

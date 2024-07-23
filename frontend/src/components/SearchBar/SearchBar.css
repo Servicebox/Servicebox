@@ -1,0 +1,28 @@
+.search-bar{
+    padding-top: 40px;
+}
+/* SearchBar.css */
+.search-bar {
+  position: relative;
+  display: inline-block;
+}
+
+.suggestions-list {
+  position: absolute;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1000; /* чтобы список был поверх других элементов */
+}
+
+.suggestions-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
+}
