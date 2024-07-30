@@ -105,7 +105,7 @@ const Add_Product = async () => {
 
    <div className='addproduct-itemfield'>
                 <p>количество на складе</p>
-                <input value={productDetails.quantity} onChange={changeHandler} type='number' name='quantity' placeholder='Type here' />
+                 <input value={productDetails.quantity} onChange={changeHandler} type='number' name='quantity' placeholder='Type here' />
             </div>
             <div className='addproduct-itemfield'>
                 <p>product category</p>

@@ -37,7 +37,7 @@ const ProductDisplay = (props) => {
           <p>{product.description}</p>
         </div>
              <div className="productdisplay-quantity">
-          <p>Остаток на складе: {product.quantity}</p>
+           <p>Остаток на складе: {product.quantity}</p>
 </div>
         <button onClick={() => addToCart(product.id)}>в корзину</button>
         <p className="productdisplay-right-category"><span>Категория :</span> {product.category}</p>
