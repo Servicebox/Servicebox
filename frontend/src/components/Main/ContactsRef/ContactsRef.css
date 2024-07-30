@@ -19,7 +19,7 @@
 }
 .contacts__block{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-family: Montserrat;
   gap: 10px;
 font-size: 20px;
@@ -61,16 +61,17 @@ color: rgb(255, 255, 255);
 .contacts__text{
   font-size: 14px;
   cursor: pointer;
+  border-bottom: 1px solid #f9a92c;
 }
 .contacts__text:hover {
   color: #F9A92C;
 }
 .contacts__block-sochial{
-  padding-bottom: 20px;
+
   display: flex;
   flex-direction: row;
   margin: 0 auto;
-  border-top: 1px solid #f9a92c;
+  border-bottom: 1px solid #f9a92c;
 }
 .contacts__image-sochial{
   max-width: 50px;

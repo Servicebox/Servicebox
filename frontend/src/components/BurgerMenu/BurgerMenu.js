@@ -76,12 +76,11 @@ const toggleBurgerMenu = () => {
           </Link>
 
 </li>
- <ul className='nav-menu-brg'>
-    <li onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='/Shop'>Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Запчасти</Link>{menu==="parts"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Электроника</Link>{menu==="electronics"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>
-  </ul>
+
+    <li className="navigation__list-brg "  onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
+    <li className="navigation__list-brg " onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Каталог тоаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
+ 
+
             </ul>
           <div className="header__links header__links-burger">
         
@@ -98,12 +97,8 @@ const toggleBurgerMenu = () => {
           </a>
         </div>
         <div className="burger-contacts ">
-        <div onClick={handlePhoneCall} className="contacts__block">
-    <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
-  +7 911 501 88 28
-</p>
-        </div>
+       
+       
         <div onClick={handleMailTo} className="contacts__block">
   <p className="contacts__text">
         <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
@@ -113,7 +108,26 @@ const toggleBurgerMenu = () => {
   <p className="contacts__text">
           <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
          г. Вологда, ул. Северная, 7А, офис 405</p>
+          <div onClick={handlePhoneCall} className="contacts__block">
+    <p className="contacts-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
+  +7 911 501 88 28
+</p>
+ </div>
         </div>
+          <div className="contacts__block">
+          <p className="contacts__text">
+          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
+         г. Вологда, ул. Ленина д.6, этаж 1</p>
+           <div onClick={handlePhoneCall} className="contacts__block">
+    <p className="contacts-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
+  +7 911 501 06 96
+</p>
+
+        </div>
+        </div>
+       
       </div>
       <div className="contacts__block-sochial">
       <ul className="contacts__icon">

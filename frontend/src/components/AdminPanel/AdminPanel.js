@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import UpdateService from './UpdateService';
-import DeleteService from './DeleteService';
+import './AdminPanel.css'
+
+import AdminPanelRoute from './AdminPanelRoute/AdminPanelRoute';
 
 const AdminPanel = () => {
   const [serviceId, setServiceId] = useState('');
@@ -10,10 +11,11 @@ const AdminPanel = () => {
   };
 
   return (
-    <div>
+    <div className='admim-panel__root'>
       <h2>Управление услугами</h2>
-      <UpdateService />
-      <DeleteService serviceId={serviceId} />
+      <AdminPanelRoute />
+
+      
       <input 
         type="text" 
         value={serviceId} 

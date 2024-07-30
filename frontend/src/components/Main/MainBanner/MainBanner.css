@@ -1593,8 +1593,8 @@ font-size: 13px;
     margin-right: 0;
   }
   .card__side {
-    height: 11rem;
-    width: 105%;
+    height: 12rem;
+    width: 95%;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -1,6 +1,8 @@
 import React, { forwardRef } from 'react'; // Добавляем forwardRef
 import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { faMapLocation} from '@fortawesome/free-solid-svg-icons';
+
 import "./Contacts.css";
 
 import Telephone from "../../images/phonecol.svg";
@@ -9,7 +11,9 @@ import Mail from "../../images/mail.svg";
 import Footer from '../Footer/Footer';
 
 import {  faMobilePhone} from '@fortawesome/free-solid-svg-icons';
-import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
+import { faVk, faTelegram, faWhatsapp, } from '@fortawesome/free-brands-svg-icons';
+
+
 
 const Contacts = forwardRef((props, ref) => {
   const handlePhoneCall = () => {
@@ -35,8 +39,8 @@ const Contacts = forwardRef((props, ref) => {
       </div>
       <div className="contacts__list-info">
         <div onClick={handlePhoneCall} className="contacts__block">
-        <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
+        <p className="contact-info__numberone" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '10px' }} />
   +7 911 501 88 28
 </p>
         </div>
@@ -45,8 +49,13 @@ const Contacts = forwardRef((props, ref) => {
           <p className="contacts__text">servicebox35@gmail.com</p>
         </div>
         <div className="contacts__block">
-          <img src={location} className="contacts__image" alt="Location" />
-          <p className="contacts__text">г. Вологда, ул. Северная, 7А, офис 405</p>
+           <p className="contacts__text">
+          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
+         г. Вологда, ул. Северная 7А, этаж 4, офис 405</p>
+           <div className="contacts__block"></div>
+         <p className="contacts__text">
+          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
+         г. Вологда, ул. Ленина, 6</p>
         </div>
         <div className="contacts__block-sochial">
         <ul className="contacts__icon">

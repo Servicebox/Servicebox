@@ -56,6 +56,10 @@ import Navbar from "../NavBar";
 import Addproduct from "../AdminPanel/Addproduct";
 import ListProduct from "../AdminPanel/ListProduct";
 import Footer from "../Footer/Footer";
+import AdminLogin from "../AdminPanel/AdminLogin/AdminLogin";
+import PrivateRoute from '../PrivateRoute/PrivateRoute';
+import AdminPanel from "../AdminPanel/AdminPanel";
+
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -95,6 +99,16 @@ const App = () => {
 
           <Route exact path="/" element={<Main />} />
           <Route path="header" element={<Header/>} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin-panel"
+          element={
+            <PrivateRoute>
+              <AdminPanel />
+            </PrivateRoute>
+          }
+        />
+              
           <Route path="image-gallery-api" element={<ImageGalleryApi />} />
           <Route path="delete-image" element={<DeleteImage />} />
           <Route exact path="/" component={ServiceRef} />

@@ -6,7 +6,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
-
+const compression = require('compression');
 const multer = require('multer');
 const fs = require('fs');
 require('dotenv').config();
@@ -22,6 +22,10 @@ const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
 const router = express.Router();
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const Admin = require('./models/Admin');
+const adminRoutes = require('./routes/admin');
+const verifyToken = require('./middlewares/verifyToken');
+
 const PORT = 8000;
 
 const allowedCors = [
@@ -96,9 +100,11 @@ app.use(
     crossOriginResourcePolicy: false,
   })
 );
+app.use(compression());
 
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/admin', adminRoutes);
 // База данных
 
 mongoose.set('strictQuery', true);
@@ -139,11 +145,19 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// Служить статические файлы
+app.use(express.static(path.join(__dirname, 'build')));
+
+
 const uploadDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
+
+
+
 
 // Обработка форм
 app.use('/api/images', imageRoutes);
@@ -653,6 +667,44 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(router);
 app.use('/', indexRouter);
 
+app.post('/admin/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const admin = await Admin.findOne({ email });
+
+    if (!admin) {
+      return res.status(401).json({ message: "Неправильный email или пароль" });
+    }
+
+    const isMatch = (password === admin.password); // Лучше использовать bcrypt для сравнения хешированных паролей
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Неправильный email или пароль" });
+    }
+
+    const token = jwt.sign({ id: admin._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (error) {
+    console.error("Ошибка во время авторизации:", error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+app.use('/admin-panel', verifyToken, express.static(path.join(__dirname, 'build')));
+app.post('/admin/create', async (req, res) => {
+  const newAdmin = new Admin({
+    email: 'admin@example.com',
+    password: 'password123', // не забудьте изменить это на более сложный пароль
+  });
+  
+  await newAdmin.save();
+  res.send('Admin created');
+});
+
+app.use('/admin-panel', verifyToken, (req, res) => {
+  // Ваши административные маршруты
+});
 const startServer = () => {
   app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
