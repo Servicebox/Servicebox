@@ -214,8 +214,8 @@ width: 146px;
 }
 .main-form__plans{
   position: relative;
-
-    padding:5px 36px;
+width: 95%;
+margin: 0 auto;
 
 }
 
@@ -262,7 +262,7 @@ width: 146px;
 #timer{
 
   display: flex;
-  padding-bottom: 75px;
+  padding-bottom: 40px;
 max-width: 400px;
 
 }
@@ -823,10 +823,7 @@ gap: 40px;
 
 /* Для экранов шириной от 320px до 480px */
 @media screen and (min-width: 320px) and (max-width: 514px) {
-  .side-content{
- 
-    
-  }
+
   .side-promotion{
     width: 95px;
     flex-direction: row;
@@ -842,6 +839,7 @@ gap: 40px;
     gap: 5px;
     width: 300px;
     justify-content: flex-start;
+    left: 10px;
   }
 .main-promotion .content-main{
   width: 300px;
@@ -851,11 +849,9 @@ gap: 40px;
   font-size: 15px;
 
 }
-.main-promotion{
-  width: 320px;
-}
+
 .promotion-carousel-container{
-  width: 320px;
+height: 590px;
 }
 .news__title{
 
@@ -872,7 +868,7 @@ gap: 40px;
   #timer{
 
     display: flex;
-    padding-bottom: 75px;
+    padding-bottom: 40px;
 
   }
   #hours {
@@ -1106,18 +1102,25 @@ width: 200px;
   }
 .side-promotions {
     display: flex;
-    overflow-x: auto;  /* для горизонтального скролла */
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch; 
     flex-direction: row;
     gap: 5px; 
-    height: 134px;
-    width: 470px;
+    height: 85px;
+    width: 400px;
     overflow-y: auto;
     justify-content: flex-start;
+    left: 15px;
+    margin: 0 auto;
   }
+  .side-image{
+width: 100px;
+height: 70px;
+  }
+  
   .main-form__plans{
   position: relative;
-   padding:5px 15px
+
   }
  .main-promotion .content-main{
     width: 350px;

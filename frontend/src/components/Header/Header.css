@@ -487,7 +487,7 @@ font-size: 62.5%
 
 .container__contacts{
     position: sticky;
-    height: 58px;
+    height: 80x;
     display: flex;
     background: #041e42;
     width: 100%;
@@ -840,9 +840,10 @@ position: absolute;
 .burger-icon{
   width: 50px;
   height: 50px;
-    position: absolute;
-    top: -19px;
-    right: -45px;
+    position: relative;
+
+        top: 0px;
+        right: 0px;
     max-width: 90px;
     cursor: pointer;
     z-index: 999;
@@ -854,7 +855,7 @@ max-width: 600px;
   }
 }
 
-@media (min-width: 320px) and (max-width: 500px) {
+@media (min-width: 320px) and (max-width: 501px) {
   .header__top{
 max-width: 320px;
     padding-top: 10px;
