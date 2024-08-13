@@ -131,10 +131,16 @@ function Header() {
         </div>
         <div className="header__top">
           <nav className="navigation">
+          <div className="nav__info">
   <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
   <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
   +7 911 501 88 28
 </p>
+ <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
+  +7 911 501 06 96
+</p>
+</div>
 <ul className="navigation__lists">
   <li className="navigation__list" onClick={() => setMenu("contacts")}>
     <Link className="navigation__list" to="/contacts">
@@ -158,8 +164,8 @@ function Header() {
   </li>
 </ul>
     <ul className='nav-menu'>
-    <li onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>каталог товаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
+    <li className="navigation__list" onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
+    <li className="navigation__list" onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>каталог товаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
     {/*<li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Акксессуары</Link>{menu==="electronics"?<hr/>:<></>} </li>
     <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>*/}
   </ul>

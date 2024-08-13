@@ -10,6 +10,10 @@ import Eplaceable from "../../../images/telpodmena.svg"
 import Form from '../../Form/Form';
 
 
+import Example1 from '../../../images/термопаста.webp';
+import Example2 from '../../../images/gid.webp';
+import Example3 from '../../../images/msi.webp';
+import Example4 from '../../../images/mnogodet.webp';
 
 
 function Countdown({ endDate }) {
@@ -53,17 +57,26 @@ function PromotionCarousel({ toggleForm }) {
     {
       title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
       endDate: new Date('2024-08-29T23:59:59'),
-      description: "До конца акции осталось:"
+      description: "До конца акции осталось:",
+      image: Example1
     },
     {
-      title: "Акция! При установке оригинального дисплейного модуля, гидрогелевая пленка в подарок",
+      title: "При установке ориг дисплея, гидрогелевая пленка в подарок",
       endDate: new Date('2024-08-30T23:59:59'),
-      description: "До конца акции осталось:"
+      description: "До конца акции осталось:",
+      image: Example2
     },
-      {
+    {
       title: "При ремонте видеокарт на Ленина д.6 скидка на работу 20%",
       endDate: new Date('2024-08-30T23:59:59'),
-      description: "До конца акции осталось:"
+      description: "До конца акции осталось:",
+      image: Example3
+    },
+    {
+      title: " Многодетным скидка на работу 20%",
+      endDate: new Date('2024-08-30T23:59:59'),
+      description: "До конца акции осталось:",
+      image: Example4
     }
   ];
 
@@ -86,29 +99,49 @@ function PromotionCarousel({ toggleForm }) {
   }, [promotions.length]);
 
   return (
-    <div className="promotion-carousel">
-      <button className='btn-main' onClick={previousPromotion}>&#9664;</button>
-      <div>
-        <h2 className='promotion-title'>{promotions[currentPromotionIndex].title}</h2>
-        <p>{promotions[currentPromotionIndex].description}</p>
-        <Countdown endDate={promotions[currentPromotionIndex].endDate} />
+    <div className="promotion-carousel-container">
+      <div 
+        className="main-promotion" 
+        style={{ backgroundImage: `url(${promotions[currentPromotionIndex].image})` }}
+      >
+        <div className='content-main'>
+          <h2 className='title'>{promotions[currentPromotionIndex].title}</h2>
+          <p className='description'>{promotions[currentPromotionIndex].description}</p>
+          <Countdown endDate={promotions[currentPromotionIndex].endDate} />
+          <button className="main-form" onClick={toggleForm}>
+            Записаться
+          </button>
+        </div>
       </div>
-      <button className='btn-main' onClick={nextPromotion}>&#9654;</button>
-      <div className='btn-form'>
-        <button className="main-form" onClick={toggleForm}>
-          Записаться
-        </button>
-      </div>
-      <div className='dots'>
-        {promotions.map((_, idx) => (
-          <span key={idx}
-            className={`dot ${idx === currentPromotionIndex ? 'active' : ''}`}
-            onClick={() => setCurrentPromotionIndex(idx)} />
+
+      <div className="side-promotions">
+        {promotions.map((promotion, idx) => (
+          <div 
+            key={idx}
+            className={`side-promotion ${idx === currentPromotionIndex ? 'active' : ''}`}
+            onClick={() => setCurrentPromotionIndex(idx)}
+          >
+             
+            <div 
+              className="side-image"
+              style={{
+                backgroundImage: `url(${promotion.image})`,
+                opacity: idx === currentPromotionIndex ? 1 : 0.5
+              }}
+            >
+        <p className="side-content">{promotion.title}</p>
+            </div>
+          </div>
         ))}
+      </div>
+      <div className="navigation-buttons">
+        <button className='btn-main' onClick={previousPromotion}>&#9664;</button>
+        <button className='btn-main' onClick={nextPromotion}>&#9654;</button>
       </div>
     </div>
   );
 }
+
 
 function MainBanner() {
   const [isOpen, setIsOpen] = useState(false);
@@ -212,7 +245,7 @@ function MainBanner() {
           <button onClick={closeNews} className="news-popup__close">&times;</button>
           <h2 className='news__title'>Внимание!</h2>
           <p className='news-subtitle'>Открыли второй отдел по ремонту!!Теперь вы можете посетить нас еще и  по адресу:</p>
-          <p className='news-title'>Вологда, ул. Ленина, д. 6</p>
+          <p className='news-title'>Вологда, ул. Ленина, д. 6 Звоните тел: 500-696</p>
         </div>
       )}
 

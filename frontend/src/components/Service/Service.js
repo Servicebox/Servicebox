@@ -54,6 +54,12 @@ import Card from "../Main/MainBanner/Card";
       linkTo: "/glass-replacement-price-lists",
     
     },
+        {
+      title: "Видеокартами",
+      subtitle: " Ремонт и обслуживание видеокарт",
+      image: "Videocard",
+      linkTo:"/videocard"
+    },
 
     {
       title: "Другими устройствами",

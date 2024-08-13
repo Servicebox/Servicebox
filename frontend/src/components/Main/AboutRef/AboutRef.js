@@ -12,6 +12,8 @@ const AboutRef = forwardRef((_props, ref) => {
 </h2>
 <h3 className="about__text">
 Быстрый и профессиональный ремонт в Вологде!</h3>
+<h4 className="about__text">
+ServiceBox открывает двери новой мастерской, расширяя спектр услуг! Теперь мы предлагаем быстрый и профессиональный ремонт видеокарт, ASICов, ноутбуков, материнских плат, ПК.</h4>
 <p className="about__subtitle">Ищете надежный сервисный центр для ремонта Вашей цифровой техники?
 Добро пожаловать в сервисный центр "ServiceBox"!
 Мы специализируемся на быстром и профессиональном ремонте ноутбуков, видеокарт, мобильных телефонов и
@@ -38,18 +40,18 @@ const AboutRef = forwardRef((_props, ref) => {
 <div className="about__tech">
     <div className="about__tech_content">
 <img src={Clock} className="about__image" alt="Clock" />
-<h3 className="about__text"> Работы от 30 минут</h3>
+<h3 className="about__text-tech"> Работы от 30 минут</h3>
 <p className="about__subtitle">Время работы или настройки занимает
 от 30 минут до несколько часов.</p>
 </div>
 <div className="about__tech_content">
 <img src={Card} className="about__image" alt="Card" />
-<h3 className="about__text"> Удобный способ оплаты</h3>
+<h3 className="about__text-tech"> Удобный способ оплаты</h3>
 <p className="about__subtitle">Оплата наличными или по перечеслению компаниям.</p>
 </div>
 <div className="about__tech_content">
 <img src={Secure} className="about__image" alt="Secure" />
-<h3 className="about__text"> Гарантия на все выполненые услуги</h3>
+<h3 className="about__text-tech"> Гарантия на все выполненые услуги</h3>
 <p className="about__subtitle">Запчасти, фотографии и сообщения под Вашим контролем. После работ инженер отдаст Вам старые запчасти.</p>
 </div>
 </div>

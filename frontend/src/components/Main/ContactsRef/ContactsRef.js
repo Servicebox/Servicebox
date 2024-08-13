@@ -42,6 +42,22 @@ const ContactsRef = forwardRef((props, ref) => {
           <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
          г. Вологда, ул. Северная, 7А, офис 405</p>
           <div className="contacts__block"></div>
+        
+        </div>
+         <div onClick={handlePhoneCall} className="contacts__block">
+        
+    <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
+  +7 911 501 88 28
+</p>
+        </div>
+                <div onClick={handleMailTo} className="contacts__block">
+        <p className="contacts__text">
+        <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
+          servicebox35@gmail.com</p>
+        </div>
+                <div className="contacts__block">
+         
          <p className="contacts__text">
           <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
          г. Вологда, ул. Ленина, 6</p>

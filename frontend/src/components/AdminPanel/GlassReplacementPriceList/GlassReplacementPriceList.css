@@ -1,7 +1,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 5px;
+  margin-top: 30px;
 }
 
 th,
@@ -63,6 +63,8 @@ tbody tr:hover {
 .smaller-font {
   font-family: Gilroy;
   font-size: 0.8em;  
+      padding-top: 50px;
+    padding-bottom: 50px;
 }
 
 .glass__btn{

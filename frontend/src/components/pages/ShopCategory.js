@@ -33,7 +33,7 @@ const ShopCategory = (props) => {
       </div>
       <div className="shopcategory-products">
         {filteredProducts.map((item, i) => (
-          <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
+          <Item key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} quantity={item.quantity}/>
         ))}
       </div>
       {visibleCount < all_product.filter(item => props.category === item.category && item.name.toLowerCase().includes(searchTerm.toLowerCase())).length && (

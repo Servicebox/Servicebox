@@ -10,8 +10,8 @@ import location from "../../images/location.svg";
 import Mail from "../../images/mail.svg";
 import Footer from '../Footer/Footer';
 
-import {  faMobilePhone} from '@fortawesome/free-solid-svg-icons';
-import { faVk, faTelegram, faWhatsapp, } from '@fortawesome/free-brands-svg-icons';
+import {  faMobilePhone, faMailBulk} from '@fortawesome/free-solid-svg-icons';
+import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 
 
 
@@ -39,23 +39,42 @@ const Contacts = forwardRef((props, ref) => {
       </div>
       <div className="contacts__list-info">
         <div onClick={handlePhoneCall} className="contacts__block">
-        <p className="contact-info__numberone" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '10px' }} />
+        
+    <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
   +7 911 501 88 28
 </p>
         </div>
         <div onClick={handleMailTo} className="contacts__block">
-          <img src={Mail} className="contacts__image" alt="Mail" />
-          <p className="contacts__text">servicebox35@gmail.com</p>
+        <p className="contacts__text">
+        <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
+          servicebox35@gmail.com</p>
         </div>
         <div className="contacts__block">
-           <p className="contacts__text">
+         <p className="contacts__text">
           <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
-         г. Вологда, ул. Северная 7А, этаж 4, офис 405</p>
-           <div className="contacts__block"></div>
+         г. Вологда, ул. Северная, 7А, офис 405</p>
+          <div className="contacts__block"></div>
+        
+        </div>
+         <div onClick={handlePhoneCall} className="contacts__block">
+        
+    <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
+  +7 911 501 88 28
+</p>
+        </div>
+                <div onClick={handleMailTo} className="contacts__block">
+        <p className="contacts__text">
+        <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
+          servicebox35@gmail.com</p>
+        </div>
+                <div className="contacts__block">
+         
          <p className="contacts__text">
           <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
          г. Вологда, ул. Ленина, 6</p>
+        
         </div>
         <div className="contacts__block-sochial">
         <ul className="contacts__icon">

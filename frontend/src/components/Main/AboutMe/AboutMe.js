@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./AboutMe.css";
-import Photo0 from "../../../images/photo5.jpeg";
-import Photo1 from "../../../images/dima.jpeg";
-import Photo2 from "../../../images/noutbook.jpeg";
-import Photo3 from "../../../images/okul.jpeg";
-import Photo4 from "../../../images/photo1.jpeg"
-import Photo5 from "../../../images/photo2.jpeg"
-import Photo6 from "../../../images/photo3.jpeg"
-import PrevButtonImage from "../../../images/Down.svg";
-import NextButtonImage from "../../../images/Up.svg";
+import Photo0 from "../../../images/photo5.webp";
+import Photo1 from "../../../images/dima.webp";
+import Photo2 from "../../../images/noutbook.webp";
+import Photo3 from "../../../images/okul.webp";
+import Photo4 from "../../../images/photo1.webp"
+import Photo5 from "../../../images/photo2.webp"
+import Photo6 from "../../../images/photo3.webp"
+
 
 function AboutMe() {
   const [currentPhoto, setCurrentPhoto] = useState(0);
@@ -39,29 +38,8 @@ function AboutMe() {
           </span>
         </h2>
         <div className="about-me__about">
-          <div className="about-me__text">
-            <p className="about-me__subtitle">
-              За счет этого мы гарантируем устранение любых неполадок и предоставляем гарантию на все выполненные работы.
-            </p>
-            <p className="about-me__subtitle">
-              Мы поможем не только восстановить работоспособность техники, но и подскажем, как избежать возникновения
-              подобных поломок в будущем.
-            </p>
-            <p className="about-me__subtitle">
-              Квалифицированная консультация специалиста поможет безопасно пользоваться компьютером. В нашем штате
-              работают опытные специалисты.
-            </p>
-          </div>
           <div className="about-me__gallery">
             <img src={photos[currentPhoto]} className="about-me__image" alt="фотография" />
-            <div className="about-me__gallery-controls">
-              <button className="about-me__prev-button" onClick={handlePrev}>
-                <img className="about-me__prev-image" src={PrevButtonImage} alt="назад" />
-              </button>
-              <button className="about-me__next-button" onClick={handleNext}>
-                <img className="about-me__next-image" src={NextButtonImage} alt="вперед" />
-              </button>
-            </div>
             <div className="about-me__dots">
               {photos.map((_, index) => (
                 <span

@@ -10,7 +10,8 @@ addItem,
 removeItem,
 addedItems = [], // Устанавливаем пустой массив в качестве значения по умолчанию
 text,
-price
+price,
+quantity
 }) => {
 const [isAdded, setIsAdded] = useState(false);
 const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,6 +69,7 @@ alt="модал"
 </div>
 <div className="card-price-add">
 <span>Цена : ₽{price}</span>
+<span>количесво :{quantity} </span>
 <button
   className={isAdded ? "remove-item-btn" : "add-item-btn"}
   onClick={() => {

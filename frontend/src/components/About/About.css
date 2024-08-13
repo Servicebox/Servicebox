@@ -1,0 +1,48 @@
+.about-me__quote{
+color: #333;
+width: 100%;
+}
+
+.about__text {
+    position: relative;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin:0 40px ;
+ 
+}
+
+.about-me__quote {
+    display: block;
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+    background: #f9f9f9;
+    border-left: 5px solid #f9a92d;
+     border-right: 5px solid #f9a92d;
+    font-style: italic;
+}
+
+.about-me__quote::before,
+.about-me__quote::after {
+  
+    font-size: 4em;
+    color: #ff6347; /* Красный оттенок (или любой другой цвет по вашему выбору) */
+    position: absolute;
+    top: -10px;
+}
+
+.about-me__quote::before {
+    left: -25px;
+}
+
+.about-me__quote::after {
+  
+    right: -25px;
+}
+
+.about-me{
+
+
+object-fit: cover;
+border-radius: 10px;
+}

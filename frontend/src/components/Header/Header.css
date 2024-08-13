@@ -3,7 +3,11 @@
   flex-wrap: wrap;
   justify-content: center;
 }
-
+.nav__info{
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
 .tag-cloud span {
   display: inline-block;
   padding: 5px 10px;
@@ -574,20 +578,20 @@ color: white;
 
 }
 .header__top {
-
+height: 70px;
   display: flex;
    white-space: nowrap;
   align-items: center;
   justify-content: space-between;
  max-width: 900px;
     margin: 0 auto;
-    border-bottom: 1px solid #000000;
+    border-bottom: 2px solid ;
     width: calc(100% - 1*40px);
     z-index: 3;
-    max-height: 50px;
+    max-height: 70px;
     overflow-x: auto;
     box-sizing: border-box;
-   background: #f9a92cb8;
+   background: #f9a92c75;
 
   
 
@@ -815,7 +819,7 @@ display: flex;
 
 .button img {
   display: block;
-  max-width: 100px;
+  max-width: 150px;
 
 }
 

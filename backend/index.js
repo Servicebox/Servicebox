@@ -543,7 +543,7 @@ app.get('/api/search', async (req, res) => {
     // Объединение всех результатов
     const results = [
       ...services.map(service => ({ id: service._id, title: service.serviceName, type: 'Service', description: service.description })),
-      ...products.map(product => ({ id: product._id, title: product.name, type: 'Product', description: product.category })),
+      ...products.map(product => ({ id: product._id, title: product.name, type: 'Product', description: product.category,  quantity: product.quantity})),
       ...images.map(image => ({ id: image._id, title: image.description, type: 'Image', description: image.filePath }))
     ];
     

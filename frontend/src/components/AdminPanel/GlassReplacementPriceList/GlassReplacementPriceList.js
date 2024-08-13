@@ -41,7 +41,7 @@ const GlassReplacementPriceList = () => {
     <div className='glass'>
       <h1 className='glass__title'>Цены на замену стекла Iphone, Apple Watch, Samsung</h1>
       <span className="smaller-font">По другим моделям уточняйте по номеру телефона 8911 501 88 28</span>
-      <Search value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
+      <Search className="search__product" value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
       <table>
         <thead>
           <tr>

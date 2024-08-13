@@ -59,6 +59,7 @@ import Footer from "../Footer/Footer";
 import AdminLogin from "../AdminPanel/AdminLogin/AdminLogin";
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import AdminPanel from "../AdminPanel/AdminPanel";
+import VideoCard from "../AdminPanel/VideoCard/VideoCard"
 
 
 const App = () => {
@@ -118,6 +119,7 @@ const App = () => {
           <Route path="/tablet-service" element={<TabletService />} />
           <Route path="/telephone-service" element={<TelephoneService />} />
           <Route path="/other-service" element={<OtherService />} />
+           <Route path="/videocard" element={<VideoCard />} />
           <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
           <Route path="/appl-service" element={<ApplService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

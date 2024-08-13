@@ -10,6 +10,7 @@ import Tablet from "../../../images/tablet.png";
 import Notebook from "../../../images/notebook.png";
 import Monoblok from "../../../images/monoblok.png";
 import Devices from "../../../images/Devices.png";
+import Videocard from "../../../images/videocard.webp";
 
 const Card = ({ title, subtitle, image, linkTo }) => {
     const serviceRef = useRef(null);
@@ -23,7 +24,8 @@ const Card = ({ title, subtitle, image, linkTo }) => {
         "Tablet": Tablet,
         "Tv": Tv,
         "Glass": Glass,
-        "Devices": Devices
+        "Devices": Devices,
+        "Videocard":Videocard,
       };
       return imageMap[title];
     };

@@ -43,13 +43,13 @@
     cursor: pointer;
 }
 
-.nav-menu hr {
+.nav-menu{
     margin: 0;
     border: none;
     width: 80%;
-    height: 3px;
+   
     border-radius: 10px;
-    background: #F9A92C;
+    
 }
 
 .nav-login-cart {

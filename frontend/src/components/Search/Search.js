@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './Search.css'
 const Search = () => {
     const [query, setQuery] = React.useState('');
 
@@ -8,13 +8,14 @@ const Search = () => {
     };
 
     return (
-        <div>
+        <div className='search__product'>
             <input
                 type="text"
                 value={query}
                 onChange={handleInputChange}
                 placeholder="поиск..."
             />
+            
         </div>
     );
 };

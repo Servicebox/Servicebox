@@ -32,6 +32,7 @@ font-style: normal;
 font-weight: 600;
 line-height: normal;
 margin: 0 auto;
+
 }
 .about__subtitle{
 color: #444;
@@ -41,7 +42,7 @@ font-style: normal;
 font-weight: 400;
 line-height: 24px; /* 133.333% */
 text-align: center;
-margin: 10px auto;
+margin: 10px 40px;
 }
 .about__image{
 
@@ -94,7 +95,7 @@ margin: 0 auto;
     .about__content{
         display: flex;
         flex-direction: column;
-        max-width: 263px;
+        align-items: center;
         padding-bottom: 50px;
     }
     .about__title{
@@ -113,7 +114,9 @@ line-height: normal;
         font-style: normal;
         font-weight: 600;
         line-height: 22px; 
+        width: 250px;
     }
+
     .about__subtitle{
         color: #444;
         text-align: center;

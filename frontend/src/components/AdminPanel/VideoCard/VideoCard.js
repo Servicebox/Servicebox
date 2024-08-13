@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import "./MonoblockService.css"
+import "./VideoCard.css"
 import axios from 'axios';
 import Search from "../../Search/Search"
 import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 
-const MonoblockServiceList = () => {
-  const [monoblockPrices, setMonoblockPrices] = useState([]);
+const videocardList = () => {
+  const [videocardPrices, setVideocardPrices] = useState([]);
 
   const [showAll, setShowAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,15 +16,15 @@ const MonoblockServiceList = () => {
 
 
   useEffect(() => {
-    const getCategoryMonoblockPrices = async () => {
+    const getCategoryVideocardPrices = async () => {
       try {
-        const response = await axios.get('https://servicebox35.pp.ru/services/Моноблок');
-        setMonoblockPrices(response.data);
+        const response = await axios.get('https://servicebox35.pp.ru/services/Видеокарты');
+        setVideocardPrices(response.data);
       } catch (error) {
         console.error('Error fetching Notebook replacement prices: ', error);
       }
     };
-    getCategoryMonoblockPrices();
+    getCategoryVideocardPrices();
   }, []);
 
   const handleShowAll = () => {
@@ -36,14 +36,15 @@ const MonoblockServiceList = () => {
   };
 
 
-  const filteredMonoblockPrices = monoblockPrices.filter((monoblockPrice) => {
-    return monoblockPrice.serviceName.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredVideocardPrices = videocardPrices.filter((videocardPrice) => {
+    return videocardPrice.serviceName.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
 
   return (
-    <div className='monoblock'>
-      <h1 className='monoblock__title'>Цены на работу по ремноту ноутбуков </h1>
+    <div className='videocard'>
+      <h1 className='monoblock__title'>Цены на работу по ремонту и обслуживанию видеокарт </h1>
+      <p>В обслуживание входит продувка радиатора с вентиляторами, замена термопасты и термопрокладок.</p>
       <span className="smaller-font">Если не нашли, что искали звоните 8911 501 88 28(ул.Северная д.7А, офис 204), 8911 501 06 96(ул.Ленина д.6). Цены указаны без учета запчастей</span> 
        <Search value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
 
@@ -55,10 +56,10 @@ const MonoblockServiceList = () => {
           </tr>
         </thead>
         <tbody>
-        {filteredMonoblockPrices.slice(0, showAll ? filteredMonoblockPrices.length : 15).map((monoblockPrice) => (
-            <tr key={monoblockPrice._id}>
-              <td>{monoblockPrice.serviceName}</td>
-              <td>{monoblockPrice.price}</td>
+        {filteredVideocardPrices.slice(0, showAll ? filteredVideocardPrices.length : 15).map((videocardPrice) => (
+            <tr key={videocardPrice._id}>
+              <td>{videocardPrice.serviceName}</td>
+              <td>{videocardPrice.price}</td>
             </tr>
           ))}
         </tbody>
@@ -80,4 +81,4 @@ const MonoblockServiceList = () => {
   );
 }
 
-export default MonoblockServiceList;
+export default videocardList;

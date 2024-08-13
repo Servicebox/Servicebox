@@ -70,17 +70,16 @@
   }
   
 .foto__title{
-  padding: 50px 201px;
-  background-color: #f9a92c;
-    -webkit-clip-path: polygon(0 0,100% 0,100% 85%,75% 100%,25% 90%,0 100%);
-    clip-path: polygon(0 0,100% 0,100% 85%,75% 100%,25% 90%,0 100%);
-    color: #000;
-  margin: 0 auto;
 
-  text-align: center;
-  font-weight: 700;
-  font-family: Montserrat;
-  font-size: 30px;
+    padding: 50px 201px;
+    background-color: #f9a92c;
+    clip-path: polygon(0 0, 25% 10%, 75% 0, 100% 10%, 100% 85%, 75% 100%, 25% 90%, 0 100%);
+    color: #000;
+    margin: 0 auto;
+    text-align: center;
+    font-weight: 700;
+    font-family: Montserrat;
+    font-size: 30px;
 }
 .foto__img{
   width: 250px;
