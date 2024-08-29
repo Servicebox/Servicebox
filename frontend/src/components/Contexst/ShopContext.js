@@ -13,6 +13,7 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
+     const [all_services, setAll_Services] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -25,6 +26,7 @@ const ShopContextProvider = (props) => {
                 console.error('Fetch allproducts error:', error);
             }
         };
+        
 
         const fetchCartItems = async () => {
             if (localStorage.getItem('auth-token')) {
@@ -92,6 +94,7 @@ const ShopContextProvider = (props) => {
         }
     };
 
+
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for (const item in cartItems) {
@@ -114,6 +117,8 @@ const ShopContextProvider = (props) => {
         }
         return totalItem;
     }
+
+    
 
     const contextValue = { getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, getTotalCartItems};
 

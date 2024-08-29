@@ -103,13 +103,17 @@ margin-bottom: 5px;
   justify-content: flex-start;
   background-size: cover;
   background-position: center;
+  background-size: contain; /* Adjust the image to maintain its aspect ratio */
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100% !important;
   transition: background-image 0.5s ease-in-out;
 }
 
 .main-promotion .content-main {
   margin: 20px; /* можем задать отступы от краёв */
   padding: 20px;
-  background: rgba(0, 0, 0, 0.6); /* тёмный фон для читаемости текста */
+  background: #041e42de;
   border-radius: 10px;
   color: white;
   width: 450px;
@@ -142,7 +146,8 @@ border-radius: 10px;
 }
 
 .side-promotion.active {
-  border: 2px solid lightblue;
+ border: 3px solid #f9aa2c;
+
 }
 
 .side-image {

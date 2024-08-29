@@ -28,7 +28,7 @@
 /* Основная сетка */
 .shopcategory-products {
       display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     width: 100%;
     justify-items: center;
@@ -54,7 +54,7 @@
 /* Адаптивные стили для более крупных экранов */
 @media screen and (min-width: 768px) {
   .shopcategory-products {
-    grid-template-columns: repeat(2, 1fr);
+    
   }
 
   .shopcategory-banner {
@@ -87,7 +87,7 @@
 .item img {
   width: 100%;
   height: auto;
-  max-width: 200px;
+  max-width: 250px;
   margin-bottom: 15px;
   object-fit: cover;
 }
@@ -132,6 +132,11 @@
     
 }
 
+@media screen and (min-width: 320px) and (max-width: 481px) {
+    .item img{
+       max-width: 200px;
+    }
+}
 @media screen and (min-width: 481px) and (max-width: 767px) {
     .shopcategory-products {
         grid-template-columns: repeat(1, 1fr);
@@ -139,9 +144,7 @@
 }
 
 @media screen and (min-width: 768px) {
-    .shopcategory-products {
-        grid-template-columns: repeat(2, 1fr);
-    }
+
   
 }
 

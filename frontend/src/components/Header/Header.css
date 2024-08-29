@@ -3,6 +3,11 @@
   flex-wrap: wrap;
   justify-content: center;
 }
+svg:not(:root).svg-inline--fa, svg:not(:host).svg-inline--fa {
+ 
+height: 25px;
+  cursor: pointer;
+}
 .nav__info{
   display: flex;
   flex-direction: column;
@@ -242,7 +247,7 @@ body {
 }
 .mainHeading__content {
   max-width: 1110px;
-  height: 400px;
+margin:0 15px;
   top: 0px;
   left: 50%;
   transform: translateX(-50%);
@@ -260,8 +265,8 @@ body {
 }
 .mainHeading__text {
   z-index: 1;
-  color: #637498;
-  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  background: #445669cf;
   padding: 40px;
   max-width: 620px;
   margin-top: 100px;
@@ -270,11 +275,12 @@ body {
   animation: text 0.8s 0.6s ease backwards;
   position: relative;
   text-align: center;
+  border-radius: 5px;
 }
 .mainHeading__text:before {
   content: "";
   position: absolute;
-  width: 5px;
+
   height: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   top: 0;
@@ -291,12 +297,13 @@ body {
 @media screen and (max-width: 799px) {
   .mainHeading__text {
     padding: 20px;
-    margin: 90px 0 40px 0;
-    width: 50%;
+    margin: 0px 0 40px 0;
+    width: 70%;
     display: flex;
     flex-direction: column;
     gap: 10px;
     text-align: center;
+    align-items: center;
   }
 }
 @keyframes text {
@@ -307,18 +314,17 @@ body {
 }
 .mainHeading__preTitle {
   text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 2px;
-  
-  color: #637498;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: #ffffff;
 }
 .mainHeading__title {
   text-transform: uppercase;
-  font-weight: 200;
+  font-weight: bold;
   letter-spacing: 2px;
 
   font-size: 40px;
-  color: #637498;
+  color: #ffffff;
 }
 @media screen and (max-width: 799px) {
   .mainHeading__title {
@@ -327,9 +333,11 @@ body {
   }
 }
 .mainHeading__description {
-  letter-spacing: 0.5px;
-  font-size: 16px;
-  line-height: 26px;
+ letter-spacing: 0.5px;
+    font-size: 18px;
+    line-height: 26px;
+    font-weight: 600;
+    color: #ffffff;
 }
 @media screen and (max-width: 799px) {
   .mainHeading__description {
@@ -337,7 +345,7 @@ body {
   }
 }
 .mainHeading__image {
-  top: -130px;
+  top: -60px;
   right: 0;
   max-width: 600px;
   width: 60%;
@@ -420,13 +428,6 @@ body {
 }
 
 
-
-
-
-
-
-
-
 @property --angle {
   syntax: '<angle>';
   initial-value: 0deg;
@@ -441,7 +442,7 @@ position: absolute;
 color: #000000;
 font-family: "sans-serif";
 font-size: 60rem;
-height: 100%;
+height: 80%;
 margin: 0;
 display: flex;
 justify-content: center;
@@ -591,7 +592,7 @@ height: 70px;
     max-height: 70px;
     overflow-x: auto;
     box-sizing: border-box;
-   background: #f9a92c75;
+   background: #37a5d7e0;
 
   
 
@@ -1109,7 +1110,7 @@ letter-spacing: -0.2px;
 }
 .mainHeading__image{
   width: 67%;
-  top: -51px;
+  top: -147px;
 }
 .contact-info__location{
   font-size: 9px;

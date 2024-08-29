@@ -10,11 +10,11 @@ import Eplaceable from "../../../images/telpodmena.svg"
 import Form from '../../Form/Form';
 
 
-import Example1 from '../../../images/термопаста.webp';
+import Example1 from '../../../images/chistka.webp';
 import Example2 from '../../../images/gid.webp';
-import Example3 from '../../../images/msi.webp';
+import Example3 from '../../../images/videocard.webp';
 import Example4 from '../../../images/mnogodet.webp';
-
+import Example5 from '../../../images/glass.webp';
 
 function Countdown({ endDate }) {
   const [timeLeft, setTimeLeft] = useState({
@@ -56,28 +56,35 @@ function PromotionCarousel({ toggleForm }) {
   const promotions = [
     {
       title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
-      endDate: new Date('2024-08-29T23:59:59'),
+      endDate: new Date('2024-09-29T23:59:59'),
       description: "До конца акции осталось:",
       image: Example1
     },
     {
       title: "При установке ориг дисплея, гидрогелевая пленка в подарок",
-      endDate: new Date('2024-08-30T23:59:59'),
+      endDate: new Date('2024-09-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example2
     },
     {
       title: "При ремонте видеокарт на Ленина д.6 скидка на работу 20%",
-      endDate: new Date('2024-08-30T23:59:59'),
+      endDate: new Date('2024-09-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example3
     },
     {
       title: " Многодетным скидка на работу 20%",
-      endDate: new Date('2024-08-30T23:59:59'),
+      endDate: new Date('2024-09-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example4
+    },
+     {
+      title: " Замена стекла в день обращения, со скидкой на работу в 5%",
+      endDate: new Date('2024-09-30T23:59:59'),
+      description: "До конца акции осталось:",
+      image: Example5
     }
+
   ];
 
   const [currentPromotionIndex, setCurrentPromotionIndex] = useState(0);

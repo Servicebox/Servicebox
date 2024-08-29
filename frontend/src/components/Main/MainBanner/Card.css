@@ -1,6 +1,6 @@
 .service__content{
   width: 95%;
-  padding: 150px 0 0;
+  padding: 120px 0 0;
 }
 
 .service__title{
@@ -219,7 +219,7 @@ font-size: 0.9em;
 }
 }
 
-@media screen and (max-width: 501px) and (min-width: 400px) {
+@media screen and (max-width: 500px) and (min-width: 400px) {
   .cards, .cover-item:before {
     border: 3px solid #ffffff80;
     border-radius: 15px;
@@ -304,7 +304,7 @@ text-align: center;
   }
   .cards .card-back {
     height: 57%;
-    top: 70px;
+    top: 0;
     width: 74%;
     left: 33px;
   }
@@ -324,7 +324,7 @@ text-align: center;
   
   }
 }
-@media screen and (min-width: 320px) and (max-width: 399px) {
+@media screen and (min-width: 320px) and (max-width: 400px) {
   .cards{
     height: 100%;
     transform-style: preserve-3d;
@@ -360,7 +360,7 @@ text-align: center;
   
   }
 }
-@media screen and (min-width: 502px) and (max-width:795px) {
+@media screen and (min-width: 500px) and (max-width:796px) {
   .card_one{
     height: 250px;
     width: 45%;
@@ -399,7 +399,7 @@ position: fixed;
     .cards .card-back {
       height: 60%;
       width: 78%;
-      top: 100px;
+      top: 0;
       left: 32px;
       display: flex;
       justify-content: flex-start;

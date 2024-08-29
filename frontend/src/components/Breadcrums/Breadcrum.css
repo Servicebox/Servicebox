@@ -1,6 +1,7 @@
 .breadcrum {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+
     gap: 8px;
     color: #5e5e5e;
     font-size: 14px;
@@ -8,6 +9,7 @@
     margin: 0px 0px 40px 0px;
     text-decoration: capitalize;
     position: relative;
+    align-items: flex-start;
 
         padding: 0 10px 0 10px;
 }

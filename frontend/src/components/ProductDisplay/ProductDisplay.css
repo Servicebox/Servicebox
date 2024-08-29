@@ -5,7 +5,11 @@
     justify-content: center;
        padding: 0 10px 0 10px;
     position: relative;
+    padding-bottom: 200px;
 
+}
+.productdisplay-quantity{
+margin-bottom: 5px;
 }
 .productdisplay-right-description{
   padding-bottom: 30px;
@@ -101,7 +105,7 @@
     font-weight: 600;
     color: white;
     background: #FF4141;
-    margin-bottom: 40px;
+
     border: none;
     outline: none;
     cursor: pointer;

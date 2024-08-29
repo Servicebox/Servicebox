@@ -46,6 +46,7 @@ const TvServiceList = () => {
   return (
     <div className='tv'>
       <h1 className='tv__title'>Цены на работу по ремноту телевизоров и мониторов </h1>
+      <p>Диагностика бесплатная! Наш мастер произведет диагностику, сообщит о проблеме и предложит решение. Мы договоримся о цене и сроках, мастер начнет работу.</p>
       <span className="smaller-font">Если не нашли, что искали звоните 8911 501 88 28. Цены указаны без учета запчастей</span>
       <Search value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
       <table>

@@ -44,6 +44,7 @@ const MonoblockServiceList = () => {
   return (
     <div className='monoblock'>
       <h1 className='monoblock__title'>Цены на работу по ремноту ноутбуков </h1>
+      <p>Диагностика бесплатная! Наш мастер произведет диагностику, сообщит о проблеме и предложит решение. Мы договоримся о цене и сроках, мастер начнет работу.</p>
       <span className="smaller-font">Если не нашли, что искали звоните 8911 501 88 28(ул.Северная д.7А, офис 204), 8911 501 06 96(ул.Ленина д.6). Цены указаны без учета запчастей</span> 
        <Search value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
 

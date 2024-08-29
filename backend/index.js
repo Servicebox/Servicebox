@@ -347,7 +347,11 @@ app.get('/allproducts', async (req, res) => {
 });
 
 //
-
+app.get('/allservices', async (req, res) => {
+  let products = await Product.find({});
+  console.log("All products fetched");
+  res.send(products);
+});
 
 // CRUD операций для пользователей
 const Users = mongoose.model('Users',{

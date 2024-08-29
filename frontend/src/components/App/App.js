@@ -55,6 +55,7 @@ import "./App.css";
 import Navbar from "../NavBar";
 import Addproduct from "../AdminPanel/Addproduct";
 import ListProduct from "../AdminPanel/ListProduct";
+import ListService from "../AdminPanel/ListService";
 import Footer from "../Footer/Footer";
 import AdminLogin from "../AdminPanel/AdminLogin/AdminLogin";
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
@@ -133,6 +134,7 @@ const App = () => {
           <Route path="/shop" element={<Shop />} />
           <Route path="/addproduct" element={<Addproduct />} />
           <Route path="/listproduct" element={<ListProduct />} />
+              <Route path="/listservice" element={<ListService />} />
             <Route path="/widget" element={<Widget />} />
           <Route path="/nav-bar" element={<Navbar />} />
           <Route path="/product-display" element={<ProductDisplay />} />

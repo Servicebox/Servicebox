@@ -10,6 +10,7 @@ import ListProduct from '../ListProduct';
 import Addproduct from '../Addproduct';
 import AdminLogin from '../AdminLogin/AdminLogin'
 import PrivateRoute from '../AdminLogin/PrivateRoute';
+import ListService from '../ListService';
 
 const AdminPanelRoute = () => {
   const handleUpload = (e) => {
@@ -23,16 +24,18 @@ const AdminPanelRoute = () => {
       <Link className='admin__link' to="/admin-panel/create">Cоздание</Link>
       <Link className='admin__link' to="/admin-panel/delete">Удаление</Link>
       <Link className='admin__link' to="/admin-panel/update">Обновление</Link>
+       <Link className='admin__link' to="/admin-panel/listservice">товары</Link>
       <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
       <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>
         <Link className='admin__link' to="/admin-panel/listproduct">товары</Link>
                 <Link className='admin__link' to="/admin-panel/addproduct">добавить товар</Link>
-  
+  <div className='admin-links'>
       <Routes>
       <Route path="/admin/login" element={<AdminLogin />} />
        <Route path="/admin-panel/*" element={<PrivateRoute><AdminPanelRoute /></PrivateRoute>} />
         <Route path="addproduct" element={<Addproduct/>} />
         <Route path="listproduct" element={<ListProduct/>} />
+         <Route path="listservice" element={<ListService/>} />
         <Route path="create-image" element={<CreateImage />} />
         <Route path="delete-image" element={<DeleteImage />} />
         <Route path="create" element={<CreateServiceForm />} />
@@ -40,6 +43,7 @@ const AdminPanelRoute = () => {
         <Route path="update" element={<UpdateService />} />
     
       </Routes>
+      </div>
     </div>
   );
 };
