@@ -2,14 +2,14 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Card.css";
 
-import Tv from "../../../images/tv.png"
-import Glass from "../../../images/Glass.png"
-import Applefon from "../../../images/apple.png";
-import Android from "../../../images/android.png";
-import Tablet from "../../../images/tablet.png";
-import Notebook from "../../../images/notebook.png";
-import Monoblok from "../../../images/monoblok.png";
-import Devices from "../../../images/Devices.png";
+import Tv from "../../../images/tv.webp"
+import Glass from "../../../images/glass.webp"
+import Applefon from "../../../images/apple.webp";
+import Android from "../../../images/android.webp";
+import Tablet from "../../../images/tablet.webp";
+import Notebook from "../../../images/notebook.webp";
+import Monoblok from "../../../images/monoblok.webp";
+import Devices from "../../../images/Devices.webp";
 import Videocard from "../../../images/videocard.webp";
 
 const Card = ({ title, subtitle, image, linkTo }) => {

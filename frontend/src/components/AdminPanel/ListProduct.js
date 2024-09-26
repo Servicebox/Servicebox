@@ -1,14 +1,12 @@
-//components/listproduct
-// eslint-disable-next-line no-unused-vars
-import React,{useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import './ListProduct.css';
-import cross_icon from '../Assets/cross_icon.png'
-
+import cross_icon from '../Assets/cross_icon.png';
 
 const ListProduct = () => {
-const [allproducts, setAllProducts] = useState([]);
+  const [allproducts, setAllProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null);
 
-const fetchInfo = async () => {
+  const fetchInfo = async () => {
     try {
       const response = await fetch('https://servicebox35.pp.ru/allproducts', {
         method: 'GET',
@@ -17,8 +15,6 @@ const fetchInfo = async () => {
           'Content-Type': 'application/json',
         },
       });
-
-      console.log('Response status: ', response.status); // Для отладки статуса ответа
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -46,8 +42,6 @@ const fetchInfo = async () => {
         body: JSON.stringify({ id: id }),
       });
 
-      console.log('Response status for remove_product: ', response.status); // Для отладки статуса ответа
-
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -58,37 +52,112 @@ const fetchInfo = async () => {
     }
   };
 
+  const startEditing = (product) => {
+    setEditingProduct({ ...product });
+  };
+
+  const handleEditChange = (e, field) => {
+    setEditingProduct({
+      ...editingProduct,
+      [field]: e.target.value
+    });
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('product', file);
+
+    try {
+      const response = await fetch('https://servicebox35.pp.ru/uploads', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setEditingProduct({
+        ...editingProduct,
+        image: data.image_url
+      });
+    } catch (error) {
+      console.error('Upload image error: ', error.message);
+    }
+  };
+
+  const saveEdit = async () => {
+    try {
+      const response = await fetch(`https://servicebox35.pp.ru/updateproduct/${editingProduct.id}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editingProduct),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      setEditingProduct(null);
+      await fetchInfo();
+    } catch (error) {
+      console.error('Update product error: ', error.message);
+    }
+  };
+
   return (
     <div className='list-product'>
-        <p>All product List</p>
+      <h2>Список всех товаров</h2>
       <div className='listproduct-format-main'>
-        <p>Товар</p>
-      
-        <p>Описание</p>
-          <p>Остаток</p>
+        <p>Фото</p>
+        <p>Название</p>
+        <p>Категория</p>
         <p>Старая цена</p>
         <p>Новая цена</p>
-        <p>Категория</p>
-        <p>Удалить</p>
+        <p>Количество</p>
+        <p>Действия</p>
       </div>
       <div className='listproduct-allproducts'>
-<hr/>
-{allproducts.map((product)=>{
-    return (
-        <div key={product.id} className='listproduct-format-main listproduct-format'>
-            <img className='listproduct-product-icon' src={product.image} alt='' />
-            <p>{product.name}</p>
-            <p>{product.quantity}</p>
-            <p>₽{product.old_price}</p>
-            <p>₽{product.new_price}</p>
-            <p>{product.category}</p>
-            <img onClick={()=>{remove_product(product.id)}} className='listproduct-remove-icon' src={cross_icon} alt='' />
-        </div>
-    );
-})}
+        <hr/>
+        {allproducts.map((product) => (
+          <div key={product.id} className='listproduct-format-main listproduct-format'>
+            {editingProduct && editingProduct.id === product.id ? (
+              <>
+                <input type="file" onChange={handleImageChange} />
+                <input value={editingProduct.name} onChange={(e) => handleEditChange(e, 'name')} />
+                <input value={editingProduct.category} onChange={(e) => handleEditChange(e, 'category')} />
+                <input value={editingProduct.old_price} onChange={(e) => handleEditChange(e, 'old_price')} type="number" />
+                <input value={editingProduct.new_price} onChange={(e) => handleEditChange(e, 'new_price')} type="number" />
+                <input value={editingProduct.quantity} onChange={(e) => handleEditChange(e, 'quantity')} type="number" />
+                <div>
+                  <button onClick={saveEdit}>Сохранить</button>
+                  <button onClick={() => setEditingProduct(null)}>Отмена</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <img className='listproduct-product-icon' src={product.image} alt='' />
+                <p>{product.name}</p>
+                <p>{product.category}</p>
+                <p>₽{product.old_price}</p>
+                <p>₽{product.new_price}</p>
+                <p>{product.quantity}</p>
+                <div className='list-btn'>
+                  <button className='list-button' onClick={() => startEditing(product)}>Редактировать</button>
+                  <img onClick={() => remove_product(product.id)} className='listproduct-remove-icon' src={cross_icon} alt='' />
+                </div>
+              </>
+            )}
+          </div>
+        ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default ListProduct
+export default ListProduct;

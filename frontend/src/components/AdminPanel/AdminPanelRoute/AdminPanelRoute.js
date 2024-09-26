@@ -11,6 +11,7 @@ import Addproduct from '../Addproduct';
 import AdminLogin from '../AdminLogin/AdminLogin'
 import PrivateRoute from '../AdminLogin/PrivateRoute';
 import ListService from '../ListService';
+import ImageList from '../Image/ImageList';
 
 const AdminPanelRoute = () => {
   const handleUpload = (e) => {
@@ -21,14 +22,16 @@ const AdminPanelRoute = () => {
   return (
     <div className='admin-panel'>
 
-      <Link className='admin__link' to="/admin-panel/create">Cоздание</Link>
-      <Link className='admin__link' to="/admin-panel/delete">Удаление</Link>
-      <Link className='admin__link' to="/admin-panel/update">Обновление</Link>
-       <Link className='admin__link' to="/admin-panel/listservice">товары</Link>
+      <Link className='admin__link' to="/admin-panel/create">Cоздание Услуги</Link>
+      <Link className='admin__link' to="/admin-panel/delete">Удаление услуги</Link>
+      <Link className='admin__link' to="/admin-panel/update">Обновление услуги</Link>
+       <Link className='admin__link' to="/admin-panel/listservice">Услуги список</Link>
       <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
       <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>
-        <Link className='admin__link' to="/admin-panel/listproduct">товары</Link>
+        <Link className='admin__link' to="/admin-panel/listproduct">Товары список</Link>
                 <Link className='admin__link' to="/admin-panel/addproduct">добавить товар</Link>
+                 <Link className='admin__link' to="/admin-panel/imagelist">Фото все</Link>
+
   <div className='admin-links'>
       <Routes>
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -41,7 +44,7 @@ const AdminPanelRoute = () => {
         <Route path="create" element={<CreateServiceForm />} />
         <Route path="delete" element={<DeleteService />} />
         <Route path="update" element={<UpdateService />} />
-    
+     <Route path="imagelist" element={<ImageList/>} />
       </Routes>
       </div>
     </div>

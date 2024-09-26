@@ -1,4 +1,5 @@
 .footer{
+  padding: 30px;
 padding-top: 20px;
 position: relative;
 z-index: 2;
@@ -35,13 +36,13 @@ border-right: 2px solid currentColor;
 
 }
 .oplata__title{
-  color: #ffffff;
-  font-family: Montserrat;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 22px;
-  text-align: center;
+    color: #ffffff;
+    font-family: Montserrat;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 57px;
+    text-align: center;
 }
 .oplata__list{
   list-style: none;
@@ -50,13 +51,16 @@ border-right: 2px solid currentColor;
   align-items: center;
  padding: 0;
   justify-content: center;
+  gap: 30px;
+  padding-top: 30px;
 }
 .oplata__img{
   width: 150px;
  
 }
 .oplata__image{
-  max-width: 100px;
+ width: 200px;
+ height: 130px;
 }
 .footer__title{
   color: #ffffff;
@@ -99,6 +103,7 @@ border-right: 2px solid currentColor;
   }
   .footer__map{
     flex-direction: column;
+    align-items: center;
   }
   .footer__map-card{
     width: 100%;
@@ -129,41 +134,52 @@ border-right: 2px solid currentColor;
       margin: 0 auto;
     }
     .oplata__img{
-      max-width: 120px;
+      width: 120px;
+      height: 100px;
      
     }
     .oplata__image{
-      max-width: 120px;
+      width: 200px;
+      height: 150px;
+      object-fit: contain;
     }
 }
-@media screen and (min-width: 500px) and (max-width: 768px){
+@media screen and (min-width: 500px) and (max-width: 900px){
   .footer__title{
     font-size: 14px;
     text-align: center;
   }
   .oplata__title{
-    color: #ffffff;
-    font-family: Montserrat;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 22px;
-    text-align: center;
+        color: #ffffff;
+        font-family: Montserrat;
+        font-size: 23px;
+        font-style: normal;
+        font-weight: bold;
+        line-height: 51px;
+        text-align: center;
+        padding-bottom: 30px;
   }
   .oplata__list{
     list-style: none;
     text-decoration: none;
     display: flex;
-flex-direction: column;
+flex-wrap: wrap;
     margin: 0 auto;
     padding: 0;
   }
   .oplata__img{
-    max-width: 120px;
+    width: 120px;
+    height: 100px;
    
   }
   .oplata__image{
-    max-width: 100px;
+ width: 200px;
+ height: 150px;
+
+  }
+    .footer__map{
+    flex-direction: column;
+    align-items: center;
   }
 
 }

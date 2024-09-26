@@ -26,13 +26,19 @@ const Addproduct = () => {
     };
 
 const Add_Product = async () => {
+ 
     if (!productDetails.category) {
         alert("Please select a category.");
         return;
     }
 
-    let responseData;
-    const formData = new FormData();
+      const formData = new FormData();
+  formData.append('name', productDetails.name);
+  formData.append('category', productDetails.category);
+  formData.append('new_price', productDetails.new_price);
+  formData.append('old_price', productDetails.old_price);
+  formData.append('description', productDetails.description);
+  formData.append('quantity', productDetails.quantity); 
     if (image) {
         formData.append('product', image);
 

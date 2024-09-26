@@ -24,31 +24,32 @@ router.post('/',  upload.single('image'), async (req, res) => {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
     const { description } = req.body;
-    const { filename, mimetype } = req.file;
+    const imageDetails = req.files.map(file => ({
+      filePath: `/uploads/gallery/${file.filename}`,
+      mimeType: file.mimetype,
+    }));
 
     const newImage = new Image({
       filePath: `/uploads/gallery/${filename}`,
       description,
-      mimeType: mimetype,
       likes: [],
     });
 
     await newImage.save();
 
     res.status(201).json({
-      message: 'Изображение успешно загружено',
-      image: {
-        _id: newImage._id,
-        filePath: newImage.filePath,
-        description: newImage.description,
-        mimeType: newImage.mimeType,
-      },
+      message: 'Изображения успешно загружены',
+      images: newImages.map(image => ({
+        _id: image._id,
+        filePath: image.filePath,
+        description: image.description,
+        mimeType: image.mimeType,
+      })),
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
-
 // Получение изображений
 router.get('/', async (req, res) => {
   try {
@@ -102,22 +103,29 @@ router.delete('/delete/:id', async (req, res) => {
         const { id } = req.params;
 
         const image = await Image.findById(id);
-        if (!image) throw new Error('Image not found');
+        if (!image) {
+            return res.status(404).json({ message: 'Image not found' });
+        }
 
         const filepath = path.join(__dirname, '..', image.filePath);
 
-        // Убедимся, что файл существует
-        if (fs.existsSync(filepath)) {
-            await fs.promises.unlink(filepath); // Удаление файла
-        } else {
-            console.warn(`Файл ${filepath} не существует.`);
+        try {
+            await fs.access(filepath);
+            await fs.unlink(filepath);
+        } catch (error) {
+            console.warn(`Файл ${filepath} не существует или не может быть удален:`, error);
+            // Продолжаем выполнение даже если файл не найден
         }
 
-        await image.remove();
+        const deletedImage = await Image.findByIdAndDelete(id);
+        if (!deletedImage) {
+            return res.status(404).json({ message: 'Image not found in database' });
+        }
 
         res.json({ message: 'Изображение успешно удалено' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Ошибка при удалении изображения:', error);
+        res.status(500).json({ message: 'Внутренняя ошибка сервера', error: error.message });
     }
 });
 

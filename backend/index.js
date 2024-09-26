@@ -9,14 +9,15 @@ const jwt = require('jsonwebtoken');
 const compression = require('compression');
 const multer = require('multer');
 const fs = require('fs');
-require('dotenv').config();
 
+require('dotenv').config();
+const crypto = require('crypto');
 const fetchUser = require('./middlewares/fetchUser');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
 
-const galleryRoutes = require('./routes/gallery');
+//const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
@@ -92,18 +93,44 @@ const corsOptions = {
 
 // Middleware
 app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(
-  helmet({
-    crossOriginResourcePolicy: false,
-  })
-);
 app.use(compression());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "blob:"],
+      connectSrc: ["'self'", "https://servicebox35.pp.ru", "http://localhost:8000", "http://localhost:3000", "'self'", 
+        "https://servicebox35.ru", 
+        "http://localhost:8000", 
+        "http://localhost:3000",
+        "https://*.yandex.ru",
+        "https://*.yandex.net",
+        "https://*.yandex.com",
+        "https://*.yandex.com.tr",
+        "https://*.yandex.ua",
+        "https://*.yandex.by",
+        "https://*.yandex.kz",
+        "https://*.yandex.uz",
+        "https://*.yandexmetrica.com",
+        "wss://*.yandexmetrica.com"],
+      frameSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
+
+
 
 app.use('/api', glassReplacementRoutes);
-app.use('/api/gallery', galleryRoutes);
+//app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
 // База данных
 
@@ -125,6 +152,7 @@ const Product = mongoose.model('Product', {
   old_price: { type: Number, required: true },
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
+   quantity: { type: Number, required: true, default: 0 },
 });
 
 // Определение Middleware для CORS
@@ -263,55 +291,61 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   }
 });
 
-app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
+//app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.post('/api/images/like/:id', fetchUser, async (req, res) => {
-  console.log(`Received token: ${req.header('auth-token')}`);
-  console.log(`User ID from token: ${req.user.id}`);
 
+app.get('/api/images/user-likes', fetchUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const images = await Image.find({ likes: userId }, '_id');
+    const likedImageIds = images.map(img => img._id);
+    res.json(likedImageIds);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.post('/api/images/like/:id', fetchUser, async (req, res) => {
   try {
     const imageId = req.params.id;
-    const clientId = req.user.id; 
-
-    if (!clientId) {
-      return res.status(400).json({ message: "clientId отсутствует в куках." });
-    }
+    const userId = req.user.id;
 
     const image = await Image.findById(imageId);
-    
-    if (!image) {
-      return res.status(404).json({ message: "Изображение не найдено." });
+    if (!image) return res.status(404).json({ message: "Изображение не найдено." });
+
+    if (image.likes.includes(userId)) {
+      return res.status(400).json({ message: "Вы уже поставили лайк этому изображению." });
     }
 
-    if (Array.isArray(image.likes) && image.likes.includes(clientId)) {
-      return res.status(409).json({ message: "Вы уже ставили лайк." });
-    }
-
-    image.likes.push(clientId);
+    image.likes.push(userId);
     await image.save();
-
     res.status(200).json(image);
   } catch (error) {
-    console.error(`Error liking image: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 });
 
-app.delete('/api/gallery/delete/:id', async (req, res) => {
+app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
   try {
-    const { id } = req.params;
+    const imageId = req.params.id;
+    const userId = req.user.id;
 
-    const image = await Image.findByIdAndDelete(id);
+    const image = await Image.findById(imageId);
+    if (!image) return res.status(404).json({ message: "Изображение не найдено." });
 
-    if (!image) {
-      return res.status(404).json({ message: 'Изображение не найдено' });
+    if (!image.likes.includes(userId)) {
+      return res.status(400).json({ message: "Вы не ставили лайк этому изображению." });
     }
 
-    res.json({ message: 'Изображение успешно удалено' });
+    image.likes = image.likes.filter(id => id !== userId);
+    await image.save();
+    res.status(200).json(image);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
+
 
 // CRUD операций для продуктов
 app.post('/addproduct', async (req, res) => {
@@ -326,13 +360,14 @@ app.post('/addproduct', async (req, res) => {
     new_price: req.body.new_price,
     old_price: req.body.old_price,
     description: req.body.description,
-    quantity: req.body.quantity,
+    quantity: req.body.quantity, // Добавьте это
   });
 
   await product.save();
   console.log("Product saved");
   res.json({ success: true, name: req.body.name });
 });
+
 
 app.post('/removeproduct', async (req, res) => {
   await Product.findOneAndDelete({ id: req.body.id });
@@ -341,7 +376,7 @@ app.post('/removeproduct', async (req, res) => {
 });
 
 app.get('/allproducts', async (req, res) => {
-  let products = await Product.find({});
+  let products = await Product.find({}, 'id name image category new_price old_price description quantity');
   console.log("All products fetched");
   res.send(products);
 });
@@ -351,6 +386,32 @@ app.get('/allservices', async (req, res) => {
   let products = await Product.find({});
   console.log("All products fetched");
   res.send(products);
+});
+
+//редактирование товара
+app.put('/updateproduct/:id', async (req, res) => {
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { id: req.params.id },
+      {
+        name: req.body.name,
+        image: req.body.image,
+        category: req.body.category,
+        old_price: req.body.old_price,
+        new_price: req.body.new_price,
+        quantity: req.body.quantity
+      },
+      { new: true }
+    );
+    if (updatedProduct) {
+      res.json({ success: true, product: updatedProduct });
+    } else {
+      res.status(404).json({ success: false, message: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
 });
 
 // CRUD операций для пользователей

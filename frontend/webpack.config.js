@@ -7,7 +7,9 @@ module.exports = {
   output: {
     path: path.resolve("build"),
     filename: "Carousel.js",
-    libraryTarget: "commonjs2"
+    libraryTarget: "commonjs2",
+      path: path.join(__dirname, 'build'),
+    filename: 'backend.js'
   },
   resolve: {
     fallback: {

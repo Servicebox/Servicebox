@@ -114,7 +114,7 @@
 .like-icon{
   height: 33px;
   position: absolute;
-  right: -9px;
+  right: 5px;
   top: 225px;
   width: 33px;
 }
@@ -123,10 +123,11 @@
 }
 .foto__sum{
   position: absolute;
-  top: 260px;
-  right: 0;
+  top: 249px;
+  right: 5px;
   font-size: 16px;
   font-family: Montserrat;
+  font-weight: bold;
 }
 @media (min-width: 320px) and (max-width: 500px) {
   .foto__title{

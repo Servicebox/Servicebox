@@ -1,10 +1,10 @@
-const express = require('express');
+{/*const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const path = require('path');
 const Image = require('../models/image');
 const fetchUser = require('../middlewares/fetchUser');
-const fs = require('fs').promises;
+const fs = require('fs');
 
 const uploadDirectory = path.join(__dirname, '../uploads/gallery');
 const storage = multer.diskStorage({
@@ -179,3 +179,4 @@ router.delete('/like/:id', fetchUser, async (req, res) => {
 });
 
 module.exports = router;
+*/}

@@ -1,18 +1,16 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
-import Oplata from "../../images/oplata1.png";
-import Sbp from "../../images/sbp.png";
-import Beznal from "../../images/beznal.png";
+import Oplata from "../../images/oplata1.webp";
+import Sbp from "../../images/sbp.webp";
+import Beznal from "../../images/beznal.webp";
+import InteractiveMap from '../InteractiveMap/InteractiveMap';
 //import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer__map">
-        <iframe
-          className="footer__map-card"
-          src="https://yandex.ru/map-widget/v1/?z=12&ol=biz&oid=58578899506"
-        ></iframe>
+       <InteractiveMap />
         <div className="footer__info">
           <p className="footer__title">
             Название организации: ООО "СЕРВИС БОКС"
@@ -26,7 +24,7 @@ function Footer() {
        <h3 className="oplata__title"> Удобные способы оплаты </h3>
        <ul className="oplata__list">
          <li className="oplata__item">
-           <img className="oplata__img" src={Oplata} alt="Paypal" />
+           <img className="oplata__image" src={Oplata} alt="Paypal" />
          </li>
          <li className="oplata__item">
            <img className="oplata__image" src={Sbp} alt="Paypal" />

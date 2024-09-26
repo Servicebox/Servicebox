@@ -1,0 +1,21 @@
+.create-img{
+    display: flex;
+    flex-direction: columns;
+    margin:20px auto;
+}
+.create-form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    padding: 20px;
+    background: blueviolet;
+}
+.create-btn{
+        border: 2px solid green;
+    padding: 10px;
+    background: aqua;
+}
+.create-form__description{
+    padding:20px
+}

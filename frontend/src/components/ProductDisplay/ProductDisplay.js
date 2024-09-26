@@ -36,9 +36,10 @@ const ProductDisplay = (props) => {
           <h1>Описание</h1>
           <p>{product.description}</p>
         </div>
-             <div className="productdisplay-quantity">
-     
-            <p className="productdisplay-right-category"><span>Остаток :</span> {product.quantity}</p>
+      <div className="productdisplay-quantity">
+  <p className="productdisplay-right-category">
+    <span>Остаток :</span> {product.quantity}
+  </p>
 </div>
         <button onClick={() => addToCart(product.id)}>в корзину</button>
         <p className="productdisplay-right-category"><span>Категория :</span> {product.category}</p>

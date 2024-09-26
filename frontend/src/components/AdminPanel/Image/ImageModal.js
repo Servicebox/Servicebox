@@ -1,27 +1,28 @@
-import React, { useEffect, useCallback } from "react";
-import "./ImageModal.css";
+
+import React, { useEffect } from "react";
+import './ImageModal.css';
 
 const ImageModal = ({ image, onClose }) => {
-  const handleKeyPress = useCallback((e) => {
+  const handleKeyDown = (e) => {
     if (e.key === "Escape") {
       onClose();
     }
-  }, [onClose]);
+  };
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, 
-  [handleKeyPress]);
+  }, []);
+
+  if (!image) return null;
 
   return (
-    <div className="image-modal-overlay" onClick={onClose}>
-      <div className="image-modal">
-        <img src={`https://servicebox35.pp.ru${image.filePath}`} alt={image.description} />
-        <button className="close-modal" onClick={onClose}>X</button>
-      </div>
+    <div className="modal" onClick={onClose}>
+      <span className="cancel" onClick={onClose}>&times;</span>
+      <img src={image.filePath} alt={image.description} className="modal-content" />
+      <div className="caption">{image.description}</div>
     </div>
   );
 };

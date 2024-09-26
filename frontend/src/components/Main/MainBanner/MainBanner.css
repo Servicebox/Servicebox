@@ -100,7 +100,7 @@ margin-bottom: 5px;
   position: relative;
   display: flex;
   align-items: flex-end;
-  justify-content: flex-start;
+  justify-content: center;
   background-size: cover;
   background-position: center;
   background-size: contain; /* Adjust the image to maintain its aspect ratio */
@@ -113,10 +113,13 @@ margin-bottom: 5px;
 .main-promotion .content-main {
   margin: 20px; /* можем задать отступы от краёв */
   padding: 20px;
-  background: #041e42de;
+  background: #f9a92ceb;
   border-radius: 10px;
-  color: white;
+  color: black !important;
   width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
 }
 
@@ -242,7 +245,7 @@ margin: 0 auto;
   cursor: pointer; /* курсор в виде указателя */
   border: none; /* убираем границу */
   background-color: #007BFF; /* цвет фона кнопки */
-  color: white; /* цвет текста кнопки */
+  color: rgb(0, 0, 0); /* цвет текста кнопки */
   border-radius: 5px; /* закругление углов */
   transition: background-color 0.3s; /* анимация изменения фона */
 }
@@ -407,7 +410,7 @@ flex-direction: column;
   margin: 5px;
   text-align: center;
 
-  color: #ffffff;
+  color: #000000;
 }
 
 #hours {
@@ -426,7 +429,7 @@ flex-direction: column;
   text-align: center;
 display: flex;
   flex-direction: column;
-  color: #ffffff;
+  color: #000000;
 }
 
 #minutes {
@@ -445,7 +448,7 @@ display: flex;
   text-align: center;
 display: flex;
 flex-direction: column;
-  color: #ffffff;
+  color: #000000;
 }
 
 #seconds {
@@ -464,7 +467,7 @@ background-color: #f9a92c;
   text-align: center;
 display: flex;
 flex-direction: column;
-  color: #ffffff;
+  color: #000000;
 }
 
 

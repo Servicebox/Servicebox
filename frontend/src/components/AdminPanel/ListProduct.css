@@ -10,9 +10,12 @@ border-radius: 6px;
 background: white;
 
 }
-.listproduct-format-main{
+.listproduct-format{
+    border-bottom: 2px solid cadetblue;
+}
+.listproduct-format-main {
 display: grid;
-grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr;
+grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
 gap: 10px;
 width: 100%;
 padding: 20px 0px;
@@ -22,6 +25,8 @@ font-weight: 600;
 .listproduct-format{
 align-items: center;
 font-weight: 500;
+font-weight: 600;
+border-bottom: 2px solid cadetblue;
 }
 }
 .listproduct-allproducts{
@@ -44,10 +49,11 @@ margin: auto;
         padding: 10px 30px;
         margin: 20px auto;
     }
-    .listproduct-format-main{
+    .listproduct-format-main {
         padding: 15px 0px;
         color: #454545;
         font-size: 12px;
+        border-bottom: 2px solid cadetblue;
 
     }
     .listproduct-product-icon{
