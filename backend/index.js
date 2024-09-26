@@ -106,8 +106,6 @@ app.use(helmet({
 
 }));
 
-
-
 app.use('/api', glassReplacementRoutes);
 //app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
