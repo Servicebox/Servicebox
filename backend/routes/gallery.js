@@ -1,4 +1,4 @@
-{/*const express = require('express');
+const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const path = require('path');
@@ -179,4 +179,3 @@ router.delete('/like/:id', fetchUser, async (req, res) => {
 });
 
 module.exports = router;
-*/}

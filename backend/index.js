@@ -17,7 +17,7 @@ const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
 
-//const galleryRoutes = require('./routes/gallery');
+const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
 const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
@@ -107,7 +107,7 @@ app.use(helmet({
 }));
 
 app.use('/api', glassReplacementRoutes);
-//app.use('/api/gallery', galleryRoutes);
+app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
 // База данных
 
@@ -153,6 +153,7 @@ app.use((req, res, next) => {
 
 // Служить статические файлы
 app.use(express.static(path.join(__dirname, 'build')));
+
 
 
 const uploadDirectory = path.join(__dirname, 'uploads');
@@ -273,7 +274,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   }
 });
 
-//app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
+app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
 //app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/images/user-likes', fetchUser, async (req, res) => {
