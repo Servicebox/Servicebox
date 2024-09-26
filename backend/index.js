@@ -82,14 +82,16 @@ const allowedCors = [
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedCors.includes(origin)) {
+    if (allowedCors.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
+  optionsSuccessStatus: 200
 };
+
 
 // Middleware
 app.use(cors(corsOptions));
@@ -99,6 +101,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 app.use(helmet({
+  crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
@@ -124,7 +127,7 @@ app.use(helmet({
       upgradeInsecureRequests: [],
     },
   },
-  crossOriginEmbedderPolicy: false,
+
 }));
 
 
@@ -179,7 +182,12 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 const uploadDirectory = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadDirectory));
+app.use('/uploads', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://servicebox35.ru');
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+}, express.static(path.join(__dirname, 'uploads')));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
