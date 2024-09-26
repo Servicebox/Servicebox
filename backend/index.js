@@ -102,31 +102,7 @@ app.use(cookieParser());
 app.use(compression());
 app.use(helmet({
   crossOriginEmbedderPolicy: false,
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "blob:"],
-      connectSrc: ["'self'", "https://servicebox35.pp.ru", "http://localhost:8000", "http://localhost:3000", "'self'", 
-        "https://servicebox35.ru", 
-        "http://localhost:8000", 
-        "http://localhost:3000",
-        "https://*.yandex.ru",
-        "https://*.yandex.net",
-        "https://*.yandex.com",
-        "https://*.yandex.com.tr",
-        "https://*.yandex.ua",
-        "https://*.yandex.by",
-        "https://*.yandex.kz",
-        "https://*.yandex.uz",
-        "https://*.yandexmetrica.com",
-        "wss://*.yandexmetrica.com"],
-      frameSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
-    },
-  },
+
 
 }));
 
