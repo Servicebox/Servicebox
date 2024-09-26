@@ -100,11 +100,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
-app.use(helmet({
-  crossOriginEmbedderPolicy: false,
-
-
-}));
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+   
+  })
+);
 
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
@@ -155,17 +157,12 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-
 const uploadDirectory = path.join(__dirname, 'uploads');
-app.use('/uploads', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://servicebox35.ru');
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-}, express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
+
 
 
 
