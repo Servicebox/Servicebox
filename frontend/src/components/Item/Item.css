@@ -10,6 +10,7 @@
 }
 .item-prices{
     display: flex;
+    flex-direction: column;
     gap: 20px;
 }
 .item-price-new{
