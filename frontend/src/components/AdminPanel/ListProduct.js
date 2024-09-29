@@ -8,7 +8,7 @@ const ListProduct = () => {
 
   const fetchInfo = async () => {
     try {
-      const response = await fetch('http://localhost:8000/allproducts', {
+      const response = await fetch('https://servicebox35.pp.ru/allproducts', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',

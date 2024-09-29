@@ -18,7 +18,7 @@ const ShopContextProvider = (props) => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                let response = await fetch('http://localhost:8000/allproducts');
+                let response = await fetch('https://servicebox35.pp.ru/allproducts');
                 if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
                 let data = await response.json();
                 setAll_Product(data);
@@ -31,7 +31,7 @@ const ShopContextProvider = (props) => {
         const fetchCartItems = async () => {
             if (localStorage.getItem('auth-token')) {
                 try {
-                    let response = await fetch('http://localhost:8000/getcart', {
+                    let response = await fetch('https://servicebox35.pp.ru/getcart', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
