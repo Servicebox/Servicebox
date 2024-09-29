@@ -135,6 +135,10 @@
    
     padding: 40px 0;
   }
+  .foto__img{
+    width: 250px;
+    height: 250px;
+  }
 
 }
 @media (min-width: 500px) and (max-width: 800px) {

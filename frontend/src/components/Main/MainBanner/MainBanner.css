@@ -1100,6 +1100,9 @@ width: 200px;
  
   width: 200px;
   }
+  .main-promotion{
+    justify-content: center;
+  }
 }
 
 /* Для экранов шириной от 481px до 768px */
