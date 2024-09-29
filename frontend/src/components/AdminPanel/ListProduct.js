@@ -8,7 +8,7 @@ const ListProduct = () => {
 
   const fetchInfo = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/allproducts', {
+      const response = await fetch('http://localhost:8000/allproducts', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -17,7 +17,7 @@ const ListProduct = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTPS error! status: ${response.status}`);
       }
 
       const data = await response.json();

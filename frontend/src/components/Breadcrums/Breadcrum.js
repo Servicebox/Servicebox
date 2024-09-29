@@ -30,7 +30,7 @@ const BreadCrum = (props) => {
     <div className="breadcrum">
      <Link to="/" className="breadcrum-link">Домашняя</Link> 
        <img className='breadcrum-img' src={arrow_icon} alt="стрелочка" />
-      <a href="https://servicebox35.ru/Shop" className="breadcrum-link">Каталог</a>
+      <a href="https://servicebox35.ru/parts" className="breadcrum-link">Каталог</a>
       <img className='breadcrum-img' src={arrow_icon} alt="стрелочка" />
       <Link to={getCategoryUrl(product.category)} className="breadcrum-link">{product.category}</Link>
       <img className='breadcrum-img' src={arrow_icon} alt="стрелочка" />

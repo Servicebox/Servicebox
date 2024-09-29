@@ -24,27 +24,25 @@ router.post('/',  upload.single('image'), async (req, res) => {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
     const { description } = req.body;
-    const imageDetails = req.files.map(file => ({
-      filePath: `/uploads/gallery/${file.filename}`,
-      mimeType: file.mimetype,
-    }));
+    const { filename, mimetype } = req.file;
 
     const newImage = new Image({
       filePath: `/uploads/gallery/${filename}`,
       description,
+      mimeType: mimetype,
       likes: [],
     });
 
     await newImage.save();
 
     res.status(201).json({
-      message: 'Изображения успешно загружены',
-      images: newImages.map(image => ({
-        _id: image._id,
-        filePath: image.filePath,
-        description: image.description,
-        mimeType: image.mimeType,
-      })),
+      message: 'Изображение успешно загружено',
+      image: {
+        _id: newImage._id,
+        filePath: newImage.filePath,
+        description: newImage.description,
+        mimeType: newImage.mimeType,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

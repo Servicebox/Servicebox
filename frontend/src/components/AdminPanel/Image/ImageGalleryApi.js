@@ -12,7 +12,7 @@ const ImageGalleryApi = () => {
   const [userLikes, setUserLikes] = useState([]);
   const [showAfter, setShowAfter] = useState({});
 
-  const fetchImages = async () => {
+ const fetchImages = async () => {
     try {
       console.log('Отправка запроса к серверу для получения изображений...');
       const response = await fetch('https://servicebox35.pp.ru/api/images', {
@@ -27,18 +27,9 @@ const ImageGalleryApi = () => {
       const fetchedImages = await response.json();
       const imagesWithCorrectPath = fetchedImages.map(img => ({
         ...img,
-        filePath: `https://servicebox35.pp.ru/uploads/gallery/${img.filePath.split('/').pop()}`,
-        beforeImage: img.beforeImage ? `https://servicebox35.pp.ru/uploads/gallery/${img.beforeImage.split('/').pop()}` : null,
-        afterImage: img.afterImage ? `https://servicebox35.pp.ru/uploads/gallery/${img.afterImage.split('/').pop()}` : null,
+        filePath: `https://servicebox35.pp.ru/uploads/gallery/${img.filePath.split('/').pop()}`, // Исправление пути к файлу
       }));
       setImages(imagesWithCorrectPath);
-      
-      // Initialize showAfter state
-      const initialShowAfter = {};
-      imagesWithCorrectPath.forEach(img => {
-        initialShowAfter[img._id] = false;
-      });
-      setShowAfter(initialShowAfter);
     } catch (error) {
       console.error('Ошибка при получении изображений:', error);
       alert('Ошибка загрузки изображений: ' + error.message);
@@ -133,33 +124,13 @@ setShowModal(false);
     }));
   };
    return (
-    <div className="foto">
+  <div className="foto">
       <h1 className="foto__title">Фотографии до и после ремонта</h1>
       <div className="images-gallery">
-        {images.map((image) => (
+        {images.length > 0 ? images.map(image => (
           <div key={image._id} className="image-item">
-            <div className="image-container">
-              {image.beforeImage && image.afterImage ? (
-                <>
-                  <img
-                    className="foto__img"
-                    src={showAfter[image._id] ? image.afterImage : image.beforeImage}
-                    alt={showAfter[image._id] ? "После" : "До"}
-                    onClick={() => handleImageClick(image)}
-                  />
-                  <button onClick={() => toggleBeforeAfter(image._id)}>
-                    {showAfter[image._id] ? "Показать ДО" : "Показать ПОСЛЕ"}
-                  </button>
-                </>
-              ) : (
-                <img
-                  className="foto__img"
-                  src={image.filePath}
-                  alt={image.description}
-                  onClick={() => handleImageClick(image)}
-                />
-              )}
-            </div>
+            <img className="foto__img" src={image.filePath} alt={image.description || "Изображение"}
+              onClick={() => handleImageClick(image)} />
             <p className="foto__description">{image.description}</p>
             <button className="foto__btn" onClick={() => toggleLikeImage(image._id)}>
               <img
@@ -172,11 +143,13 @@ setShowModal(false);
               </span>
             </button>
           </div>
-        ))}
-      </div>
+        ))
+      : <p>Изображения загружаются...</p>}
       {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
     </div>
-  );
-};
+    </div>
+  )
+
+}
 
 export default ImageGalleryApi;

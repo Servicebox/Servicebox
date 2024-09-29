@@ -81,18 +81,18 @@ const allowedCors = [
 ];
 
 const corsOptions = {
-  origin: allowedCors,
+  origin: (origin, callback) => {
+    if (!origin || allowedCors.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  optionsSuccessStatus: 200
 };
 
-app.use(cors(corsOptions));
-
-
 // Middleware
-
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -100,11 +100,10 @@ app.use(cookieParser());
 app.use(compression());
 app.use(
   helmet({
-    contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false,
-   
+    crossOriginResourcePolicy: false,
   })
 );
+
 
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
@@ -153,24 +152,15 @@ app.use((req, res, next) => {
 
 // Служить статические файлы
 app.use(express.static(path.join(__dirname, 'build')));
-const addCorsHeaders = (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://servicebox35.ru');
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  next();
-};
+
 
 const uploadDirectory = path.join(__dirname, 'uploads');
-//app.use('/uploads', express.static(uploadDirectory));
+app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
-//app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
-//app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
+app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
+app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
 
-app.use('/uploads', addCorsHeaders, express.static(uploadDirectory));
-app.use('/images', addCorsHeaders, express.static(path.join(__dirname, 'uploads', 'images')));
-app.use('/gallery', addCorsHeaders, express.static(path.join(__dirname, 'uploads', 'gallery')));
 
 
 // Обработка форм
@@ -278,7 +268,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 });
 
 app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/images/user-likes', fetchUser, async (req, res) => {
   try {
