@@ -7,7 +7,7 @@
 }
 
 .shopcategory-banner {
-  width: 100%;
+  width: 80%;
   max-width: 1200px;
   height: auto;
   margin-bottom: 20px;
@@ -53,9 +53,7 @@
 
 /* Адаптивные стили для более крупных экранов */
 @media screen and (min-width: 768px) {
-  .shopcategory-products {
-    
-  }
+
 
   .shopcategory-banner {
     margin-bottom: 30px;

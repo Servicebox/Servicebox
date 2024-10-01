@@ -26,19 +26,19 @@ const Addproduct = () => {
     };
 
 const Add_Product = async () => {
- 
     if (!productDetails.category) {
         alert("Please select a category.");
         return;
     }
 
-      const formData = new FormData();
-  formData.append('name', productDetails.name);
-  formData.append('category', productDetails.category);
-  formData.append('new_price', productDetails.new_price);
-  formData.append('old_price', productDetails.old_price);
-  formData.append('description', productDetails.description);
-  formData.append('quantity', productDetails.quantity); 
+    const formData = new FormData();
+    formData.append('name', productDetails.name);
+    formData.append('category', productDetails.category);
+    formData.append('new_price', productDetails.new_price);
+    formData.append('old_price', productDetails.old_price);
+    formData.append('description', productDetails.description);
+    formData.append('quantity', productDetails.quantity); 
+
     if (image) {
         formData.append('product', image);
 
@@ -55,12 +55,11 @@ const Add_Product = async () => {
                 throw new Error(`Upload failed: ${uploadResponse.statusText}`);
             }
 
-            responseData = await uploadResponse.json();
+            const responseData = await uploadResponse.json(); // Объявляем переменную здесь
 
             if (responseData.success) {
                 productDetails.image = responseData.image_url;
 
-                // Логирование отправляемых данных
                 console.log("Product details being sent:", productDetails);
 
                 const addProductResponse = await fetch('https://servicebox35.pp.ru/addproduct', {

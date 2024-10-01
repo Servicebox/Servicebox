@@ -4,15 +4,15 @@ import { Link } from'react-router-dom'
 import Item from '../Item/Item'
 import './ShopCategory.css'
 import { ShopContext } from '../Contexst/ShopContext'
-
+import banner from '../../images/banner.webp'
 
 const ShopCategory = (props) => {
   const { all_product } = useContext(ShopContext);
-  const [visibleCount, setVisibleCount] = useState(10); // Начинаем с 10 товаров
+  const [visibleCount, setVisibleCount] = useState(12); // Начинаем с 10 товаров
   const [searchTerm, setSearchTerm] = useState(""); // Строка поиска
 
   const handleLoadMore = () => {
-    setVisibleCount(prevCount => prevCount + 20); // Увеличиваем количество на 20
+    setVisibleCount(prevCount => prevCount + 12); // Увеличиваем количество на 20
   };
 
   // Фильтруем товары по категории и строке поиска, и отображаем только видимые
@@ -22,7 +22,7 @@ const ShopCategory = (props) => {
 
   return (
     <div className='shop-category'>
-      <img className="shopcategory-banner" src={props.banner} alt="" />
+      <img className="shopcategory-banner" src={banner} alt="" />
       <div className="shopcategory-indexSort">
         <input className='shopcategory-input'
           type="text"

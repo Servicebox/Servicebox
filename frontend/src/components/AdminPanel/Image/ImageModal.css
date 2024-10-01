@@ -52,7 +52,11 @@
 
 @media only screen and (max-width: 700px) {
   .modal-content {
-    max-width: 95%;
+
+        width: 250px;
+        height: 250px;
+        object-fit: contain;
+        padding: 5px;
   }
   
   .cancel {
@@ -63,5 +67,6 @@
   
   .caption {
     font-size: 16px;
+    
   }
 }
