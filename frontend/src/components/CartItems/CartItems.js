@@ -50,7 +50,6 @@ const CartItems = (props) => {
               <div className="cartitems-format cartitems-format-main">
                 <img src={e.image} alt="изо товара" className="cartitems-product-icon" />
                 <p>{e.name}</p>
-                <p>{e.quantity}</p>
                 <p>₽{e.new_price}</p>
                 <button className="cartitems-quantity">{cartItems[e.id]}</button>
                 <p>₽{e.new_price * cartItems[e.id]}</p>

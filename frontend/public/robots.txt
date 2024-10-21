@@ -1,3 +1,5 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /css
+Disallow: /admin-panel/
+Sitemap: https://servicebox35.ru/sitemap.xml

@@ -77,7 +77,7 @@ const toggleBurgerMenu = () => {
 
 </li>
 
-    <li className="navigation__list-brg "  onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
+ {/* <li className="navigation__list" onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>*/}
     <li className="navigation__list-brg " onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Каталог тоаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
  
 

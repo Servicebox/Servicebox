@@ -19,7 +19,7 @@ const Navbar = () => {
           </div>
           <ul className='nav-menu'>
     
-    <li onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='/Shop'>Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>
+     {/* <li className="navigation__list" onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>*/}
     <li onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Запчасти</Link>{menu==="parts"?<hr/>:<></>} </li>
     <li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Аксессуары</Link>{menu==="electronics"?<hr/>:<></>} </li>
     <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>
