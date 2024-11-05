@@ -1,14 +1,13 @@
 import React, { useState, useCallback, useEffect} from "react";
 import { BrowserRouter as Router, Route, Routes , useLocation} from "react-router-dom";
+import { Widget, addResponseMessage }  from 'react-chat-widget-react-18';
 
+import logo from '../../images/logo.jpg'
 //import PrivateRoute from "./PrivateRoute"; 
 import { Link } from'react-router-dom';
 import gsap from "gsap";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 import axios from 'axios';
-
-
- 
 import NavBar from "../NavBar";  
 import Shop from "../pages/Shop";
 
@@ -46,8 +45,6 @@ import Product from "../pages/Product";
 import CartItems from "../CartItems/CartItems";
 import { ShopContext } from "../Contexst/ShopContext";
 import BubbleBackground from "../BubbleBackground/BubbleBackground";
-import Widget from "../Widget/Widget";
-//import TelegramWidget from "../TelegramWidget/TelegramWidget";
 import BreadCrums from "../Breadcrums/Breadcrum";
 import ProductDisplay from "../ProductDisplay/ProductDisplay";
 import { useParams } from 'react-router-dom';
@@ -61,7 +58,7 @@ import AdminLogin from "../AdminPanel/AdminLogin/AdminLogin";
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import AdminPanel from "../AdminPanel/AdminPanel";
 import VideoCard from "../AdminPanel/VideoCard/VideoCard"
-
+import Chat from "../TelegramChat/Chat"
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -81,13 +78,11 @@ const App = () => {
       closeModal();
     }
   }, []);
-
   const openForm = useCallback(() => {
     setIsFormOpen(true);
   }, []);
 
   const scrollTo = (target) => gsap.to(window, { duration: 1, scrollTo: target });
-
 
   return (
     <div className="">
@@ -95,7 +90,6 @@ const App = () => {
       <div className="page__wrapper">
         <div className="nav">
           <BubbleBackground />
-
         </div>
         <Routes>
 
@@ -110,7 +104,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-              
           <Route path="image-gallery-api" element={<ImageGalleryApi />} />
           <Route path="delete-image" element={<DeleteImage />} />
           <Route exact path="/" component={ServiceRef} />
@@ -135,7 +128,7 @@ const App = () => {
           <Route path="/addproduct" element={<Addproduct />} />
           <Route path="/listproduct" element={<ListProduct />} />
               <Route path="/listservice" element={<ListService />} />
-            <Route path="/widget" element={<Widget />} />
+
           <Route path="/nav-bar" element={<Navbar />} />
           <Route path="/product-display" element={<ProductDisplay />} />
         <Route path="/parts" element={<ShopCategory  category="part" />} />
@@ -144,15 +137,15 @@ const App = () => {
         <Route path="/bread-crums" element={<BreadCrums/>} />
         <Route path='/product' element={<Product />} >
           <Route path=':productId' element={<Product />} />
+          <Route path=':productName' element={<Product />} />
         </Route>
         <Route path='/cart' element={<Cart />} />
         <Route path='/login' element={<LoginSignup/>} />
-   
         </Routes>
-       
         {isFormOpen && <Form toggleForm={toggleForm} />}
-
         <CookieMessage />
+        
+        <Chat />
         <Footer />
       </div>
     </div>

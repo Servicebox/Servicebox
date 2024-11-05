@@ -16,7 +16,9 @@ const fetchUser = require('./middlewares/fetchUser');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
-
+// Telegram Config
+const TELEGRAM_TOKEN = "6875218502:AAErs3zaTZduyLbjWAOR7g4AIP0u8Ld-_8I";
+const TELEGRAM_CHAT_ID = "-1002016730487";
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
@@ -26,9 +28,19 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const Admin = require('./models/Admin');
 const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
+const http = require("http");
 
 const PORT = 8000;
 
+const YOUR_SERVER_URL = "https://servicebox35.pp.ru";
+const { Server } = require('socket.io');
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',  // временно для полного тестирования
+    methods: ['GET', 'POST']
+  }
+});
 const allowedCors = [
   'http://localhost:5173',
 'https://servicebox35.pp.ru/get-client-id',
@@ -539,28 +551,28 @@ app.get('/popularinpart', async (req, res) => {
 // Endpoints для корзины
 app.post('/addtocart', fetchUser, async (req, res) => {
   try {
-    console.log("added", req.body.itemId);
-    let userData = await Users.findOne({_id: req.user.id});
-    
-    if (!userData) {
-      return res.status(404).json({ message: "Пользователь не найден" });
+    const productId = req.body.itemId;
+    const product = await Product.findOne({ id: productId });
+
+    if (!product) {
+      return res.status(404).json({ message: "Товар не найден" });
     }
 
-    if (!userData.cartData) {
-      return res.status(404).json({ message: "Данные о корзине не найдены" });
+    if (product.quantity <= 0) {
+      return res.status(400).json({ message: "Товар закончился" });
     }
 
-    // Уменьшаем количество товара на складе
-    let product = await Product.findOne({id: req.body.itemId});
-    if (product.quantity > 0) {
+    const userData = await Users.findOne({ _id: req.user.id });
+
+    if (userData.cartData[productId] < product.quantity) {
       product.quantity -= 1;
       await product.save();
-      
-      userData.cartData[req.body.itemId] += 1;
-      await Users.findOneAndUpdate({_id: req.user.id},{cartData:userData.cartData});
+
+      userData.cartData[productId] += 1;
+      await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData });
       res.json({ message: "Added" });
     } else {
-      res.status(400).json({ message: "Товар закончился" });
+      res.status(400).json({ message: "Нельзя добавить больше, чем доступно на складе" });
     }
   } catch (error) {
     console.error('Error while adding to cart:', error.message);
@@ -733,6 +745,10 @@ app.post('/admin/login', async (req, res) => {
   }
 });
 
+
+
+
+
 app.use('/admin-panel', verifyToken, express.static(path.join(__dirname, 'build')));
 app.post('/admin/create', async (req, res) => {
   const newAdmin = new Admin({
@@ -747,20 +763,66 @@ app.post('/admin/create', async (req, res) => {
 app.use('/admin-panel', verifyToken, (req, res) => {
   // Ваши административные маршруты
 });
-const startServer = () => {
-  app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-  })
-  .on('error', (error) => {
-    console.error('Server start error:', error);
-  })
-  .on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  })
-  .on('uncaughtException', (error) => {
-    console.error('Uncaught Exception:', error);
-    process.exit(1);
-  });
-};
 
-startServer();
+
+
+////
+// Handle WebSocket connections hereio.on("connection", (socket) => {
+
+io.on("connection", (socket) => {
+  console.log("A new user has connected", socket.id);
+
+socket.on("message", async (message) => {
+  await sendMessageToTelegram(message);
+  socket.emit("message", message); // Отправить обратно отправителю
+});
+
+  socket.on("disconnect", () => {
+    console.log(socket.id, " disconnected");
+  });
+});
+
+async function sendMessageToTelegram(message) {
+  const text = `${message.text}\nFrom: User`;
+  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+
+  const body = {
+    chat_id: TELEGRAM_CHAT_ID,
+    text: text,
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return response.json();
+  } catch (error) {
+    console.error("Error sending message to Telegram:", error);
+  }
+}
+
+app.post('/webhook', (req, res) => {
+  const { channel_post } = req.body;
+  console.log("Поступил вебхук:", req.body); // Изменено, чтобы видеть весь получаемый объект
+ if (channel_post && channel_post.text) {
+    const responseMessage = {
+      text: channel_post.text,
+      timestamp: new Date(),
+    };
+    io.emit("message", responseMessage);
+    console.log("Отправлено WebSocket сообщение:", responseMessage);
+  }
+  res.send({ status: 'ok' });
+});
+
+// Установите вебхук при запуске сервера
+fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${YOUR_SERVER_URL}/webhook`)
+  .then(response => response.json())
+  .then(data => console.log('Webhook установлен:', data))
+  .catch(err => console.error('Ошибка при установке вебхука:', err));
+
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

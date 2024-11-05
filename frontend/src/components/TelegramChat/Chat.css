@@ -1,0 +1,112 @@
+.chat-toggle {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.8rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.chat-container {
+    z-index: 9999;
+  position: fixed;
+  bottom: 4.5rem;
+  right: 1rem;
+  width: 350px;
+  height: 400px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.chat-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-header {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: #1293d2;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #f0f0f0;
+}
+
+.message {
+  margin-bottom: 10px;
+  max-width: 70%;
+}
+
+.message-user {
+  text-align: left;
+}
+
+.message-bot {
+  text-align: right;
+}
+
+.message-text {
+  display: inline-block;
+  padding: 8px;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+.message-user .message-text {
+  background-color: #4caf50; /* Зеленый для пользователя */
+}
+
+.message-bot .message-text {
+  background-color: #128fd3; /* Синий для оператора */
+}
+
+.message-timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.message-id {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.message-input-container {
+  display: flex;
+  border-top: 1px solid #ccc;
+}
+
+.message-input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+.send-button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover {
+  background-color: #0056b3;
+}

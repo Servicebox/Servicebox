@@ -37,7 +37,9 @@
     "request": "^2.88.2",
     "save-dev": "^0.0.1-security",
     "semver": "^7.6.0",
-    "winston": "^3.11.0"
+    "socket.io": "^4.8.0",
+    "winston": "^3.11.0",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",

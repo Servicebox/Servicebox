@@ -17,7 +17,7 @@ const ShopCategory = (props) => {
 
   // Фильтруем товары по категории и строке поиска, и отображаем только видимые
   const filteredProducts = all_product
-    .filter(item => props.category === item.category && item.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter(item => props.category === item.category && item.quantity > 0 && item.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .slice(0, visibleCount);
 
   return (

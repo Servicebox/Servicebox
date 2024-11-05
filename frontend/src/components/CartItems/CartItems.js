@@ -53,7 +53,7 @@ const CartItems = (props) => {
                 <p>₽{e.new_price}</p>
                 <button className="cartitems-quantity">{cartItems[e.id]}</button>
                 <p>₽{e.new_price * cartItems[e.id]}</p>
-                <button onClick={() => { addToCart(e.id) }}>+</button>
+               <button onClick={() => addToCart(e.id)} disabled={cartItems[e.id] >= e.quantity}>+</button>
                 <img className="cartitems-remove-icon" src={remove_icon} alt="" onClick={() => { removeFromCart(e.id) }} />
               </div>
               <hr />
@@ -83,13 +83,7 @@ const CartItems = (props) => {
             <TinkoffPayForm amount={getTotalCartAmount()} receiptData={receiptData} onPaymentSuccess={() => setIsPaid(true)} />
           </div>
         </div>
-        <div className="cartitems-promocode">
-          <p>Если у вас есть промо-код, введите его здесь...</p>
-          <div className="cartitems-promobox">
-            <input type="text" placeholder="Промо код" />
-            <button>Отправить</button>
-          </div>
-        </div>
+  
       </div>
       <div className="back__btn"> 
         <ul>

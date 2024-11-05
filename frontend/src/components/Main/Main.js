@@ -13,11 +13,6 @@ import Completed from "./Completed/Completed";
 import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
-
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-
-
 function Main() {
 
   const location = useLocation();
@@ -35,13 +30,7 @@ function Main() {
       <ArronService />
       <AboutMe />
       <Gifts />
-      
-      
-     
-
   <ContactsRef />
-
-      
     </main>
  
     </div>

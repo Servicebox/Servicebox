@@ -11,10 +11,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb')
 
 // Определение схемы данных
 const dataSchema = new mongoose.Schema({
+ chatId: Number, // Telegram chat id
   name: String,
   phone: String,
-  description: String
-});
+  description: String,
+  lastMessageId: Number,
+}, { timestamps: true });
+
 
 // Создание модели
 const Data = mongoose.model('Data', dataSchema);
@@ -50,6 +53,6 @@ app.post('/submit', (req, res) => {
 });
 
 // Слушаем сервер на указанном порту
-app.listen(5000, () => {
-  console.log('Server listening on port 5000');
+app.listen(8000, () => {
+  console.log('Server listening on port 8000');
 });
