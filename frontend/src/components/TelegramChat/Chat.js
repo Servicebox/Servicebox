@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import './Chat.css';
 
-const socket = io("https://servicebox35.pp.ru"); // Replace with your server address
+// Замените на свой URL сервера
+const socket = io("https://servicebox35.pp.ru", {
+  query: { clientId: document.cookie.replace(/(?:(?:^|.*;\s*)client-id\s*\=\s*([^;]*).*$)|^.*$/, "$1") }
+});
 
 function Chat() {
   const [messages, setMessages] = useState([]);
@@ -11,11 +14,10 @@ function Chat() {
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log("Получено сообщение:", message); // Логирование
+      console.log("Получено сообщение:", message);
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
-    // Развесим слушатель событий клавиатуры
     const handleKeyDown = (event) => {
       if (chatOpen) {
         if (event.key === 'Escape') {
@@ -33,12 +35,19 @@ function Chat() {
       socket.off("message");
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [chatOpen, messageInput]); // Добавляем зависимости
+  }, [chatOpen, messageInput]);
 
   const sendMessage = () => {
     if (messageInput.trim() !== "") {
+        // Заменяем id получателя на локальное сохраненное, если оно есть
+      const clientId = localStorage.getItem("clientId");
+      localStorage.setItem("clientId", clientId); // Сохраняем id получателя
+      setMessages((prevMessages) => [...prevMessages, { text: clientId, timestamp: new Date() }]); // Добавляем сообщение с id получателя
+      sendMessageToTelegram(clientId); // Отправляем сообщение в Telegram
+ 
       const message = { text: messageInput, timestamp: new Date() };
-      socket.emit("message", message);
+
+      socket.emit("message", message, clientId); // Передаем id получателя
       setMessageInput("");
     }
   };
@@ -66,11 +75,6 @@ function Chat() {
                   <span className="message-timestamp">
                     {new Date(msg.timestamp).toLocaleTimeString()}
                   </span>
-                  {msg.update_id && (
-                    <span className="message-id">
-                      ID: {msg.update_id}
-                    </span>
-                  )}
                 </div>
               ))}
             </div>

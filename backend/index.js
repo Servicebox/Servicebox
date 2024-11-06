@@ -772,15 +772,30 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 io.on("connection", (socket) => {
   console.log("A new user has connected", socket.id);
 
-socket.on("message", async (message) => {
-  await sendMessageToTelegram(message);
-  socket.emit("message", message); // Отправить обратно отправителю
-});
+
+  // Получаем client-id из куки или параметров подключения
+  const clientId = socket.handshake.query.clientId;
+
+  if (clientId) {
+    socket.join(clientId); // Присоединяем клиента к комнате с его ID
+  }
+
+  socket.on("message", async (message, recipientId) => {
+    await sendMessageToTelegram(message);
+
+    // Отправить сообщение в комнату получателя
+    if (recipientId) {
+        io.to(recipientId).emit("message", message);
+    } else {
+        socket.emit("message", message); // Eсли не указан получатель, то отправляем обратно отправителю
+    }
+  });
 
   socket.on("disconnect", () => {
     console.log("User disconnected: ", socket.id);
   });
 });
+
 
 async function sendMessageToTelegram(message) {
   const text = `${message.text}\nFrom: User`;
