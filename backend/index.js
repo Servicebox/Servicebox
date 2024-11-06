@@ -775,19 +775,11 @@ io.on("connection", (socket) => {
   const clientId = socket.handshake.query.clientId;
   
   if (clientId) {
-    socket.join(clientId);
+    socket.join(clientId); // Присоединяем к комнате
   }
 
   socket.on("message", async (message) => {
     await sendMessageToTelegram(message);
-
-    // Отправляем сообщение обратно только в конкретную комнату пользователя
-    if (clientId) {
-      socket.to(clientId).emit("message", message);
-
-    }
-
-    // Пример ответа бота на сообщение
     if (clientId) {
       socket.to(clientId).emit("message", {
        ...message,
@@ -795,32 +787,17 @@ io.on("connection", (socket) => {
       });
     }
   });
-
-  socket.on("join", (clientId) => {
-    console.log("User joined:", clientId);
-    socket.join(clientId);
-  });
-
-
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
 });
 
-
-
-
 async function sendMessageToTelegram(message) {
   const text = `${message.text}\nFrom: ${message.userName}`;
-  const response = await sendToTelegram(text);
-  console.log("Telegram response:", response);
-
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
   const body = {
-
     chat_id: TELEGRAM_CHAT_ID,
-    parse_mode: 'MarkdownV2', // Чтобы отправлять сообщения с Markdown
     text: text,
   };
 
@@ -844,13 +821,16 @@ app.post('/webhook', (req, res) => {
     const responseMessage = {
       text: channel_post.text,
       timestamp: new Date(),
+      userName: 'Servicebox' // Или любое другое имя для бота
     };
-    io.emit("message", responseMessage);
+    const clientId = extractClientIdFromSomewhere(channel_post); // Логика получения clientId (по пример)
+    if (clientId) {
+      io.to(clientId).emit("message", responseMessage);
+    }
     console.log("Отправлено WebSocket сообщение:", responseMessage);
   }
   res.send({ status: 'ok' });
 });
-
 /**
  * Extracts the client ID from the given channel post.
  * 
