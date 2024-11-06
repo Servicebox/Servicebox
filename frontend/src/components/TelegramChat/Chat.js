@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import './Chat.css';
 
-async function getClientId() {
-  const response = await fetch('/get-client-id', { credentials: 'include' });
-  const data = await response.json();
-  return data.clientId;
-}
+const getClientId = () => {
+  return Promise.resolve(document.cookie.replace(/(?:(?:^|.*;\s*)client-id\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+};
 
 function Chat() {
   const [socket, setSocket] = useState(null);
@@ -28,15 +26,18 @@ function Chat() {
 
       setSocket(newSocket);
 
+      // Чистка после завершения
       return () => newSocket.disconnect();
     });
   }, [userName]);
 
   const sendMessage = () => {
-    if (messageInput.trim() !== "" && userName.trim() !== "") {
-      const message = { text: messageInput, timestamp: new Date(), userName };
-      socket.emit("message", message);
-      setMessages(prevMessages => [...prevMessages, message]);
+    if (socket && messageInput.trim()) {
+      socket.emit("message", {
+        text: messageInput,
+        timestamp: new Date(),
+        userName
+      });
       setMessageInput("");
     }
   };
@@ -65,9 +66,14 @@ function Chat() {
             </div>
             <div className="messages">
               {messages.map((msg, index) => (
-                <div key={index} className={`message ${index % 2 === 0 ? "message-user" : "message-bot"}`}>
+                <div
+                  key={index}
+                  className={`message ${index % 2 === 0 ? "message-user" : "message-bot"}`}
+                >
                   <div className="message-text"><strong>{msg.userName}:</strong> {msg.text}</div>
-                  <span className="message-timestamp">{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                  <span className="message-timestamp">
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </span>
                 </div>
               ))}
             </div>

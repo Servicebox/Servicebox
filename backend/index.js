@@ -218,9 +218,9 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
 
 
 app.get('/get-client-id', (req, res) => {
-  let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
+  let clientId = req.cookies['client-id'];
   if (!clientId) {
-    clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
+    clientId = `client_${Math.random().toString(36).substring(2, 15)}`;
     res.cookie('client-id', clientId, {
       httpOnly: true,
       maxAge: 86400 * 1000,
@@ -785,8 +785,10 @@ io.on("connection", (socket) => {
   socket.on("message", async (msg) => {
     msg.userName = socket.handshake.query.userName || 'Anonymous';
 
+    // Отправка сообщения в Телеграм
     const sentToTelegram = await sendMessageToTelegram(msg);
 
+    // Ответ пользователю в чате, при условии успешной отправки
     if (sentToTelegram.ok) {
       socket.to(clientId).emit("message", {
         ...msg,
@@ -801,7 +803,7 @@ io.on("connection", (socket) => {
 });
 
 async function sendMessageToTelegram(message) {
-  const text = `${message.text}\nFrom: ${message.userName}`;
+  const text = `${message.userName}: ${message.text}`;
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
   const body = {
@@ -821,6 +823,8 @@ async function sendMessageToTelegram(message) {
     return { ok: false, error };
   }
 }
+
+
 
 app.post('/webhook', (req, res) => {
   const { message } = req.body;
