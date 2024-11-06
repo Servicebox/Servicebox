@@ -778,11 +778,11 @@ io.on("connection", (socket) => {
     socket.join(clientId);
   }
 
-  socket.on("message", async (message, recipientId) => {
-    await sendMessageToTelegram(message);
+  socket.on("message", async (message) => {
+    await sendMessageToTelegram(message, clientId);
 
-    if (recipientId) {
-      io.to(recipientId).emit("message", message);
+    if (clientId) {
+      io.to(clientId).emit("message", message);
     } else {
       socket.emit("message", message);
     }
