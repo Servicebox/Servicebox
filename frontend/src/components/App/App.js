@@ -59,6 +59,7 @@ import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import AdminPanel from "../AdminPanel/AdminPanel";
 import VideoCard from "../AdminPanel/VideoCard/VideoCard"
 import Chat from "../TelegramChat/Chat"
+import io from 'socket.io-client';
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);

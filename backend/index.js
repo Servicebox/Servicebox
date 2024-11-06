@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const compression = require('compression');
 const multer = require('multer');
 const fs = require('fs');
-
+const fetch = require('node-fetch');
 require('dotenv').config();
 const crypto = require('crypto');
 const fetchUser = require('./middlewares/fetchUser');
@@ -37,8 +37,8 @@ const { Server } = require('socket.io');
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',  // временно для полного тестирования
-    methods: ['GET', 'POST']
+    origin: "https://servicebox35.ru",
+    methods: ["GET", "POST"]
   }
 });
 const allowedCors = [
@@ -778,7 +778,7 @@ socket.on("message", async (message) => {
 });
 
   socket.on("disconnect", () => {
-    console.log(socket.id, " disconnected");
+    console.log("User disconnected: ", socket.id);
   });
 });
 
