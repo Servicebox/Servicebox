@@ -767,11 +767,7 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 
 
 ////
-// Handle WebSocket connections hereio.on("connection", (socket) => {
-function myMethodToExtractClientId(channel_post) {
-  // Реальная логика для извлечения clientId из вашего поста
-  return 'derived-client-id'; // заглушка
-}
+
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
@@ -785,15 +781,12 @@ io.on("connection", (socket) => {
   socket.on("message", async (msg) => {
     msg.userName = socket.handshake.query.userName || 'Anonymous';
 
-    // Отправка сообщения в Телеграм
+    // Send the message to Telegram
     const sentToTelegram = await sendMessageToTelegram(msg);
 
-    // Ответ пользователю в чате, при условии успешной отправки
+    // Emit the message back to the sender and their room
     if (sentToTelegram.ok) {
-      socket.to(clientId).emit("message", {
-        ...msg,
-        userName: 'Servicebox'
-      });
+      io.to(clientId).emit("message", msg);  // Emit to the specific room
     }
   });
 
@@ -801,6 +794,7 @@ io.on("connection", (socket) => {
     console.log("User disconnected:", socket.id);
   });
 });
+
 
 async function sendMessageToTelegram(message) {
   const text = `${message.userName}: ${message.text}`;
@@ -831,7 +825,7 @@ app.post('/webhook', (req, res) => {
   console.log("Webhook received:", req.body);
 
   if (message && message.text) {
-    const clientId = myMethodToExtractClientId(message);
+    const clientId = myMethodToExtractClientId(message);  // This should determine the right client ID
     if (clientId) {
       io.to(clientId).emit("message", {
         text: message.text,

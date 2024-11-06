@@ -13,34 +13,36 @@ function Chat() {
   const [chatOpen, setChatOpen] = useState(false);
   const [userName, setUserName] = useState("");
 
-  useEffect(() => {
-    getClientId().then(clientId => {
-      const newSocket = io("https://servicebox35.pp.ru", {
-        query: { clientId, userName }
-      });
-
-      newSocket.on("message", (message) => {
-        console.log("Получено сообщение:", message);
-        setMessages(prevMessages => [...prevMessages, message]);
-      });
-
-      setSocket(newSocket);
-
-      // Чистка после завершения
-      return () => newSocket.disconnect();
+useEffect(() => {
+  getClientId().then(clientId => {
+    const newSocket = io("https://servicebox35.pp.ru", {
+      query: { clientId, userName }
     });
-  }, [userName]);
 
-  const sendMessage = () => {
-    if (socket && messageInput.trim()) {
-      socket.emit("message", {
-        text: messageInput,
-        timestamp: new Date(),
-        userName
-      });
-      setMessageInput("");
-    }
-  };
+    // Listen for incoming messages
+    newSocket.on("message", (message) => {
+      console.log("Получено сообщение:", message);
+      setMessages(prevMessages => [...prevMessages, message]);
+    });
+
+    setSocket(newSocket);
+
+    return () => newSocket.disconnect();
+  });
+}, [userName]);
+
+
+
+const sendMessage = () => {
+  if (socket && messageInput.trim()) {
+    socket.emit("message", {
+      text: messageInput,
+      timestamp: new Date(),
+      userName
+    });
+    setMessageInput("");
+  }
+};
 
   const toggleChat = () => {
     setChatOpen(!chatOpen);
