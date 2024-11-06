@@ -782,10 +782,10 @@ io.on("connection", (socket) => {
     msg.userName = socket.handshake.query.userName || 'Anonymous';
 
     // Send the message to Telegram
-    const sentToTelegram = await sendMessageToTelegram(msg);
+    const sendToTelegram = await sendMessageToTelegram(msg);
 
     // Emit the message back to the sender and their room
-    if (sentToTelegram.ok) {
+    if (sendToTelegram.ok) {
       io.to(clientId).emit("message", msg);  // Emit to the specific room
     }
   });
