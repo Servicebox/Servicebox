@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const compression = require('compression');
 const multer = require('multer');
 const fs = require('fs');
-const fetch = require('node-fetch');
+
 require('dotenv').config();
 const crypto = require('crypto');
 const fetchUser = require('./middlewares/fetchUser');
