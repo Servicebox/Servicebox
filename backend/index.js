@@ -768,21 +768,23 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 
 ////
 // Handle WebSocket connections hereio.on("connection", (socket) => {
+
 io.on("connection", (socket) => {
   console.log("A new user has connected:", socket.id);
 
   const clientId = socket.handshake.query.clientId;
   
   if (clientId) {
-    socket.join(clientId); // Присоединяем к комнате
+    socket.join(clientId);
   }
 
-  socket.on("message", async (message) => {
+  socket.on("message", async (message, recipientId) => {
     await sendMessageToTelegram(message);
 
-    // Отправляем сообщение обратно только в конкретную комнату пользователя
-    if (clientId) {
-      socket.to(clientId).emit("message", { ...message, userName: 'Bot' }); // Пример ответа бота с указанным userName
+    if (recipientId) {
+      io.to(recipientId).emit("message", message);
+    } else {
+      socket.emit("message", message);
     }
   });
 
@@ -791,8 +793,11 @@ io.on("connection", (socket) => {
   });
 });
 
+
+
+
 async function sendMessageToTelegram(message) {
-  const text = `${message.text}\nFrom: ${message.userName}`;
+  const text = `${message.text}\nFrom: User`;
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
   const body = {
@@ -814,22 +819,18 @@ async function sendMessageToTelegram(message) {
 
 app.post('/webhook', (req, res) => {
   const { channel_post } = req.body;
-  console.log("Поступил вебхук:", req.body);
-
-  if (channel_post && channel_post.text) {
+  console.log("Поступил вебхук:", req.body); // Изменено, чтобы видеть весь получаемый объект
+ if (channel_post && channel_post.text) {
     const responseMessage = {
       text: channel_post.text,
       timestamp: new Date(),
-      userName: 'Servicebox' // Или любое другое имя для бота
     };
-    const clientId = extractClientIdFromSomewhere(channel_post); // Логика получения clientId (по пример)
-    if (clientId) {
-      io.to(clientId).emit("message", responseMessage);
-    }
+    io.emit("message", responseMessage);
     console.log("Отправлено WebSocket сообщение:", responseMessage);
   }
   res.send({ status: 'ok' });
 });
+
 // Установите вебхук при запуске сервера
 fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${YOUR_SERVER_URL}/webhook`)
   .then(response => response.json())
