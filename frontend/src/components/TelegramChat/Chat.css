@@ -36,6 +36,7 @@
   background-color: #1293d2;
   text-align: center;
   font-size: 1.2rem;
+      font-weight: bold;
 }
 
 .messages {
@@ -109,4 +110,18 @@
 
 .send-button:hover {
   background-color: #0056b3;
+}
+.user-name-input-container{
+  font-size: 16px;
+  color: #000;
+  background-color: transparent;
+}
+.user-name-input{
+
+    color: #000;
+    border-bottom: 2px solid red;
+border-radius: 8px;
+height: 40px;
+padding-top: 10px;
+    width: 100%;
 }

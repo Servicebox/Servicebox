@@ -1,58 +1,38 @@
-// Установите зависимости
-const express = require('express');
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
-// Подключение к базе данных MongoDB
-mongoose.set('strictQuery', true);
-mongoose.connect('mongodb://127.0.0.1:27017/serviceboxdb')
-  .then(() => console.log('Соединение с базой данных установлено'))
-  .catch((error) => console.error('Ошибка подключения к базе данных:', error));
+const { Schema, model } = mongoose
 
+const messageSchema = new Schema(
+  {
+    messageId: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    messageType: {
+      type: String,
+      required: true
+    },
+    textOrPathToFile: {
+      type: String,
+      required: true
+    },
+    roomId: {
+      type: String,
+      required: true
+    },
+    userId: {
+      type: String,
+      required: true
+    },
+    userName: {
+      type: String,
+      required: true
+    }
+  },
+  {
+    timestamps: true
+  }
+)
 
-// Определение схемы данных
-const dataSchema = new mongoose.Schema({
- chatId: Number, // Telegram chat id
-  name: String,
-  phone: String,
-  description: String,
-  lastMessageId: Number,
-}, { timestamps: true });
-
-
-// Создание модели
-const Data = mongoose.model('Data', dataSchema);
-
-// Создание сервера express
-const app = express();
-
-// Разрешить парсинг данных из формы
-app.use(express.urlencoded({ extended: true }));
-
-// Обработка данных из формы
-app.post('/submit', (req, res) => {
-  // Получить данные из формы
-  const { name, phone, description } = req.body;
-
-  // Создать новый экземпляр модели с данными из формы
-  const newData = new Data({
-    name,
-    phone,
-    description
-  });
-
-  // Сохранить данные в базе данных
-  newData.save()
-    .then(() => {
-      console.log('Data saved successfully');
-      res.redirect('/success'); // Редирект на страницу "Успех"
-    })
-    .catch((error) => {
-      console.error('Error saving data:', error);
-      res.redirect('/error'); // Редирект на страницу ошибки
-    });
-});
-
-// Слушаем сервер на указанном порту
-app.listen(8000, () => {
-  console.log('Server listening on port 8000');
-});
+export default model('Message', messageSchema)

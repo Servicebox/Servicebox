@@ -770,31 +770,30 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 // Handle WebSocket connections hereio.on("connection", (socket) => {
 
 io.on("connection", (socket) => {
-  console.log("A new user has connected", socket.id);
+  console.log("A new user has connected:", socket.id);
 
-
-  // Получаем client-id из куки или параметров подключения
   const clientId = socket.handshake.query.clientId;
-
+  
   if (clientId) {
-    socket.join(clientId); // Присоединяем клиента к комнате с его ID
+    socket.join(clientId);
   }
 
   socket.on("message", async (message, recipientId) => {
     await sendMessageToTelegram(message);
 
-    // Отправить сообщение в комнату получателя
     if (recipientId) {
-        io.to(recipientId).emit("message", message);
+      io.to(recipientId).emit("message", message);
     } else {
-        socket.emit("message", message); // Eсли не указан получатель, то отправляем обратно отправителю
+      socket.emit("message", message);
     }
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected: ", socket.id);
+    console.log("User disconnected:", socket.id);
   });
 });
+
+
 
 
 async function sendMessageToTelegram(message) {
