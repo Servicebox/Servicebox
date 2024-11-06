@@ -779,14 +779,28 @@ io.on("connection", (socket) => {
   }
 
   socket.on("message", async (message) => {
-    await sendMessageToTelegram(message, clientId);
+    await sendMessageToTelegram(message);
 
+    // Отправляем сообщение обратно только в конкретную комнату пользователя
     if (clientId) {
-      io.to(clientId).emit("message", message);
-    } else {
-      socket.emit("message", message);
+      socket.to(clientId).emit("message", message);
+
+    }
+
+    // Пример ответа бота на сообщение
+    if (clientId) {
+      socket.to(clientId).emit("message", {
+       ...message,
+        userName: 'Servicebox', // Пример ответа бота с указанным userName
+      });
     }
   });
+
+  socket.on("join", (clientId) => {
+    console.log("User joined:", clientId);
+    socket.join(clientId);
+  });
+
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
@@ -797,11 +811,16 @@ io.on("connection", (socket) => {
 
 
 async function sendMessageToTelegram(message) {
-  const text = `${message.text}\nFrom: User`;
+  const text = `${message.text}\nFrom: ${message.userName}`;
+  const response = await sendToTelegram(text);
+  console.log("Telegram response:", response);
+
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
   const body = {
+
     chat_id: TELEGRAM_CHAT_ID,
+    parse_mode: 'MarkdownV2', // Чтобы отправлять сообщения с Markdown
     text: text,
   };
 
@@ -819,8 +838,9 @@ async function sendMessageToTelegram(message) {
 
 app.post('/webhook', (req, res) => {
   const { channel_post } = req.body;
-  console.log("Поступил вебхук:", req.body); // Изменено, чтобы видеть весь получаемый объект
- if (channel_post && channel_post.text) {
+  console.log("Поступил вебхук:", req.body);
+
+  if (channel_post && channel_post.text) {
     const responseMessage = {
       text: channel_post.text,
       timestamp: new Date(),
@@ -831,11 +851,32 @@ app.post('/webhook', (req, res) => {
   res.send({ status: 'ok' });
 });
 
+/**
+ * Extracts the client ID from the given channel post.
+ * 
+ * @param {object} channel_post - The channel post object.
+ * @returns {number} The client ID extracted from the channel post.
+ */// Получение clientId из вебхука Telegram
+function extractClientIdFromSomewhere(channel_post) {
+  // Проверяем, существуют ли необходимые свойства в объекте channel_post
+  if (channel_post && channel_post.chat && channel_post.chat.id) {
+    return channel_post.chat.id;
+  }
+
+  // Если свойства отсутствуют, возвращаем null
+  return null;
+}
+
 // Установите вебхук при запуске сервера
+
 fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${YOUR_SERVER_URL}/webhook`)
+
   .then(response => response.json())
+
   .then(data => console.log('Webhook установлен:', data))
+
   .catch(err => console.error('Ошибка при установке вебхука:', err));
+
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
