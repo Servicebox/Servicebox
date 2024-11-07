@@ -218,9 +218,9 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
 
 
 app.get('/get-client-id', (req, res) => {
-  let clientId = req.cookies['client-id'];
+  let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
   if (!clientId) {
-    clientId = `client_${Math.random().toString(36).substring(2, 15)}`;
+    clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
     res.cookie('client-id', clientId, {
       httpOnly: true,
       maxAge: 86400 * 1000,
@@ -767,44 +767,28 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 
 
 ////
+// Handle WebSocket connections hereio.on("connection", (socket) => {
 
-io.on("connection", (socket) => {
-  console.log("A user connected:", socket.id);
-
+io.on('connection', (socket) => {
   const clientId = socket.handshake.query.clientId;
-
-  if (clientId) {
-    socket.join(clientId);
-    console.log(`Client joined room: ${clientId}`);
-  }
-
-  socket.on("message", async (msg) => {
-    msg.userName = socket.handshake.query.userName || 'Anonymous';
-
-    // Send the message to Telegram
-    const sendToTelegram = await sendMessageToTelegram(msg);
-
-    // Emit the message back to the sender and their room
-    if (sendToTelegram.ok) {
-      io.to(clientId).emit("message", msg);  // Emit to the specific room
+  console.log(`User connected: ${clientId}`);
+  
+  // Отправка сообщения клиенту
+  socket.on('message', async (message) => {
+    if (message.text && message.userName) {
+      await sendMessageToTelegram(`[${message.userName}]: ${message.text}`);
+      socket.emit("message", message);
     }
   });
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
+  socket.on('disconnect', () => {
+    console.log(`User disconnected: ${clientId}`);
   });
 });
 
-
-async function sendMessageToTelegram(message) {
-  const text = `${message.userName}: ${message.text}`;
+async function sendMessageToTelegram(text) {
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
-
-  const body = {
-    chat_id: TELEGRAM_CHAT_ID,
-    text: text,
-  };
-
+  const body = { chat_id: TELEGRAM_CHAT_ID, text };
   try {
     const response = await fetch(url, {
       method: 'POST',
@@ -814,55 +798,40 @@ async function sendMessageToTelegram(message) {
     return response.json();
   } catch (error) {
     console.error("Error sending message to Telegram:", error);
-    return { ok: false, error };
   }
 }
-
-
 
 app.post('/webhook', (req, res) => {
-  const { message } = req.body;
-  console.log("Webhook received:", req.body);
-
+  const message = req.body.message || req.body.channel_post;
   if (message && message.text) {
-    const clientId = myMethodToExtractClientId(message);  // This should determine the right client ID
-    if (clientId) {
-      io.to(clientId).emit("message", {
-        text: message.text,
-        timestamp: new Date(),
-        userName: 'Telegram User'
-      });
-      console.log("WebSocket message sent:", message.text);
-    } else {
-      console.log("Client ID not found.");
-    }
+    const responseMessage = {
+      userName: "Servicebox",
+      text: message.text,
+      timestamp: new Date(),
+    };
+    io.emit('message', responseMessage);
   }
-  res.send({ status: 'ok' });
+  res.sendStatus(200);
 });
+async function setTelegramWebhook() {
+  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook`;
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: `${YOUR_SERVER_URL}/webhook` })
+    });
 
-/**
- * Extracts the client ID from the given channel post.
- * 
- * @param {object} channel_post - The channel post object.
- * @returns {number} The client ID extracted from the channel post.
- */// Получение clientId из вебхука Telegram
-function myMethodToExtractClientId(channel_post) {
-  // Логика по извлечению clientId
-  // Может быть необходимо связывать каждое исходящее сообщение с Telegram ID
-  // и хранить это соотношение
-  return 'derived-client-id'; // заглушка, замените истинной реализацией
+    const data = await response.json();
+    console.log("Webhook setup response:", data);
+  } catch (error) {
+    console.error("Error setting up Telegram webhook:", error);
+  }
 }
 
-// Установите вебхук при запуске сервера
-
-fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook?url=${YOUR_SERVER_URL}/webhook`)
-
-  .then(response => response.json())
-
-  .then(data => console.log('Webhook установлен:', data))
-
-  .catch(err => console.error('Ошибка при установке вебхука:', err));
-
+// Вызов функции для установки вебхука
+setTelegramWebhook();
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

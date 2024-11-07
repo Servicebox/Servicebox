@@ -3,7 +3,12 @@ import io from "socket.io-client";
 import './Chat.css';
 
 const getClientId = () => {
-  return Promise.resolve(document.cookie.replace(/(?:(?:^|.*;\s*)client-id\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+  let clientId = document.cookie.replace(/(?:(?:^|.*;\s*)client-id\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  if (!clientId) {
+    clientId = `client_${Math.random().toString(36).substring(2, 15)}`;
+    document.cookie = `client-id=${clientId}; path=/; max-age=86400`;
+  }
+  return clientId;
 };
 
 function Chat() {
@@ -13,36 +18,39 @@ function Chat() {
   const [chatOpen, setChatOpen] = useState(false);
   const [userName, setUserName] = useState("");
 
-useEffect(() => {
-  getClientId().then(clientId => {
+  useEffect(() => {
+    const clientId = getClientId();
     const newSocket = io("https://servicebox35.pp.ru", {
       query: { clientId, userName }
     });
+    
+    newSocket.on("connect", () => {
+      console.log("Connected to server");
+    });
 
-    // Listen for incoming messages
     newSocket.on("message", (message) => {
-      console.log("Получено сообщение:", message);
+      console.log("Received message:", message);
       setMessages(prevMessages => [...prevMessages, message]);
     });
 
     setSocket(newSocket);
 
-    return () => newSocket.disconnect();
-  });
-}, [userName]);
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [userName]);
 
-
-
-const sendMessage = () => {
-  if (socket && messageInput.trim()) {
-    socket.emit("message", {
-      text: messageInput,
-      timestamp: new Date(),
-      userName
-    });
-    setMessageInput("");
-  }
-};
+  const sendMessage = () => {
+    if (socket && messageInput.trim() && userName.trim()) {
+      const message = {
+        text: messageInput.trim(),
+        userName: userName.trim(),
+        timestamp: new Date()
+      };
+      socket.emit("message", message);
+      setMessageInput("");
+    }
+  };
 
   const toggleChat = () => {
     setChatOpen(!chatOpen);
@@ -68,14 +76,8 @@ const sendMessage = () => {
             </div>
             <div className="messages">
               {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message ${index % 2 === 0 ? "message-user" : "message-bot"}`}
-                >
+                <div key={index} className={`message ${msg.userName === userName ? "message-user" : "message-bot"}`}>
                   <div className="message-text"><strong>{msg.userName}:</strong> {msg.text}</div>
-                  <span className="message-timestamp">
-                    {new Date(msg.timestamp).toLocaleTimeString()}
-                  </span>
                 </div>
               ))}
             </div>
@@ -83,7 +85,7 @@ const sendMessage = () => {
               <input
                 type="text"
                 className="message-input"
-                placeholder="Задайте вопрос..."
+                placeholder="Введите ваше сообщение..."
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
               />
