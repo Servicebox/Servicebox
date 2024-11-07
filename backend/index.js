@@ -31,7 +31,7 @@ const verifyToken = require('./middlewares/verifyToken');
 const http = require("http");
 
 const PORT = 8000;
-
+const nodemailer = require('nodemailer');
 const YOUR_SERVER_URL = "https://servicebox35.pp.ru";
 const { Server } = require('socket.io');
 const server = http.createServer(app);
@@ -89,6 +89,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/init-payment',
   'http://localhost:3000/init-paymen',
   'https://servicebox35.pp.ru/api/search',
+  'https://localhost:8000/products',
 
 ];
 
@@ -424,26 +425,69 @@ const Users = mongoose.model('Users',{
     type:Date,
     default:Date.now,
   }
-})
+});
+
+// Настройка транспорту `nodemailer` для Яндекс.Почты
+const transporter = nodemailer.createTransport({
+  host: 'smtp.yandex.ru',
+  port: 465,
+  secure: true, // true для 465, false для других портов
+  auth: {
+    user: 'S89062960353@ya.ru', // ваш логин в Яндексе
+    pass: 'yqpsouempwslxgvf.' // ваш пароль или пароль приложения
+  }
+});
 
 app.post('/signup', async (req, res) => {
-  let check = await Users.findOne({ email: req.body.email });
-  if (check) {
-    return res.status(400).json({ success: false, errors: "Existing user found with same email address" });
+  try {
+    // Проверка на существующего пользователя
+    let check = await Users.findOne({ email: req.body.email });
+    if (check) {
+      return res.status(400).json({ success: false, errors: "Пользователь с такой почтой уже существует" });
+    }
+
+    // Создание данных для корзины
+    let cart = Array.from({ length: 301 }).reduce((acc, _, idx) => ({ ...acc, [idx]: 0 }), {});
+
+    // Создание нового пользователя
+    const user = new Users({
+      name: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+      cartData: cart,
+    });
+
+    // Сохранение пользователя в базе данных
+    await user.save();
+
+    // Генерация JWT токена
+    const token = jwt.sign({ user: { id: user.id } }, JWT_SECRET);
+
+    // Опции для отправки почты
+    const mailOptions = {
+      from: 'ваш_логин@yandex.ru',
+      to: req.body.email,
+      subject: 'Добро пожаловать!',
+      text: `Привет, ${req.body.username}! Спасибо за регистрацию.`
+    };
+
+    // Отправка письма
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Ошибка при отправке письма:", error);
+      } else {
+        console.log('Письмо отправлено: ' + info.response);
+      }
+    });
+
+    // Ответ клиенту
+    res.json({ success: true, token });
+
+  } catch (error) {
+    // Обработка ошибок
+    console.error("Ошибка на сервере:", error);
+    res.status(500).json({ success: false, errors: "Ошибка на сервере" });
   }
-
-  let cart = Array.from({ length: 301 }).reduce((acc, _, idx) => ({ ...acc, [idx]: 0 }), {});
-  const user = new Users({
-    name: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    cartData: cart,
-  });
-  
-  await user.save();
-  const token = jwt.sign({ user: { id: user.id } }, JWT_SECRET);
-
-  res.json({ success: true, token });
 });
 
 app.post('/login',async(req,res)=>{
@@ -607,6 +651,7 @@ app.get('/api/search', async (req, res) => {
   }
 });
  //creating enpoint to get cartdata
+ //creating enpoint to get cartdata
 app.post('/getcart', fetchUser, async (req, res) => {
   console.log("GetCart request received");
   try {
@@ -630,6 +675,7 @@ app.post('/getcart', fetchUser, async (req, res) => {
       res.status(500).json({ message: "Ошибка сервера" });
   }
 });
+
 
 
 
@@ -709,6 +755,8 @@ app.get('/services/:category', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+/////
+
 
 app.use(requestLogger);
 app.use(errorLogger);
@@ -773,13 +821,16 @@ io.on('connection', (socket) => {
   const clientId = socket.handshake.query.clientId;
   console.log(`User connected: ${clientId}`);
   
+  
+   // Join client to their own room based on clientId
+  socket.join(clientId);
   // Отправка сообщения клиенту
-  socket.on('message', async (message) => {
-    if (message.text && message.userName) {
-      await sendMessageToTelegram(`[${message.userName}]: ${message.text}`);
-      socket.emit("message", message);
-    }
-  });
+socket.on('message', async ({ message, clientId }) => {
+  if (message.text && message.userName) {
+    await sendMessageToTelegram(`[${message.userName}]: ${message.text}`);
+    io.to(clientId).emit("message", message);
+  }
+});
 
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${clientId}`);

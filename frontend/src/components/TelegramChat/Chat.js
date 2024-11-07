@@ -17,6 +17,7 @@ function Chat() {
   const [messageInput, setMessageInput] = useState("");
   const [chatOpen, setChatOpen] = useState(false);
   const [userName, setUserName] = useState("");
+  const [clientId, setClientId] = useState(getClientId());
 
   useEffect(() => {
     const clientId = getClientId();
@@ -47,7 +48,7 @@ function Chat() {
         userName: userName.trim(),
         timestamp: new Date()
       };
-      socket.emit("message", message);
+      socket.emit("message", { message, clientId });
       setMessageInput("");
     }
   };
