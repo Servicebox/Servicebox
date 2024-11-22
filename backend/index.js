@@ -924,6 +924,7 @@ const generateBotResponse = (text) => {
   return `Вы написали: ${text}`;
 };
 
+
 // Функция отправки сообщения через Telegram API
 const sendMessage = async (chatId, text) => {
   try {
