@@ -1,5 +1,5 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
@@ -9,16 +9,15 @@ const jwt = require('jsonwebtoken');
 const compression = require('compression');
 const multer = require('multer');
 const fs = require('fs');
-
-require('dotenv').config();
+const axios = require('axios');
 const crypto = require('crypto');
 const fetchUser = require('./middlewares/fetchUser');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
 // Telegram Config
-const TELEGRAM_TOKEN = "6875218502:AAErs3zaTZduyLbjWAOR7g4AIP0u8Ld-_8I";
-const TELEGRAM_CHAT_ID = "-1002016730487";
+
+
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
@@ -28,20 +27,31 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const Admin = require('./models/Admin');
 const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
-const http = require("http");
+const app = express();
+
+const { Telegraf } = require('telegraf');
+const TelegramBot = require('node-telegram-bot-api');
+const token = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
+const telegramApi = `https://api.telegram.org/bot${token}`;
+const chatId = '406806305';
+
 
 const PORT = 8000;
 const nodemailer = require('nodemailer');
 
-const YOUR_SERVER_URL = "https://servicebox35.pp.ru";
-const { Server } = require('socket.io');
-const server = http.createServer(app);
-const io = new Server(server, {
+
+// Создаем объект для хранения соответствий сеансов с пользователями Telegram
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, {
   cors: {
-    origin: "https://servicebox35.ru",
-    methods: ["GET", "POST"]
+    origin: 'https://servicebox35.ru', // Замените на адрес вашего фронтенда
+    methods: ['GET', 'POST'],
   }
 });
+
+// In-memory хранилище сообщений (для примера). Используйте БД для продакшена.
+const userMessages = {};
+
 const allowedCors = [
   'http://localhost:5173',
 'https://servicebox35.pp.ru/get-client-id',
@@ -72,7 +82,7 @@ const allowedCors = [
   'http://localhost:5000',
   'https://localhost:3000',
   'http://localhost:3000',
-   'https://localhost:8000',
+  'https://localhost:8000',
   'https://servicebox35.pp.ru',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
@@ -91,6 +101,7 @@ const allowedCors = [
   'http://localhost:3000/init-paymen',
   'https://servicebox35.pp.ru/api/search',
   'https://localhost:8000/products',
+  'http://localhost:8000/send',
 
 ];
 
@@ -106,7 +117,11 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'https://servicebox35.ru', // Разрешаем только этот источник
+  methods: ['GET', 'POST'], // Разрешаем определенные методы
+  credentials: true, // Указываем, что можно работать с куками
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -219,7 +234,7 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
 // клиент 
 
 
-app.get('/get-client-id', (req, res) => {
+{/*app.get('/get-client-id', (req, res) => {
   let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
   if (!clientId) {
     clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
@@ -232,6 +247,7 @@ app.get('/get-client-id', (req, res) => {
   }
   res.json({ clientId });
 });
+*/}
 // Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -358,7 +374,17 @@ app.post('/addproduct', async (req, res) => {
   res.json({ success: true, name: req.body.name });
 });
 
+///
+// Схема для сообщений
+const messageSchema = new mongoose.Schema({
+  userId: String,
+  text: String,
+  userName: String,
+  timestamp: String,
+});
 
+const Message = mongoose.model('Message', messageSchema);
+//
 app.post('/removeproduct', async (req, res) => {
   await Product.findOneAndDelete({ id: req.body.id });
   console.log("Product removed");
@@ -405,27 +431,30 @@ app.put('/updateproduct/:id', async (req, res) => {
 });
 
 // CRUD операций для пользователей
-const Users = mongoose.model('Users',{
-  name:{
-    type:String,
-    
+const Users = mongoose.model('Users', {
+  name: {
+    type: String,
+    required: true,
   },
-  email:{
-    type:String,
-    unique:true,
+  email: {
+    type: String,
+    unique: true,
+    sparse: true, // Параметр sparse позволяет сохранять уникальные значения для неполных документов
   },
-  password:{
-    type:String,
-   
+  password: {
+    type: String,
   },
- cartData:{
-    type:Object,
-   
-  }, 
-  date:{
-    type:Date,
-    default:Date.now,
-  }
+  phone: {
+    type: String,
+    required: true,
+  },
+  cartData: {
+    type: Object,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Настройка транспорту `nodemailer` для Яндекс.Почты
@@ -434,7 +463,7 @@ const transporter = nodemailer.createTransport({
   port: 465,
   secure: true, // true для 465, false для других портов
   auth: {
-    user: 'S89062960353@ya.ru', // ваш логин в Яндексе
+    user: 'Leto2025.', // ваш логин в Яндексе
     pass: 'yqpsouempwslxgvf.' // ваш пароль или пароль приложения
   }
 });
@@ -814,77 +843,148 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 });
 
 
-
-////
-// Handle WebSocket connections hereio.on("connection", (socket) => {
-
-io.on('connection', (socket) => {
-  const clientId = socket.handshake.query.clientId;
-  console.log(`User connected: ${clientId}`);
-  
-  
-   // Join client to their own room based on clientId
-  socket.join(clientId);
-  // Отправка сообщения клиенту
-socket.on('message', async ({ message, clientId }) => {
-  if (message.text && message.userName) {
-    await sendMessageToTelegram(`[${message.userName}]: ${message.text}`);
-    io.to(clientId).emit("message", message);
-  }
+app.get('/get-ip', (req, res) => {
+  // Получаем IP-адрес клиента и отправляем его обратно
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  res.json(ip);
 });
 
+//
+// Код для обработки сообщений на сервере
+// Обработка отправки сообщения
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('join', (userId) => {
+    socket.join(userId);
+  });
+
   socket.on('disconnect', () => {
-    console.log(`User disconnected: ${clientId}`);
+    console.log('user disconnected');
   });
 });
 
-async function sendMessageToTelegram(text) {
-  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
-  const body = { chat_id: TELEGRAM_CHAT_ID, text };
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    return response.json();
-  } catch (error) {
-    console.error("Error sending message to Telegram:", error);
-  }
-}
-
+// Вебхук маршрут// Вебхук маршрут
 app.post('/webhook', (req, res) => {
-  const message = req.body.message || req.body.channel_post;
-  if (message && message.text) {
-    const responseMessage = {
-      userName: "Servicebox",
-      text: message.text,
-      timestamp: new Date(),
-    };
-    io.emit('message', responseMessage);
+  const update = req.body;
+
+  if (update.message) {
+    handleMessage(update.message);
   }
+
   res.sendStatus(200);
 });
-async function setTelegramWebhook() {
-  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/setWebhook`;
-  
+
+// Обработка входящих сообщений от Telegram
+const handleMessage = (message) => {
+  const chatId = message.chat.id;
+  const userId = extractUserId(message); // Функция для получения userId
+
+  if (!userId) {
+    // Если невозможно определить userId, игнорируем сообщение
+    return;
+  }
+
+  const text = message.text;
+
+  // Инициализируем массив сообщений для пользователя, если он еще не существует
+  if (!userMessages[userId]) {
+    userMessages[userId] = [];
+  }
+
+  // Добавляем сообщение пользователя
+  userMessages[userId].push({
+    text,
+    userName: 'Вы',
+    timestamp: new Date().toISOString(),
+  });
+
+  // Здесь можно добавить логику обработки сообщения и генерации ответа от бота
+  const botResponse = generateBotResponse(text);
+
+  // Добавляем сообщение от бота
+  userMessages[userId].push({
+    text: botResponse,
+    userName: 'Бот',
+    timestamp: new Date().toISOString(),
+  });
+
+  // Отправляем ответ в Telegram
+  sendMessage(chatId, botResponse);
+};
+
+// Функция для извлечения userId из сообщения
+const extractUserId = (message) => {
+  // Например, можно использовать chat.id как userId
+  return message.chat.id;
+};
+
+// Функция генерации ответа от бота (простая эхо-функция)
+const generateBotResponse = (text) => {
+  return `Вы написали: ${text}`;
+};
+
+// Функция отправки сообщения через Telegram API
+const sendMessage = async (chatId, text) => {
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url: `${YOUR_SERVER_URL}/webhook` })
+    await axios.post(`${telegramApi}/sendMessage`, {
+      chat_id: chatId,
+      text,
+    });
+  } catch (error) {
+    console.error('Ошибка при отправке сообщения:', error.response ? error.response.data : error.message);
+  }
+};
+
+// API маршрут для получения сообщений пользователя
+app.get('/messages/:userId', (req, res) => {
+  const userId = req.params.userId;
+
+  if (userMessages[userId]) {
+    res.json(userMessages[userId]);
+  } else {
+    res.json([]);
+  }
+});
+
+// API маршрут для отправки сообщения пользователя через Telegram
+app.post('/send', async (req, res) => {
+  const { userId, text } = req.body;
+
+  if (!userId || !text) {
+    return res.status(400).json({ error: 'userId и text обязательны.' });
+  }
+
+  // Здесь можно сопоставить userId с chatId (если они отличаются)
+  const chatId = userId; // В примере используем userId как chatId
+
+  // Инициализируем массив сообщений для пользователя, если он еще не существует
+  if (!userMessages[userId]) {
+    userMessages[userId] = [];
+  }
+
+  // Добавляем сообщение пользователя
+  userMessages[userId].push({
+    text,
+    userName: 'Вы',
+    timestamp: new Date().toISOString(),
+  });
+
+  // Отправляем сообщение через Telegram API
+  try {
+    await axios.post(`${telegramApi}/sendMessage`, {
+      chat_id: chatId,
+      text: text,
     });
 
-    const data = await response.json();
-    console.log("Webhook setup response:", data);
+    res.json({ status: 'Message sent successfully.' });
   } catch (error) {
-    console.error("Error setting up Telegram webhook:", error);
+    console.error('Ошибка при отправке сообщения:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: 'Ошибка при отправке сообщения.' });
   }
-}
+});
 
-// Вызов функции для установки вебхука
-setTelegramWebhook();
 
-server.listen(PORT, () => {
+http.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

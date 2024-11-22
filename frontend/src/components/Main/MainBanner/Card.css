@@ -221,15 +221,16 @@ font-size: 0.9em;
 
 @media screen and (max-width: 500px) and (min-width: 400px) {
   .cards, .cover-item:before {
-    border: 3px solid #ffffff80;
-    border-radius: 15px;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    top: 20px;
-    transform: translateZ(0);
-    transform-style: preserve-3d;
-    transition: all 2.3s ease;
+border: 3px solid #ffffff80;
+        border-radius: 5px;
+        bottom: 27px;
+        left: 20px;
+        border: 1px solid rgb(225, 214, 214);
+        right: 20px;
+        top: 20px;
+        transform: translateZ(0);
+        transform-style: preserve-3d;
+        transition: all 2.3s ease;
 }
 
   .card-cover{
@@ -237,8 +238,8 @@ font-size: 0.9em;
     width: 45%;
   }
   .cards .cover-item{
-    height: 101%;
-    top: -1px;
+          height: 100%;
+        top: 0px;
   
   }
   .cards .card-back .link-card{

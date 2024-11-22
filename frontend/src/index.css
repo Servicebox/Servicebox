@@ -1,9 +1,6 @@
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts/inter.css);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 body {
   background-color: #EBF3F8, #EBF3F800;
   margin: 0;

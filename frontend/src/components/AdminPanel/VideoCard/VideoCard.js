@@ -4,7 +4,7 @@ import axios from 'axios';
 import Search from "../../Search/Search"
 import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
 
-const videocardList = () => {
+const VideocardList = () => {
   const [videocardPrices, setVideocardPrices] = useState([]);
 
   const [showAll, setShowAll] = useState(false);
@@ -81,4 +81,4 @@ const videocardList = () => {
   );
 }
 
-export default videocardList;
+export default VideocardList;

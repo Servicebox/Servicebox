@@ -79,6 +79,7 @@ margin-bottom: 5px;
 }
 
 .promotion-carousel-container {
+  width: 90%;
   border-radius: 10px;
   height: 605px;
   overflow: hidden;
@@ -100,7 +101,7 @@ margin-bottom: 5px;
   position: relative;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: flex-start;
   background-size: cover;
   background-position: center;
   background-size: contain; /* Adjust the image to maintain its aspect ratio */
@@ -221,9 +222,12 @@ width: 146px;
   background-color: #0056b3;
 }
 .main-form__plans{
-  position: relative;
-width: 95%;
-margin: 0 auto;
+display: flex;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
 
 }
 

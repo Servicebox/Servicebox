@@ -68,19 +68,19 @@ function PromotionCarousel({ toggleForm }) {
     },
     {
       title: "При ремонте видеокарт на Ленина д.6 скидка на работу 20%",
-      endDate: new Date('2024-11-30T23:59:59'),
+      endDate: new Date('2024-12-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example3
     },
     {
       title: " Многодетным скидка на работу 20%",
-      endDate: new Date('2024-11-30T23:59:59'),
+      endDate: new Date('2024-12-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example4
     },
      {
       title: " Замена стекла в день обращения, со скидкой на работу в 5%",
-      endDate: new Date('2024-11-15T23:59:59'),
+      endDate: new Date('2024-12-15T23:59:59'),
       description: "До конца акции осталось:",
       image: Example5
     }

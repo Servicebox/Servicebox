@@ -5,7 +5,7 @@ import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import ShopContextProvider from './components/Contexst/ShopContext';
-import Widget from './components/Widget/Widget';
+//import Widget from './components/Widget/Widget';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,8 +15,7 @@ root.render(
 
       <ShopContextProvider>
         <App />
-        <Widget link="tg://resolve?domain=@Tomkka" imageName="telegram" />
-    
+       {/* <Widget link="tg://resolve?domain=@Tomkka" imageName="telegram" />*/}
       </ShopContextProvider>
     </BrowserRouter>
   </React.StrictMode>
