@@ -174,13 +174,19 @@ class TelegaChat {
     });
   }
 
-  getIp() {
-    axios.get(`https://servicebox35.pp.ru/get-ip`)
+getIp() {
+  axios.get(`https://servicebox35.pp.ru/get-ip`)
     .then(r => {
-      if (r.data.length > 8 && r.data != 'undefined') idStart = r.data
+      if (r.data && r.data.ip) {
+        idStart = r.data.ip; // Теперь получаем правильный IP-адрес
+      } else {
+        console.error("Не удалось получить IP");
+      }
     })
-  }
-
+    .catch(error => {
+      console.error("Ошибка при получении IP:", error);
+    });
+}
   submit() {
     timeNow = new Date().toLocaleTimeString();
     let val = $(".chat__main__input").value;

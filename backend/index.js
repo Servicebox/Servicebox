@@ -16,7 +16,7 @@ const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 //const service = require('./models/service');
 const imageRoutes = require('./routes/images');
 // Telegram Config
-
+const requestIp = require('request-ip');
 
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
@@ -35,7 +35,7 @@ const token = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
 const telegramApi = `https://api.telegram.org/bot${token}`;
 const chatId = '406806305';
 
-
+app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
 
@@ -844,11 +844,10 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 
 
 app.get('/get-ip', (req, res) => {
-  // Получаем IP-адрес клиента и отправляем его обратно
-  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  res.json(ip);
+  // Получаем реальный IP-адрес клиента
+  const ip = req.clientIp;
+  res.json({ ip });
 });
-
 //
 // Код для обработки сообщений на сервере
 // Обработка отправки сообщения

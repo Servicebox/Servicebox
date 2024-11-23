@@ -247,15 +247,15 @@ function MainBanner() {
         </div>
       </div>
 
-      {isNewsOpen && (
-        <div className="news-popup">
+     {/*  {isNewsOpen && (
+       <div className="news-popup">
           <button onClick={closeNews} className="news-popup__close">&times;</button>
           <h2 className='news__title'>Внимание!</h2>
           <p className='news-subtitle'>Открыли второй отдел по ремонту!!Теперь вы можете посетить нас еще и  по адресу:</p>
           <p className='news-title'>Вологда, ул. Ленина, д. 6 Звоните тел: 500-696</p>
         </div>
       )}
-
+*/}
      <div className="u-center-text u-margin-bottom-big">
         <div className="row">
           <div className="col-1-of-3">
