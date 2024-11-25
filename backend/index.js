@@ -34,7 +34,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
 const telegramApi = `https://api.telegram.org/bot${token}`;
 const chatId = '406806305';
-
+app.set('trust proxy', true);
 app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
@@ -844,11 +844,11 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 
 
 app.get('/get-ip', (req, res) => {
-  // Получаем реальный IP-адрес клиента
   const ip = req.clientIp;
+  console.log(`Получен IP: ${ip}`);
   res.json({ ip });
 });
-//
+
 // Код для обработки сообщений на сервере
 // Обработка отправки сообщения
 io.on('connection', (socket) => {

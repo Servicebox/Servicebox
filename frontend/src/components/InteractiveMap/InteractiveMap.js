@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-
+import './InteractiveMap.css';
 const InteractiveMap = () => {
   const [addresses] = useState([
     'Вологда, ул. Северная 7А, 405',
@@ -82,7 +82,7 @@ const InteractiveMap = () => {
   }, [isMapReady, coordinates, addresses]);
 
   return (
-    <div>
+    <div className='map-card'>
       <div id="map" style={{ width: '300px', height: '300px', borderRadius:'15%' }}></div>
       <p>Статус загрузки карты: {isMapReady ? 'Готова' : 'Загрузка...'}</p>
       <p>Количество координат: {coordinates.length}</p>

@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
-import Oplata from "../../images/oplata1.webp";
-import Sbp from "../../images/sbp.webp";
-import Beznal from "../../images/beznal.webp";
+import Oplata from "../../images/ruble.svg";
+import Sbp from "../../images/MNP.svg";
+import Beznal from "../../images/Payment methods.svg";
+import Dolyami from '../../images/Dolyame.svg'
 import InteractiveMap from '../InteractiveMap/InteractiveMap';
 //import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
 
@@ -23,12 +24,7 @@ function Footer() {
           <div className="foooter__oplata">
        <h3 className="oplata__title"> Удобные способы оплаты </h3>
        <ul className="oplata__list">
-         <li className="oplata__item">
-           <img className="oplata__image" src={Oplata} alt="Paypal" />
-         </li>
-         <li className="oplata__item">
-           <img className="oplata__image" src={Sbp} alt="Paypal" />
-         </li>
+     
          <li className="oplata__item">
            <img className="oplata__image" src={Beznal} alt="Paypal" />
          </li>

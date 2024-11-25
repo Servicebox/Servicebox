@@ -98,11 +98,74 @@ content: '';
   font-size: 20px;
 }
 
+/* 4. Тело Чата */
 .chat__body {
-  padding: 10px;
-  flex-grow: 1;
+  flex: 1;
+  padding: 15px;
+  background-color: var(--chat-body-bg);
   overflow-y: auto;
-  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat__body__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+}
+
+.chat__body__item__user__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chat__body__item__user {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.chat__body__item__text {
+  background-color: var(--user-msg-bg);
+  color: var(--text-color);
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 70%;
+
+  position: relative;
+}
+
+.chat__body__item__manager .chat__body__item__text {
+  background-color: var(--manager-msg-bg);
+}
+
+.chat__body__item__time {
+  font-size: 0.8rem;
+  color: var(--time-color);
+  margin-top: 5px;
+  align-self: flex-end;
+}
+
+.chat__body__item__delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--time-color);
+  visibility: hidden;
+  transition: visibility var(--transition-speed), color var(--transition-speed);
+}
+
+.chat__body__item:hover .chat__body__item__delete {
+  visibility: visible;
+}
+
+.chat__body__item__delete:hover {
+  color: red;
 }
 .chat__body__item__client{
 

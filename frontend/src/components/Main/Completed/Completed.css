@@ -269,8 +269,7 @@ object-fit: cover;
    }
 
   .completed__carousel-img{
-max-width: 400px;
-
+width: 400px;
 border-radius: 15px;
 object-fit: cover;
   }
@@ -338,7 +337,7 @@ object-fit: cover;
    }
 
   .completed__carousel-img{
-max-width: 550px;
+width: 550px;
 
 border-radius: 15px;
 object-fit: cover;

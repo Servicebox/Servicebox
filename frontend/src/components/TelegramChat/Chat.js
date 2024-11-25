@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import axios from 'axios';
 import './Chat.css'; // Подключение стилей
 import soundPushUrl from '../Sounds/send-sound.mp3'
@@ -19,7 +19,9 @@ const Chat = () => {
         chatWrap.classList.add('open');
       }
     };
-
+const toggleTheme = () => {
+  document.body.classList.toggle('dark-theme');
+};
     const handleCloseChat = () => {
       const chatWrap = document.querySelector('.chat__wrap');
       if (chatWrap) {
@@ -93,7 +95,7 @@ let idStart = getRandomInt(999)
 
 
 // Имя менагера
-const manager = 'Менеджер'
+const manager = 'Админ'
 
 let tpl = `<div class="chat__wrap">
     <div class="chat__title">Онлайн-чат
