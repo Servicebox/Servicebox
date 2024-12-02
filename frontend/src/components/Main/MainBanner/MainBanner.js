@@ -56,13 +56,13 @@ function PromotionCarousel({ toggleForm }) {
   const promotions = [
     {
       title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
-      endDate: new Date('2024-11-29T23:59:59'),
+      endDate: new Date('2024-12-29T23:59:59'),
       description: "До конца акции осталось:",
       image: Example1
     },
     {
       title: "При установке ориг дисплея, гидрогелевая пленка в подарок",
-      endDate: new Date('2024-11-30T23:59:59'),
+      endDate: new Date('2024-12-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example2
     },
@@ -246,16 +246,6 @@ function MainBanner() {
           <div className="spiral__anim" id="spiral2"></div>
         </div>
       </div>
-
-     {/*  {isNewsOpen && (
-       <div className="news-popup">
-          <button onClick={closeNews} className="news-popup__close">&times;</button>
-          <h2 className='news__title'>Внимание!</h2>
-          <p className='news-subtitle'>Открыли второй отдел по ремонту!!Теперь вы можете посетить нас еще и  по адресу:</p>
-          <p className='news-title'>Вологда, ул. Ленина, д. 6 Звоните тел: 500-696</p>
-        </div>
-      )}
-*/}
      <div className="u-center-text u-margin-bottom-big">
         <div className="row">
           <div className="col-1-of-3">
@@ -267,6 +257,7 @@ function MainBanner() {
                 </div>
                 <div className="card__details">
                   <img className="care-about__youimg" src={Eplaceable} alt="" />
+                   <p className="card__deskriptions">подробности на обороте</p>
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-1">
@@ -294,6 +285,7 @@ function MainBanner() {
                 </div>
                 <div className="card__details">
                   <img className="care-about__youimg" src={Cleane} alt="удаление" />
+                   <p className="card__deskriptions">подробности на обороте</p>
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-2">
@@ -320,6 +312,7 @@ function MainBanner() {
                 </div>
                 <div className="card__details">
                   <img className="care-about__youimg" src={Diagnostics} alt="диагностка бесплатная" />
+                  <p className="card__deskriptions">подробности на обороте</p>
                 </div>
               </div>
               <div className="card__side card__side--back card__side--back-3">

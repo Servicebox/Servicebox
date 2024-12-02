@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect} from "react";
-import { BrowserRouter as Router, Route, Routes , useLocation} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes , useLocation, useNavigate} from "react-router-dom";
 import { Widget, addResponseMessage }  from 'react-chat-widget-react-18';
 
 import logo from '../../images/logo.jpg'
@@ -59,11 +59,15 @@ import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import AdminPanel from "../AdminPanel/AdminPanel";
 import VideoCard from "../AdminPanel/VideoCard/VideoCard"
 import Chat from "../TelegramChat/Chat"
-import io from 'socket.io-client';
+import VerifyEmail from '../pages/VerifyEmail';
+import ResetPasswordWrapper from '../pages/ResetPasswordWrapper';
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isModalOpen, setModalOpen] = useState(false);
+ const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const categoryId = urlParams.get('categoryId');
@@ -71,8 +75,8 @@ const App = () => {
   gsap.registerPlugin(ScrollToPlugin);
 
   const toggleForm = () => setIsFormOpen(!isFormOpen);
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const escFunction = useCallback((event) => {
     if (event.keyCode === 27) {
@@ -84,6 +88,9 @@ const App = () => {
   }, []);
 
   const scrollTo = (target) => gsap.to(window, { duration: 1, scrollTo: target });
+ const handleLoginSuccess = () => {
+    // Обновите состояние аутентификации в вашем приложении
+  };
 
   return (
     <div className="">
@@ -129,6 +136,8 @@ const App = () => {
           <Route path="/addproduct" element={<Addproduct />} />
           <Route path="/listproduct" element={<ListProduct />} />
               <Route path="/listservice" element={<ListService />} />
+ <Route path="/verify-email" element={<VerifyEmail />} />
+   <Route path="/login" render={(props) => <LoginSignup {...props} isOpen={true} onClose={() => {}} />} />
 
           <Route path="/nav-bar" element={<Navbar />} />
           <Route path="/product-display" element={<ProductDisplay />} />
@@ -141,7 +150,19 @@ const App = () => {
           <Route path=':productName' element={<Product />} />
         </Route>
         <Route path='/cart' element={<Cart />} />
-        <Route path='/login' element={<LoginSignup/>} />
+    
+          <Route
+          path="/login"
+          element={
+            <LoginSignup
+              isOpen={true}
+              onClose={() => {}}
+              onLoginSuccess={handleLoginSuccess}
+            />
+          }
+        />
+        <Route path="/reset-password/:token" element={<ResetPasswordWrapper />} />
+
         </Routes>
         {isFormOpen && <Form toggleForm={toggleForm} />}
         <CookieMessage />

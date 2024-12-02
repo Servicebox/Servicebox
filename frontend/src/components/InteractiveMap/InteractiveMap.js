@@ -83,7 +83,7 @@ const InteractiveMap = () => {
 
   return (
     <div className='map-card'>
-      <div id="map" style={{ width: '300px', height: '300px', borderRadius:'15%' }}></div>
+      <div id="map" style={{ width: '260px', height: '300px', borderRadius:'15%' }}></div>
       <p>Статус загрузки карты: {isMapReady ? 'Готова' : 'Загрузка...'}</p>
       <p>Количество координат: {coordinates.length}</p>
     </div>

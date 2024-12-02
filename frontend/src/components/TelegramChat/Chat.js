@@ -95,7 +95,7 @@ let idStart = getRandomInt(999)
 
 
 // Имя менагера
-const manager = 'Админ'
+const manager = 'Админ '
 
 let tpl = `<div class="chat__wrap">
     <div class="chat__title">Онлайн-чат

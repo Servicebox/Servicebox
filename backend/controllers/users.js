@@ -1,7 +1,7 @@
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/Users');
 
 const { NODE_ENV, SECRET } = require('../utils/constants');
 const UnauthorizedError = require('../errors/UnauthorizedError');
@@ -20,6 +20,7 @@ function createUser(req, res, next) {
     .then((hash) => User.create({
       email,
       password: hash,
+      phone,
       name,
       about,
       avatar,
@@ -29,6 +30,7 @@ function createUser(req, res, next) {
 
       return res.status(201).send({
         email,
+        phone,
         name,
         about,
         avatar,

@@ -768,6 +768,13 @@ gap: 40px;
   border-radius: 10px;
   padding: 10px;
 }
+.card__deskriptions{
+  font-size: 14px;
+  font-weight: 700;
+  font-family: Bebas Neue;
+  margin-top: 10px;
+  text-align: center;
+}
 
 .care-about-you__text {
   margin: 0;
@@ -1298,7 +1305,7 @@ line-height: 18px; /* 133.333% */
 }
 
 .card__side {
-  height: 25rem;
+  height: 27rem;
   -webkit-transition: all 0.8s ease;
   transition: all 0.8s ease;
   position: absolute;
@@ -1390,14 +1397,15 @@ line-height: 18px; /* 133.333% */
 }
 
 .card__heading {
-  font-size: 1.3rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-align: center;
-  color: #000000;
-  background-color: #00000000;
-
-  padding: 7px 0px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    line-height: 0.3;
+    text-align: center;
+    font-family: Bebas Neue;
+    color: #000000;
+    background-color: #00000000;
+    padding: 7px 0px;
  
 }
 
@@ -1720,8 +1728,12 @@ font-size: 13px;
 
  }
  .card__heading {
-  font-size: 0.7em ;
+  font-size: 0.6em ;
 
+ }
+
+ .card__deskriptions {
+font-size: 0.6em;
  }
  .card-neon {
   height: 8.5rem;

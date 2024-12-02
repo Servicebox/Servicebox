@@ -17,7 +17,7 @@ const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
 const imageRoutes = require('./routes/images');
 // Telegram Config
 const requestIp = require('request-ip');
-
+const bcrypt = require('bcrypt');
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
@@ -29,27 +29,30 @@ const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
 const app = express();
 
-const { Telegraf } = require('telegraf');
-const TelegramBot = require('node-telegram-bot-api');
 const token = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
 const telegramApi = `https://api.telegram.org/bot${token}`;
+//const User = require('./models/Users');
+const YANDEX_USER='S89062960353@yandex.ru'
 const chatId = '406806305';
+
 app.set('trust proxy', true);
 app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
 
-
+const YANDEX_PASS='qqerptchfqbzbnma';
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
+const CLIENT_URL='https://servicebox35.ru'
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
   cors: {
-    origin: 'https://servicebox35.ru', // Замените на адрес вашего фронтенда
+    origin: 'https://servicebox35.ru',
     methods: ['GET', 'POST'],
   }
 });
+const emailToken = crypto.randomBytes(64).toString('hex');
 
-// In-memory хранилище сообщений (для примера). Используйте БД для продакшена.
 const userMessages = {};
 
 const allowedCors = [
@@ -102,6 +105,8 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/search',
   'https://localhost:8000/products',
   'http://localhost:8000/send',
+  'http://localhost:8000/signup',
+  
 
 ];
 
@@ -115,6 +120,8 @@ const corsOptions = {
   },
   credentials: true,
 };
+
+
 
 // Middleware
 app.use(cors({
@@ -140,7 +147,7 @@ app.use('/admin', adminRoutes);
 // База данных
 
 mongoose.set('strictQuery', true);
-mongoose.connect(MONGODB_URI)
+mongoose.connect( MONGODB_URI )
   .then(() => console.log('Соединение с базой данных установлено'))
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
@@ -374,7 +381,6 @@ app.post('/addproduct', async (req, res) => {
   res.json({ success: true, name: req.body.name });
 });
 
-///
 // Схема для сообщений
 const messageSchema = new mongoose.Schema({
   userId: String,
@@ -429,124 +435,217 @@ app.put('/updateproduct/:id', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-
-// CRUD операций для пользователей
-const Users = mongoose.model('Users', {
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    sparse: true, // Параметр sparse позволяет сохранять уникальные значения для неполных документов
-  },
-  password: {
-    type: String,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  cartData: {
-    type: Object,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-});
+// Модель пользователя
+const User = mongoose.model('User', new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+  phone: String,
+  emailToken: String,
+  isVerified: Boolean,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+}));
 
 // Настройка транспорту `nodemailer` для Яндекс.Почты
-const transporter = nodemailer.createTransport({
-  host: 'smtp.yandex.ru',
-  port: 465,
-  secure: true, // true для 465, false для других портов
-  auth: {
-    user: 'Leto2025.', // ваш логин в Яндексе
-    pass: 'yqpsouempwslxgvf.' // ваш пароль или пароль приложения
+const transporter = nodemailer.createTransport(
+  smtpTransport({
+    service: 'yandex',
+    host: 'smtp.yandex.ru',
+    secure: true,
+    auth: {
+      user: 's89062960353@yandex.ru',
+      pass: 'qqerptchfqbzbnma',
+    },
+  })
+);
+
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error("Ошибка при верификации транспорта:", error);
+  } else {
+    console.log('Настройки транспорта верны. Готов к отправке');
   }
 });
 
+// Регистрация с верификацией email
 app.post('/signup', async (req, res) => {
   try {
-    // Проверка на существующего пользователя
-    let check = await Users.findOne({ email: req.body.email });
-    if (check) {
-      return res.status(400).json({ success: false, errors: "Пользователь с такой почтой уже существует" });
+    const { username, email, password, phone } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Пользователь с такой почтой уже существует' });
     }
 
-    // Создание данных для корзины
-    let cart = Array.from({ length: 301 }).reduce((acc, _, idx) => ({ ...acc, [idx]: 0 }), {});
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const emailToken = crypto.randomBytes(64).toString('hex');
 
-    // Создание нового пользователя
-    const user = new Users({
-      name: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-      cartData: cart,
+    const user = new User({
+      username,
+      email,
+      password: hashedPassword,
+      phone,
+      emailToken,
+      isVerified: false,
     });
 
-    // Сохранение пользователя в базе данных
+    await user.save();
+
+    const mailOptions = {
+      from: YANDEX_USER,
+      to: email,
+      subject: 'Подтверждение email',
+      html: `<p>Кликните по ссылке для подтверждения: <a href="${CLIENT_URL}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Регистрация успешна! Подтвердите email.' });
+  } catch (err) {
+    console.error('Ошибка при регистрации:', err);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
+
+// Подтверждение email
+app.get('/verify-email', async (req, res) => {
+  try {
+    const { token } = req.query;
+    const user = await User.findOne({ emailToken: token });
+
+    if (!user) {
+      return res.status(400).json({ message: "Неверный токен" });
+    }
+
+    user.isVerified = true;
+    user.emailToken = null;
+    await user.save();
+
+    const data = {
+      user: {
+        id: user.id
+      }
+    };
+    const authToken = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.json({ message: "Email подтвержден! Теперь вы можете войти.", token: authToken });
+  } catch (error) {
+    console.error("Ошибка при подтверждении email:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+// Восстановление пароля через email
+app.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(400).json({ message: 'Пользователь не найден' });
+    }
+
+    const resetToken = crypto.randomBytes(64).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 час
+    await user.save();
+
+ const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+    const mailOptions = {
+      from:YANDEX_USER,
+      to: email,
+      subject: 'Сброс пароля',
+      html: `<p>Перейдите по ссылке для сброса пароля: <a href="${resetUrl}">Сбросить пароль</a></p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ message: 'Инструкции по сбросу пароля отправлены на email' });
+  } catch (err) {
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
+
+// Сброс пароля
+app.post('/reset-password/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() }, // Проверяем, что токен не истек
+    });
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: 'Токен недействителен или истек' });
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
     await user.save();
 
     // Генерация JWT токена
-    const token = jwt.sign({ user: { id: user.id } }, JWT_SECRET);
+    const data = {
+      user: {
+        id: user.id
+      }
+    };
+    const authToken = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    // Опции для отправки почты
+    // Отправка подтверждающего письма
     const mailOptions = {
-      from: 'ваш_логин@yandex.ru',
-      to: req.body.email,
-      subject: 'Добро пожаловать!',
-      text: `Привет, ${req.body.username}! Спасибо за регистрацию.`
+      from: 's89062960353@yandex.ru', // Убедитесь, что используете правильный email
+      to: user.email,
+      subject: 'Пароль успешно изменен',
+      html: `<p>Здравствуйте, ${user.username}!</p>
+             <p>Ваш пароль был успешно изменен.</p>
+             <p>Если вы не выполняли это действие, пожалуйста, свяжитесь с нашей поддержкой.</p>`,
     };
 
-    // Отправка письма
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log("Ошибка при отправке письма:", error);
-      } else {
-        console.log('Письмо отправлено: ' + info.response);
-      }
-    });
+    await transporter.sendMail(mailOptions);
 
-    // Ответ клиенту
-    res.json({ success: true, token });
-
-  } catch (error) {
-    // Обработка ошибок
-    console.error("Ошибка на сервере:", error);
-    res.status(500).json({ success: false, errors: "Ошибка на сервере" });
+    res.json({ success: true, message: 'Пароль успешно обновлен', token: authToken });
+  } catch (err) {
+    console.error('Ошибка при сбросе пароля:', err);
+    res.status(500).json({ success: false, message: 'Ошибка сервера' });
   }
 });
 
-app.post('/login',async(req,res)=>{
-  let user = await Users.findOne({email:req.body.email});
-  if (user) {
-    const passCompare = req.body.password === user.password;
-    if (passCompare) {
-      const data = {
-        user:{
-          id:user.id
+
+// Маршрут авторизации
+app.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
+      const passCompare = await bcrypt.compare(password, user.password);
+      if (passCompare) {
+        if (!user.isVerified) {
+          return res.json({ success: false, errors: "Пожалуйста, подтвердите свой email перед входом." });
         }
+        const data = {
+          user: {
+            id: user.id
+          }
+        };
+        const token = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
+        res.json({
+          success: true,
+          token
+        });
+      } else {
+        res.json({ success: false, errors: "Неверный пароль" });
       }
-      const token = jwt.sign(data,'secret_ecom');
-      res.json({
-        success:true,token
-      });
+    } else {
+      res.json({ success: false, errors: "Пользователь с таким email не найден" });
     }
-    else{
-      res.json({success:false,errors:"Wrong password"})
-    }
-    }
-    else{
-      res.json({success:false,errors:"Wrong email id"})
-    
+  } catch (error) {
+    console.error("Ошибка при выполнении запроса:", error);
+    res.status(500).json({ success: false, errors: "Ошибка на сервере" });
   }
-})
-
-
-// Service CRUD operations
+});
 // Service CRUD operations
 app.get('/services', async (req, res) => {
   try {
@@ -680,7 +779,7 @@ app.get('/api/search', async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера', error: error.message });
   }
 });
- //creating enpoint to get cartdata
+
  //creating enpoint to get cartdata
 app.post('/getcart', fetchUser, async (req, res) => {
   console.log("GetCart request received");

@@ -127,5 +127,8 @@ line-height: normal;
 .contacts__text:hover {
   color: #F9A92C;
 }
+.contacts__icon{
+  display: none !important;
+}
 
 }

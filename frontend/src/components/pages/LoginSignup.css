@@ -1,73 +1,187 @@
-.loginsignup {
-    width: 100%;
-    height: 80vh;
-
-    padding-top: 100px;
-    position: relative;
-    
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.loginsignup-container {
-    width: 580px;
-    height: 600px;
-    background: white;
-    margin: auto;
-    padding: 40px 60px;
-    border: 1px solid black;
-}
-
-.loginsignup-container h1 {
-    margin: 20px 0px;
-}
-
-.loginsignup-fields {
+/* Modal Content */
+.modal-content__reg {
+ background: #ffffff;
+    width: 90%;
+    gap: 20px;
     display: flex;
+    max-width: 500px;
+    border-radius: 10px;
+    padding: 30px 40px;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-in-out;
     flex-direction: column;
-    gap: 29px;
-    margin-top: 30px;
+}
+
+/* Header */
+.modal-header__reg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header__reg h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333333;
+   font-family: Bebas Neue;
+}
+
+.close-buttonreg{
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999999;
+  transition: color 0.3s;
+  background: transparent;
+  border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+      cursor: pointer;
+    font-family: Bebas Neue;
+    margin:0px;
+}
+
+.close-buttonreg:hover {
+  color: #333333;
+}
+
+/* Fields */
+.loginsignup-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 .loginsignup-fields input {
-    height: 72px;
-    width: 100%;
-    padding-left: 20px;
-    border: 1px solid #c9c9c9;
-    outline: none;
-    color: #5c5c5c;
-    font-size: 18px;
+  padding: 15px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #333333;
+  transition: border-color 0.3s;
 }
 
-.loginsignup-container button {
-width: 459px;
-    height: 72px;
-    color: white;
-    background: #0b82f7;
-    margin-top: 30px;
-    border: none;
-    font-size: 24px;
-    font-weight: 600;
+.loginsignup-fields input:focus {
+  outline: none;
+  border-color: #0b82f7;
 }
 
-.loginsignup-login {
-    margin-top: 20px;
-    color: #5c5c5c;
-    font-size: 18px;
-    font-weight: 500;
+/* Submit Button */
+.submit-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #0b82f7;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: 20px;
 }
 
-.loginsignup-login span {
-    color: #ff4141;
-    font-weight: 600;
+.submit-button:hover {
+  background-color: #096dd9;
+  transform: translateY(-2px);
 }
 
-.loginsignup-agree {
-    display: flex;
-    align-items: center;
-    margin-top: 25px;
-width: 350px;
-    color: #5c5c5c;
-    font-size: 18px;
-    font-weight: 500;
+/* Toggle State */
+.toggle-state {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 16px;
+  color: #555555;
+}
+
+.toggle-state span {
+  color: #0b82f7;
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.toggle-state span:hover {
+  color: #095a9d;
+}
+
+/* Agree Section */
+.agree-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555555;
+}
+
+.agree-section a {
+  color: #0b82f7;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.agree-section a:hover {
+  color: #095a9d;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .modal-content__reg {
+    padding: 20px 25px;
+  }
+
+  .modal-header__reg h2 {
+    font-size: 20px;
+  }
+
+  .loginsignup-fields input {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+
+  .submit-button {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .toggle-state {
+    font-size: 14px;
+  }
+
+  .agree-section {
+    font-size: 12px;
+  }
 }
 @media (min-width: 320px) and (max-width: 500px) {
     .loginsignup-container {
@@ -106,4 +220,339 @@ width: 350px;
     font-size: 12px;
     width: 220px;
 }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content__reg {
+  background-color: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header__reg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-buttonreg {
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.loginsignup-fields input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+@media only screen and (max-width: 768px) {
+  .modal-content__reg {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .loginsignup-fields input,
+  .submit-button {
+    font-size: 0.9rem;
+  }
+}
+/* Overlay для модального окна */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Содержимое модального окна */
+.modal-content__reg {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Заголовок модального окна */
+.modal-header__reg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header__reg h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.close-buttonreg {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Формы */
+.loginsignup-fields,
+.forgot-password,
+.reset-password {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginsignup-fields input,
+.forgot-password input,
+.reset-password input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit-button,
+.reset-password button,
+.forgot-password button,
+.wrong-password-modal button {
+  padding: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover,
+.reset-password button:hover,
+.forgot-password button:hover,
+.wrong-password-modal button:hover {
+  background-color: #0056b3;
+}
+
+/* Переключение между режимами */
+.toggle-state {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.toggle-state span {
+  color: #007BFF;
+  cursor: pointer;
+}
+
+.toggle-state span:hover {
+  text-decoration: underline;
+}
+
+/* Модальное окно неправильного пароля */
+.wrong-password-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrong-password-modal .modal-content {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 300px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.wrong-password-modal h3 {
+  margin-bottom: 15px;
+}
+
+.wrong-password-modal p {
+  margin-bottom: 20px;
+}
+
+.recover-link {
+  color: #007BFF;
+  cursor: pointer;
+}
+
+.recover-link:hover {
+  text-decoration: underline;
+}
+/* src/pages/LoginSignup.css */
+
+/* Overlay для модального окна */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Содержимое модального окна */
+.modal-content__reg {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Заголовок модального окна */
+.modal-header__reg {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header__reg h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.close-buttonreg {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Формы */
+.loginsignup-fields,
+.forgot-password,
+.reset-password {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginsignup-fields input,
+.forgot-password input,
+.reset-password input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit-button,
+.reset-password button,
+.forgot-password button,
+.wrong-password-modal button {
+  padding: 10px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submit-button:hover,
+.reset-password button:hover,
+.forgot-password button:hover,
+.wrong-password-modal button:hover {
+  background-color: #0056b3;
+}
+
+/* Переключение между режимами */
+.toggle-state {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.toggle-state span {
+  color: #007BFF;
+  cursor: pointer;
+}
+
+.toggle-state span:hover {
+  text-decoration: underline;
+}
+
+/* Модальное окно неправильного пароля */
+.wrong-password-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrong-password-modal .modal-content {
+  background-color: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  width: 300px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.wrong-password-modal h3 {
+  margin-bottom: 15px;
+}
+
+.wrong-password-modal p {
+  margin-bottom: 20px;
+}
+
+.recover-link {
+  color: #007BFF;
+  cursor: pointer;
+}
+
+.recover-link:hover {
+  text-decoration: underline;
 }

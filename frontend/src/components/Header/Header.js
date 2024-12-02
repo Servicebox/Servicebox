@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Link, useLocation, NavLink} from "react-router-dom";
+import { BrowserRouter as Router, Link, useLocation, NavLink, useNavigate} from "react-router-dom";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faBasketShopping, faMobilePhone} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,18 +12,28 @@ import Status from "../../images/status.svg";
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm"
 import { ShopContext } from '../Contexst/ShopContext';
 import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
-
+import LoginSignup from "../pages/LoginSignup"
 
 function Header() {
   const [menu, setMenu] = useState("shop");
   const {getTotalCartItems} = useContext(ShopContext);
   gsap.registerPlugin(ScrollToPlugin);
   const location = useLocation();
-  const [isModalOpen, setModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  gsap.registerPlugin(ScrollToPlugin);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+ const navigate = useNavigate();
+  useEffect(() => {
+    // Проверяем, есть ли токен в локальном хранилище при первом рендере
+    const token = localStorage.getItem('auth-token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
 
   const scrollTo = (target) =>
@@ -64,119 +74,128 @@ function Header() {
     window.location.href = "tel:+7911 501 88 28";
   };
 
-  useEffect(() => {
 
+  useEffect(() => {
+    // Проверяем, есть ли токен в локальном хранилище при первом рендере
+    const token = localStorage.getItem('auth-token');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+    const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  };
+  useEffect(() => {
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
   }, []);
 
-  return (
+ const handleLogout = () => {
+    localStorage.removeItem('auth-token');
+    setIsAuthenticated(false);
+  };
+  
+ return (
     <header className="header" id="header">
-
       <div className="container container__main">
-        <div className="container__contacts" > 
-          <li><Link to="/"  className="form__logo" >
+        <div className="container__contacts">
+          <li><Link to="/" className="form__logo" >
             <img src={headerLogo} alt="Логотип сайта" className="logo" />
           </Link>
           </li>
-        
+
           <div className="contacts__block">
-          <ul className="contacts__icon">
-          <li className="contacts__icon-sochial pulse-one">
-            <a href="https://vk.com/servicebox35">
-              <FontAwesomeIcon icon={faVk} />
-              <span>VK</span>
-            </a>
-          </li>
-          <li className="contacts__icon-sochial pulse-two">
-            <a href="whatsapp://send?phone=79062960353">
-              <FontAwesomeIcon icon={faWhatsapp} />
-              <span>Watsapp</span>
-            </a>
-          </li>
-          <li className="contacts__icon-sochial pulse-three">
-            <a href="tg://resolve?domain=@Tomkka">
-              <FontAwesomeIcon icon={faTelegram} />
-              <span>Telegram</span>
-            </a>
-          </li>
-          </ul>
-        </div>
-        
-        <div className="content-holder"><span className="heading-span">Часы работы</span><br /><span>Понедельник-Пятница <br />(10:00 - 19:00)</span></div>
-                <div className="contact-info">
-            
-         <p className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</p>
-         <p className="contact-info__location">Адрес: г.Вологда, ул.Ленина 6</p>
-      
+            <ul className="contacts__icon">
+              <li className="contacts__icon-sochial pulse-one">
+                <a href="https://vk.com/servicebox35">
+                  <FontAwesomeIcon icon={faVk} />
+                  <span>VK</span>
+                </a>
+              </li>
+              <li className="contacts__icon-sochial pulse-two">
+                <a href="whatsapp://send?phone=79062960353">
+                  <FontAwesomeIcon icon={faWhatsapp} />
+                  <span>Watsapp</span>
+                </a>
+              </li>
+              <li className="contacts__icon-sochial pulse-three">
+                <a href="tg://resolve?domain=@Tomkka">
+                  <FontAwesomeIcon icon={faTelegram} />
+                  <span>Telegram</span>
+                </a>
+              </li>
+            </ul>
           </div>
-                    <div className="nav-login-cart">
-            {localStorage.getItem('auth-token')
-            ?<button onClick={()=>{localStorage.removeItem('auth-token');window.location.replace('/')}}>выйти</button>
-            :<Link to='/login'><button>Вход</button></Link>}           
-              <Link to='/cart'> <FontAwesomeIcon icon={faBasketShopping} /></Link>
-              <div className="nav-cart-count">{getTotalCartItems()}</div>    
+
+          <div className="content-holder"><span className="heading-span">Часы работы</span><br /><span>Понедельник-Пятница <br />(10:00 - 19:00)</span></div>
+          <div className="contact-info">
+            <p className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</p>
+            <p className="contact-info__location">Адрес: г.Вологда, ул.Ленина 6</p>
+          </div>
+           <div className="nav-login-cart">
+            {isAuthenticated ? (
+              <button className='open-modal-button' onClick={handleLogout}>
+                Выход
+              </button>
+            ) : (
+              <button className='open-modal-button' onClick={openModal}>
+                Войти / Зарегистрироваться
+              </button>
+            )}
+            <LoginSignup isOpen={isModalOpen} onClose={closeModal} onLoginSuccess={handleLoginSuccess} />
+            <Link to='/cart'> <FontAwesomeIcon icon={faBasketShopping} /></Link>
+            <div className="nav-cart-count">{getTotalCartItems()}</div>
+          </div>
+          <BurgerMenu scrollTo={scrollTo} />
+        </div>
       </div>
-      <BurgerMenu scrollTo={scrollTo} />
-</div>
-      {isModalOpen && (
-        <div className="modal">
-          <div className="modal__overlay" onClick={closeModal}></div> 
-          <div className="modal__content">
-            <CreateServiceForm />
-            <button className="modal__close-btn"
-             onClick={closeModal}>
-              Закрыть</button>
-          </div>
-        </div>
-)}
-        </div>
-        <div className="header__top">
-          <nav className="navigation">
+      <div className="header__top">
+        <nav className="navigation">
           <div className="nav__info">
-  <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
-  +7 911 501 88 28
-</p>
- <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
-  +7 911 501 06 96
-</p>
-</div>
-<ul className="navigation__lists">
-  <li className="navigation__list" onClick={() => setMenu("contacts")}>
-    <Link className="navigation__list" to="/contacts">
-      Контакты {menu === "contacts" && <hr/>}
-    </Link>
-  </li>
-  <li className="navigation__list" onClick={() => setMenu("about")}>
-    <Link className="navigation__list" to="/about">
-      О нас {menu === "about" && <hr/>}
-    </Link>
-  </li>
-  <li className="navigation__list" onClick={() => setMenu("service")}>
-    <Link className="navigation__list" to="/service">
-      Услуги {menu === "service" && <hr/>}
-    </Link>
-  </li>
-  <li className="navigation__list" onClick={() => setMenu("gallery")}>
-    <Link className="navigation__list" to="/image-gallery-api">
-      Фото {menu === "gallery" && <hr/>}
-    </Link>
-  </li>
-</ul>
-    <ul className='nav-menu'>
-   {/* <li className="navigation__list" onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>*/}
-    <li className="navigation__list" onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>каталог товаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
-    {/*<li onClick={()=>{setMenu("electronics")}}> <Link style={{textDecoration:'none'}} to='/electronics'>Акксессуары</Link>{menu==="electronics"?<hr/>:<></>} </li>
-    <li onClick={()=>{setMenu("usedspareparts")}}><Link style={{textDecoration:'none'}} to='/usedspareparts'> б/у запчсти</Link>{menu==="usedspareparts"?<hr/>:<></>} </li>*/}
-  </ul>
-    <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
-              <img src={Status} alt="Кнопка" />
-              <span className="button-text">CТАТУС РЕМОНТА</span>
-            </a>
-          </nav>
-        <div className="list-header">
+            <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+              <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
+              +7 911 501 88 28
+            </p>
+            <p className="contact-info__number" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
+              <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} />
+              +7 911 501 06 96
+            </p>
           </div>
-</div>
+          <ul className="navigation__lists">
+            <li className="navigation__list" onClick={() => setMenu("contacts")}>
+              <Link className="navigation__list" to="/contacts">
+                Контакты {menu === "contacts" && <hr />}
+              </Link>
+            </li>
+            <li className="navigation__list" onClick={() => setMenu("about")}>
+              <Link className="navigation__list" to="/about">
+                О нас {menu === "about" && <hr />}
+              </Link>
+            </li>
+            <li className="navigation__list" onClick={() => setMenu("service")}>
+              <Link className="navigation__list" to="/service">
+                Услуги {menu === "service" && <hr />}
+              </Link>
+            </li>
+            <li className="navigation__list" onClick={() => setMenu("gallery")}>
+              <Link className="navigation__list" to="/image-gallery-api">
+                Фото {menu === "gallery" && <hr />}
+              </Link>
+            </li>
+          </ul>
+          <ul className='nav-menu'>
+            <li className="navigation__list" onClick={() => { setMenu("parts") }}> <Link style={{ textDecoration: 'none' }} to='/parts'>каталог товаров для СЦ</Link>{menu === "parts" ? <hr /> : <></>} </li>
+          </ul>
+          <a className="button" href="https://app.helloclient.io/check.html#250362" target="_blank" rel="noopener noreferrer">
+            <img src={Status} alt="Кнопка" />
+            <span className="button-text">CТАТУС РЕМОНТА</span>
+          </a>
+        </nav>
+        <div className="list-header">
+        </div>
+      </div>
     </header>
   );
 }

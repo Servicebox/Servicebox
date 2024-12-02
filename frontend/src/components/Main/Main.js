@@ -1,8 +1,5 @@
 import React, { useEffect, useRef, forwardRef } from "react";
-import { BrowserRouter as Router, useLocation } from "react-router-dom";
-import gsap from "gsap";
-import ScrollToPlugin from "gsap/ScrollToPlugin";
-import { Element } from "react-scroll";
+import { BrowserRouter as Router, useLocation, useNavigate } from "react-router-dom";
 import "./Main.css";
 
 import MainBanner from "./MainBanner/MainBanner";
@@ -13,26 +10,29 @@ import Completed from "./Completed/Completed";
 import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
+
 function Main() {
+  const navigate = useNavigate();
 
-  const location = useLocation();
-
+  useEffect(() => {
+    const token = localStorage.getItem('auth-token');
+    if (!token) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   return (
     <div>
-
-    <main className="main">
-
-      <MainBanner />
-    <ServiceRef />
-  <AboutRef />
-      <Completed />
-      <ArronService />
-      <AboutMe />
-      <Gifts />
-  <ContactsRef />
-    </main>
- 
+      <main className="main">
+        <MainBanner />
+        <ServiceRef />
+        <AboutRef />
+        <Completed />
+        <ArronService />
+        <AboutMe />
+        <Gifts />
+        <ContactsRef />
+      </main>
     </div>
   );
 }

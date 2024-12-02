@@ -55,21 +55,30 @@
 .nav-login-cart {
     display: flex;
     align-items: center;
-    gap: 45px;
+    gap: 25px;
 }
 
 
 .nav-login-cart button {
-    width: 89px;
-    height: 35px;
+    display: flex;
+    position: relative;
+ 
+    height: 60px;
+    top: 0;
     outline: none;
     border: 1px solid #000000;
-    border-radius: 20px;
+    border-radius: 5px;
     color: #000000;
-    font-size: 12px;
+    font-size: 20px;
     font-weight: 600;
     background: #f9a92c;
     cursor: pointer;
+    font-family: Bebas Neue;
+
+    align-items: center;
+    padding: 10px 10px;
+    flex-direction: column;
+    justify-content: center;
 }
 
 
