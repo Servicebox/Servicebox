@@ -21,14 +21,14 @@ const bcrypt = require('bcrypt');
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
-const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
+//const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
 const router = express.Router();
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const Admin = require('./models/Admin');
 const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
 const app = express();
-
+JWT_SECRET= '7a54c5de8b7d054d85a00b8d3712b4308e543967a65822ca77af7cfe2049bedf';
 const token = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
 const telegramApi = `https://api.telegram.org/bot${token}`;
 //const User = require('./models/Users');

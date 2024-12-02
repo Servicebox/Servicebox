@@ -141,7 +141,7 @@ function Header() {
               </button>
             ) : (
               <button className='open-modal-button' onClick={openModal}>
-                Войти / Зарегистрироваться
+                Войти
               </button>
             )}
             <LoginSignup isOpen={isModalOpen} onClose={closeModal} onLoginSuccess={handleLoginSuccess} />
