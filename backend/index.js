@@ -45,16 +45,7 @@ const YANDEX_PASS='qqerptchfqbzbnma';
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
 const CLIENT_URL='https://servicebox35.ru'
 const http = require('http').createServer(app);
-const io = require('socket.io')(http, {
-  cors: {
-    origin: 'https://servicebox35.ru',
-    methods: ['GET', 'POST'],
-  }
-});
 const emailToken = crypto.randomBytes(64).toString('hex');
-
-const userMessages = {};
-
 const allowedCors = [
   'http://localhost:5173',
 'https://servicebox35.pp.ru/get-client-id',
@@ -106,6 +97,10 @@ const allowedCors = [
   'https://localhost:8000/products',
   'http://localhost:8000/send',
   'http://localhost:8000/signup',
+  'http://smtp.yandex.ru',
+  'https://smtp.yandex.ru',
+'https://servicebox35.pp.ru/verify-email',
+'https://servicebox35.ru/verify-email',
   
 
 ];
@@ -139,7 +134,6 @@ app.use(
     crossOriginResourcePolicy: false,
   })
 );
-
 
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
@@ -196,9 +190,6 @@ app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 
-
-
-
 // Обработка форм
 app.use('/api/images', imageRoutes);
 app.get("./",(req, res) => {
@@ -238,23 +229,6 @@ app.post('/uploads', productUpload.single('product'), (req, res) => {
   }
 });
 
-// клиент 
-
-
-{/*app.get('/get-client-id', (req, res) => {
-  let clientId = req.cookies['client-id']; // Получить client-id из куки, если он есть
-  if (!clientId) {
-    clientId = `client_${Math.random().toString(36).substring(2, 15)}`; // Generate unique id
-    res.cookie('client-id', clientId, {
-      httpOnly: true,
-      maxAge: 86400 * 1000,
-      sameSite: 'None',
-      secure: true,
-    });
-  }
-  res.json({ clientId });
-});
-*/}
 // Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -358,8 +332,6 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
   }
 });
 
-
-
 // CRUD операций для продуктов
 app.post('/addproduct', async (req, res) => {
   let products = await Product.find({});
@@ -452,6 +424,7 @@ const transporter = nodemailer.createTransport(
   smtpTransport({
     service: 'yandex',
     host: 'smtp.yandex.ru',
+     port: 465, 
     secure: true,
     auth: {
       user: 's89062960353@yandex.ru',
@@ -884,9 +857,6 @@ app.get('/services/:category', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-/////
-
-
 app.use(requestLogger);
 app.use(errorLogger);
 // Тестирование обработки ошибок
@@ -922,10 +892,6 @@ app.post('/admin/login', async (req, res) => {
   }
 });
 
-
-
-
-
 app.use('/admin-panel', verifyToken, express.static(path.join(__dirname, 'build')));
 app.post('/admin/create', async (req, res) => {
   const newAdmin = new Admin({
@@ -947,142 +913,6 @@ app.get('/get-ip', (req, res) => {
   console.log(`Получен IP: ${ip}`);
   res.json({ ip });
 });
-
-// Код для обработки сообщений на сервере
-// Обработка отправки сообщения
-io.on('connection', (socket) => {
-  console.log('a user connected');
-
-  socket.on('join', (userId) => {
-    socket.join(userId);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
-// Вебхук маршрут// Вебхук маршрут
-app.post('/webhook', (req, res) => {
-  const update = req.body;
-
-  if (update.message) {
-    handleMessage(update.message);
-  }
-
-  res.sendStatus(200);
-});
-
-// Обработка входящих сообщений от Telegram
-const handleMessage = (message) => {
-  const chatId = message.chat.id;
-  const userId = extractUserId(message); // Функция для получения userId
-
-  if (!userId) {
-    // Если невозможно определить userId, игнорируем сообщение
-    return;
-  }
-
-  const text = message.text;
-
-  // Инициализируем массив сообщений для пользователя, если он еще не существует
-  if (!userMessages[userId]) {
-    userMessages[userId] = [];
-  }
-
-  // Добавляем сообщение пользователя
-  userMessages[userId].push({
-    text,
-    userName: 'Вы',
-    timestamp: new Date().toISOString(),
-  });
-
-  // Здесь можно добавить логику обработки сообщения и генерации ответа от бота
-  const botResponse = generateBotResponse(text);
-
-  // Добавляем сообщение от бота
-  userMessages[userId].push({
-    text: botResponse,
-    userName: 'Бот',
-    timestamp: new Date().toISOString(),
-  });
-
-  // Отправляем ответ в Telegram
-  sendMessage(chatId, botResponse);
-};
-
-// Функция для извлечения userId из сообщения
-const extractUserId = (message) => {
-  // Например, можно использовать chat.id как userId
-  return message.chat.id;
-};
-
-// Функция генерации ответа от бота (простая эхо-функция)
-const generateBotResponse = (text) => {
-  return `Вы написали: ${text}`;
-};
-
-
-// Функция отправки сообщения через Telegram API
-const sendMessage = async (chatId, text) => {
-  try {
-    await axios.post(`${telegramApi}/sendMessage`, {
-      chat_id: chatId,
-      text,
-    });
-  } catch (error) {
-    console.error('Ошибка при отправке сообщения:', error.response ? error.response.data : error.message);
-  }
-};
-
-// API маршрут для получения сообщений пользователя
-app.get('/messages/:userId', (req, res) => {
-  const userId = req.params.userId;
-
-  if (userMessages[userId]) {
-    res.json(userMessages[userId]);
-  } else {
-    res.json([]);
-  }
-});
-
-// API маршрут для отправки сообщения пользователя через Telegram
-app.post('/send', async (req, res) => {
-  const { userId, text } = req.body;
-
-  if (!userId || !text) {
-    return res.status(400).json({ error: 'userId и text обязательны.' });
-  }
-
-  // Здесь можно сопоставить userId с chatId (если они отличаются)
-  const chatId = userId; // В примере используем userId как chatId
-
-  // Инициализируем массив сообщений для пользователя, если он еще не существует
-  if (!userMessages[userId]) {
-    userMessages[userId] = [];
-  }
-
-  // Добавляем сообщение пользователя
-  userMessages[userId].push({
-    text,
-    userName: 'Вы',
-    timestamp: new Date().toISOString(),
-  });
-
-  // Отправляем сообщение через Telegram API
-  try {
-    await axios.post(`${telegramApi}/sendMessage`, {
-      chat_id: chatId,
-      text: text,
-    });
-
-    res.json({ status: 'Message sent successfully.' });
-  } catch (error) {
-    console.error('Ошибка при отправке сообщения:', error.response ? error.response.data : error.message);
-    res.status(500).json({ error: 'Ошибка при отправке сообщения.' });
-  }
-});
-
 
 http.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
