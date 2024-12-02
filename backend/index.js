@@ -433,6 +433,7 @@ const transporter = nodemailer.createTransport(
   })
 );
 
+
 transporter.verify(function (error, success) {
   if (error) {
     console.error("Ошибка при верификации транспорта:", error);
