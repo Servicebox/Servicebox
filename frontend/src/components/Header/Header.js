@@ -145,8 +145,10 @@ function Header() {
               </button>
             )}
             <LoginSignup isOpen={isModalOpen} onClose={closeModal} onLoginSuccess={handleLoginSuccess} />
-            <Link to='/cart'> <FontAwesomeIcon icon={faBasketShopping} /></Link>
-            <div className="nav-cart-count">{getTotalCartItems()}</div>
+       <Link to='/cart'> <FontAwesomeIcon icon={faBasketShopping} /></Link>
+            <div className="nav-cart-count">{getTotalCartItems()}
+           
+            </div>
           </div>
           <BurgerMenu scrollTo={scrollTo} />
         </div>

@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+//require('dotenv').config({ path: require('.env') })
+console.log(require("dotenv").config())
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
@@ -21,31 +23,27 @@ const bcrypt = require('bcrypt');
 const galleryRoutes = require('./routes/gallery');
 const indexRouter = require('./routes/index');
 const MONGODB_URI = 'mongodb://127.0.0.1:27017/serviceboxdb';
-//const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
+const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
 const router = express.Router();
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const Admin = require('./models/Admin');
 const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
 const app = express();
-JWT_SECRET= '7a54c5de8b7d054d85a00b8d3712b4308e543967a65822ca77af7cfe2049bedf';
-const token = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
-const telegramApi = `https://api.telegram.org/bot${token}`;
 //const User = require('./models/Users');
-const YANDEX_USER='S89062960353@yandex.ru'
-const chatId = '406806305';
-
+const YANDEX_USER = process.env.YANDEX_USER;
+const YANDEX_PASS = process.env.YANDEX_PASS;
+const CLIENT_URL = process.env.CLIENT_URL;
 app.set('trust proxy', true);
 app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
 
-const YANDEX_PASS='qqerptchfqbzbnma';
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
-const CLIENT_URL='https://servicebox35.ru'
+console.log(process.env)
 const http = require('http').createServer(app);
-const emailToken = crypto.randomBytes(64).toString('hex');
+//const emailToken = crypto.randomBytes(64).toString('hex');
 const allowedCors = [
   'http://localhost:5173',
 'https://servicebox35.pp.ru/get-client-id',
@@ -101,6 +99,7 @@ const allowedCors = [
   'https://smtp.yandex.ru',
 'https://servicebox35.pp.ru/verify-email',
 'https://servicebox35.ru/verify-email',
+'http://localhost:8000/signup',
   
 
 ];
@@ -120,7 +119,7 @@ const corsOptions = {
 
 // Middleware
 app.use(cors({
-  origin: 'https://servicebox35.ru', // Разрешаем только этот источник
+  origin: process.env.CLIENT_URL, // Разрешаем только этот источник
   methods: ['GET', 'POST'], // Разрешаем определенные методы
   credentials: true, // Указываем, что можно работать с куками
 }));
@@ -427,8 +426,8 @@ const transporter = nodemailer.createTransport(
      port: 465, 
     secure: true,
     auth: {
-      user: 's89062960353@yandex.ru',
-      pass: 'qqerptchfqbzbnma',
+      user: process.env.YANDEX_USER,
+      pass: process.env.YANDEX_PASS,
     },
   })
 );
@@ -467,10 +466,10 @@ app.post('/signup', async (req, res) => {
     await user.save();
 
     const mailOptions = {
-      from: YANDEX_USER,
+      from: process.env.YANDEX_USER,
       to: email,
       subject: 'Подтверждение email',
-      html: `<p>Кликните по ссылке для подтверждения: <a href="${CLIENT_URL}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
+      html: `<p>Кликните по ссылке для подтверждения: <a href="${process.env.CLIENT_URL}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -526,7 +525,7 @@ app.post('/forgot-password', async (req, res) => {
 
  const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
     const mailOptions = {
-      from:YANDEX_USER,
+      from:process.env.YANDEX_USER,
       to: email,
       subject: 'Сброс пароля',
       html: `<p>Перейдите по ссылке для сброса пароля: <a href="${resetUrl}">Сбросить пароль</a></p>`,
@@ -570,7 +569,7 @@ app.post('/reset-password/:token', async (req, res) => {
 
     // Отправка подтверждающего письма
     const mailOptions = {
-      from: 's89062960353@yandex.ru', // Убедитесь, что используете правильный email
+      from: process.env.YANDEX_USER, // Убедитесь, что используете правильный email
       to: user.email,
       subject: 'Пароль успешно изменен',
       html: `<p>Здравствуйте, ${user.username}!</p>

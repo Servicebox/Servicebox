@@ -55,7 +55,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const login = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/login', {
+      const response = await fetch('https://servicebox35.pp.ru/login', { // Убедитесь, что адрес правильный
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -85,7 +85,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const signup = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/signup', {
+      const response = await fetch('https://servicebox35.pp.ru/signup', { // Убедитесь, что адрес правильный
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -109,7 +109,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const requestPasswordReset = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/forgot-password', {
+      const response = await fetch('https://servicebox35.pp.ru/forgot-password', { // Убедитесь, что адрес правильный
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -134,7 +134,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       return;
     }
     try {
-      const response = await fetch(`https://servicebox35.pp.ru/reset-password/${token}`, {
+      const response = await fetch(`https://servicebox35.pp.ru/reset-password/${token}`, { // Убедитесь, что адрес правильный
         method: 'POST',
         headers: {
           'Accept': 'application/json',

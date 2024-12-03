@@ -55,30 +55,30 @@
 .nav-login-cart {
     display: flex;
     align-items: center;
-    gap: 25px;
+
 }
 
 
-.nav-login-cart button {
+.nav-login-cart button{
+gap: 25px;
     display: flex;
     position: relative;
- 
-    height: 60px;
-    top: 0;
+   margin-right: 30px;
+  top: 0;
+    /* gap: 10px; */
     outline: none;
     border: 1px solid #000000;
     border-radius: 5px;
     color: #000000;
     font-size: 20px;
     font-weight: 600;
-    background: #f9a92c;
+    /* background: #f9a92c; */
     cursor: pointer;
     font-family: Bebas Neue;
-
-    align-items: center;
     padding: 10px 10px;
+    justify-content: space-around;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
 }
 
 
@@ -87,15 +87,15 @@
 }
 
 .nav-cart-count {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -26px;
-    margin-left: -50px;
-    border-radius: 11px;
-    font-size: 13px;
-    background: red;
-    color: white;
+width: 11px;
+        height: 11px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: -26px;
+        margin-left: -29px;
+        border-radius: 11px;
+        font-size: 8px;
+        background: red;
+        color: white;
 }

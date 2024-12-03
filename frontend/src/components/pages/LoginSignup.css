@@ -192,6 +192,18 @@
     padding: 33px 33px;
     border: 1px solid black;
 }
+.close-buttonreg {
+    font-size: 30px;
+    margin: 0px;
+    width: 60px;
+    height: 50px;
+}
+.modal-header__reg{
+  width: 100%;
+  gap: 90px;
+
+}
+
 .loginsignup-container button {
     width: 200px;
     height: 50px;
