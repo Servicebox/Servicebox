@@ -481,7 +481,6 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-// Подтверждение email
 app.get('/verify-email', async (req, res) => {
   try {
     const { token } = req.query;
@@ -491,8 +490,13 @@ app.get('/verify-email', async (req, res) => {
       return res.status(400).json({ message: "Неверный токен" });
     }
 
+    // Если пользователь уже подтвержден
+    if (user.isVerified) {
+      return res.status(400).json({ message: "Email уже подтвержден." });
+    }
+
     user.isVerified = true;
-    user.emailToken = null;
+    user.emailToken = null; // Обнуляйте токен, чтобы не использовать повторно
     await user.save();
 
     const data = {

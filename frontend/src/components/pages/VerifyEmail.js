@@ -10,6 +10,11 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     const verifyEmail = async () => {
+      if (!token) {
+        setMessage("Токен не предоставлен.");
+        return;
+      }
+
       try {
         const response = await fetch(`https://servicebox35.pp.ru/verify-email?token=${token}`);
         const data = await response.json();
@@ -18,7 +23,7 @@ const VerifyEmail = () => {
           localStorage.setItem('auth-token', data.token);
           navigate('/');
         } else {
-          setMessage(data.message);
+          setMessage(data.message || "Неизвестная ошибка при подтверждении email.");
         }
       } catch (error) {
         console.error("Ошибка при подтверждении email:", error);
@@ -26,6 +31,7 @@ const VerifyEmail = () => {
       }
     };
 
+    // Запускаем верификацию только один раз при загрузке компонента
     verifyEmail();
   }, [token, navigate]);
 
