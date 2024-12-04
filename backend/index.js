@@ -40,6 +40,8 @@ app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
 const smtpTransport = require('nodemailer-smtp-transport');
+// Создание API роутера
+const apiRouter = express.Router();
 
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
 console.log(process.env)
@@ -140,6 +142,7 @@ app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
 // База данных
 
+app.use('/api', apiRouter);
 mongoose.set('strictQuery', true);
 mongoose.connect( MONGODB_URI )
   .then(() => console.log('Соединение с базой данных установлено'))
@@ -180,10 +183,12 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Служить статические файлы
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html')); // Обновите путь при необходимости
+});
 
 const uploadDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadDirectory));
@@ -549,6 +554,7 @@ const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
 
 // Сброс пароля
 app.post('/reset-password/:token', async (req, res) => {
+  console.log('Получен запрос на сброс пароля с токеном:', req.params.token);
   try {
     const { token } = req.params;
     const { password } = req.body;

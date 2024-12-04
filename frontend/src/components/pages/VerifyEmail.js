@@ -16,7 +16,7 @@ const VerifyEmail = () => {
       }
 
       try {
-        const response = await fetch(`https://servicebox35.pp.ru/verify-email?token=${token}`);
+        const response = await fetch(`http://localhost:8000/verify-email?token=${token}`);
         const data = await response.json();
 
         if (response.ok) {

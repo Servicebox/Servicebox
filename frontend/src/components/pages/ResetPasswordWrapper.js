@@ -7,7 +7,6 @@ import { useParams } from 'react-router-dom';
 
 const ResetPasswordWrapper = () => {
   const { token } = useParams();
-
   return (
     <LoginSignup
       isOpen={true}

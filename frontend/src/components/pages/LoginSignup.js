@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './LoginSignup.css';
-
+const API_URL = 'http://localhost:8000';
+console.log(API_URL);
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const { token } = useParams(); // Получаем токен из URL
   const [mode, setMode] = useState("Login"); // "Login", "Sign Up", "Forgot Password", "Set New Password"
@@ -54,7 +55,7 @@ useEffect(() => {
 
   const login = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/login', { // Убедитесь, что адрес правильный
+      const response = await fetch(`${API_URL}/login`, {// Убедитесь, что адрес правильный
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -82,33 +83,26 @@ useEffect(() => {
     }
   };
 
-  const signup = async () => {
-    try {
-      const response = await fetch('https://servicebox35.pp.ru/signup', { // Убедитесь, что адрес правильный
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+ const signup = async () => {
+  try {
+    const response = await fetch(`${API_URL}/signup`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-      const responseData = await response.json();
-      if (response.ok) {
-        alert(responseData.message);
-        onClose();
-      } else {
-        alert(responseData.message);
-      }
-    } catch (error) {
-      console.error("Ошибка при выполнении запроса:", error);
-      alert("Ошибка при выполнении запроса.");
-    }
-  };
+  } catch (error) {
+    console.error("Ошибка при выполнении запроса:", error);
+    alert("Ошибка при выполнении запроса.");
+  }
+};
 
   const requestPasswordReset = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/forgot-password', { // Убедитесь, что адрес правильный
+      const response = await fetch('http://localhost:8000/forgot-password/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -133,7 +127,7 @@ useEffect(() => {
       return;
     }
     try {
-      const response = await fetch(`https://servicebox35.pp.ru/reset-password/${token}`, { // Убедитесь, что адрес правильный
+       const response = await fetch(`http://localhost:8000/reset-password/${token}`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
