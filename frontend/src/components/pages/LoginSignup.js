@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './LoginSignup.css';
-const API_URL = 'http://localhost:8000';
+const API_URL = 'https://servicebox35.pp.ru';
 console.log(API_URL);
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const { token } = useParams(); // Получаем токен из URL
@@ -102,7 +102,7 @@ useEffect(() => {
 
   const requestPasswordReset = async () => {
     try {
-      const response = await fetch('http://localhost:8000/forgot-password/', {
+      const response = await fetch('https://servicebox35.pp.ru/forgot-password/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -127,7 +127,7 @@ useEffect(() => {
       return;
     }
     try {
-       const response = await fetch(`http://localhost:8000/reset-password/${token}`, {
+       const response = await fetch(`https://servicebox35.pp.ru/reset-password/${token}`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
