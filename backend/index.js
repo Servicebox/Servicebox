@@ -15,9 +15,7 @@ const axios = require('axios');
 const crypto = require('crypto');
 const fetchUser = require('./middlewares/fetchUser');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
-//const service = require('./models/service');
 const imageRoutes = require('./routes/images');
-// Telegram Config
 const requestIp = require('request-ip');
 const bcrypt = require('bcrypt');
 const galleryRoutes = require('./routes/gallery');
