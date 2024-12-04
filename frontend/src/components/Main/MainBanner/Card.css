@@ -64,7 +64,7 @@
   top: 75%;
   margin-bottom: 15px;
   font-family: Gilroy;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
   position: absolute;
   bottom: 55px;
@@ -400,7 +400,7 @@ position: fixed;
     .cards .card-back {
       height: 60%;
       width: 78%;
-      top: 0;
+      top: 50px;
       left: 32px;
       display: flex;
       justify-content: flex-start;

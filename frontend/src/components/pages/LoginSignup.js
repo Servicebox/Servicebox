@@ -17,16 +17,15 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isOpen) {
-      resetForm();
-    }
+useEffect(() => {
+  if (!isOpen) {
+    resetForm();
+  }
 
-    // Если есть токен, переключаемся на режим "Set New Password"
-    if (token) {
-      setMode("Set New Password");
-    }
-  }, [isOpen, token]);
+  if (token) {
+    setMode("Set New Password");
+  }
+}, [isOpen, token]);
 
   const resetForm = () => {
     setFormData({ username: "", email: "", password: "", phone: "" });

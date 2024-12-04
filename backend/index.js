@@ -29,6 +29,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const Admin = require('./models/Admin');
 const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
+
 const app = express();
 //const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
@@ -179,6 +180,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 // Служить статические файлы
 app.use(express.static(path.join(__dirname, 'build')));
 
@@ -465,12 +469,12 @@ app.post('/signup', async (req, res) => {
 
     await user.save();
 
-    const mailOptions = {
-      from: process.env.YANDEX_USER,
-      to: email,
-      subject: 'Подтверждение email',
-      html: `<p>Кликните по ссылке для подтверждения: <a href="${process.env.CLIENT_URL}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
-    };
+const mailOptions = {
+  from: process.env.YANDEX_USER,
+  to: email,
+  subject: 'Подтверждение email',
+  html: `<p>Кликните по ссылке для подтверждения: <a href="${process.env.CLIENT_URL.replace(/\/$/, "")}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
+};
 
     await transporter.sendMail(mailOptions);
 
@@ -527,7 +531,9 @@ app.post('/forgot-password', async (req, res) => {
     user.resetPasswordExpires = Date.now() + 3600000; // 1 час
     await user.save();
 
- const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+// Внутри маршрута /forgot-password
+const clientUrl = process.env.CLIENT_URL.replace(/\/$/, ""); // Убедитесь, что URL заканчивается на '/'
+const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
     const mailOptions = {
       from:process.env.YANDEX_USER,
       to: email,

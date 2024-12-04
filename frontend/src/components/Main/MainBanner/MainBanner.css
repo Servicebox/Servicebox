@@ -1636,6 +1636,7 @@ line-height: 18px; /* 133.333% */
 .card__heading {
   font-size: 1.3rem;
   font-weight: 400;
+  line-height: 0.9;
 }
 .card__price-only {
   font-size: 1.1rem;
@@ -1683,6 +1684,7 @@ font-size: 13px;
  }
  .card__heading {
   font-size: 0.8em;
+          line-height: 0.9;
  }
  .card-neon {
   height: 10rem;
