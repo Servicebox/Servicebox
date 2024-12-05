@@ -182,11 +182,8 @@ app.use((req, res, next) => {
 });
 
 // Служить статические файлы
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html')); // Обновите путь при необходимости
-});
 
 const uploadDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadDirectory));
@@ -534,6 +531,7 @@ app.post('/forgot-password', async (req, res) => {
 
 // Внутри маршрута /forgot-password
 const clientUrl = process.env.CLIENT_URL.replace(/\/$/, ""); // Убедитесь, что URL заканчивается на '/'
+const url = `${process.env.PROD_SERVER}/api/users/verification/${token}`;
 const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
     const mailOptions = {
       from:process.env.YANDEX_USER,
@@ -630,6 +628,20 @@ app.post('/login', async (req, res) => {
     console.error("Ошибка при выполнении запроса:", error);
     res.status(500).json({ success: false, errors: "Ошибка на сервере" });
   }
+});
+app.get('/reset-password/:token', async (req, res) => {
+    const { token } = req.params;
+    const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+    
+    if (!user) {
+        return res.status(400).send('Password reset token is invalid or has expired.');
+    }
+    
+    // Отображение формы сброса пароля
+    res.render('reset-password-form', { token });
 });
 // Service CRUD operations
 app.get('/services', async (req, res) => {
