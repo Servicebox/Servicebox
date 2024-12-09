@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './LoginSignup.css';
+
 const API_URL = 'https://servicebox35.pp.ru';
-console.log(API_URL);
+
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
-  const { token } = useParams(); // Получаем токен из URL
+  const { token } = useParams(); // Получаем токен из URL, если есть
   const [mode, setMode] = useState("Login"); // "Login", "Sign Up", "Forgot Password", "Set New Password"
   const [formData, setFormData] = useState({
     username: "",
@@ -16,17 +17,19 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false); // Новое состояние загрузки
   const navigate = useNavigate();
 
-useEffect(() => {
-  if (!isOpen) {
-    resetForm();
-  }
+  useEffect(() => {
+    if (!isOpen) {
+      resetForm();
+    }
 
-  if (token) {
-    setMode("Set New Password");
-  }
-}, [isOpen, token]);
+    if (token) {
+      setMode("Set New Password");
+    }
+  }, [isOpen, token]);
 
   const resetForm = () => {
     setFormData({ username: "", email: "", password: "", phone: "" });
@@ -35,6 +38,7 @@ useEffect(() => {
     setConfirmPassword("");
     setShowWrongPasswordModal(false);
     setMode("Login");
+    setMessage("");
   };
 
   const changeHandler = (e) => {
@@ -44,6 +48,9 @@ useEffect(() => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage(""); // Сброс сообщения
+    if (loading) return; // Предотвращаем отправку, если уже идет загрузка
+
     if (mode === "Login") {
       await login();
     } else if (mode === "Sign Up") {
@@ -54,8 +61,10 @@ useEffect(() => {
   };
 
   const login = async () => {
+    setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/login`, {// Убедитесь, что адрес правильный
+      console.log(`Отправка запроса на: ${API_URL}/login`);
+      const response = await fetch(`${API_URL}/login`, { 
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -63,6 +72,8 @@ useEffect(() => {
         },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
       });
+
+      console.log(`Загрузка Fetch завершена: POST (${API_URL}/login).`);
 
       const responseData = await response.json();
       if (responseData.success) {
@@ -74,35 +85,50 @@ useEffect(() => {
         if (responseData.errors === "Неверный пароль") {
           setShowWrongPasswordModal(true);
         } else {
-          alert(responseData.errors);
+          setMessage(responseData.errors || "Ошибка входа");
         }
       }
     } catch (error) {
       console.error("Ошибка при выполнении запроса:", error);
-      alert("Ошибка при выполнении запроса.");
+      setMessage("Ошибка при выполнении запроса.");
+    } finally {
+      setLoading(false);
     }
   };
 
- const signup = async () => {
-  try {
-    const response = await fetch(`${API_URL}/signup`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
+  const signup = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-  } catch (error) {
-    console.error("Ошибка при выполнении запроса:", error);
-    alert("Ошибка при выполнении запроса.");
-  }
-};
+      const responseData = await response.json();
+      if (response.ok) {
+        setMessage(responseData.message || "Регистрация успешна! Подтвердите email.");
+        // Опционально, переключиться на режим "Login"
+        setMode("Login");
+      } else {
+        setMessage(responseData.message || "Ошибка при регистрации.");
+      }
+
+    } catch (error) {
+      console.error("Ошибка при выполнении запроса:", error);
+      setMessage("Ошибка при выполнении запроса.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const requestPasswordReset = async () => {
+    setLoading(true);
     try {
-      const response = await fetch('https://servicebox35.pp.ru/forgot-password/', {
+      const response = await fetch(`${API_URL}/forgot-password`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -111,23 +137,32 @@ useEffect(() => {
         body: JSON.stringify({ email: emailForReset }),
       });
       const responseData = await response.json();
-      alert(responseData.message);
-      setMode("Login");
-      onClose();
+      if (response.ok) {
+        alert(responseData.message);
+        setMode("Login");
+        onClose();
+      } else {
+        alert(responseData.message || "Ошибка при запросе сброса пароля.");
+      }
     } catch (error) {
       console.error("Ошибка при запросе сброса пароля:", error);
       alert("Ошибка при запросе сброса пароля.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const resetPassword = async (e) => {
     e.preventDefault();
+    setMessage("");
+    if (loading) return; // Предотвращаем отправку, если уже идет загрузка
     if (newPassword !== confirmPassword) {
       alert("Пароли не совпадают");
       return;
     }
+    setLoading(true);
     try {
-       const response = await fetch(`https://servicebox35.pp.ru/reset-password/${token}`, {
+      const response = await fetch(`${API_URL}/reset-password/${token}`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -144,11 +179,13 @@ useEffect(() => {
         onClose();
         navigate('/'); // Перенаправление на главную страницу
       } else {
-        alert(responseData.message);
+        setMessage(responseData.message || "Ошибка при сбросе пароля.");
       }
     } catch (error) {
       console.error("Ошибка при сбросе пароля:", error);
-      alert("Ошибка при сбросе пароля.");
+      setMessage("Ошибка при сбросе пароля.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -166,6 +203,8 @@ useEffect(() => {
           <button className='close-buttonreg' onClick={onClose}>&times;</button>
         </div>
 
+        {message && <p className='error-message'>{message}</p>}
+
         {mode === "Set New Password" ? (
           <form className='reset-password' onSubmit={resetPassword}>
             <h3>Установка нового пароля</h3>
@@ -175,6 +214,7 @@ useEffect(() => {
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="Введите новый пароль"
               required
+              autoComplete="new-password"
             />
             <input
               type="password"
@@ -182,8 +222,11 @@ useEffect(() => {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Повторите новый пароль"
               required
+              autoComplete="new-password"
             />
-            <button type="submit">Установить новый пароль</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Загрузка..." : "Установить новый пароль"}
+            </button>
           </form>
         ) : mode === "Forgot Password" ? (
           <form className='forgot-password' onSubmit={handleSubmit}>
@@ -194,8 +237,11 @@ useEffect(() => {
               onChange={(e) => setEmailForReset(e.target.value)}
               placeholder="Введите ваш email"
               required
+              autoComplete="email"
             />
-            <button type="submit">Отправить</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Загрузка..." : "Отправить"}
+            </button>
           </form>
         ) : (
           <form className='loginsignup-fields' onSubmit={handleSubmit}>
@@ -208,14 +254,16 @@ useEffect(() => {
                   type='text'
                   placeholder='Имя'
                   required
+                  autoComplete="username"
                 />
                 <input
                   name='phone'
                   value={formData.phone}
                   onChange={changeHandler}
-                  type='text'
+                  type='tel'
                   placeholder='Телефон'
                   required
+                  autoComplete="tel"
                 />
               </>
             )}
@@ -226,6 +274,7 @@ useEffect(() => {
               type="email"
               placeholder="Email"
               required
+              autoComplete="email"
             />
             <input
               name='password'
@@ -234,9 +283,10 @@ useEffect(() => {
               type="password"
               placeholder="Пароль"
               required
+              autoComplete={mode === "Login" ? "current-password" : "new-password"}
             />
-            <button className='submit-button' type="submit">
-              {mode === "Login" ? "Войти" : "Зарегистрироваться"}
+            <button className='submit-button' type="submit" disabled={loading}>
+              {loading ? "Загрузка..." : (mode === "Login" ? "Войти" : "Зарегистрироваться")}
             </button>
           </form>
         )}
@@ -246,6 +296,14 @@ useEffect(() => {
             {mode === "Sign Up" ? "Уже есть аккаунт? " : "У вас нет аккаунта? "}
             <span onClick={() => { setMode(mode === "Login" ? "Sign Up" : "Login") }}>
               {mode === "Login" ? "Зарегистрироваться" : "Войти"}
+            </span>
+          </p>
+        )}
+
+        {mode === "Login" && (
+          <p className='forgot-password-link'>
+            <span onClick={() => setMode("Forgot Password")}>
+              Забыли пароль?
             </span>
           </p>
         )}

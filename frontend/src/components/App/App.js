@@ -1,26 +1,21 @@
 import React, { useState, useCallback, useEffect} from "react";
-import { BrowserRouter as Router, Route, Routes , useLocation, useNavigate} from "react-router-dom";
-import { Widget, addResponseMessage }  from 'react-chat-widget-react-18';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 
-import logo from '../../images/logo.jpg'
-//import PrivateRoute from "./PrivateRoute"; 
-import { Link } from'react-router-dom';
 import gsap from "gsap";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
-import axios from 'axios';
-import NavBar from "../NavBar";  
 import Shop from "../pages/Shop";
-
- 
 import Header from "../Header/Header";
 import Main from "../Main/Main"; 
 //import Footer from "../Footer/Footer";
 import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
-import Search from "../Search/Search";
-
-import ServiceRef from "../Main/ServiceRef/ServiceRef";
 import NotebookService from "../AdminPanel/NotebookService/NotebookService"
 import MonoblockService from "../AdminPanel/MonobloсkService/MonobloсkService"
 import TelephoneService from "../AdminPanel/TelephoneService/TelephoneService";
@@ -113,7 +108,6 @@ const App = () => {
   />
   <Route path="/image-gallery-api" element={<ImageGalleryApi />} />
   <Route path="/delete-image" element={<DeleteImage />} />
-  {/* Удалите следующий дублирующий маршрут */}
   {/* <Route exact path="/" component={ServiceRef} /> */}
   <Route path="/notebook-service" element={<NotebookService />} />
   <Route path="/monoblock-service" element={<MonoblockService />} />

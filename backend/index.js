@@ -27,7 +27,8 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const Admin = require('./models/Admin');
 const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
-
+const rateLimit = require('express-rate-limit');
+const { body, validationResult } = require('express-validator');
 const app = express();
 //const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
@@ -117,11 +118,10 @@ const corsOptions = {
 };
 
 
-
 // Middleware
 app.use(cors({
   origin: process.env.CLIENT_URL, // Разрешаем только этот источник
-  methods: ['GET', 'POST'], // Разрешаем определенные методы
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешаем определенные методы
   credentials: true, // Указываем, что можно работать с куками
 }));
 
@@ -408,32 +408,30 @@ app.put('/updateproduct/:id', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-// Модель пользователя
-const User = mongoose.model('User', new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-  phone: String,
+// Определение модели пользователя
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+  phone: { type: String, required: true },
   emailToken: String,
-  isVerified: Boolean,
+  isVerified: { type: Boolean, default: false },
   resetPasswordToken: String,
   resetPasswordExpires: Date,
-}));
+});
 
-// Настройка транспорту `nodemailer` для Яндекс.Почты
-const transporter = nodemailer.createTransport(
-  smtpTransport({
-    service: 'yandex',
-    host: 'smtp.yandex.ru',
-     port: 465, 
-    secure: true,
-    auth: {
-      user: process.env.YANDEX_USER,
-      pass: process.env.YANDEX_PASS,
-    },
-  })
-);
+const User = mongoose.model('User', UserSchema);
 
+// Настройка транспорта nodemailer для Яндекс.Почты
+const transporter = nodemailer.createTransport({
+  host: 'smtp.yandex.ru',
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.YANDEX_USER,
+    pass: process.env.YANDEX_PASS,
+  },
+});
 
 transporter.verify(function (error, success) {
   if (error) {
@@ -443,62 +441,99 @@ transporter.verify(function (error, success) {
   }
 });
 
-// Регистрация с верификацией email
-app.post('/signup', async (req, res) => {
-  try {
-    const { username, email, password, phone } = req.body;
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Пользователь с такой почтой уже существует' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const emailToken = crypto.randomBytes(64).toString('hex');
-
-    const user = new User({
-      username,
-      email,
-      password: hashedPassword,
-      phone,
-      emailToken,
-      isVerified: false,
-    });
-
-    await user.save();
-
-const mailOptions = {
-  from: process.env.YANDEX_USER,
-  to: email,
-  subject: 'Подтверждение email',
-  html: `<p>Кликните по ссылке для подтверждения: <a href="${process.env.CLIENT_URL.replace(/\/$/, "")}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
-};
-
-    await transporter.sendMail(mailOptions);
-
-    res.status(200).json({ message: 'Регистрация успешна! Подтвердите email.' });
-  } catch (err) {
-    console.error('Ошибка при регистрации:', err);
-    res.status(500).json({ message: 'Ошибка сервера' });
-  }
+// Rate Limiting
+const signupLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 10, // Ограничение до 10 запросов с одного IP за windowMs
+  message: "Слишком много попыток регистрации с этого IP, попробуйте позже."
 });
 
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: "Слишком много попыток входа с этого IP, попробуйте позже."
+});
+
+// Маршрут регистрации с верификацией email
+app.post('/signup',
+  signupLimiter,
+  [
+    body('username').notEmpty().withMessage('Имя обязательно'),
+    body('email').isEmail().withMessage('Некорректный email'),
+    body('password').isLength({ min: 6 }).withMessage('Пароль должен быть не менее 6 символов'),
+    body('phone').notEmpty().withMessage('Телефон обязателен'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.array().map(err => err.msg).join(', ') });
+    }
+
+    try {
+      const { username, email, password, phone } = req.body;
+
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        console.warn(`Попытка регистрации с существующим email: ${email}`);
+        return res.status(400).json({ message: 'Пользователь с такой почтой уже существует' });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const emailToken = crypto.randomBytes(64).toString('hex');
+
+      const user = new User({
+        username,
+        email,
+        password: hashedPassword,
+        phone,
+        emailToken,
+        isVerified: false,
+      });
+
+      await user.save();
+
+      const mailOptions = {
+        from: process.env.YANDEX_USER,
+        to: email,
+        subject: 'Подтверждение email',
+        html: `<p>Кликните по ссылке для подтверждения: <a href="${CLIENT_URL}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
+      };
+
+      await transporter.sendMail(mailOptions);
+
+      console.log(`Новый пользователь зарегистрирован: ${email}`);
+      res.status(200).json({ message: 'Регистрация успешна! Подтвердите email.' });
+    } catch (err) {
+      console.error('Ошибка при регистрации:', err);
+      res.status(500).json({ message: 'Ошибка сервера' });
+    }
+  }
+);
+
+// Маршрут подтверждения email
 app.get('/verify-email', async (req, res) => {
   try {
     const { token } = req.query;
+    console.log(`Получен запрос на верификацию email с токеном: ${token}`);
+    if (!token) {
+      console.warn('Токен не предоставлен.');
+      return res.status(400).json({ message: "Токен не предоставлен." });
+    }
+
     const user = await User.findOne({ emailToken: token });
 
     if (!user) {
+      console.warn(`Пользователь с токеном ${token} не найден.`);
       return res.status(400).json({ message: "Неверный токен" });
     }
 
-    // Если пользователь уже подтвержден
     if (user.isVerified) {
+      console.warn(`Пользователь с email ${user.email} уже подтвержден.`);
       return res.status(400).json({ message: "Email уже подтвержден." });
     }
 
     user.isVerified = true;
-    user.emailToken = null; // Обнуляйте токен, чтобы не использовать повторно
+    user.emailToken = null; // Обнуляем токен
     await user.save();
 
     const data = {
@@ -506,53 +541,130 @@ app.get('/verify-email', async (req, res) => {
         id: user.id
       }
     };
-    const authToken = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const authToken = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
 
+    console.log(`Пользователь ${user.email} успешно верифицирован.`);
     res.json({ message: "Email подтвержден! Теперь вы можете войти.", token: authToken });
   } catch (error) {
     console.error("Ошибка при подтверждении email:", error);
     res.status(500).json({ message: "Ошибка сервера" });
   }
 });
-// Восстановление пароля через email
-app.post('/forgot-password', async (req, res) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-    
-    if (!user) {
-      return res.status(400).json({ message: 'Пользователь не найден' });
+
+// Маршрут авторизации (логин)
+app.post('/login',
+  loginLimiter,
+  [
+    body('email').isEmail().withMessage('Некорректный email'),
+    body('password').notEmpty().withMessage('Пароль обязателен'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, errors: errors.array().map(err => err.msg).join(', ') });
     }
 
-    const resetToken = crypto.randomBytes(64).toString('hex');
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 час
-    await user.save();
-
-// Внутри маршрута /forgot-password
-const clientUrl = process.env.CLIENT_URL.replace(/\/$/, ""); // Убедитесь, что URL заканчивается на '/'
-const url = `${process.env.PROD_SERVER}/api/users/verification/${token}`;
-const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
-    const mailOptions = {
-      from:process.env.YANDEX_USER,
-      to: email,
-      subject: 'Сброс пароля',
-      html: `<p>Перейдите по ссылке для сброса пароля: <a href="${resetUrl}">Сбросить пароль</a></p>`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    res.json({ message: 'Инструкции по сбросу пароля отправлены на email' });
-  } catch (err) {
-    res.status(500).json({ message: 'Ошибка сервера' });
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      if (user) {
+        const passCompare = await bcrypt.compare(password, user.password);
+        if (passCompare) {
+          if (!user.isVerified) {
+            console.warn(`Попытка входа не верифицированного пользователя: ${email}`);
+            return res.json({ success: false, errors: "Пожалуйста, подтвердите свой email перед входом." });
+          }
+          const data = {
+            user: {
+              id: user.id
+            }
+          };
+          const token = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
+          console.log(`Пользователь вошел в систему: ${email}`);
+          res.json({
+            success: true,
+            token
+          });
+        } else {
+          console.warn(`Неверный пароль для пользователя: ${email}`);
+          res.json({ success: false, errors: "Неверный пароль" });
+        }
+      } else {
+        console.warn(`Пользователь с email ${email} не найден.`);
+        res.json({ success: false, errors: "Пользователь с таким email не найден" });
+      }
+    } catch (error) {
+      console.error("Ошибка при выполнении запроса:", error);
+      res.status(500).json({ success: false, errors: "Ошибка на сервере" });
+    }
   }
-});
+);
 
-// Сброс пароля
-app.post('/reset-password/:token', async (req, res) => {
-  console.log('Получен запрос на сброс пароля с токеном:', req.params.token);
+// Маршрут запроса сброса пароля
+app.post('/forgot-password',
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 минут
+    max: 5, // Ограничение до 5 запросов с одного IP за windowMs
+    message: "Слишком много запросов с этого IP, попробуйте позже."
+  }),
+  [
+    body('email').isEmail().withMessage('Некорректный email'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.array().map(err => err.msg).join(', ') });
+    }
+
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        console.warn(`Запрос на сброс пароля для несуществующего email: ${email}`);
+        return res.status(400).json({ message: 'Пользователь не найден' });
+      }
+
+      const resetToken = crypto.randomBytes(64).toString('hex');
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = Date.now() + 3600000; // 1 час
+      await user.save();
+
+      // Формирование URL для сброса пароля
+      const clientUrl = CLIENT_URL.replace(/\/$/, ""); // Убедитесь, что URL не заканчивается на '/'
+      const resetUrl = `${clientUrl}/reset-password/${resetToken}`;
+
+      const mailOptions = {
+        from: process.env.YANDEX_USER,
+        to: email,
+        subject: 'Сброс пароля',
+        html: `<p>Перейдите по ссылке для сброса пароля: <a href="${resetUrl}">Сбросить пароль</a></p>`,
+      };
+
+      await transporter.sendMail(mailOptions);
+
+      console.log(`Запрос на сброс пароля отправлен на: ${email}`);
+      res.json({ message: 'Инструкции по сбросу пароля отправлены на email' });
+    } catch (err) {
+      console.error('Ошибка в маршруте /forgot-password:', err);
+      res.status(500).json({ message: 'Ошибка сервера' });
+    }
+  }
+);
+
+// Маршрут сброса пароля
+app.post('/reset-password/:token', [
+  body('password').isLength({ min: 6 }).withMessage('Пароль должен быть не менее 6 символов'),
+], async (req, res) => {
+  const { token } = req.params;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, message: errors.array().map(err => err.msg).join(', ') });
+  }
+
+  console.log(`Получен запрос на сброс пароля с токеном: ${token}`);
+  
   try {
-    const { token } = req.params;
     const { password } = req.body;
 
     const user = await User.findOne({
@@ -561,6 +673,7 @@ app.post('/reset-password/:token', async (req, res) => {
     });
 
     if (!user) {
+      console.warn(`Недействительный или истекший токен сброса пароля: ${token}`);
       return res.status(400).json({ success: false, message: 'Токен недействителен или истек' });
     }
 
@@ -575,11 +688,11 @@ app.post('/reset-password/:token', async (req, res) => {
         id: user.id
       }
     };
-    const authToken = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const authToken = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
 
     // Отправка подтверждающего письма
     const mailOptions = {
-      from: process.env.YANDEX_USER, // Убедитесь, что используете правильный email
+      from: process.env.YANDEX_USER,
       to: user.email,
       subject: 'Пароль успешно изменен',
       html: `<p>Здравствуйте, ${user.username}!</p>
@@ -589,6 +702,7 @@ app.post('/reset-password/:token', async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
+    console.log(`Пароль успешно изменен для пользователя: ${user.email}`);
     res.json({ success: true, message: 'Пароль успешно обновлен', token: authToken });
   } catch (err) {
     console.error('Ошибка при сбросе пароля:', err);
@@ -596,53 +710,11 @@ app.post('/reset-password/:token', async (req, res) => {
   }
 });
 
+// Тестовый маршрут для проверки работы сервера
+app.get("/", (req, res) => {
+  res.send("Express App is running");
+});
 
-// Маршрут авторизации
-app.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-      const passCompare = await bcrypt.compare(password, user.password);
-      if (passCompare) {
-        if (!user.isVerified) {
-          return res.json({ success: false, errors: "Пожалуйста, подтвердите свой email перед входом." });
-        }
-        const data = {
-          user: {
-            id: user.id
-          }
-        };
-        const token = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
-        res.json({
-          success: true,
-          token
-        });
-      } else {
-        res.json({ success: false, errors: "Неверный пароль" });
-      }
-    } else {
-      res.json({ success: false, errors: "Пользователь с таким email не найден" });
-    }
-  } catch (error) {
-    console.error("Ошибка при выполнении запроса:", error);
-    res.status(500).json({ success: false, errors: "Ошибка на сервере" });
-  }
-});
-app.get('/reset-password/:token', async (req, res) => {
-    const { token } = req.params;
-    const user = await User.findOne({
-        resetPasswordToken: token,
-        resetPasswordExpires: { $gt: Date.now() }
-    });
-    
-    if (!user) {
-        return res.status(400).send('Password reset token is invalid or has expired.');
-    }
-    
-    // Отображение формы сброса пароля
-    res.render('reset-password-form', { token });
-});
 // Service CRUD operations
 app.get('/services', async (req, res) => {
   try {

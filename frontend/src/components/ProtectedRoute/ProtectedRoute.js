@@ -1,9 +1,8 @@
 //frontend/ProtectedRoute/ProtectedRoute.js
-import React from "react"
-import { Navigate } from "react-router-dom"
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({ component: Component, ...props }) => {
-  return props.loggedIn ? <Component {...props} /> : <Navigate to="/" />
-}
-
-export default ProtectedRoute
+const ProtectedRoute = ({ loggedIn }) => {
+  return loggedIn ? <Outlet /> : <Navigate to="/" />;
+};
+export default ProtectedRoute;
