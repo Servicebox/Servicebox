@@ -499,7 +499,7 @@ app.post('api/signup',
 );
 
 // Маршрут подтверждения email
-app.get('api/verify-email', async (req, res) => {
+app.get('/api/verify-email', async (req, res) => {
   try {
     const { token } = req.query;
     console.log(`Получен запрос на верификацию email с токеном: ${token}`);
@@ -540,7 +540,7 @@ app.get('api/verify-email', async (req, res) => {
 });
 
 // Маршрут авторизации (логин)
-app.post('api/login',
+app.post('/api/login',
   loginLimiter,
   [
     body('email').isEmail().withMessage('Некорректный email'),
@@ -589,7 +589,7 @@ app.post('api/login',
 );
 
 // Маршрут запроса сброса пароля
-app.post('api/forgot-password',
+app.post('/api/forgot-password',
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 минут
     max: 5, // Ограничение до 5 запросов с одного IP за windowMs
@@ -641,7 +641,7 @@ app.post('api/forgot-password',
 );
 
 // Маршрут сброса пароля
-app.post('api/reset-password/:token', [
+app.post('/api/reset-password/:token', [
   body('password').isLength({ min: 6 }).withMessage('Пароль должен быть не менее 6 символов'),
 ], async (req, res) => {
   const { token } = req.params;
