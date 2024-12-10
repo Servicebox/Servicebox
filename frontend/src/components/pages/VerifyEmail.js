@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './VerifyEmail.css';
 
-const API_URL = 'https://servicebox35.pp.ru';
+const API_URL = 'https://servicebox35.pp.ru/api';
 
 const VerifyEmail = () => {
   const query = new URLSearchParams(useLocation().search);
