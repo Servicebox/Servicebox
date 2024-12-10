@@ -443,7 +443,7 @@ const loginLimiter = rateLimit({
 });
 
 // Маршрут регистрации с верификацией email
-app.post('api/signup',
+app.post('/api/signup',
   signupLimiter,
   [
     body('username').notEmpty().withMessage('Имя обязательно'),
@@ -620,7 +620,7 @@ app.post('/api/forgot-password',
 
       // Формирование URL для сброса пароля
       const clientUrl = CLIENT_URL.replace(/\/$/, ""); // Убедитесь, что URL не заканчивается на '/'
-      const resetUrl = `${clientUrl}api/reset-password/${resetToken}`;
+      const resetUrl = `${clientUrl}/api/reset-password/${resetToken}`;
 
       const mailOptions = {
         from: process.env.YANDEX_USER,
