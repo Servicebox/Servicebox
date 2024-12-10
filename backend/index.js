@@ -38,7 +38,7 @@ app.set('trust proxy', true);
 app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
-const smtpTransport = require('nodemailer-smtp-transport');
+
 // Создание API роутера
 const apiRouter = express.Router();
 
@@ -105,25 +105,13 @@ const allowedCors = [
   
 
 ];
-
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedCors.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: process.env.CLIENT_URL, // Разрешаем только этот источник
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 };
 
-
-// Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL, // Разрешаем только этот источник
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Разрешаем определенные методы
-  credentials: true, // Указываем, что можно работать с куками
-}));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -653,7 +641,7 @@ app.post('/forgot-password',
 );
 
 // Маршрут сброса пароля
-app.post('/reset-password/:token', [
+app.post('api/reset-password/:token', [
   body('password').isLength({ min: 6 }).withMessage('Пароль должен быть не менее 6 символов'),
 ], async (req, res) => {
   const { token } = req.params;
@@ -711,9 +699,9 @@ app.post('/reset-password/:token', [
 });
 
 // Тестовый маршрут для проверки работы сервера
-app.get("/", (req, res) => {
-  res.send("Express App is running");
-});
+//app.get("/", (req, res) => {
+  //res.send("Express App is running");
+//     });
 
 // Service CRUD operations
 app.get('/services', async (req, res) => {

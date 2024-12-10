@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './LoginSignup.css';
 
-const API_URL = 'https://servicebox35.pp.ru';
+const API_URL = 'https://servicebox35.pp.ru/api';
 
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const { token } = useParams(); // Получаем токен из URL, если есть
