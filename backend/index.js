@@ -843,7 +843,7 @@ app.get('/api/search', async (req, res) => {
 });
 
  //creating enpoint to get cartdata
-app.post('/getcart', fetchUser, async (req, res) => {
+app.post('/api/getcart', fetchUser, async (req, res) => {
   console.log("GetCart request received");
   try {
       console.log(`Fetching cart data for user with ID: ${req.user.id}`);
