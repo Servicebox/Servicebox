@@ -8,7 +8,7 @@ const ListProduct = () => {
 
   const fetchInfo = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/allproducts', {
+      const response = await fetch('https://servicebox35.pp.ru/api/allproducts', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -33,7 +33,7 @@ const ListProduct = () => {
 
   const remove_product = async (id) => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/removeproduct', {
+      const response = await fetch('https://servicebox35.pp.ru/api/removeproduct', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -69,7 +69,7 @@ const ListProduct = () => {
     formData.append('product', file);
 
     try {
-      const response = await fetch('https://servicebox35.pp.ru/uploads', {
+      const response = await fetch('https://servicebox35.pp.ru/api/uploads', {
         method: 'POST',
         body: formData,
       });
@@ -90,7 +90,7 @@ const ListProduct = () => {
 
   const saveEdit = async () => {
     try {
-      const response = await fetch(`https://servicebox35.pp.ru/updateproduct/${editingProduct.id}`, {
+      const response = await fetch(`https://servicebox35.pp.ru/api/updateproduct/${editingProduct.id}`, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',

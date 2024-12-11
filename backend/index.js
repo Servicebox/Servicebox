@@ -207,7 +207,7 @@ const productStorage = multer.diskStorage({
 
 const productUpload = multer({ storage: productStorage });
 
-app.post('/uploads', productUpload.single('product'), (req, res) => {
+app.post('/api/uploads', productUpload.single('product'), (req, res) => {
   if (req.file) {
     res.json({
       success: 1,
@@ -352,13 +352,13 @@ const messageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('Message', messageSchema);
 //
-app.post('/removeproduct', async (req, res) => {
+app.post('/api/removeproduct', async (req, res) => {
   await Product.findOneAndDelete({ id: req.body.id });
   console.log("Product removed");
   res.json({ success: true });
 });
 
-app.get('/allproducts', async (req, res) => {
+app.get('/api/allproducts', async (req, res) => {
   let products = await Product.find({}, 'id name image category new_price old_price description quantity');
   console.log("All products fetched");
   res.send(products);
@@ -372,7 +372,7 @@ app.get('/allservices', async (req, res) => {
 });
 
 //редактирование товара
-app.put('/updateproduct/:id', async (req, res) => {
+app.put('/api/updateproduct/:id', async (req, res) => {
   try {
     const updatedProduct = await Product.findOneAndUpdate(
       { id: req.params.id },
@@ -398,14 +398,19 @@ app.put('/updateproduct/:id', async (req, res) => {
 });
 // Определение модели пользователя
 const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  phone: { type: String, required: true },
-  emailToken: String,
-  isVerified: { type: Boolean, default: false },
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
+    username: { type: String, required: true },
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    phone: { type: String, required: true },
+    emailToken: String,
+    isVerified: { type: Boolean, default: false },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    cartData: {
+        type: Map,
+        of: Number,
+        default: {}
+    },
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -764,14 +769,14 @@ router.get('/services/:category', async (req, res) => {
 
 
 // Маршруты для новых коллекций и популярных частей
-app.get('/newcollections', async (req, res) => {
+app.get('/api/newcollections', async (req, res) => {
   let products = await Product.find({});
   let newCollection = products.slice(1).slice(-8);
   console.log("New Collection fetched");
   res.send(newCollection);
 });
 
-app.get('/popularinpart', async (req, res) => {
+app.get('/api/popularinpart', async (req, res) => {
   let products = await Product.find({ category: "part" });
   let popularInPart = products.slice(0, 4);
   console.log("Popular in Part fetched");
@@ -779,7 +784,7 @@ app.get('/popularinpart', async (req, res) => {
 });
 
 // Endpoints для корзины
-app.post('/addtocart', fetchUser, async (req, res) => {
+app.post('/api/addtocart', fetchUser, async (req, res) => {
   try {
     const productId = req.body.itemId;
     const product = await Product.findOne({ id: productId });
@@ -948,7 +953,7 @@ app.get('/crash-test', (req, res, next) => {
   setTimeout(() => next(new Error('Server will crash now')), 0);
 });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(router);
 app.use('/', indexRouter);
 

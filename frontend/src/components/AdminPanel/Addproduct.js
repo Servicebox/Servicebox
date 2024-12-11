@@ -43,7 +43,7 @@ const Add_Product = async () => {
         formData.append('product', image);
 
         try {
-            const uploadResponse = await fetch('https://servicebox35.pp.ru/uploads', {
+            const uploadResponse = await fetch('https://servicebox35.pp.ru/api/uploads', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
@@ -62,7 +62,7 @@ const Add_Product = async () => {
 
                 console.log("Product details being sent:", productDetails);
 
-                const addProductResponse = await fetch('https://servicebox35.pp.ru/addproduct', {
+                const addProductResponse = await fetch('https://servicebox35.pp.ru/api/addproduct', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',

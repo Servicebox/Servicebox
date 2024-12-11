@@ -1,7 +1,7 @@
-
 import React, { createContext, useState, useEffect } from "react";
 
 export const ShopContext = createContext(null);
+
 const getDefaultCart = () => {
     let cart = {};
     for (let index = 0; index < 301; index++) {
@@ -13,12 +13,17 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
-     const [all_services, setAll_Services] = useState([]);
+    const [all_services, setAll_Services] = useState([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                let response = await fetch('https://servicebox35.pp.ru/allproducts');
+                let response = await fetch('https://servicebox35.pp.ru/api/allproducts', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    }
+                });
                 if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
                 let data = await response.json();
                 setAll_Product(data);
@@ -26,16 +31,16 @@ const ShopContextProvider = (props) => {
                 console.error('Fetch allproducts error:', error);
             }
         };
-        
 
         const fetchCartItems = async () => {
-            if (localStorage.getItem('auth-token')) {
+            const token = localStorage.getItem('auth-token');
+            if (token) {
                 try {
-                    let response = await fetch('https://servicebox35.pp.ru/getcart', {
+                    let response = await fetch('https://servicebox35.pp.ru/api/getcart', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
-                            'auth-token': localStorage.getItem('auth-token'),
+                            'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({}),
@@ -55,13 +60,14 @@ const ShopContextProvider = (props) => {
 
     const addToCart = async (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-        if (localStorage.getItem('auth-token')) {
+        const token = localStorage.getItem('auth-token');
+        if (token) {
             try {
-                let response = await fetch('https://servicebox35.pp.ru/addtocart', {
+                let response = await fetch('https://servicebox35.pp.ru/api/addtocart', {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/form-data',
-                        'auth-token': `${localStorage.getItem('auth-token')}`,
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ "itemId": itemId }),
@@ -76,13 +82,14 @@ const ShopContextProvider = (props) => {
 
     const removeFromCart = async (itemId) => {
         setCartItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
-        if (localStorage.getItem('auth-token')) {
+        const token = localStorage.getItem('auth-token');
+        if (token) {
             try {
-                let response = await fetch('https://servicebox35.pp.ru/removefromcart', {
+                let response = await fetch('https://servicebox35.pp.ru/api/removefromcart', {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/form-data',
-                        'auth-token': `${localStorage.getItem('auth-token')}`,
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ "itemId": itemId }),
@@ -93,7 +100,6 @@ const ShopContextProvider = (props) => {
             }
         }
     };
-
 
     const getTotalCartAmount = () => {
         let totalAmount = 0;
@@ -118,9 +124,7 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    
-
-    const contextValue = { getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, getTotalCartItems};
+    const contextValue = { getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, getTotalCartItems };
 
     return (
         <ShopContext.Provider value={contextValue}>
