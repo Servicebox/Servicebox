@@ -12,11 +12,16 @@ const ImageGalleryApi = () => {
   const [userLikes, setUserLikes] = useState([]);
   const [showAfter, setShowAfter] = useState({});
 
- const fetchImages = async () => {
+  const fetchImages = async () => {
     try {
       console.log('Отправка запроса к серверу для получения изображений...');
+      const token = localStorage.getItem('auth-token'); // Получение токена
       const response = await fetch('https://servicebox35.pp.ru/api/images', {
-        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }), // Добавление заголовка Authorization
+        },
       });
 
       if (!response.ok) {
@@ -41,30 +46,29 @@ const ImageGalleryApi = () => {
     fetchUserLikes();
   }, []);
 
+  const fetchUserLikes = async () => {
+    try {
+      const token = localStorage.getItem('auth-token');
+      if (!token) return;
 
+      const response = await fetch('https://servicebox35.pp.ru/api/images/user-likes', {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Исправлено на Authorization
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
 
-const fetchUserLikes = async () => {
-  try {
-    const token = localStorage.getItem('auth-token');
-    if (!token) return;
-
-    const response = await fetch('https://servicebox35.pp.ru/api/images/user-likes', {
-      headers: {
-        'auth-token': token
-      },
-      credentials: 'include'
-    });
-
-    if (response.ok) {
-      const likes = await response.json();
-      setUserLikes(likes);
+      if (response.ok) {
+        const likes = await response.json();
+        setUserLikes(likes);
+      }
+    } catch (error) {
+      console.error('Error fetching user likes:', error);
     }
-  } catch (error) {
-    console.error('Error fetching user likes:', error);
-  }
-};
+  };
 
-// Handle like operation
+  // Handle like operation
 const toggleLikeImage = async (imageId) => {
   try {
     const token = localStorage.getItem('auth-token');
@@ -72,24 +76,25 @@ const toggleLikeImage = async (imageId) => {
       alert('Пожалуйста, авторизуйтесь для выполнения этого действия');
       return;
     }
+
     const hasLiked = userLikes.includes(imageId);
     const method = hasLiked ? 'DELETE' : 'POST';
     const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
       method,
       headers: {
         'Accept': 'application/json',
-        'auth-token': token,
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      credentials: 'include'
     });
 
     if (response.ok) {
       const updatedImage = await response.json();
-      setImages(images.map(img => 
-        img._id === imageId ? { ...img, likes: updatedImage.likes } : img
+      setImages(images.map(img =>
+        img._id === imageId ? { ...img, likes: updatedImage.image.likes } : img
       ));
-      
+
+      // Обновляем userLikes на клиенте
       if (hasLiked) {
         setUserLikes(userLikes.filter(id => id !== imageId));
       } else {
@@ -106,16 +111,15 @@ const toggleLikeImage = async (imageId) => {
   }
 };
 
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+    setShowModal(true);
+  };
 
-const handleImageClick = (image) => {
-setSelectedImage(image);
-setShowModal(true);
-};
-
-const handleCloseModal = () => {
-setSelectedImage(null);
-setShowModal(false);
-};
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+    setShowModal(false);
+  };
 
   const toggleBeforeAfter = (imageId) => {
     setShowAfter(prev => ({
@@ -123,8 +127,9 @@ setShowModal(false);
       [imageId]: !prev[imageId]
     }));
   };
-   return (
-  <div className="foto">
+
+  return (
+    <div className="foto">
       <h1 className="foto__title">Фотографии до и после ремонта</h1>
       <div className="images-gallery">
         {images.length > 0 ? images.map(image => (
@@ -146,10 +151,9 @@ setShowModal(false);
         ))
       : <p>Изображения загружаются...</p>}
       {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
-    </div>
+      </div>
     </div>
   )
-
 }
 
 export default ImageGalleryApi;

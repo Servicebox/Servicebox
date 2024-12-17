@@ -3,6 +3,9 @@
     padding: 20px;
     box-sizing: border-box;
     margin: 10px auto;
+  background-color: #004578;
+    clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
+    padding-bottom: 50px;
   }
 
 
@@ -40,12 +43,14 @@ line-height: normal;
   align-items: center;
 color: rgb(255, 255, 255);
   border-radius: 10px;
-  background-color: #041e42;
+ background-color: #004578;
+    clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
  
 }
 
 .contacts__list-text{
   margin: 0 auto;
+  padding-top: 60px;
   text-align: center;
   padding-bottom: 10px;
   color: #ffffff;

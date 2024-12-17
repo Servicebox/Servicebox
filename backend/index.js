@@ -105,6 +105,19 @@ const allowedCors = [
   
 
 ];
+
+const isBehindProxy = false; // Change to true if behind a proxy
+
+app.set('trust proxy', isBehindProxy);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 100, // Максимум 100 запросов с одного IP
+  standardHeaders: true, // Return rate limit info in the RateLimit-* headers
+  legacyHeaders: false, // Disable the X-RateLimit-* headers
+  message: 'Слишком много запросов с этого IP, попробуйте позже.',
+});
+
+app.use(limiter);
 const corsOptions = {
   origin: process.env.CLIENT_URL, // Разрешаем только этот источник
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -352,10 +365,40 @@ const messageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('Message', messageSchema);
 //
-app.post('/api/removeproduct', async (req, res) => {
-  await Product.findOneAndDelete({ id: req.body.id });
-  console.log("Product removed");
-  res.json({ success: true });
+app.post('/api/removefromcart', fetchUser, async (req, res) => {
+  try {
+    const productId = req.body.itemId;
+
+    // Валидация itemId
+    if (typeof productId !== 'number' && typeof productId !== 'string') {
+      return res.status(400).json({ message: "Некорректный ID товара" });
+    }
+
+    const product = await Product.findOne({ id: productId });
+
+    if (!product) {
+      return res.status(404).json({ message: "Товар не найден" });
+    }
+
+    const userData = await User.findOne({ _id: req.user.id });
+
+    const productIdStr = String(productId);
+
+    const currentQuantity = userData.cartData.get(productIdStr) || 0;
+
+    if (currentQuantity > 0) {
+      userData.cartData.set(productIdStr, currentQuantity - 1);
+      product.quantity += 1;
+      await product.save();
+      await userData.save();
+      res.json({ message: "Removed" });
+    } else {
+      res.status(400).json({ message: "Нельзя удалить, так как количество равно нулю" });
+    }
+  } catch (error) {
+    console.error('Error while removing from cart:', error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
 });
 
 app.get('/api/allproducts', async (req, res) => {
@@ -409,10 +452,15 @@ const UserSchema = new mongoose.Schema({
     cartData: {
         type: Map,
         of: Number,
-        default: {}
+        default: () => {
+            let initialCart = {};
+            for (let index = 0; index < 301; index++) {
+                initialCart[String(index)] = 0;
+            }
+            return initialCart;
+        }
     },
-});
-
+}, { timestamps: true });
 const User = mongoose.model('User', UserSchema);
 
 // Настройка транспорта nodemailer для Яндекс.Почты
@@ -787,6 +835,12 @@ app.get('/api/popularinpart', async (req, res) => {
 app.post('/api/addtocart', fetchUser, async (req, res) => {
   try {
     const productId = req.body.itemId;
+    
+    // Валидация itemId
+    if (typeof productId !== 'number' && typeof productId !== 'string') {
+      return res.status(400).json({ message: "Некорректный ID товара" });
+    }
+
     const product = await Product.findOne({ id: productId });
 
     if (!product) {
@@ -797,21 +851,28 @@ app.post('/api/addtocart', fetchUser, async (req, res) => {
       return res.status(400).json({ message: "Товар закончился" });
     }
 
-    const userData = await Users.findOne({ _id: req.user.id });
+    const userData = await User.findOne({ _id: req.user.id });
 
-    if (userData.cartData[productId] < product.quantity) {
+    if (!userData) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    const productIdStr = String(productId);
+    const currentQuantity = userData.cartData.get(productIdStr) || 0;
+
+    if (currentQuantity < product.quantity) {
       product.quantity -= 1;
       await product.save();
 
-      userData.cartData[productId] += 1;
-      await Users.findOneAndUpdate({ _id: req.user.id }, { cartData: userData.cartData });
-      res.json({ message: "Added" });
+      userData.cartData.set(productIdStr, currentQuantity + 1);
+      await userData.save();
+      return res.json({ message: "Added" });
     } else {
-      res.status(400).json({ message: "Нельзя добавить больше, чем доступно на складе" });
+      return res.status(400).json({ message: "Нельзя добавить больше, чем доступно на складе" });
     }
   } catch (error) {
     console.error('Error while adding to cart:', error.message);
-    res.status(500).json({ message: "Ошибка сервера" });
+    return res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 // Эндпоинт для поиска данных
@@ -841,33 +902,51 @@ app.get('/api/search', async (req, res) => {
     res.status(500).json({ message: 'Ошибка сервера', error: error.message });
   }
 });
+///
 
+
+app.post('/api/removeproduct', async (req, res) => {
+  await Product.findOneAndDelete({ id: req.body.id });
+  console.log("Product removed");
+  res.json({ success: true });
+});
+
+app.get('/allproducts', async (req, res) => {
+  let products = await Product.find({}, 'id name image category new_price old_price description quantity');
+  console.log("All products fetched");
+  res.send(products);
+});
+
+//
+app.get('/allservices', async (req, res) => {
+  let products = await Product.find({});
+  console.log("All products fetched");
+  res.send(products);
+});
  //creating enpoint to get cartdata
 app.post('/api/getcart', fetchUser, async (req, res) => {
   console.log("GetCart request received");
   try {
       console.log(`Fetching cart data for user with ID: ${req.user.id}`);
-      let userData = await Users.findOne({_id: req.user.id});
+      let userData = await User.findOne({_id: req.user.id});
       
       if (!userData) {
           console.log(`User with ID ${req.user.id} not found`);
           return res.status(404).json({ message: "Пользователь не найден" });
       }
 
-      if (!userData.cartData) {
-          console.log(`Cart data not found for user with ID: ${req.user.id}`);
+      if (!userData.cartData || userData.cartData.size === 0) {
+          console.log(`Cart data not found or empty for user with ID: ${req.user.id}`);
           return res.status(404).json({ message: "Данные о корзине не найдены" });
       }
 
       console.log(`Cart data retrieved successfully for user with ID: ${req.user.id}`);
-      res.json(userData.cartData);
+      res.json(Object.fromEntries(userData.cartData));
   } catch (error) {
       console.error('Ошибка при получении данных корзины:', error.message);
       res.status(500).json({ message: "Ошибка сервера" });
   }
 });
-
-
 
 
 // Маршруты для изображений

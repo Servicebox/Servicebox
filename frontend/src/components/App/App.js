@@ -56,7 +56,9 @@ import VideoCard from "../AdminPanel/VideoCard/VideoCard"
 import Chat from "../TelegramChat/Chat"
 import VerifyEmail from '../pages/VerifyEmail';
 import ResetPasswordWrapper from '../pages/ResetPasswordWrapper';
-
+import { AuthProvider } from "../pages/AuthContext";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import ShopContextProvider from '../pages/ShopCategory';
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
  const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
@@ -94,18 +96,19 @@ const App = () => {
         <div className="nav">
           <BubbleBackground />
         </div>
+    
        <Routes>
   <Route path="/" element={<Main />} />
   <Route path="/header" element={<Header />} />
   <Route path="/admin/login" element={<AdminLogin />} />
-  <Route
-    path="/admin-panel"
-    element={
-      <PrivateRoute>
-        <AdminPanel />
-      </PrivateRoute>
-    }
-  />
+ <Route
+          path="/admin-panel"
+          element={
+            <PrivateRoute>
+              <AdminPanel />
+            </PrivateRoute>
+          }
+        />
   <Route path="/image-gallery-api" element={<ImageGalleryApi />} />
   <Route path="/delete-image" element={<DeleteImage />} />
   {/* <Route exact path="/" component={ServiceRef} /> */}
@@ -120,7 +123,7 @@ const App = () => {
   <Route path="/appl-service" element={<ApplService />} />
   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
   <Route path="/CreateServiceForm" element={<CreateServiceForm />} />
-  <Route path="/admin-panel/*" element={<AdminPanelRoute />} />
+  <Route path="/admin-panel" element={<AdminPanelRoute />} />
   <Route path="/contacts" element={<Contacts />} />
   <Route path="/service" element={<Service />} />
   <Route path="/about" element={<About />} />
@@ -137,26 +140,65 @@ const App = () => {
   <Route path="/electronics" element={<ShopCategory category="electronic" />} />
   <Route path="/usedspareparts" element={<ShopCategory category="usedsparepart" />} />
   <Route path="/bread-crums" element={<BreadCrums />} />
-  <Route path="/product/:productId" element={<Product />} />
-  <Route path="/product/:productName" element={<Product />} />
-  <Route path="/cart" element={<Cart />} />
+ <Route path="image-gallery-api" element={<ImageGalleryApi />} />
+          <Route path="delete-image" element={<DeleteImage />} />
+ 
+          <Route path="/notebook-service" element={<NotebookService />} />
+          <Route path="/monoblock-service" element={<MonoblockService />} />
+          <Route path="/tv-service" element={<TvService />} />
+          <Route path="/tablet-service" element={<TabletService />} />
+          <Route path="/telephone-service" element={<TelephoneService />} />
+          <Route path="/other-service" element={<OtherService />} />
+           <Route path="/videocard" element={<VideoCard />} />
+          <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
+          <Route path="/appl-service" element={<ApplService />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="CreateServiceForm" element={<CreateServiceForm />} />
+          <Route path="/admin-panel/*" element={<AdminPanelRoute />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/service" element={<Service />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/loginsignup" element={<LoginSignup />} />
+      <Route path="/cart-items" element={<CartItems />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/addproduct" element={<Addproduct />} />
+          <Route path="/listproduct" element={<ListProduct />} />
+              <Route path="/listservice" element={<ListService />} />
+
+          <Route path="/nav-bar" element={<Navbar />} />
+          <Route path="/product-display" element={<ProductDisplay />} />
+        <Route path="/parts" element={<ShopCategory  category="part" />} />
+        <Route path="/electronics" element={<ShopCategory category="electronic" />} />
+        <Route path="/usedspareparts" element={<ShopCategory   category="usedsparepart"/>} />
+        <Route path="/bread-crums" element={<BreadCrums/>} />
+        <Route path='/product' element={<Product />} >
+          <Route path=':productId' element={<Product />} />
+          <Route path=':productName' element={<Product />} />
+        </Route>
+        <Route path='/cart' element={<Cart />} />
+          
   <Route
     path="/login"
     element={
+      <ProtectedRoute>
       <LoginSignup
         isOpen={true}
         onClose={() => {}}
         onLoginSuccess={handleLoginSuccess}
       />
+      </ProtectedRoute>
     }
   />
+   
   <Route path="/reset-password/:token" element={<ResetPasswordWrapper />} />
 
   <Route path="*" element={<NotFound />} />
+ 
 </Routes>
+  
         {isFormOpen && <Form toggleForm={toggleForm} />}
         <CookieMessage />
-        
+   
         <Chat />
         <Footer />
       </div>

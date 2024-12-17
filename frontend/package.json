@@ -50,6 +50,7 @@
     "mobx-react-lite": "^4.0.7",
     "path-browserify": "^1.0.1",
     "postcss-cli": "^11.0.0",
+    "prompts": "desired_version_here",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
     "react-chat-widget-react-18": "^1.0.0",

@@ -1,21 +1,30 @@
+// src/contexts/AuthContext.js
+import React, { createContext, useState, useEffect } from 'react';
+
+// Создаём контекст
+export const AuthContext = createContext();
+
+// Создаём провайдер для контекста
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Проверяем, есть ли токен при загрузке приложения
   useEffect(() => {
-    // Check if there's a token in local storage when the app loads
-    const token = localStorage.getItem('auth-token');
+    const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
     }
   }, []);
 
+  // Функция для входа
   const login = (token) => {
-    localStorage.setItem('auth-token', token);
+    localStorage.setItem('token', token);
     setIsAuthenticated(true);
   };
 
+  // Функция для выхода
   const logout = () => {
-    localStorage.removeItem('auth-token');
+    localStorage.removeItem('token');
     setIsAuthenticated(false);
   };
 

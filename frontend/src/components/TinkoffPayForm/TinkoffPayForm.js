@@ -3,7 +3,6 @@ import './TinkoffPayForm.css';
 
 const terminalkey = "1709125434432"; // идентификатор магазина
 
-
 function TinkoffPayForm({ amount, receiptData, onPaymentSuccess }) {
   const [phone, setPhone] = useState('');
 
@@ -18,10 +17,23 @@ function TinkoffPayForm({ amount, receiptData, onPaymentSuccess }) {
     };
   }, []);
 
+  const calculateTotalAmount = () => {
+    return receiptData.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const payForm = document.forms['payform-tinkoff'];
+    
+    // Вычисляем общую сумму позиций
+    const calculatedAmount = calculateTotalAmount();
+
+    // Проверяем, что сумма в чеке совпадает с переданной суммой заказа
+    if (calculatedAmount !== parseFloat(amount)) {
+      return alert("Сумма всех позиций в чеке должна равняться сумме заказа.");
+    }
+
     const receipt = {
       EmailCompany: "mail@mail.com",
       Taxation: "patent",
@@ -37,6 +49,7 @@ function TinkoffPayForm({ amount, receiptData, onPaymentSuccess }) {
           MeasurementUnit: "pc"
       })),
     };
+    
     payForm.elements.receipt.value = JSON.stringify(receipt);
     payForm.elements.Phone.value = phone;
 

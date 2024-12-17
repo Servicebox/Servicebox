@@ -128,50 +128,45 @@ router.delete('/delete/:id', async (req, res) => {
 });
 
 // Лайк/дизлайк изображения
+// Лайк изображения
 router.post('/like/:id', fetchUser, async (req, res) => {
-  const imageId = req.params.id;
-  const userId = req.user.id;
-  
   try {
+    const imageId = req.params.id;
+    const userId = req.user.id;
+
     const image = await Image.findById(imageId);
-    if (!image) return res.status(404).json({ message: 'Изображение не найдено' });
+    if (!image) return res.status(404).json({ success: false, message: "Изображение не найдено." });
 
     if (image.likes.includes(userId)) {
-      image.likes = image.likes.filter(id => id !== userId); // Удаление лайка
-    } else {
-      image.likes.push(userId); // Добавление лайка
+      return res.status(400).json({ success: false, message: "Вы уже поставили лайк этому изображению." });
     }
 
+    image.likes.push(userId);
     await image.save();
-
-    res.status(200).json(image);
+    res.json({ success: true, image });
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Ошибка сервера' });
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 router.delete('/like/:id', fetchUser, async (req, res) => {
+  try {
     const imageId = req.params.id;
     const userId = req.user.id;
-    
-    try {
-        const image = await Image.findById(imageId);
-        if (!image) return res.status(404).json({ message: 'Изображение не найдено' });
 
-        // Если пользователь уже лайкнул изображение, удаляем лайк
-        if (image.likes.includes(userId)) {
-            image.likes = image.likes.filter(id => id !== userId);
-            await image.save();
-            res.status(200).json(image);
-        } else {
-            res.status(400).json({ message: 'Вы не лайкали это изображение' });
-        }
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ message: 'Ошибка сервера' });
+    const image = await Image.findById(imageId);
+    if (!image) return res.status(404).json({ success: false, message: "Изображение не найдено." });
+
+    if (!image.likes.includes(userId)) {
+      return res.status(400).json({ success: false, message: "Вы не ставили лайк этому изображению." });
     }
-});
 
+    image.likes = image.likes.filter(id => id.toString() !== userId);
+    await image.save();
+    res.json({ success: true, image });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 
 module.exports = router;
