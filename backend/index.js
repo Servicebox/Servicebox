@@ -121,8 +121,9 @@ const limiter = rateLimit({
 app.use(limiter);
 
 const corsOptions = {
-  origin: process.env.CLIENT_URL, // Разрешаем только этот источник
+  origin: process.env.CLIENT_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 
@@ -153,7 +154,7 @@ mongoose.connect( MONGODB_URI )
 
 // Определение моделей
 const Image = require('./models/image');
-const Service = require('./models/service');  // Перенесите сюда определение модели Service, если у вас такая есть
+const Service = require('./models/service');
 const Product = mongoose.model('Product', {
   id: { type: Number, required: true },
   name: { type: String, required: true },
@@ -750,7 +751,13 @@ app.post('/api/refresh-token', async (req, res) => {
             return res.sendStatus(403); // Forbidden
         }
 
-        // If refresh token is valid, generate new access token
+        // Проверка валидности refreshToken
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.id !== user.id) {
+            return res.sendStatus(403);
+        }
+
+        // Генерация нового accessToken
         const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
         res.json({ accessToken });
     } catch (error) {
@@ -759,9 +766,9 @@ app.post('/api/refresh-token', async (req, res) => {
     }
 });
 // Тестовый маршрут для проверки работы сервера
-app.get("/", (req, res) => {
-  res.send("Express App is running");
-     });
+//app.get("/", (req, res) => {
+  //res.send("Express App is running");
+    // });
 
 // Service CRUD operations
 app.get('/services', async (req, res) => {

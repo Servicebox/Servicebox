@@ -1,4 +1,3 @@
-// ImageGalleryApi.js
 import React, { useState, useEffect } from "react";
 import "./ImageGalleryApi.css";
 import likeIconUrl from "../../../images/likeactive.png";
@@ -12,10 +11,16 @@ const ImageGalleryApi = () => {
   const [userLikes, setUserLikes] = useState([]);
   const [showAfter, setShowAfter] = useState({});
 
+  useEffect(() => {
+    fetchImages();
+    fetchUserLikes();
+  }, []);
+
   const fetchImages = async () => {
     try {
       console.log('Отправка запроса к серверу для получения изображений...');
       const token = localStorage.getItem('auth-token'); // Получение токена
+      console.log('Токен для fetchImages:', token);
       const response = await fetch('https://servicebox35.pp.ru/api/images', {
         headers: {
           'Accept': 'application/json',
@@ -26,7 +31,7 @@ const ImageGalleryApi = () => {
 
       if (!response.ok) {
         const errResponse = await response.json();
-        throw new Error(errResponse.errors || 'Ошибка при получении изображений');
+        throw new Error(errResponse.message || 'Ошибка при получении изображений');
       }
 
       const fetchedImages = await response.json();
@@ -41,82 +46,99 @@ const ImageGalleryApi = () => {
     }
   };
 
-  useEffect(() => {
-    fetchImages();
-    fetchUserLikes();
-  }, []);
-
-const fetchUserLikes = async () => {
+  const fetchUserLikes = async () => {
     try {
-        const token = localStorage.getItem('auth-token');
-        if (!token) {
-    console.warn('Токен отсутствует, пользователь не авторизован');
-    return;
-}
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        console.warn('Токен отсутствует, пользователь не авторизован');
+        return;
+      }
+      console.log('Токен для fetchUserLikes:', token);
 
-        const response = await fetch('https://servicebox35.pp.ru/api/images/user-likes', {
-            headers: {
-                'Authorization': `Bearer ${token}`, // Bearer токен обязателен
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-        });
+      const response = await fetch('https://servicebox35.pp.ru/api/images/user-likes', {
+        headers: {
+          'Authorization': `Bearer ${token}`, // Bearer токен обязателен
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.warn('Ошибка получения лайков пользователя:', errorData.message);
-            return;
+      console.log('Статус ответа fetchUserLikes:', response.status);
+
+      if (!response.ok) {
+        let errorMessage = 'Неизвестная ошибка';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          console.error('Не удалось распарсить JSON из ошибки:', e);
         }
-
-        const likes = await response.json();
-        setUserLikes(likes); // Обновляем состояние
-    } catch (error) {
-        console.error('Ошибка при получении лайков:', error.message);
-    }
-};
-
-  // Handle like operation
-const toggleLikeImage = async (imageId) => {
-  try {
-    const token = localStorage.getItem('auth-token');
-    if (!token) {
-      alert('Пожалуйста, авторизуйтесь для выполнения этого действия');
-      return;
-    }
-
-    const hasLiked = userLikes.includes(imageId);
-    const method = hasLiked ? 'DELETE' : 'POST';
-    const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
-     method,
-  headers: {
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  },
-});
-
-    if (response.ok) {
-      const updatedImage = await response.json();
-      setImages(images.map(img =>
-        img._id === imageId ? { ...img, likes: updatedImage.image.likes } : img
-      ));
-
-      // Обновляем userLikes на клиенте
-      if (hasLiked) {
-        setUserLikes(userLikes.filter(id => id !== imageId));
-      } else {
-        setUserLikes([...userLikes, imageId]);
+        console.warn('Ошибка получения лайков пользователя:', errorMessage);
+        alert(`Ошибка получения лайков: ${errorMessage}`);
+        return;
       }
 
-      alert(hasLiked ? 'Лайк успешно удален!' : 'Лайк успешно поставлен!');
-    } else {
-      const errorData = await response.json();
-      alert(`Ошибка: ${errorData.message}`);
+      const likes = await response.json();
+      console.log('Полученные лайки пользователя:', likes);
+      setUserLikes(likes); // Обновляем состояние
+    } catch (error) {
+      console.error('Ошибка при получении лайков:', error.message);
+      alert('Ошибка при получении лайков: ' + error.message);
     }
-  } catch (error) {
-    alert(`Ошибка переключения лайка: ${error.message}`);
-  }
-};
+  };
+
+  // Handle like operation
+  const toggleLikeImage = async (imageId) => {
+    try {
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        alert('Пожалуйста, авторизуйтесь для выполнения этого действия');
+        return;
+      }
+
+      const hasLiked = userLikes.includes(imageId);
+      const method = hasLiked ? 'DELETE' : 'POST';
+      console.log(`Отправка ${method} запроса для изображения ID: ${imageId}`);
+      const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
+        method,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      console.log(`Статус ответа ${method} запроса:`, response.status);
+
+      if (response.ok) {
+        const updatedImage = await response.json();
+        console.log('Обновленное изображение после лайка:', updatedImage);
+        setImages(images.map(img =>
+          img._id === imageId ? { ...img, likes: updatedImage.image.likes } : img
+        ));
+
+        // Обновляем userLikes на клиенте
+        if (hasLiked) {
+          setUserLikes(userLikes.filter(id => id !== imageId));
+        } else {
+          setUserLikes([...userLikes, imageId]);
+        }
+
+        alert(hasLiked ? 'Лайк успешно удален!' : 'Лайк успешно поставлен!');
+      } else {
+        let errorMessage = 'Неизвестная ошибка';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (e) {
+          console.error('Не удалось распарсить JSON из ошибки:', e);
+        }
+        alert(`Ошибка: ${errorMessage}`);
+      }
+    } catch (error) {
+      alert(`Ошибка переключения лайка: ${error.message}`);
+    }
+  };
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -156,8 +178,8 @@ const toggleLikeImage = async (imageId) => {
             </button>
           </div>
         ))
-      : <p>Изображения загружаются...</p>}
-      {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
+          : <p>Изображения загружаются...</p>}
+        {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
       </div>
     </div>
   )

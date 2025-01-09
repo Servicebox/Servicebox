@@ -1,15 +1,14 @@
-var path = require("path");
+// webpack.config.js
+const path = require("path");
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = {
-  mode: "production",
+  mode: "development", // Рекомендуется использовать "development" для режима разработки
   entry: "./src/Carousel.js",
   output: {
-    path: path.resolve("build"),
-    filename: "Carousel.js",
-    libraryTarget: "commonjs2",
-      path: path.join(__dirname, 'build'),
-    filename: 'backend.js'
+    path: path.resolve(__dirname, 'build'),
+    filename: 'index.js', // Задайте нужное имя файла
+    libraryTarget: 'commonjs2'
   },
   resolve: {
     fallback: {
@@ -36,7 +35,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        use: ["style-loader", "css-loader"] // Рекомендуется использовать массив для указания загрузчиков
       },
       {
         test: /\.js$/,
@@ -50,7 +49,7 @@ module.exports = {
     react: "react"
   },
   devServer: {
-    navigateApiFallback: true,
+    historyApiFallback: true,
     proxy: {
       '/uploads': {
         target: 'https://servicebox35.ru',

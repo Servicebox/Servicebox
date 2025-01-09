@@ -51,7 +51,6 @@
     "mobx-react-lite": "^4.0.7",
     "path-browserify": "^1.0.1",
     "postcss-cli": "^11.0.0",
-    "prompts": "desired_version_here",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
     "react-chat-widget-react-18": "^1.0.0",
@@ -68,7 +67,8 @@
     "url": "^0.11.3",
     "util": "^0.12.5",
     "web-vitals": "^3.5.2",
-    "workbox-cacheable-response": "^7.0.0"
+    "workbox-cacheable-response": "^7.0.0",
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -79,6 +79,7 @@
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.0.1",
     "eslint-plugin-jquery": "^1.5.1",
-    "eslint-plugin-react-hooks": "^4.6.2"
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "webpack-dev-server": "^5.2.0"
   }
 }
