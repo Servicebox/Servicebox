@@ -75,18 +75,16 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
 
       console.log(`Загрузка Fetch завершена: POST (${API_URL}/login).`);
 
-      const responseData = await response.json();
-      if (responseData.success) {
-        localStorage.setItem('auth-token', responseData.token);
-        onLoginSuccess(); // Обновляем состояние аутентификации в родительском компоненте
+  const responseData = await response.json();
+    if (responseData.success) {
+        localStorage.setItem('auth-token', responseData.accessToken);
+        localStorage.setItem('refresh-token', responseData.refreshToken); // Save refresh token
+        onLoginSuccess();
         onClose();
         navigate('/');
-      } else {
-        if (responseData.errors === "Неверный пароль") {
-          setShowWrongPasswordModal(true);
-        } else {
-          setMessage(responseData.errors || "Ошибка входа");
-        }
+    } else {
+        setMessage(responseData.errors || "Ошибка входа");
+    
       }
     } catch (error) {
       console.error("Ошибка при выполнении запроса:", error);
@@ -151,7 +149,35 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       setLoading(false);
     }
   };
+//
+const refreshAuthToken = async () => {
+    const refreshToken = localStorage.getItem('refresh-token');
 
+    if (!refreshToken) return false; // Нет токена для обновления
+
+    try {
+        const response = await fetch(`${API_URL}/refresh-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: refreshToken }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('auth-token', data.accessToken); // Сохраняем новый access token
+            return true;
+        } else {
+            console.error('Ошибка обновления токена:', response.statusText);
+            localStorage.removeItem('auth-token');
+            localStorage.removeItem('refresh-token'); // Очистка при ошибке
+            return false;
+        }
+    } catch (error) {
+        console.error('Ошибка обновления токена:', error.message);
+        return false;
+    }
+};
+///
   const resetPassword = async (e) => {
     e.preventDefault();
     setMessage("");

@@ -46,27 +46,34 @@ const ImageGalleryApi = () => {
     fetchUserLikes();
   }, []);
 
-  const fetchUserLikes = async () => {
+const fetchUserLikes = async () => {
     try {
-      const token = localStorage.getItem('auth-token');
-      if (!token) return;
+        const token = localStorage.getItem('auth-token');
+        if (!token) {
+    console.warn('Токен отсутствует, пользователь не авторизован');
+    return;
+}
 
-      const response = await fetch('https://servicebox35.pp.ru/api/images/user-likes', {
-        headers: {
-          'Authorization': `Bearer ${token}`, // Исправлено на Authorization
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+        const response = await fetch('https://servicebox35.pp.ru/api/images/user-likes', {
+            headers: {
+                'Authorization': `Bearer ${token}`, // Bearer токен обязателен
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
 
-      if (response.ok) {
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.warn('Ошибка получения лайков пользователя:', errorData.message);
+            return;
+        }
+
         const likes = await response.json();
-        setUserLikes(likes);
-      }
+        setUserLikes(likes); // Обновляем состояние
     } catch (error) {
-      console.error('Error fetching user likes:', error);
+        console.error('Ошибка при получении лайков:', error.message);
     }
-  };
+};
 
   // Handle like operation
 const toggleLikeImage = async (imageId) => {
@@ -80,13 +87,13 @@ const toggleLikeImage = async (imageId) => {
     const hasLiked = userLikes.includes(imageId);
     const method = hasLiked ? 'DELETE' : 'POST';
     const response = await fetch(`https://servicebox35.pp.ru/api/images/like/${imageId}`, {
-      method,
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-    });
+     method,
+  headers: {
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+});
 
     if (response.ok) {
       const updatedImage = await response.json();

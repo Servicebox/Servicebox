@@ -10,7 +10,7 @@ const ProductDisplay = (props) => {
   const { addToCart } = useContext(ShopContext);
 
   if (!product) {
-    return <div>Loading product information...</div>;
+    return <div>Загрузка информации...</div>;
   }
 
  console.log('Product data:', product);
@@ -38,7 +38,7 @@ const ProductDisplay = (props) => {
         </div>
       <div className="productdisplay-quantity">
   <p className="productdisplay-right-category">
-    <span>Остаток :</span> {product.quantity}
+    <span>На складе :</span> {product.quantity} шт
   </p>
 </div>
         <button onClick={() => addToCart(product.id)}>в корзину</button>

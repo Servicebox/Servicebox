@@ -56,31 +56,31 @@ function PromotionCarousel({ toggleForm }) {
   const promotions = [
     {
       title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
-      endDate: new Date('2024-12-29T23:59:59'),
+      endDate: new Date('2025-02-29T23:59:59'),
       description: "До конца акции осталось:",
       image: Example1
     },
     {
       title: "При установке ориг дисплея, гидрогелевая пленка в подарок",
-      endDate: new Date('2024-12-30T23:59:59'),
+      endDate: new Date('2025-02-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example2
     },
     {
       title: "При ремонте видеокарт на Ленина д.6 скидка на работу 20%",
-      endDate: new Date('2024-12-30T23:59:59'),
+      endDate: new Date('2025-02-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example3
     },
     {
       title: " Многодетным скидка на работу 20%",
-      endDate: new Date('2024-12-30T23:59:59'),
+      endDate: new Date('2025-02-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example4
     },
      {
       title: " Замена стекла в день обращения, со скидкой на работу в 5%",
-      endDate: new Date('2024-12-15T23:59:59'),
+      endDate: new Date('2025-02-15T23:59:59'),
       description: "До конца акции осталось:",
       image: Example5
     }

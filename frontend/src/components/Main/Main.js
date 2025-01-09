@@ -14,6 +14,7 @@ import Gifts from "./Gifts/Gifts";
 function Main() {
   const navigate = useNavigate();
 
+
   useEffect(() => {
     const token = localStorage.getItem('auth-token');
     if (!token) {

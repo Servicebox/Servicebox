@@ -6,14 +6,14 @@ import arrow_icon from "../Assets/breadcrum_arrow.png"
 
 const getCategoryUrl = (category) => {
   switch(category) {
-    case 'part':
+    case 'для СЦ':
       return '/parts';
     case 'electronic':
       return '/electronics';
     case 'usedsparepart':
       return '/usedspareparts';
     default:
-      return '/';  
+      return '/parts';  
   }
 };
 
@@ -23,7 +23,7 @@ const BreadCrum = (props) => {
 
   // Проверка на наличие продукта, его категории и имени
   if (!product || !product.category || !product.name) {
-    return <div>Loading breadcrumb information...</div>;
+    return <div>Загрузка информации...</div>;
   }
 
   return (

@@ -95,13 +95,13 @@ const allowedCors = [
   'http://localhost:3000/init-paymen',
   'https://servicebox35.pp.ru/api/search',
   'https://localhost:8000/products',
-  'http://localhost:8000/send',
-  'http://localhost:8000/signup',
+  'https://servicebox35.pp.ru/send',
+  'https://servicebox35.pp.ru/signup',
   'http://smtp.yandex.ru',
   'https://smtp.yandex.ru',
 'https://servicebox35.pp.ru/verify-email',
 'https://servicebox35.ru/verify-email',
-'http://localhost:8000/signup',
+'https://servicebox35.pp.ru/signup',
   
 
 ];
@@ -109,20 +109,23 @@ const allowedCors = [
 const isBehindProxy = false; // Change to true if behind a proxy
 
 app.set('trust proxy', isBehindProxy);
+
+// Настройка Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 минут
-  max: 100, // Максимум 100 запросов с одного IP
-  standardHeaders: true, // Return rate limit info in the RateLimit-* headers
-  legacyHeaders: false, // Disable the X-RateLimit-* headers
+  max: 200, // Максимум 100 запросов с одного IP за windowMs
+  skip: (req) => req.method === 'OPTIONS', // Пропускаем CORS предзапросы
   message: 'Слишком много запросов с этого IP, попробуйте позже.',
 });
 
 app.use(limiter);
+
 const corsOptions = {
   origin: process.env.CLIENT_URL, // Разрешаем только этот источник
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 };
+
 
 app.use(cors(corsOptions));
 
@@ -281,20 +284,27 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 });
 
 app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  maxAge: '3d', // Кэширование на 1 день
+  etag: false,
+}));
 
 app.get('/api/images/user-likes', fetchUser, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const images = await Image.find({ likes: userId }, '_id');
-    const likedImageIds = images.map(img => img._id);
-    res.json(likedImageIds);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(400).json({ message: 'Invalid user ID' });
+        }
+        const userId = req.user.id;
+        const images = await Image.find({ likes: userId }, '_id');
+        const likedImageIds = images.map(img => img._id);
+        res.json(likedImageIds);
+    } catch (error) {
+        console.error('Error fetching user likes:', error.message);
+        res.status(500).json({ message: 'Ошибка сервера' });
+    }
 });
 
-app.post('/api/images/like/:id', fetchUser, async (req, res) => {
+{/*app.post('/api/images/like/:id', fetchUser, async (req, res) => {
   try {
     const imageId = req.params.id;
     const userId = req.user.id;
@@ -313,7 +323,7 @@ app.post('/api/images/like/:id', fetchUser, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
+*/}
 app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
   try {
     const imageId = req.params.id;
@@ -335,7 +345,7 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
 });
 
 // CRUD операций для продуктов
-app.post('/addproduct', async (req, res) => {
+app.post('/api/addproduct', async (req, res) => {
   let products = await Product.find({});
   let id = products.length ? products.slice(-1)[0].id + 1 : 1;
 
@@ -444,6 +454,7 @@ const UserSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
+    refreshToken: { type: String },
     phone: { type: String, required: true },
     emailToken: String,
     isVerified: { type: Boolean, default: false },
@@ -592,54 +603,30 @@ app.get('/api/verify-email', async (req, res) => {
   }
 });
 
-// Маршрут авторизации (логин)
-app.post('/api/login',
-  loginLimiter,
-  [
-    body('email').isEmail().withMessage('Некорректный email'),
-    body('password').notEmpty().withMessage('Пароль обязателен'),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array().map(err => err.msg).join(', ') });
-    }
-
-    try {
-      const { email, password } = req.body;
-      const user = await User.findOne({ email });
-      if (user) {
+app.post('/api/login', async (req, res) => {
+    // Validate and find user
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (user) {
         const passCompare = await bcrypt.compare(password, user.password);
         if (passCompare) {
-          if (!user.isVerified) {
-            console.warn(`Попытка входа не верифицированного пользователя: ${email}`);
-            return res.json({ success: false, errors: "Пожалуйста, подтвердите свой email перед входом." });
-          }
-          const data = {
-            user: {
-              id: user.id
-            }
-          };
-          const token = jwt.sign(data, JWT_SECRET, { expiresIn: '1h' });
-          console.log(`Пользователь вошел в систему: ${email}`);
-          res.json({
-            success: true,
-            token
-          });
+            // Generate tokens
+            const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
+            const refreshToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1d' });
+
+            // Store refresh token in the database
+            user.refreshToken = refreshToken;
+            await user.save();
+
+            res.json({ success: true, accessToken, refreshToken });
         } else {
-          console.warn(`Неверный пароль для пользователя: ${email}`);
-          res.json({ success: false, errors: "Неверный пароль" });
+            res.status(401).json({ success: false, message: 'Неверный пароль' });
         }
-      } else {
-        console.warn(`Пользователь с email ${email} не найден.`);
-        res.json({ success: false, errors: "Пользователь с таким email не найден" });
-      }
-    } catch (error) {
-      console.error("Ошибка при выполнении запроса:", error);
-      res.status(500).json({ success: false, errors: "Ошибка на сервере" });
+    } else {
+        res.status(404).json({ success: false, message: 'Пользователь не найден' });
     }
-  }
-);
+});
 
 // Маршрут запроса сброса пароля
 app.post('/api/forgot-password',
@@ -750,11 +737,31 @@ app.post('/api/reset-password/:token', [
     res.status(500).json({ success: false, message: 'Ошибка сервера' });
   }
 });
+app.post('/api/refresh-token', async (req, res) => {
+    const { token } = req.body;
 
+    if (!token) {
+        return res.sendStatus(401); // Unauthorized
+    }
+
+    try {
+        const user = await User.findOne({ refreshToken: token });
+        if (!user) {
+            return res.sendStatus(403); // Forbidden
+        }
+
+        // If refresh token is valid, generate new access token
+        const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
+        res.json({ accessToken });
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500); // Internal Server Error
+    }
+});
 // Тестовый маршрут для проверки работы сервера
-//app.get("/", (req, res) => {
-  //res.send("Express App is running");
-//     });
+app.get("/", (req, res) => {
+  res.send("Express App is running");
+     });
 
 // Service CRUD operations
 app.get('/services', async (req, res) => {
@@ -825,7 +832,7 @@ app.get('/api/newcollections', async (req, res) => {
 });
 
 app.get('/api/popularinpart', async (req, res) => {
-  let products = await Product.find({ category: "part" });
+  let products = await Product.find({ category: "для СЦ" });
   let popularInPart = products.slice(0, 4);
   console.log("Popular in Part fetched");
   res.send(popularInPart);

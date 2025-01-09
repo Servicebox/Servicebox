@@ -1,5 +1,6 @@
 .modal {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
@@ -39,7 +40,7 @@
 }
 
 .caption {
-  position: absolute;
+
   bottom: 15px;
   left: 0;
   right: 0;
@@ -53,8 +54,8 @@
 @media only screen and (max-width: 700px) {
   .modal-content {
 
-        width: 250px;
-        height: 250px;
+        width: 80%;
+        height: 50%;
         object-fit: contain;
         padding: 5px;
   }

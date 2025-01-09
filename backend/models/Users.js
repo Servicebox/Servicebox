@@ -18,7 +18,7 @@ const UsersSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true, // Обязательное поле
+    required: true,
   },
   cartData: {
     type: Object,

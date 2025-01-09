@@ -1,4 +1,7 @@
+// ShopContext.js
+
 import React, { createContext, useState, useEffect } from "react";
+import { jwtDecode } from 'jwt-decode'; 
 
 export const ShopContext = createContext(null);
 
@@ -10,25 +13,70 @@ const getDefaultCart = () => {
     return cart;
 };
 
+// Добавляем fetchWithAuth
+const fetchWithAuth = async (url, options = {}) => {
+    const token = localStorage.getItem('auth-token');
+    const headers = options.headers || {};
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+        headers['Accept'] = 'application/json';
+        headers['Content-Type'] = 'application/json';
+    }
+
+    const newOptions = { ...options, headers };
+    return fetch(url, newOptions);
+};
+
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
     const [all_services, setAll_Services] = useState([]);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const checkTokenValidity = () => {
+        const token = localStorage.getItem('auth-token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token); // Используем именованный импорт
+                const currentTime = Date.now() / 1000;
+                if (decoded.exp < currentTime) {
+                    // Токен истек
+                    localStorage.removeItem('auth-token');
+                    localStorage.removeItem('refresh-token');
+                    setIsAuthenticated(false);
+                } else {
+                    setIsAuthenticated(true);
+                }
+            } catch (error) {
+                console.error("Ошибка декодирования токена:", error);
+                localStorage.removeItem('auth-token');
+                localStorage.removeItem('refresh-token');
+                setIsAuthenticated(false);
+            }
+        } else {
+            setIsAuthenticated(false);
+        }
+    };
+
+    useEffect(() => {
+        checkTokenValidity();
+
+        // Установить интервал для проверки каждые 5 минут
+        const interval = setInterval(checkTokenValidity, 5 * 60 * 1000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                let response = await fetch('https://servicebox35.pp.ru/api/allproducts', {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    }
-                });
-                if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
-                let data = await response.json();
+                const response = await fetchWithAuth('https://servicebox35.pp.ru/api/allproducts');
+                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
+                const data = await response.json();
                 setAll_Product(data);
             } catch (error) {
-                console.error('Fetch allproducts error:', error);
+                console.error('Fetch products error:', error);
             }
         };
 
@@ -36,13 +84,8 @@ const ShopContextProvider = (props) => {
             const token = localStorage.getItem('auth-token');
             if (token) {
                 try {
-                    let response = await fetch('https://servicebox35.pp.ru/api/getcart', {
+                    let response = await fetchWithAuth('https://servicebox35.pp.ru/api/getcart', {
                         method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json',
-                        },
                         body: JSON.stringify({}),
                     });
                     if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
@@ -63,13 +106,8 @@ const ShopContextProvider = (props) => {
         const token = localStorage.getItem('auth-token');
         if (token) {
             try {
-                let response = await fetch('https://servicebox35.pp.ru/api/addtocart', {
+                let response = await fetchWithAuth('https://servicebox35.pp.ru/api/addtocart', {
                     method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
                     body: JSON.stringify({ "itemId": itemId }),
                 });
                 let data = await response.json();
@@ -85,13 +123,8 @@ const ShopContextProvider = (props) => {
         const token = localStorage.getItem('auth-token');
         if (token) {
             try {
-                let response = await fetch('https://servicebox35.pp.ru/api/removefromcart', {
+                let response = await fetchWithAuth('https://servicebox35.pp.ru/api/removefromcart', {
                     method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
                     body: JSON.stringify({ "itemId": itemId }),
                 });
                 await response.json();
@@ -124,7 +157,16 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = { getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart, getTotalCartItems };
+    const contextValue = { 
+        getTotalCartAmount, 
+        all_product, 
+        cartItems, 
+        addToCart, 
+        removeFromCart, 
+        getTotalCartItems,
+        isAuthenticated,
+        setIsAuthenticated
+    };
 
     return (
         <ShopContext.Provider value={contextValue}>

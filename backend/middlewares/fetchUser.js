@@ -1,25 +1,24 @@
 // middlewares/fetchUser.js
-const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom';
+
+const jwt = require('jsonwebtoken'); // Импортируем jsonwebtoken
+const JWT_SECRET = process.env.JWT_SECRET || 'secret_ecom'; // Определяем секретный ключ
 
 const fetchUser = (req, res, next) => {
-    const authHeader = req.header('Authorization');
-    if (!authHeader) {
-        return res.status(401).json({ errors: "Пожалуйста, пройдите аутентификацию" });
-    }
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Извлекаем токен из заголовка
 
-    const token = authHeader.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ errors: "Пожалуйста, пройдите аутентификацию" });
+        return res.status(401).json({ message: 'Токен не предоставлен или неверен' });
     }
 
     try {
-        const data = jwt.verify(token, JWT_SECRET);
-        req.user = data.user;
-        next();
-    } catch (error) {
-        console.error('Ошибка при проверке токена:', error.message);
-        res.status(401).json({ errors: "Пожалуйста, пройдите аутентификацию" });
+        // Проверяем токен
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded; // Добавляем информацию о пользователе в объект запроса
+        next(); // Переходим к следующему middleware или обработчику маршрута
+    } catch (err) {
+        console.error('Ошибка при проверке токена:', err.message);
+        return res.status(403).json({ message: 'Токен недействителен' });
     }
 };
 

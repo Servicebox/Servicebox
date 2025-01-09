@@ -115,7 +115,12 @@
     cursor: pointer;
 }
 /* Адаптивные стили */
-
+.cartitems{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
 @media (min-width: 320px) and (max-width: 500){
     .cartitems {
 
@@ -135,7 +140,7 @@
 @media screen and (max-width: 1000px) {
     .cartitems {
         margin: 20px;
-        max-width: 600px;
+        max-width: 100%;
     }
     .cartitems-down {
         flex-direction: column;
