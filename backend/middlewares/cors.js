@@ -16,15 +16,15 @@ const allowedCors = [
   'https://localhost:8000/api/products',
   'https://servicebox35.pp.ru/get-client-id',
   'https://servicebox35.pp.ru/api/images',
-  'http://localhost:3000/send-request',
+  'https://servicebox35.ru/send-request',
   'https://servicebox35.pp.ru/api/', 
   'https://servicebox35.pp.ru',
   'http://localhost:5000',
   'https://localhost:3000',
-  'http://localhost:3000',
+  'https://servicebox35.ru',
   'https://optfm.ru/api/',
   'http://optfm.ru/api/',
-  'http://localhost:3000/api/user/auth',
+  'https://servicebox35.ru/api/user/auth',
 ];
 
 

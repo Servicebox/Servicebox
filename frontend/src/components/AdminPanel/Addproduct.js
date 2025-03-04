@@ -127,7 +127,7 @@ const Add_Product = async () => {
                 </label>
                 <input onChange={imageHandler} type='file' name='image' id="file-input" hidden />
             </div>
-            <button onClick={Add_Product} className='addproduct-btn'>ADD</button>
+            <button onClick={Add_Product} className='addproduct-btn'>Создать</button>
         </div>
     );
 };

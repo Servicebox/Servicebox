@@ -56,31 +56,31 @@ function PromotionCarousel({ toggleForm }) {
   const promotions = [
     {
       title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
-      endDate: new Date('2025-02-29T23:59:59'),
+      endDate: new Date('2025-04-29T23:59:59'),
       description: "До конца акции осталось:",
       image: Example1
     },
     {
       title: "При установке ориг дисплея, гидрогелевая пленка в подарок",
-      endDate: new Date('2025-02-30T23:59:59'),
+      endDate: new Date('2025-04-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example2
     },
     {
       title: "При ремонте видеокарт на Ленина д.6 скидка на работу 20%",
-      endDate: new Date('2025-02-30T23:59:59'),
+      endDate: new Date('2025-04-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example3
     },
     {
       title: " Многодетным скидка на работу 20%",
-      endDate: new Date('2025-02-30T23:59:59'),
+      endDate: new Date('2025-04-30T23:59:59'),
       description: "До конца акции осталось:",
       image: Example4
     },
      {
       title: " Замена стекла в день обращения, со скидкой на работу в 5%",
-      endDate: new Date('2025-02-15T23:59:59'),
+      endDate: new Date('2025-04-15T23:59:59'),
       description: "До конца акции осталось:",
       image: Example5
     }
@@ -105,45 +105,40 @@ function PromotionCarousel({ toggleForm }) {
     return () => clearInterval(intervalId);
   }, [promotions.length]);
 
-  return (
+ return (
     <div className="promotion-carousel-container">
-      <div 
-        className="main-promotion" 
-        style={{ backgroundImage: `url(${promotions[currentPromotionIndex].image})` }}
-      >
-        <div className='content-main'>
-          <h2 className='title'>{promotions[currentPromotionIndex].title}</h2>
-          <p className='description'>{promotions[currentPromotionIndex].description}</p>
-          <Countdown endDate={promotions[currentPromotionIndex].endDate} />
-          <button className="main-form" onClick={toggleForm}>
-            Записаться
-          </button>
-        </div>
-      </div>
-
-      <div className="side-promotions">
-        {promotions.map((promotion, idx) => (
+      <div className="fullscreen-slider">
+        {promotions.map((promotion, index) => (
           <div 
-            key={idx}
-            className={`side-promotion ${idx === currentPromotionIndex ? 'active' : ''}`}
-            onClick={() => setCurrentPromotionIndex(idx)}
+            key={index}
+            className={`slide ${index === currentPromotionIndex ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${promotion.image})` }}
           >
-             
-            <div 
-              className="side-image"
-              style={{
-                backgroundImage: `url(${promotion.image})`,
-                opacity: idx === currentPromotionIndex ? 1 : 0.5
-              }}
-            >
-        <p className="side-content">{promotion.title}</p>
+            <div className="slide-content">
+              <h2>{promotion.title}</h2>
+              <p>{promotion.description}</p>
+              <Countdown endDate={promotion.endDate} />
+              <button className="cta-button" onClick={toggleForm}>
+                Записаться
+              </button>
             </div>
           </div>
         ))}
       </div>
-      <div className="navigation-buttons">
-        <button className='btn-main' onClick={previousPromotion}>&#9664;</button>
-        <button className='btn-main' onClick={nextPromotion}>&#9654;</button>
+
+      <div className="slider-controls">
+        <button className="prev" onClick={previousPromotion}>&#10094;</button>
+        <button className="next" onClick={nextPromotion}>&#10095;</button>
+      </div>
+      
+      <div className="pagination-dots">
+        {promotions.map((_, idx) => (
+          <span 
+            key={idx} 
+            className={idx === currentPromotionIndex ? 'active' : ''}
+            onClick={() => setCurrentPromotionIndex(idx)}
+          />
+        ))}
       </div>
     </div>
   );

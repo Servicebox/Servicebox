@@ -1,5 +1,5 @@
 // src/components/TelegramChat.js
-import React, { useEffect, useState } from 'react';
+{/*import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 import './TelegramChat.css';
@@ -118,3 +118,4 @@ const handleSubmit = async () => {
 };
 
 export default TelegramChat;
+*/}

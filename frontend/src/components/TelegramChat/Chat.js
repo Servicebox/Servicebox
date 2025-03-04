@@ -2,7 +2,7 @@ import React, { useEffect} from 'react';
 import axios from 'axios';
 import './Chat.css'; // Подключение стилей
 import soundPushUrl from '../Sounds/send-sound.mp3'
-import Cha from '../../images/chat.svg'
+import Cha from '../../images/chatonlain.gif'
 import userIcon from '../../images/user.png';
 import managerIcon from '../../images/manager.svg'; 
 import Icon from '../../images/Up.svg'
