@@ -12,7 +12,6 @@ const Chat = () => {
       const chatInstance = new TelegaChat();
       chatInstance.open();
       chatInstance.startUpdate();
-      
       // Добавляем класс 'open' для отображения чата
       const chatWrap = document.querySelector('.chat__wrap');
       if (chatWrap) {

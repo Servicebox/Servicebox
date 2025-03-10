@@ -11,6 +11,7 @@ background: linear-gradient(to bottom right, #003366, #006699);
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-bottom: 3rem;
+  justify-items: center;
 }
 
 .taxi-widget-container {
@@ -20,6 +21,37 @@ background: linear-gradient(to bottom right, #003366, #006699);
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.taxi-load-button {
+  padding: 24px 20px;
+    background: #007bff;
+    color: white;
+    text-align: center;
+    border: none;
+    display: flex
+;
+    width: 300px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 15px 0;
+    height: 27%;
+    align-items: center;
+    justify-content: center;
+}
+
+.geo-error {
+  color: #dc3545;
+  padding: 10px;
+  background: #f8d7da;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+.taxi-widget-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin: 15px 0;
 }
 
 .ya-taxi-widget {

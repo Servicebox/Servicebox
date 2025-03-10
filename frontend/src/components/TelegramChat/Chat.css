@@ -44,8 +44,8 @@ content: '';
     height: 50%;
     border-radius: 50%;
     background-color: rgba(0, 132, 255, 0.5);
-    top: 13px;
-    right: 26px;
+    top: 22px;
+    right: 58px;
     /* left: 0; */
      z-index: -1; 
     animation: pulse 1.5s infinite ease-in-out;
@@ -70,15 +70,15 @@ content: '';
   background-color: #005bb5;
 }
 .img-chat{
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
 }
 
 .chat__wrap.open {
     right: 20px;
     position: fixed;
     bottom: 40px;
-    width: 70%;
+    width: 60%;
     border: 1px solid gray;
 }
 .chat__title {
@@ -391,4 +391,5 @@ font-size: 10px;
   width: 100px;
   height: 100px;
 }
+
 }
