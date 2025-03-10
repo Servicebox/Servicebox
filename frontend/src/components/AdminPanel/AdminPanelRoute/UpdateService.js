@@ -18,7 +18,7 @@ export const UpdateService = () => {
         price: updatedData.price,
         category: updatedData.category
       });
-      console.log(response.data);
+      (response.data);
     } catch (error) {
       console.error('Error updating service:', error);
     }

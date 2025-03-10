@@ -58,7 +58,12 @@ import VerifyEmail from '../pages/VerifyEmail';
 import ResetPasswordWrapper from '../pages/ResetPasswordWrapper';
 import { AuthProvider } from "../pages/AuthContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import UpdateNewsForm from "../AdminPanel/News/UpdateNewsForm";
+import CreateNewsForm from "../AdminPanel/News/CreateNewsForm";
 import ShopContextProvider from '../pages/ShopCategory';
+import ListNews from "../AdminPanel/News/ListNews";
+import NewsDetail from "../AdminPanel/News/NewsDetail";
+import PublicNewsList from "../AdminPanel/News/PublicNewsList";
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
  const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
@@ -131,6 +136,11 @@ const App = () => {
   <Route path="/cart-items" element={<CartItems />} />
   <Route path="/shop" element={<Shop />} />
   <Route path="/addproduct" element={<Addproduct />} />
+  <Route path="/news-detali/:id" element={<NewsDetail />} />
+ <Route path="/news" element={<PublicNewsList />} />
+<Route path="/news/:id" element={<NewsDetail />} />
+   <Route path="/create-news-form" element={<CreateNewsForm />} />
+   <Route path="/listnews" element={<ListNews/>} />
   <Route path="/listproduct" element={<ListProduct />} />
   <Route path="/listservice" element={<ListService />} />
   <Route path="/verify-email" element={<VerifyEmail />} />
@@ -198,8 +208,10 @@ const App = () => {
   
         {isFormOpen && <Form toggleForm={toggleForm} />}
         <CookieMessage />
+
    
         <Chat />
+
         <Footer />
       </div>
     </div>

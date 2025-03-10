@@ -12,7 +12,9 @@ import Status from "../../images/status.svg";
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm"
 import { ShopContext } from '../Contexst/ShopContext';
 import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+
 import LoginSignup from "../pages/LoginSignup"
+
 import { jwtDecode } from 'jwt-decode'; // Используем именованный импорт
 
 function Header() {
@@ -213,14 +215,19 @@ function Header() {
                     <ul className='nav-menu'>
                         <li className="navigation__list" onClick={() => { setMenu("parts") }}>
                             <Link style={{ textDecoration: 'none' }} to='/parts'>
-                                каталог товаров для СЦ
+                                Каталог
                             </Link>
                             {menu === "parts" ? <hr /> : <></>} 
                         </li>
+                        <li className="navigation__list" onClick={() => { setMenu("newsdetail") }}>
+                            <Link style={{ textDecoration: 'none' }} to='/news'>
+                            Новости
+                            </Link>
+                            {menu === "newsdetail"? <hr /> : <></>}
+                        </li>
                     </ul>
                     <a className="button" href="https://pm-31768.promaster.app/index_cl" target="_blank" rel="noopener noreferrer">
-                    
-                       <img src={Status} alt="Кнопка" />
+                     
                         <span className="button-text">СТАТУС РЕМОНТА</span>
                     </a>
                 </nav>

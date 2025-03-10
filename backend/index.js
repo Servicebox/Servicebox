@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require('express');
+const { Server } = require('socket.io');
 //require('dotenv').config({ path: require('.env') })
-console.log(require("dotenv").config())
+//console.log(require("dotenv").config())
+const http = require('http');
 const mongoose = require('mongoose');
 const path = require('path');
 const cors = require('cors');
@@ -29,6 +31,8 @@ const adminRoutes = require('./routes/admin');
 const verifyToken = require('./middlewares/verifyToken');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
+const newsRoutes = require('./routes/newsRoutes');
+const News = require('./models/News'); 
 const app = express();
 //const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
@@ -39,12 +43,59 @@ app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
 
-// Создание API роутера
+// Создание API роутер
+
 const apiRouter = express.Router();
 
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
-console.log(process.env)
-const http = require('http').createServer(app);
+const server = http.createServer(app); // Используйте server вместо http для создания экземпляра socket.io
+
+// Инициализация Socket.io сразу после создания сервера
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL || 'https://servicebox35.ru',
+    methods: ['GET', 'POST']
+  }
+});
+io.on('connection', (socket) => {
+  //console.log('User connected:', socket.id);
+
+  socket.on('joinChat', ({ userId, adminId }) => {
+    const room = [userId, adminId].sort().join('_');
+    socket.join(room);
+    //console.log(`User ${socket.id} joined room ${room}`);
+  });
+
+  socket.on('sendMessage', async (message) => {
+    try {
+      const newMessage = await Message.create(message);
+      const room = [message.senderId, message.receiverId].sort().join('_');
+      io.to(room).emit('newMessage', newMessage);
+    } catch (error) {
+      console.error('Error saving message:', error);
+    }
+  });
+
+  socket.on('markAsRead', async ({ messages, readerId }) => {
+    try {
+      const ids = messages.map(m => m._id);
+      await Message.updateMany(
+        { _id: { $in: ids } },
+        { $set: { status: 'read' } }
+      );
+      
+      const updatedMessages = await Message.find({ _id: { $in: ids } });
+      const room = [messages[0].senderId, readerId].sort().join('_');
+      io.to(room).emit('messagesRead', updatedMessages);
+    } catch (error) {
+      console.error('Error marking messages as read:', error);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 //const emailToken = crypto.randomBytes(64).toString('hex');
 const allowedCors = [
   'http://localhost:5173',
@@ -102,6 +153,8 @@ const allowedCors = [
 'https://servicebox35.pp.ru/verify-email',
 'https://servicebox35.ru/verify-email',
 'https://servicebox35.pp.ru/signup',
+'https://servicebox35.pp.ru/api/gallery/group',
+'https://servicebox35.ru/api/gallery/group'
   
 
 ];
@@ -119,19 +172,16 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
-
 const corsOptions = {
-  origin: process.env.CLIENT_URL,
+  origin: ['https://servicebox35.ru', 'https://servicebox35.pp.ru'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'], // Добавьте 'auth-token'
+  credentials: true
 };
 
-
 app.use(cors(corsOptions));
-
+app.options('*', cors(corsOptions)); 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
 app.use(
@@ -140,9 +190,27 @@ app.use(
   })
 );
 
+
+
+
+// Папка для загрузок
+const uploadDirectory = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDirectory)) {
+  fs.mkdirSync(uploadDirectory, { recursive: true });
+}
+
+app.use('/uploads', express.static(uploadDirectory, {
+  maxAge: '3d',
+  etag: false,
+}));
+
+app.use('/api/news', newsRoutes); 
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
+
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // База данных
 
 app.use('/api', apiRouter);
@@ -167,6 +235,8 @@ const Product = mongoose.model('Product', {
    quantity: { type: Number, required: true, default: 0 },
 });
 
+
+
 // Определение Middleware для CORS
 app.use((req, res, next) => {
   const { origin } = req.headers;
@@ -190,7 +260,6 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-const uploadDirectory = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
@@ -305,26 +374,6 @@ app.get('/api/images/user-likes', fetchUser, async (req, res) => {
     }
 });
 
-{/*app.post('/api/images/like/:id', fetchUser, async (req, res) => {
-  try {
-    const imageId = req.params.id;
-    const userId = req.user.id;
-
-    const image = await Image.findById(imageId);
-    if (!image) return res.status(404).json({ message: "Изображение не найдено." });
-
-    if (image.likes.includes(userId)) {
-      return res.status(400).json({ message: "Вы уже поставили лайк этому изображению." });
-    }
-
-    image.likes.push(userId);
-    await image.save();
-    res.status(200).json(image);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-*/}
 app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
   try {
     const imageId = req.params.id;
@@ -362,7 +411,7 @@ app.post('/api/addproduct', async (req, res) => {
   });
 
   await product.save();
-  console.log("Product saved");
+  //console.log("Product saved");
   res.json({ success: true, name: req.body.name });
 });
 
@@ -414,14 +463,14 @@ app.post('/api/removefromcart', fetchUser, async (req, res) => {
 
 app.get('/api/allproducts', async (req, res) => {
   let products = await Product.find({}, 'id name image category new_price old_price description quantity');
-  console.log("All products fetched");
+  //("All products fetched");
   res.send(products);
 });
 
 //
 app.get('/allservices', async (req, res) => {
   let products = await Product.find({});
-  console.log("All products fetched");
+  //console.log("All products fetched");
   res.send(products);
 });
 
@@ -488,9 +537,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(function (error, success) {
   if (error) {
-    console.error("Ошибка при верификации транспорта:", error);
+    //console.error("Ошибка при верификации транспорта:", error);
   } else {
-    console.log('Настройки транспорта верны. Готов к отправке');
+    //console.log('Настройки транспорта верны. Готов к отправке');
   }
 });
 
@@ -554,7 +603,7 @@ app.post('/api/signup',
 
       await transporter.sendMail(mailOptions);
 
-      console.log(`Новый пользователь зарегистрирован: ${email}`);
+      //console.log(`Новый пользователь зарегистрирован: ${email}`);
       res.status(200).json({ message: 'Регистрация успешна! Подтвердите email.' });
     } catch (err) {
       console.error('Ошибка при регистрации:', err);
@@ -567,7 +616,7 @@ app.post('/api/signup',
 app.get('/api/verify-email', async (req, res) => {
   try {
     const { token } = req.query;
-    console.log(`Получен запрос на верификацию email с токеном: ${token}`);
+    //console.log(`Получен запрос на верификацию email с токеном: ${token}`);
     if (!token) {
       console.warn('Токен не предоставлен.');
       return res.status(400).json({ message: "Токен не предоставлен." });
@@ -846,47 +895,35 @@ app.get('/api/popularinpart', async (req, res) => {
 });
 
 // Endpoints для корзины
-app.post('/api/addtocart', fetchUser, async (req, res) => {
+// routes/products.js
+router.post('/api/addtocart', fetchUser, async (req, res) => {
   try {
     const productId = req.body.itemId;
-    
-    // Валидация itemId
-    if (typeof productId !== 'number' && typeof productId !== 'string') {
-      return res.status(400).json({ message: "Некорректный ID товара" });
-    }
+    const userId = req.user.id;
 
-    const product = await Product.findOne({ id: productId });
+    // Атомарно уменьшаем количество и добавляем в корзину
+    const product = await Product.findOneAndUpdate(
+      { 
+        id: productId,
+        quantity: { $gt: 0 } 
+      },
+      { $inc: { quantity: -1 } },
+      { new: true }
+    );
 
     if (!product) {
-      return res.status(404).json({ message: "Товар не найден" });
+      return res.status(400).json({ message: "Товар недоступен" });
     }
 
-    if (product.quantity <= 0) {
-      return res.status(400).json({ message: "Товар закончился" });
-    }
+    await User.updateOne(
+      { _id: userId },
+      { $inc: { [`cartData.${productId}`]: 1 } }
+    );
 
-    const userData = await User.findOne({ _id: req.user.id });
-
-    if (!userData) {
-      return res.status(404).json({ message: "Пользователь не найден" });
-    }
-
-    const productIdStr = String(productId);
-    const currentQuantity = userData.cartData.get(productIdStr) || 0;
-
-    if (currentQuantity < product.quantity) {
-      product.quantity -= 1;
-      await product.save();
-
-      userData.cartData.set(productIdStr, currentQuantity + 1);
-      await userData.save();
-      return res.json({ message: "Added" });
-    } else {
-      return res.status(400).json({ message: "Нельзя добавить больше, чем доступно на складе" });
-    }
+    res.json({ message: "Added", newQuantity: product.quantity });
   } catch (error) {
-    console.error('Error while adding to cart:', error.message);
-    return res.status(500).json({ message: "Ошибка сервера" });
+    console.error('Error:', error);
+    res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 // Эндпоинт для поиска данных
@@ -1088,14 +1125,36 @@ app.post('/admin/create', async (req, res) => {
 app.use('/admin-panel', verifyToken, (req, res) => {
   // Ваши административные маршруты
 });
+// В разделе с роутами добавьте:
+app.post('/api/send-message', async (req, res) => {
+  try {
+    const { message, userId } = req.body;
+    
+    // Сохраняем сообщение в MongoDB
+    const newMessage = new Message({
+      userId,
+      text: message,
+      timestamp: new Date()
+    });
+    
+    await newMessage.save();
 
+    // Отправляем сообщение через Socket.io
+    const room = [userId, 'admin'].sort().join('_');
+    io.to(room).emit('newMessage', newMessage);
+
+    res.status(200).json({ status: 'success' });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.get('/get-ip', (req, res) => {
   const ip = req.clientIp;
   console.log(`Получен IP: ${ip}`);
   res.json({ ip });
 });
-
-http.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

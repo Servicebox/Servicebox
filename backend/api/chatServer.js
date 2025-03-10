@@ -5,7 +5,7 @@ const request = require('request');
 const wss = new WebSocket.Server({ port: 8000 });
 
 wss.on('connection', (ws) => {
-  console.log('Client connected');
+  //('Client connected');
 
   // Listen for messages from clients
   ws.on('message', (message) => {

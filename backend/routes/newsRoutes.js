@@ -1,131 +1,145 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const router = express.Router();
+const multer = require('../config/multer');
 const News = require('../models/News');
+const fs = require('fs').promises;
+const path = require('path');
 
-const uploadDir = path.resolve(__dirname, '..', 'uploads');
-fs.mkdir(uploadDir, { recursive: true }, (err) => {
-  if (err) {
-    console.error('Не могу создать папку для загрузок:', err);
-  }
-});
+const upload = multer.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'video', maxCount: 1 }
+]);
 
-// Настройка Multer для хранения файлов в указанной директории
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + file.originalname;
-    cb(null, uniqueSuffix);
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Only image and video files are allowed!'), false);
-  }
+// Helper для обработки файлов
+const processFiles = (files) => {
+  const result = {};
+  if (files?.image) result.image = files.image[0].filename;
+  if (files?.video) result.video = files.video[0].filename;
+  return result;
 };
 
-const upload = multer({ storage, fileFilter });
-
-const router = express.Router();
-
-// Добавление новости
-router.post('/api/news', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'video', maxCount: 1 }]), async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const { title, content } = req.body;
-    let imagePath = '';
-    let videoPath = '';
-
-    if (req.files) {
-      // Обработка изображения
-      if (req.files.image) {
-        const image = req.files.image[0];
-        imagePath = `/uploads/${image.filename}`;
-      }
-
-      // Обработка видео
-      if (req.files.video) {
-        const video = req.files.video[0];
-        videoPath = `/uploads/${video.filename}`;
-      }
-    }
-
-    const news = await News.create({ title, content, image: imagePath, video: videoPath });
-    res.status(201).json(news);
+    const news = await News.findById(req.params.id);
+    if (!news) return res.status(404).json({ error: 'Новость не найдена' });
+    
+    res.json({
+      success: true,
+      data: news
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      success: false,
+      error: 'Ошибка сервера'
+    });
   }
 });
 
-// Получение списка новостей
-router.get('/api/news', async (req, res) => {
+// Создание новости
+router.post('/', upload, async (req, res) => {
   try {
-    const news = await News.find();
-    res.status(200).json(news);
+    const { title, content } = req.body;
+    const files = processFiles(req.files);
+
+    const news = await News.create({
+      title,
+      content,
+      ...files
+    });
+
+    res.status(201).json({
+      success: true,
+      data: news
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Получение всех новостей
+router.get('/', async (req, res) => {
+  try {
+    const news = await News.find().sort('-createdAt');
+    res.json({
+      success: true,
+      count: news.length,
+      data: news
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Ошибка сервера'
+    });
   }
 });
 
 // Обновление новости
-router.put('/api/news/:id', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'video', maxCount: 1 }]), async (req, res) => {
+router.put('/:id', upload, async (req, res) => {
   try {
-    const { id } = req.params;
+    const news = await News.findById(req.params.id);
+    if (!news) return res.status(404).json({ error: 'Новость не найдена' });
+
     const { title, content } = req.body;
-    let imagePath = req.body.image;
-    let videoPath = req.body.video;
+    const files = processFiles(req.files);
 
-    if (req.files) {
-      if (req.files.image) {
-        const image = req.files.image[0];
-        imagePath = `/uploads/${image.filename}`;
-        // Удаление старого изображения, если оно существует
-        const oldNews = await News.findById(id);
-        if (oldNews && oldNews.image) {
-          fs.unlinkSync(path.join(uploadDir, path.basename(oldNews.image)));
-        }
-      }
-
-      if (req.files.video) {
-        const video = req.files.video[0];
-        videoPath = `/uploads/${video.filename}`;
-        // Удаление старого видео, если оно существует
-        const oldNews = await News.findById(id);
-        if (oldNews && oldNews.video) {
-          fs.unlinkSync(path.join(uploadDir, path.basename(oldNews.video)));
-        }
-      }
+    // Удаление старых файлов
+    if (files.image && news.image) {
+      await fs.unlink(path.join(uploadDir, news.image));
+    }
+    if (files.video && news.video) {
+      await fs.unlink(path.join(uploadDir, news.video));
     }
 
-    const updatedNews = await News.findByIdAndUpdate(id, { title, content, image: imagePath, video: videoPath }, { new: true });
-    res.status(200).json(updatedNews);
+    const updatedNews = await News.findByIdAndUpdate(
+      req.params.id,
+      { title, content, ...files },
+      { new: true, runValidators: true }
+    );
+
+    res.json({
+      success: true,
+      data: updatedNews
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({
+      success: false,
+      error: error.message
+    });
   }
 });
 
 // Удаление новости
-router.delete('/api/news/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const { id } = req.params;
-    const news = await News.findByIdAndDelete(id);
+    const news = await News.findByIdAndDelete(req.params.id);
+    if (!news) return res.status(404).json({ error: 'Новость не найдена' });
 
+    // Полный путь к файлам
+    const uploadDir = path.resolve(__dirname, '../uploads');
+    
+    const deleteOperations = [];
     if (news.image) {
-      fs.unlinkSync(path.join(uploadDir, path.basename(news.image)));
+      deleteOperations.push(fs.unlink(path.join(uploadDir, news.image)));
     }
     if (news.video) {
-      fs.unlinkSync(path.join(uploadDir, path.basename(news.video)));
+      deleteOperations.push(fs.unlink(path.join(uploadDir, news.video)));
     }
 
-    res.status(200).json({ message: 'News deleted successfully' });
+    await Promise.all(deleteOperations);
+    
+    res.json({ 
+      success: true,
+      message: 'Новость успешно удалена'
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Ошибка удаления:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Ошибка сервера при удалении'
+    });
   }
 });
 

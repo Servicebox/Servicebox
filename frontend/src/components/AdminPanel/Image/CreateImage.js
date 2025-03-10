@@ -1,95 +1,109 @@
 import React, { useState, useEffect } from 'react';
+import './CreateImage.css';
 
 const CreateImage = () => {
-  const [file, setFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState('');
+  const [files, setFiles] = useState([]);
+  const [previews, setPreviews] = useState([]);
   const [description, setDescription] = useState('');
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0]; 
-    if (selectedFile && isValidFile(selectedFile)) {
-      setFile(selectedFile);
-      setPreviewUrl(URL.createObjectURL(selectedFile));
-    } else {
-      alert('Выбран некорректный файл.');
+    const selectedFiles = Array.from(e.target.files);
+    
+    if (selectedFiles.some(file => !isValidFile(file))) {
+      alert('Один или несколько файлов недопустимы (максимальный размер 5MB, только изображения)');
+      return;
     }
+
+    setFiles(selectedFiles);
+    
+    // Создание превью
+    const previewUrls = selectedFiles.map(file => URL.createObjectURL(file));
+    setPreviews(previewUrls);
   };
 
   const isValidFile = (file) => {
-    return file.type.startsWith('image/') && file.size < 5 * 1024 * 1024; // Проверка типа и размера файла
-  };
-
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    return file.type.startsWith('image/') && file.size < 5 * 1024 * 1024;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!file) {
-      alert('Пожалуйста, выберите файл для загрузки');
+    
+    if (files.length === 0) {
+      alert('Пожалуйста, выберите файлы для загрузки');
       return;
     }
 
     const formData = new FormData();
-    formData.append('image', file); // Поле 'image' соответствует полю на сервере
+    files.forEach(file => formData.append('images', file));
     formData.append('description', description);
 
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
-    }
-
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/gallery', {
+      const response = await fetch('https://servicebox35.pp.ru/api/gallery/group', {
         method: 'POST',
         body: formData,
-        credentials: 'include',
         headers: {
-          'auth-token': localStorage.getItem('auth-token'), // Добавление токена
+          'auth-token': localStorage.getItem('auth-token'),
         },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        const errorText = errorData.message || 'Неизвестная ошибка';
-        throw new Error(`Ошибка: ${response.status} - ${errorText}`);
-      }
-
+      if (!response.ok) throw new Error('Ошибка загрузки');
+      
       const result = await response.json();
-      alert('Изображение успешно загружено');
-      setFile(null);
-      setDescription('');
-      setPreviewUrl('');
+      alert('Изображения успешно загружены!');
+      resetForm();
     } catch (error) {
       alert(error.message);
     }
   };
 
+  const resetForm = () => {
+    setFiles([]);
+    setPreviews([]);
+    setDescription('');
+  };
+
   useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
+    return () => previews.forEach(url => URL.revokeObjectURL(url));
+  }, [previews]);
 
   return (
-    <div>
-      <h1>Загрузка изображения с описанием</h1>
+    <div className="upload-container">
+      <h2>Загрузка группы изображений</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="file"
-          onChange={handleFileChange}
-          accept="image/*"
-        />
-        {previewUrl && <img src={previewUrl} alt="Preview" width="200" />}
-        <input
-          type="text"
-          value={description}
-          onChange={handleDescriptionChange}
-          placeholder="Описание изображения"
-        />
-        <button type="submit">Загрузить</button>
+        <div className="upload-area">
+          <label className="file-input-label">
+            <input
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              accept="image/*"
+            />
+            <span>Выберите файлы или перетащите их сюда</span>
+          </label>
+          
+          <div className="preview-grid">
+            {previews.map((url, index) => (
+              <div key={index} className="preview-item">
+                <img src={url} alt={`Preview ${index + 1}`} />
+                <span className="image-number">{index + 1}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="description-field">
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Добавьте описание для группы изображений"
+            maxLength="500"
+          />
+          <span className="char-counter">{description.length}/500</span>
+        </div>
+
+        <button type="submit" className="upload-button">
+          Загрузить группу изображений
+        </button>
       </form>
     </div>
   );

@@ -6,7 +6,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "proxy": "https://servicebox35.pp.ru"
   },
   "author": "",
   "license": "ISC",
@@ -51,6 +52,7 @@
     "mobx-react-lite": "^4.0.7",
     "path-browserify": "^1.0.1",
     "postcss-cli": "^11.0.0",
+    "prompts": "^2.4.2",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
     "react-chat-widget-react-18": "^1.0.0",
@@ -65,10 +67,10 @@
     "tailwindcss": "^3.4.14",
     "three": "^0.159.0",
     "url": "^0.11.3",
+    "use-sound": "^5.0.0",
     "util": "^0.12.5",
     "web-vitals": "^3.5.2",
-    "workbox-cacheable-response": "^7.0.0",
-    "prompts": "^2.4.2"
+    "workbox-cacheable-response": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

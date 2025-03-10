@@ -7,180 +7,151 @@ background: linear-gradient(to bottom right, #003366, #006699);
     clip-path: path('M 0 0 L 100% 0 C 100% 50%, 0 100%, 0 100% Z');
 }
 .footer__map {
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.taxi-widget-container {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  height: fit-content;
   display: flex;
-  flex-direction: row;
-  padding-left: 5px;
-  padding-right: 5px;
-
-  border-radius: 5px;
-}
-
-.footer__map-card{
-  width: 100%;
-  /* height: 100%; */
-  /* border: 0; */
-  border-right: 1px solid white;
-  border-radius: 20px;
-}
-.footer__map-card{
-border-right: 2px solid currentColor;
-}
-
-.footer__info{
-
-  border-radius: 6px;
-  padding: 20px;
-  width: 80%;
-  text-align: center;
-  background: transparent;
-
-}
-.oplata__title{
-    color: #ffffff;
-    font-family: Montserrat;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: bold;
-    line-height: 57px;
-    text-align: center;
-}
-.oplata__list{
-  list-style: none;
-  text-decoration: none;
-  display: flex;
+  flex-direction: column;
   align-items: center;
- padding: 0;
-  justify-content: center;
-  gap: 30px;
-  padding-top: 30px;
 }
-.oplata__img{
-  width: 150px;
- 
+
+.ya-taxi-widget {
+  min-height: 70px;
 }
-.oplata__image{
- width: 500px;
- height: 100px;
-}
-.footer__title{
-  color: #ffffff;
-  font-family: Montserrat;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 22px;
-}
-.footer__author{
-  color: #ffffff;
-  font-family: Montserrat;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 22px;
+
+.footer__contacts {
   text-align: center;
-  margin: 10px auto;
+  grid-column: 1 / -1;
 }
-.footer__link{
-  text-decoration: none;
-  list-style: none;
-  padding-bottom: 20px;
-  text-align: center;
-  font-size: 12px;
+
+.go-img {
+  max-width: 200px;
+  transition: transform 0.3s ease;
+}
+
+.go-img:hover {
+  transform: scale(1.05);
+}
+
+.footer__content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.company-info {
+  flex: 1 1 300px;
+}
+
+.info-title {
   color: #ffffff;
-}
-.footer__link:hover {
-  text-decoration: underline;
-  color: #F9A92C;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
-@media screen and (min-width: 320px) and (max-width: 499px){
-  .footer__info{
-    width: 100%;
-  }
-  .footer__title{
-    font-size: 12px;
-  }
-  .footer__map{
-    flex-direction: column;
-    align-items: center;
-  }
-  .footer__map-card{
-    width: 100%;
-    margin-top: -10px;
-  }
-  .footer__map-card{
-    border-bottom: 2px solid currentColor;
-    border-right: none;
-    }
+.footer__text {
+  color: #7f8c8d;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
 
-    .oplata__title{
-      color: #ffffff;
-      font-family: Montserrat;
-      font-size: 12px;
-      font-style: normal;
-      font-weight: 600;
-      line-height: 22px;
-      text-align: center;
-    }
-    .oplata__list{
-      list-style: none;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+.privacy-link {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.privacy-link:hover {
+  color: #2980b9;
+}
+
+.payment-section {
+  flex: 1 1 180px;
+}
+
+.payment-title {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.payment-logo {
+  height: 40px;
+  transition: transform 0.3s ease;
+  filter: grayscale(100%);
+  opacity: 0.8;
+}
+
+.payment-logo:hover {
+  filter: none;
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.footer__bottom {
+  border-top: 1px solid #ecf0f1;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.footer__author {
+  color: #95a5a6;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer__map {
+    grid-template-columns: 1fr;
+  }
   
-      justify-content: center;
-      margin: 0 auto;
-    }
-    .oplata__img{
-      width: 120px;
-      height: 100px;
-     
-    }
-    .oplata__image{
-      width: 320px;
-      height: 100px;
-      object-fit: contain;
-    }
-}
-@media screen and (min-width: 500px) and (max-width: 900px){
-  .footer__title{
-    font-size: 14px;
-    text-align: center;
+  .taxi-widget-container {
+    order: 2;
   }
-  .oplata__title{
-        color: #ffffff;
-        font-family: Montserrat;
-        font-size: 23px;
-        font-style: normal;
-        font-weight: bold;
-        line-height: 51px;
-        text-align: center;
-        padding-bottom: 30px;
-  }
-  .oplata__list{
-    list-style: none;
-    text-decoration: none;
-    display: flex;
-flex-wrap: wrap;
-    margin: 0 auto;
-    padding: 0;
-  }
-  .oplata__img{
-    width: 120px;
-    height: 100px;
-   
-  }
-  .oplata__image{
- width: 400px;
- height: 100px;
-
-  }
-    .footer__map{
+  
+  .footer__content {
     flex-direction: column;
-    align-items: center;
   }
+  
+  .payment-methods {
+    justify-content: center;
+  }
+  
+  .go-img {
+    max-width: 160px;
+  }
+}
 
+@media (max-width: 480px) {
+  .footer__map {
+    gap: 1rem;
+  }
+  
+  .payment-logo {
+    height: 30px;
+  }
+  
+  .footer__text {
+    font-size: 0.8rem;
+  }
 }

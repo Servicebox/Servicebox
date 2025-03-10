@@ -16,6 +16,7 @@ import CreateNewsForm from '../News/CreateNewsForm';
 import ListNews from '../News/ListNews';
 import UpdateNewsForm from '../News/UpdateNewsForm';
 
+
 const AdminPanelRoute = () => {
   return (
     <div className='admin-panel'>
@@ -45,7 +46,7 @@ const AdminPanelRoute = () => {
           <Route path="update" element={<UpdateService />} />
           <Route path="imagelist" element={<ImageList />} />
           <Route path="addnews" element={<CreateNewsForm />} />
-          <Route path="listnews" element={<ListNews />} />
+      <Route path="listnews" element={<ListNews />} />
           <Route path="update-news/:id" element={<UpdateNewsForm />} />
         </Routes>
       </div>

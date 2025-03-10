@@ -35,6 +35,7 @@ height: 25px;
   display: flex;
   flex-direction: column;
   gap: 7px;
+  padding-right: 15px;
 }
 .tag-cloud span {
   display: inline-block;
@@ -464,7 +465,7 @@ align-items: center;
 gap: 0;
 position: absolute;
 color: #000000;
-font-family: "sans-serif";
+font-family: "Bebas Neue";
 font-size: 60rem;
 height: 80%;
 margin: 0;
@@ -529,7 +530,7 @@ font-size: 62.5%
 .content-holder{
 color: white;
     font-family: Gilroy;
-    font-size: 10px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 600;
     line-height: normal;
@@ -605,13 +606,13 @@ color: white;
 }
 .header__top {
 height: 70px;
-  display: flex;
+
    white-space: nowrap;
   align-items: center;
   justify-content: space-between;
- max-width: 900px;
+padding: 5px 10px;
     margin: 0 auto;
-    border-bottom: 2px solid ;
+    border-top: 2px solid #999393;
     width: calc(100% - 1*40px);
     z-index: 3;
     max-height: 70px;
@@ -619,6 +620,7 @@ height: 70px;
     box-sizing: border-box;
 background: linear-gradient(to bottom right, #ffffff, #00aaff);
     clip-path: path('M 0 0 L 100% 0 C 100% 50%, 0 100%, 0 100% Z');
+        box-shadow: 2px 8px 25px 3px grey;
 
   
 
@@ -724,6 +726,7 @@ display: none;
 
 .contact-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
   margin: 0;
   gap: 20px;
@@ -854,10 +857,16 @@ display: flex;
 position: absolute;
     top: 50%;
     left: 42%;
+
+    font-family: Montserrat;
     transform: translate(-50%, -50%);
     color: #000;
-    font-size: 7.5px;
+    font-size: 10px;
     font-weight: bold;
+    line-height: 1;
+   background: linear-gradient(to bottom right, #f9a92c, #0699f4);
+    padding: 12px;
+    border-radius: 10px;
 }
 .button-text {
   white-space: nowrap;
@@ -888,13 +897,26 @@ max-width: 320px;
     padding-top: 10px;
 
   }
+  .nav-login-cart button {
+        margin-right: 20px;
+  }
   .nav-menu{
     font-size: 12px;
+    gap: 8px;
   }
   .navigation__lists{
     font-size: 12px;
     gap: 10px;
   }
+  .contacts__icon {
+    list-style: none;
+    display: flex
+;
+    flex-direction: row;
+    padding: 0;
+    margin: 15px auto;
+    gap: 5px;
+}
   .navigation{
     gap: 10px;
   }
@@ -931,7 +953,7 @@ max-width: 320px;
         margin: 0 auto;
     
         align-items: center;
-        padding: 10px 10px;
+        padding: 10px 20px;
     
 }
 .nav-cart-count{
@@ -956,7 +978,7 @@ max-width: 320px;
 display: none;
 }
 .nav-login-cart{
-  gap: 20px;
+  gap: 0px;
 }
 
 
@@ -1130,7 +1152,8 @@ letter-spacing: -0.2px;
     font-size: 13px;
   }
   .container__contacts{
-        padding: 1% 10%;
+
+        gap: 0px;
   }
 
 .mainHeading__title{

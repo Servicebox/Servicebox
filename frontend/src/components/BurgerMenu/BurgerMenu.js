@@ -1,169 +1,154 @@
-import React, { useState, useContext } from "react";
-import { BrowserRouter as Router, Link, useLocation, NavLink} from "react-router-dom";
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import "./BurgerMenu.css";
-import burgerIcon from "../../images/Burger.svg";
-import logoImage from "../../images/Servicebox6.svg";
-import closeIcon from "../../images/x.svg";
-import Status from "../../images/status.svg";
-import { faBasketShopping, faMobilePhone, faMailBulk, faMapLocation} from '@fortawesome/free-solid-svg-icons';
-import { faVk, faTelegram, faWhatsapp} from '@fortawesome/free-brands-svg-icons';
-
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faBasketShopping, 
+  faMobilePhone, 
+  faMailBulk, 
+  faMapLocation,
+  faTimes 
+} from '@fortawesome/free-solid-svg-icons';
+import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { ShopContext } from '../Contexst/ShopContext';
-
-
+import "./BurgerMenu.css";
+import logoImage from "../../images/Servicebox6.svg";
 
 function BurgerMenu({ scrollTo }) {
   const [isOpen, setIsOpen] = useState(false);
-const [burgerOpen, setBurgerOpen] = useState(false);
-    const [menu, setMenu] = useState("shop");
-  const {getTotalCartItems} = useContext(ShopContext);
+  const { getTotalCartItems } = useContext(ShopContext);
+  const location = useLocation();
+
+  // Закрываем меню при изменении локации
+  useEffect(() => {
+    setIsOpen(false);
+    document.body.style.overflow = 'auto';
+  }, [location]);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    document.body.style.overflow = isOpen ? 'auto' : 'hidden';
   };
 
-  const handleScrollTo = (target) => {
-    scrollTo(target);
+  const handleContactAction = (action) => {
     toggleMenu();
+    if (action === 'tel') window.location.href = "tel:+7 911 501 88 28";
+    if (action === 'mail') window.location.href = "mailto:servicebox35@gmail.com";
   };
-  const handlePhoneCall = () => {
-    window.location.href = "tel:+7 911 501 88 28"; 
-  };
-
-  const handleMailTo = () => {
-    window.location.href = "mailto:servicebox35@gmail.com"; 
-  };
-
-const toggleBurgerMenu = () => {
-  setBurgerOpen(!burgerOpen);
-  if (!burgerOpen) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = 'auto';
-  }
-};
-
-
 
   return (
     <div className={`burger-menu ${isOpen ? "open" : ""}`}>
-      <div className="overlay" onClick={toggleMenu}></div>
-      <div className="content">
-        <button className="close-btn" onClick={toggleMenu}>
-          <img src={closeIcon} alt="Закрыть" />
-        </button>
-        <img className="logo-burger" src={logoImage} alt="Логотип" />
-        <nav className="navigation-lists">
-        <ul className="burger-menu__list">
-        <li className="navigation__list-brg ">
-            <Link className="navigation__list" to="/contacts">
-          <h3 className="card__subtitle-img">контакты</h3>
-          </Link>
-</li>
-<li className="navigation__list-brg  ">
-            <Link className="navigation__list" to="/about">
-          <h3 className="card__subtitle-img">О нас</h3>
-          </Link>
-</li>
-<li className="navigation__list-brg  ">
-            <Link className="navigation__list" to="/service">
-          <h3 className="card__subtitle-img">Услуги</h3>
-          </Link>
-</li>
-<li  className="navigation__list-brg ">
-  <Link className="navigation__list" to="/image-gallery-api">
-          <h3 className="card__subtitle-img">фото</h3>
-          </Link>
+      <button 
+        className={`burger-toggle ${isOpen ? "open" : ""}`}
+        onClick={toggleMenu}
+        aria-label="Toggle menu"
+      >
+        <div className="burger-line top"></div>
+        <div className="burger-line middle"></div>
+        <div className="burger-line bottom"></div>
+      </button>
 
-</li>
-
- {/* <li className="navigation__list" onClick={()=>{setMenu("shop")}}> <Link style={{textDecoration:'none'}} to='https://ru.servicebox.shop/' target="_blank" rel="noopener noreferrer">Магазин</Link>{menu==="shop"?<hr/>:<></>} </li>*/}
-    <li className="navigation__list-brg " onClick={()=>{setMenu("parts")}}> <Link style={{textDecoration:'none'}} to='/parts'>Каталог тоаров для СЦ</Link>{menu==="parts"?<hr/>:<></>} </li>
- 
-
-            </ul>
-          <div className="header__links header__links-burger">
-        
-          </div>
-          <div className="nav__button">
-          <a
-            className="button"
-            href="https://app.helloclient.io/check.html#250362"
-            target="_blank"
-            rel="noopener noreferrer"
+      <div className="menu-overlay" onClick={toggleMenu}></div>
+      
+      <nav className="menu-content">
+        <div className="menu-header">
+          <img className="menu-logo" src={logoImage} alt="ServiceBox Logo" />
+          <button 
+            className="menu-close"
+            onClick={toggleMenu}
+            aria-label="Close menu"
           >
-            <img src={Status} alt="Кнопка" />
-            <span className="button-text">CТАТУС РЕМОНТА</span>
-          </a>
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
         </div>
-        <div className="burger-contacts ">
-       
-       
-        <div onClick={handleMailTo} className="contacts__block">
-  <p className="contacts__text">
-        <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
-          servicebox35@gmail.com</p>
-        </div>
-          <div className="contacts__block">
-  <p className="contacts__text">
-          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
-         г. Вологда, ул. Северная, 7А, офис 405</p>
-          <div onClick={handlePhoneCall} className="contacts__block">
-    <p className="contacts-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
-  +7 911 501 88 28
-</p>
- </div>
-        </div>
-          <div className="contacts__block">
-          <p className="contacts__text">
-          <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
-         г. Вологда, ул. Ленина д.6, этаж 1</p>
-           <div onClick={handlePhoneCall} className="contacts__block">
-    <p className="contacts-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-  <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
-  +7 911 501 06 96
-</p>
 
-        </div>
-        </div>
-       
-      </div>
-      <div className="contacts__block-sochial">
-      <ul className="contacts__icon">
-          <li className="contacts__icon-sochial pulse-one">
-            <a href="https://vk.com/servicebox35">
+        <ul className="menu-list">
+          <li className="menu-item">
+            <Link to="/contacts" className="menu-link" onClick={toggleMenu}>
+              Контакты
+            </Link>
+          </li>
+          <li className="menu-item">
+            <Link to="/about" className="menu-link" onClick={toggleMenu}>
+              О нас
+            </Link>
+          </li>
+          <li className="menu-item">
+            <Link to="/service" className="menu-link" onClick={toggleMenu}>
+              Услуги
+            </Link>
+          </li>
+          <li className="menu-item">
+            <Link to="/image-gallery-api" className="menu-link" onClick={toggleMenu}>
+              Фото
+            </Link>
+          </li>
+          <li className="menu-item">
+            <Link to="/parts" className="menu-link" onClick={toggleMenu}>
+              Каталог товаров
+            </Link>
+          </li>
+           <li className="menu-item">
+            <Link to="/news" className="menu-link" onClick={toggleMenu}>
+              Новости
+            </Link>
+          </li>
+        </ul>
+
+        <div className="menu-footer">
+          <div className="status-check">
+            <a
+              className="status-button"
+              href="https://pm-31768.promaster.app/index_cl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Проверить статус ремонта
+            </a>
+          </div>
+
+          <div className="contact-info">
+            <div className="contact-item" onClick={() => handleContactAction('mail')}>
+              <FontAwesomeIcon icon={faMailBulk} />
+              <span>servicebox35@gmail.com</span>
+            </div>
+            
+            <div className="address-block">
+              <p>
+                <FontAwesomeIcon icon={faMapLocation} />
+                г. Вологда, ул. Северная, 7А, офис 405
+              </p>
+              <div className="contact-item" onClick={() => handleContactAction('tel')}>
+                <FontAwesomeIcon icon={faMobilePhone} />
+                <span>+7 911 501 88 28</span>
+              </div>
+            </div>
+
+            <div className="address-block">
+              <p>
+                <FontAwesomeIcon icon={faMapLocation} />
+                г. Вологда, ул. Ленина д.6, этаж 1
+              </p>
+              <div className="contact-item" onClick={() => handleContactAction('tel')}>
+                <FontAwesomeIcon icon={faMobilePhone} />
+                <span>+7 911 501 06 96</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="social-links">
+            <a href="https://vk.com/servicebox35" className="social-link vk">
               <FontAwesomeIcon icon={faVk} />
-              <span>VK</span>
             </a>
-          </li>
-          <li className="contacts__icon-sochial pulse-two">
-            <a href="whatsapp://send?phone=79062960353">
+            <a href="whatsapp://send?phone=79062960353" className="social-link whatsapp">
               <FontAwesomeIcon icon={faWhatsapp} />
-              <span>Watsapp</span>
             </a>
-          </li>
-          <li className="contacts__icon-sochial pulse-three">
-            <a href="tg://resolve?domain=@Tomkka">
+            <a href="tg://resolve?domain=@Tomkka" className="social-link telegram">
               <FontAwesomeIcon icon={faTelegram} />
-              <span>Telegram</span>
             </a>
-          </li>
-          </ul>
+          </div>
         </div>
-        </nav>
-      </div>
-      {!isOpen && (
-        <img
-          className="burger-icon"
-          src={burgerIcon}
-          alt="Кнопка бургера"
-          onClick={toggleMenu}
-        />
-      )}
-
+      </nav>
     </div>
-
   );
 }
 

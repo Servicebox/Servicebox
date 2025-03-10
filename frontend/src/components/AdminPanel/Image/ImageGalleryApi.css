@@ -67,85 +67,208 @@
   }
   .foto{
     padding-top: 30px;
+    position: relative;
   }
   
-.foto__title{
-
-    padding: 50px 201px;
-    background-color: #f9a92c;
-    clip-path: polygon(0 0, 25% 10%, 75% 0, 100% 10%, 100% 85%, 75% 100%, 25% 90%, 0 100%);
-    color: #000;
-    margin: 0 auto;
-    text-align: center;
-    font-weight: 700;
-    font-family: Montserrat;
-    font-size: 30px;
-}
-.foto__img{
-  width: 250px;
-  height: 250px;
-  border-radius: 15px;
- object-fit: cover;
-}
-.images-gallery{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-.foto__description{
-
-  font-family: Montserrat;
-  font-size: 12px;
-  margin: 0 auto;
-  max-width: 230px;
-  text-align: center;
-
-}
-.foto__btn{
-  padding: 0;
-  border: none;
-  background-color: transparent;
 
 
+/* ImageGalleryApi.css */
+/* ImageGalleryApi.css */
+
+/* Стили сетки групп */
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
 }
-.like-icon{
-  height: 33px;
-  position: absolute;
-  right: 5px;
-  top: 225px;
-  width: 33px;
-}
-.image-item{
+
+.group-card {
   position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  background: #fff;
+      box-shadow: 4px 1px 13px gray;
 }
-.foto__sum{
+
+.group-card:hover {
+  transform: translateY(-5px);
+}
+
+.group-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  aspect-ratio: 1;
+  position: relative;
+  background: #f5f5f5;
+}
+
+.group-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  background: #e0e0e0;
+}
+
+.more-images {
   position: absolute;
-  top: 249px;
-  right: 5px;
-  font-size: 16px;
-  font-family: Montserrat;
-  font-weight: bold;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  backdrop-filter: blur(2px);
 }
-@media (min-width: 320px) and (max-width: 500px) {
-  .foto__title{
-    font-size: 16px;
-   
-    padding: 40px 0;
-  }
-  .foto__img{
-    width: 250px;
-    height: 250px;
-  }
 
+.group-description {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #444;
+      font-family: 'Bebas Neue';
 }
-@media (min-width: 500px) and (max-width: 800px) {
-  .foto__title{
-    font-size: 18px;
-   
-    padding: 40px 0;
-  }
 
+/* Стили модального окна */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+      background: rgb(0 0 0 / 5%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.image-container {
+  position: relative;
+  padding-bottom: 70.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.image-container img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Навигационные стрелки */
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.nav-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.nav-button.prev {
+  left: 1rem;
+}
+
+.nav-button.next {
+  right: 1rem;
+}
+
+/* Точки пагинации */
+.pagination-dots {
+  position: absolute;
+  bottom: 0.5rem;
+ 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f9a92c;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: #fff;
+  transform: scale(1.2);
+  background: #0056b3;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  .group-grid {
+           grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .nav-button {
+    width: 30px;
+    height: 30px;
+    font-size: 1.2rem;
+  }
+  
+  .pagination-dots {
+    bottom: 1rem;
+  }
+  
+  .modal-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+}
+
+/* Анимации */
+@keyframes slideIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Эффекты ховера */
+.group-preview img:hover {
+  z-index: 1;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }

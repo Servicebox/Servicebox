@@ -7,8 +7,8 @@ const fetchUser = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Извлекаем токен из заголовка
 
-    console.log(`Заголовок Authorization: ${authHeader}`);
-    console.log(`Полученный токен: ${token}`);
+    //console.log(`Заголовок Authorization: ${authHeader}`);
+    //console.log(`Полученный токен: ${token}`);
 
     if (!token) {
         console.warn('Токен не предоставлен.');
@@ -18,7 +18,7 @@ const fetchUser = (req, res, next) => {
     try {
         // Проверяем токен
         const decoded = jwt.verify(token, JWT_SECRET);
-        console.log('Декодированный токен:', decoded);
+       // console.log('Декодированный токен:', decoded);
         req.user = decoded; // Добавляем информацию о пользователе в объект запроса
         next(); // Переходим к следующему middleware или обработчику маршрута
     } catch (err) {

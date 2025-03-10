@@ -4,18 +4,28 @@ import { useParams } from 'react-router-dom';
 
 const UpdateNewsForm = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState(null);
-  const [video, setVideo] = useState(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    image: null,
+    video: null,
+    existingImage: '',    // Добавляем поле для существующего изображения
+    existingVideo: ''     // Добавляем поле для существующего видео
+  });
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const response = await axios.get(`https://servicebox35.pp.ru/api/news/${id}`);
         const news = response.data;
-        setTitle(news.title);
-        setContent(news.content);
+        setFormData({
+          title: news.title,
+          content: news.content,
+          image: null,
+          video: null,
+          existingImage: news.image || '',
+          existingVideo: news.video || ''
+        });
       } catch (error) {
         console.error('Error fetching news:', error);
       }
@@ -26,34 +36,42 @@ const UpdateNewsForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('content', content);
-    if (image) {
-      formData.append('image', image);
+    const formDataToSend = new FormData();
+    formDataToSend.append('title', formData.title);
+    formDataToSend.append('content', formData.content);
+    
+    if (formData.image) {
+      formDataToSend.append('image', formData.image);
     }
-    if (video) {
-      formData.append('video', video);
+    if (formData.video) {
+      formDataToSend.append('video', formData.video);
     }
 
     try {
-      const response = await axios.put(`https://servicebox35.pp.ru/api/news/${id}`, formData, {
+      await axios.put(`https://servicebox35.pp.ru/api/news/${id}`, formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log('News updated:', response.data);
+      alert('Новость успешно обновлена!');
     } catch (error) {
       console.error('Error updating news:', error);
+      alert('Ошибка при обновлении новости');
     }
   };
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const handleVideoChange = (e) => {
-    setVideo(e.target.files[0]);
+  const handleFileChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.files[0]
+    });
   };
 
   return (
@@ -64,27 +82,55 @@ const UpdateNewsForm = () => {
           <label>Заголовок</label>
           <input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
             required
           />
         </div>
+        
         <div className="form-group">
           <label>Содержание</label>
           <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            name="content"
+            value={formData.content}
+            onChange={handleChange}
             required
           ></textarea>
         </div>
+
         <div className="form-group">
-          <label>Фото</label>
-          <input type="file" onChange={handleImageChange} />
+          <label>Текущее изображение:</label>
+          {formData.existingImage && (
+            <img 
+              src={`https://servicebox35.pp.ru/uploads/${formData.existingImage}`} 
+              alt="Current" 
+              style={{maxWidth: '200px', display: 'block'}}
+            />
+          )}
+          <input 
+            type="file" 
+            name="image"
+            onChange={handleFileChange}
+          />
         </div>
+
         <div className="form-group">
-          <label>Видео</label>
-          <input type="file" onChange={handleVideoChange} />
+          <label>Текущее видео:</label>
+          {formData.existingVideo && (
+            <div>
+              <video controls style={{maxWidth: '200px'}}>
+                <source src={`https://servicebox35.pp.ru/uploads/${formData.existingVideo}`} />
+              </video>
+            </div>
+          )}
+          <input 
+            type="file" 
+            name="video"
+            onChange={handleFileChange}
+          />
         </div>
+
         <button type="submit">Обновить Новость</button>
       </form>
     </div>

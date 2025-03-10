@@ -1,7 +1,7 @@
 // routes/product.js
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/Product');
+const Product = require('../models/product');
 
 // Удалить продукт
 router.post('/api/removeproduct', async (req, res) => {

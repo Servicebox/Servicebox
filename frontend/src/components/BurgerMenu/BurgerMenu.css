@@ -1,161 +1,207 @@
 .burger-menu {
-  display: none;
+  position: relative;
+  z-index: 1000;
 }
 
-@media (max-width: 768px) {
-  .burger-menu {
-    display: block;
-    position: relative;
-  }
+.burger-toggle {
+  position: relative !important;
 
-.nav-menu-brg{
+  top: 0px;
+left: 0px;
+     background: linear-gradient(to bottom right, #f9a92c, #02578b);
+  border: none;
+  padding: 15px;
+  border-radius: 30%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1001;
   display: flex;
-  color: white;
   flex-direction: column;
-  align-items: center;
+  gap: 5px;
 }
-  .burger-icon::before,
-.burger-icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
+
+.burger-line {
+  width: 20px;
+  height: 2px;
+  background: white;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.burger-toggle.open .top {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.burger-toggle.open .middle {
+  opacity: 0;
+}
+
+.burger-toggle.open .bottom {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  background-color: rgba(0, 123, 255, 0.5); /* Синий цвет с некоторой прозрачностью */
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  z-index: 999;
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
-.burger-icon::after {
-  transition-delay: 0.1s;
-}
-
-.burger-icon:hover::before,
-.burger-icon:hover::after {
+.burger-menu.open .menu-overlay {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  visibility: visible;
 }
 
-  .content {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 90%;
-    height: 100%;
-    background-color: #041e42;
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 999;
-  }
+.menu-content {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 85%;
+  max-width: 400px;
+  height: 100%;
+  background: #0438788c;
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.96);
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
 
-  .open .content {
+.burger-menu.open .menu-content {
+  right: 0;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.menu-logo {
+  width: 120px;
+  height: auto;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+}
+
+.menu-close {
+display: none !important;
+}
+
+.menu-close:hover {
+  transform: rotate(90deg);
+}
+
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 auto 0;
+}
+
+.menu-item {
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  transform: translateX(20px);
+  animation: menuItemAppear 0.3s ease forwards;
+}
+
+@keyframes menuItemAppear {
+  to {
+    opacity: 1;
     transform: translateX(0);
   }
-
-  .close-btn {
-    max-width: 50px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: transparent;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    z-index: 999;
-  }
-
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-  
-  .logo-burger {
-    display: flex;
-    max-width: 90px;
-padding: 5px;
-    margin: 0 auto;
-    justify-content: center;
-    filter: drop-shadow(2px 1px 2px white);
-    margin-top: 15px;
-    background: white;
-    border-radius: 10px;
-  
-  }
-
-  .burger-menu__list {
-    margin-top: 50px;
-    padding: 0;
-    list-style: none;
-    color: white;
-  }
-
-  .burger-menu__item {
-    margin: 0 auto;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  .burger-contacts {
-    padding-top: 20px;
-  }
-
-  .nav__button{
-    margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  border-radius: 10%;
-  }
-
-  .burger-menu__item a {
-    text-decoration: none;
-    color: #ffffff;
-    font-size: 18px;
-  }
-
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-  }
-.open .overlay {
-    display: block;
-  }
-  .middle__links {
-    background-color: rgb(211, 211, 211);
-    padding: 10px;
-    border-radius: 10px;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    text-decoration: none;
 }
-.header__links-burger{
+
+.menu-link {
   color: white;
-  padding: 0 0 15px;
-}
+  text-decoration: none;
+  font-size: 1.2rem;
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: block;
+  transition: all 0.2s ease;
+  background: #007bff9e;
 }
 
-@media (max-width: 320px) {
-  .content{
-  width: 90%;
-  }
-  .contact-text{
-    font-size: 11px;
-    font-weight: bold;
+.menu-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(10px);
+}
+
+.status-check {
+  margin: 2rem 0;
+}
+
+.status-button {
+  display: block;
+  background: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.status-button:hover {
+  background: #0056b3;
+}
+
+.contact-info {
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.address-block {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-radius: 6px;
+}
+
+.contact-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.social-link {
+  font-size: 1.5rem;
+  color: white;
+  transition: transform 0.2s ease;
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+}
+
+.vk:hover { color: #4a76a8; }
+.whatsapp:hover { color: #25d366; }
+.telegram:hover { color: #0088cc; }
+
+@media (min-width: 769px) {
+  .burger-menu {
+    display: none;
   }
 }

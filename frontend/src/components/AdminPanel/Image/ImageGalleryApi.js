@@ -10,41 +10,41 @@ const ImageGalleryApi = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [userLikes, setUserLikes] = useState([]);
   const [showAfter, setShowAfter] = useState({});
+    const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+    const fetchGroups = async () => {
+      try {
+        const response = await fetch('https://servicebox35.pp.ru/api/gallery/group');
+        const data = await response.json();
+        setGroups(data);
+      } catch (error) {
+        console.error('Ошибка загрузки групп:', error);
+      }
+    };
+    fetchGroups();
+  }, []);
+
+    const handleGroupClick = (group, index) => {
+    setSelectedGroup(group);
+    setCurrentImageIndex(index);
+  };
+
+  const handleNavigation = (direction) => {
+    setCurrentImageIndex(prev => {
+      const newIndex = direction === 'next' ? prev + 1 : prev - 1;
+      return Math.max(0, Math.min(newIndex, selectedGroup.images.length - 1));
+    });
+  };
 
   useEffect(() => {
-    fetchImages();
+    setImages();
     fetchUserLikes();
   }, []);
 
-  const fetchImages = async () => {
-    try {
-      console.log('Отправка запроса к серверу для получения изображений...');
-      const token = localStorage.getItem('auth-token'); // Получение токена
-      console.log('Токен для fetchImages:', token);
-      const response = await fetch('https://servicebox35.pp.ru/api/images', {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          ...(token && { 'Authorization': `Bearer ${token}` }), // Добавление заголовка Authorization
-        },
-      });
 
-      if (!response.ok) {
-        const errResponse = await response.json();
-        throw new Error(errResponse.message || 'Ошибка при получении изображений');
-      }
-
-      const fetchedImages = await response.json();
-      const imagesWithCorrectPath = fetchedImages.map(img => ({
-        ...img,
-        filePath: `https://servicebox35.pp.ru/uploads/gallery/${img.filePath.split('/').pop()}`, // Исправление пути к файлу
-      }));
-      setImages(imagesWithCorrectPath);
-    } catch (error) {
-      console.error('Ошибка при получении изображений:', error);
-      alert('Ошибка загрузки изображений: ' + error.message);
-    }
-  };
 
   const fetchUserLikes = async () => {
     try {
@@ -158,31 +158,40 @@ const ImageGalleryApi = () => {
   };
 
   return (
+    
     <div className="foto">
       <h1 className="foto__title">Фотографии до и после ремонта</h1>
-      <div className="images-gallery">
-        {images.length > 0 ? images.map(image => (
-          <div key={image._id} className="image-item">
-            <img className="foto__img" src={image.filePath} alt={image.description || "Изображение"}
-              onClick={() => handleImageClick(image)} />
-            <p className="foto__description">{image.description}</p>
-            <button className="foto__btn" onClick={() => toggleLikeImage(image._id)}>
-              <img
-                src={userLikes.includes(image._id) ? likeIconUrl : likeInactiveIconUrl}
-                alt="Like"
-                className={`like-icon ${userLikes.includes(image._id) ? 'liked' : ''}`}
-              />
-              <span className="foto__sum">
-                {Array.isArray(image.likes) ? image.likes.length : 0}
-              </span>
-            </button>
+      <div className="group-grid">
+        {groups.map(group => (
+          <div key={group._id} className="group-card">
+            <div className="group-preview">
+             {group.images.slice(0, 4).map((img, index) => (
+  <img
+    key={img._id}
+    src={`https://servicebox35.pp.ru${img.filePath}`} // Добавляем базовый URL
+    alt={group.description}
+    onClick={() => handleGroupClick(group, index)}
+  />
+))}
+              {group.images.length > 4 && (
+                <div className="more-images">+{group.images.length - 4}</div>
+              )}
+            </div>
+            <p className="group-description">{group.description}</p>
           </div>
-        ))
-          : <p>Изображения загружаются...</p>}
-        {showModal && <ImageModal image={selectedImage} onClose={handleCloseModal} />}
+        ))}
       </div>
+
+      {selectedGroup && (
+        <ImageModal
+          group={selectedGroup}
+          currentIndex={currentImageIndex}
+          onClose={() => setSelectedGroup(null)}
+          onNavigate={handleNavigation}
+        />
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default ImageGalleryApi;

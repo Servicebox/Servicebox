@@ -3,19 +3,77 @@ const multer = require('multer');
 const router = express.Router();
 const path = require('path');
 const Image = require('../models/image');
+const Group = require('../models/Group');
+
+
+
 const fetchUser = require('../middlewares/fetchUser');
 const fs = require('fs');
 
-const uploadDirectory = path.join(__dirname, '../uploads/gallery');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDirectory);
+    cb(null, path.join(__dirname, '../uploads/gallery'));
   },
   filename: (req, file, cb) => {
-    cb(null, `gallery_${Date.now()}${path.extname(file.originalname)}`);
-  },
+    cb(null, `group_${Date.now()}_${file.originalname}`);
+  }
 });
 const upload = multer({ storage });
+// Загрузка группы изображений
+router.post('/group', upload.array('images'), async (req, res) => {
+  console.log('Received files:', req.files.map(f => f.path));
+  try {
+    const { description } = req.body;
+    const files = req.files;
+
+    if (!files || files.length === 0) {
+      return res.status(400).json({ error: 'No files uploaded' });
+    }
+
+    const group = new Group({
+      description,
+      createdAt: new Date()
+    });
+
+    const savedGroup = await group.save();
+
+    const images = files.map(file => ({
+      filePath: `/uploads/gallery/${file.filename}`,
+      groupId: savedGroup._id,
+      description
+    }));
+
+    await Image.insertMany(images);
+
+    res.status(201).json({
+      message: 'Group uploaded successfully',
+      group: savedGroup
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Получение всех групп
+router.get('/group', async (req, res) => {
+  try {
+    const groups = await Group.aggregate([
+      {
+        $lookup: {
+          from: 'images',
+          localField: '_id',
+          foreignField: 'groupId',
+          as: 'images'
+        }
+      },
+      { $sort: { createdAt: -1 } }
+    ]);
+    
+    res.json(groups);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Загрузка изображения
 router.post('/', upload.single('image'), async (req, res) => {

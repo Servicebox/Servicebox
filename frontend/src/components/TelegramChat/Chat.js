@@ -1,7 +1,7 @@
 import React, { useEffect} from 'react';
 import axios from 'axios';
 import './Chat.css'; // Подключение стилей
-import soundPushUrl from '../Sounds/send-sound.mp3'
+
 import Cha from '../../images/chatonlain.gif'
 import userIcon from '../../images/user.png';
 import managerIcon from '../../images/manager.svg'; 
@@ -69,9 +69,9 @@ window.$$ = (el) => {
 //Фунцкия воспроизведения звуков
 window.soundPush = (url) => {
   let audio = new Audio(); // Создаём новый элемент Audio
-  audio.src = url; // Указываем путь к звуку "клика"
-  audio.autoplay = true; // Автоматически запускаем
-  audio.volume = 0.7
+  //audio.src = url; // Указываем путь к звуку "клика"
+  //audio.autoplay = true; // Автоматически запускаем
+  //audio.volume = 0.7
   $('body').appendChild(audio)
   audio.addEventListener("ended", e => audio.remove())
   return url

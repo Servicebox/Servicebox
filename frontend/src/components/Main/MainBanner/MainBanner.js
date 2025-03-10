@@ -21,6 +21,10 @@ function Countdown({ endDate }) {
     days: 0, hours: 0, minutes: 0, seconds: 0
   });
 
+ const calculateProgress = (current, max) => {
+    return 283 * (1 - current/max); // 283 - длина окружности
+  };
+  
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
@@ -174,7 +178,7 @@ function MainBanner() {
   // Animation code
   useEffect(() => {
     const isFirefox = typeof InstallTrigger !== 'undefined';
-    const words = "SERVICEBOXSERVICEBOX";
+    const words = "SERVICEBOXЛЕНИНА6";
     let ANGLE = 360;
     const ANIMATION_DURATION = 4000;
 
@@ -248,7 +252,7 @@ function MainBanner() {
               <div className="card__side card__side--front-1">
                 <div className="card__titleneon card__titleneon--1">
                   <i className="fas fa-paper-plane"></i>
-                  <h4 className="card__heading">Подменный телефон</h4>
+                  <h4 className="card__heading">Подменный телефон </h4>
                 </div>
                 <div className="card__details">
                   <img className="care-about__youimg" src={Eplaceable} alt="" />
@@ -316,8 +320,8 @@ function MainBanner() {
                     <p className="card__price-only">Описание</p>
                     <p className="care-about-you___subtitle">
                       Не откладывайте ремонт!
-                      Обращайтесь к нам и получите качественный бесплатный
-                      ремонт незначительных поломок Вашей цифровой техники уже сегодня.
+                      Диагностика бесплатная всех устройств, кроме ноутбуков,ПК и видеокарт-если происходит отказ
+                      от ремонта, в таком случае диагностика от 500-1500 руб,в зависимости от сложности диагностики.
                     </p>
                   </div>
                 </div>

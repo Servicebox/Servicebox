@@ -1,11 +1,12 @@
-//models/image
+
+// models/Image.js
 const mongoose = require('mongoose');
 
-const imageSchema = new mongoose.Schema({
-  filePath: { type: String, required: true },
-  description: { type: String },
-  mimeType: { type: String, required: true },
-   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
-}, { timestamps: true });
+const ImageSchema = new mongoose.Schema({
+  filePath: String,
+  groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
+  description: String,
+  createdAt: { type: Date, default: Date.now }
+});
 
-module.exports = mongoose.model('Image', imageSchema);
+module.exports = mongoose.model('Image', ImageSchema);
