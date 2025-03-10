@@ -72,6 +72,8 @@ content: '';
 .img-chat{
   width: 200px;
   height: 200px;
+  position: relative;
+    right: 30px;
 }
 
 .chat__wrap.open {
