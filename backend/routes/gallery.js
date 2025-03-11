@@ -18,7 +18,10 @@ const storage = multer.diskStorage({
     cb(null, `group_${Date.now()}_${file.originalname}`);
   }
 });
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB на файл
+});
 // Загрузка группы изображений
 router.post('/group', upload.array('images'), async (req, res) => {
   console.log('Received files:', req.files.map(f => f.path));

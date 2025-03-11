@@ -41,9 +41,6 @@ const CreateImage = () => {
       const response = await fetch('https://servicebox35.pp.ru/api/gallery/group', {
         method: 'POST',
         body: formData,
-        headers: {
-          'auth-token': localStorage.getItem('auth-token'),
-        },
       });
 
       if (!response.ok) throw new Error('Ошибка загрузки');
