@@ -105,7 +105,7 @@
 .pagination-dots span {
     width: 12px;
     height: 12px;
-    background: rgba(255, 255, 255, 0.3);
+    background: #0000006b;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.6s ease;
@@ -125,7 +125,7 @@
   }
   
   .slide-content h2 {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   
   .slider-controls button {
@@ -228,7 +228,7 @@
 
 .pagination-dots span.active {
     width: 32px;
-    background: #fff;
+    background: #1297d3a3;
 }
 
 /* Карточки услуг */
@@ -281,8 +281,8 @@
 @media (max-width: 1200px) {
     .slide-content {
         left: 15%;
-        max-width: 400px;
-        padding: 1.5rem;
+       
+      padding: 2rem 0rem;
     }
     
     .slide-content h2 {
@@ -296,10 +296,10 @@
     }
     
     .slide-content {
-        bottom: 2%;
-        left: 10%;
+        bottom: 0%;
+        left: 5%;
         right: 5%;
-        max-width: 79%;
+       
     }
     
     .countdown-clock {
@@ -1252,7 +1252,7 @@ justify-content: center;
 height: 300px;
 }
 .promotion-carousel-container{
-  width: 90%;
+  width: 100%;
 }
     .slide-content h2 {
       font-size: 1.2rem;
@@ -1263,7 +1263,7 @@ height: 300px;
     .cta-button{
       font-size: 12px;
       font-weight: 700;
-      padding:7px;
+      padding: 11px 60px;
       border-radius: 5px;
     }
 .news__title{

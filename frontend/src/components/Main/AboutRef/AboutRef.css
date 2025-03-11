@@ -40,9 +40,9 @@ font-family: Gilroy;
 font-size: 19px;
 font-style: normal;
 font-weight: 400;
-line-height: 24px; /* 133.333% */
+line-height: 22px; /* 133.333% */
 text-align: center;
-margin: 10px 40px;
+margin: 10px 10px;
 }
 .about__image{
 
@@ -113,8 +113,8 @@ line-height: normal;
         font-size: 16px;
         font-style: normal;
         font-weight: 600;
-        line-height: 22px; 
-        width: 250px;
+        line-height: 20px; 
+        width: 290px;
     }
 
     .about__subtitle{
