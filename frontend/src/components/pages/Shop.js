@@ -7,7 +7,6 @@ import "./Shop.css"
 
 const Shop = () => {
   const navigate = useNavigate()
-
   return (
     <div className=''>
       <a href="https://ru.servicebox.shop/" className="link" />
