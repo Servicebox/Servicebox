@@ -13,7 +13,7 @@ import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm"
 import { ShopContext } from '../Contexst/ShopContext';
 import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
-import LoginSignup from "../Pages/LoginSignup"
+import LoginSignup from "../pages/LoginSignup"
 
 import { jwtDecode } from 'jwt-decode'; // Используем именованный импорт
 import PromotionsPage from "../AdminPanel/PromotionsPage/PromotionsPage";

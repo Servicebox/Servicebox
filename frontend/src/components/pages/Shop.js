@@ -2,10 +2,6 @@ import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-//import Hero from '../Hero/Hero';
-
-//import Offers from '../Offers/Offers';
-
 import "./Shop.css"
 
 

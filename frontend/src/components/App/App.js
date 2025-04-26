@@ -9,7 +9,7 @@ import {
 
 import gsap from "gsap";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
-import Shop from "../Pages/Shop";
+import Shop from "../pages/Shop";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
 //import Footer from "../Footer/Footer";
@@ -33,10 +33,10 @@ import Contacts from "../Contacts/Contacts";
 import Service from "../Service/Service";
 import About from "../About/About";
 import NotFound from "../NotFound/NotFound";
-import Cart from "../Pages/Cart";
-import LoginSignup from "../Pages/LoginSignup"
-import ShopCategory from "../Pages/ShopCategory";
-import Product from "../Pages/Product";
+import Cart from "../pages/Cart";
+import LoginSignup from "../pages/LoginSignup"
+import ShopCategory from "../pages/ShopCategory";
+import Product from "../pages/Product";
 import CartItems from "../CartItems/CartItems";
 import { ShopContext } from "../Contexst/ShopContext";
 import BubbleBackground from "../BubbleBackground/BubbleBackground";
@@ -54,13 +54,13 @@ import AdminRoute from '../PrivateRoute/PrivateRoute';
 import AdminPanel from "../AdminPanel/AdminPanel";
 import VideoCard from "../AdminPanel/VideoCard/VideoCard"
 import Chat from "../TelegramChat/Chat"
-import VerifyEmail from '../Pages/VerifyEmail';
-import ResetPasswordWrapper from '../Pages/ResetPasswordWrapper';
-import { AuthProvider } from "../Pages/AuthContext";
+import VerifyEmail from '../pages/VerifyEmail';
+import ResetPasswordWrapper from '../pages/ResetPasswordWrapper';
+import { AuthProvider } from "../pages/AuthContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import UpdateNewsForm from "../AdminPanel/News/UpdateNewsForm";
 import CreateNewsForm from "../AdminPanel/News/CreateNewsForm";
-import ShopContextProvider from '../Pages/ShopCategory';
+import ShopContextProvider from '../pages/ShopCategory';
 import ListNews from "../AdminPanel/News/ListNews";
 import NewsDetail from "../AdminPanel/News/NewsDetail";
 import PublicNewsList from "../AdminPanel/News/PublicNewsList";
