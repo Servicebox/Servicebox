@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
@@ -33,7 +32,7 @@
     "multer": "^1.4.5-lts.1",
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.16",
-    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemailer-smtp-transport": "^2.4.2",
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",

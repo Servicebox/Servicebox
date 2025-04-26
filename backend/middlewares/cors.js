@@ -17,7 +17,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/get-client-id',
   'https://servicebox35.pp.ru/api/images',
   'https://servicebox35.ru/send-request',
-  'https://servicebox35.pp.ru/api/', 
+  'https://servicebox35.pp.ru/api/',
   'https://servicebox35.pp.ru',
   'http://localhost:5000',
   'https://localhost:3000',
@@ -42,7 +42,7 @@ module.exports = (req, res, next) => {
 
     if (method === 'OPTIONS') {
       res.setHeader('Access-Control-Allow-Origin');
-      
+
       res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
       res.header('Access-Control-Allow-Headers', requestHeaders);
       return res.end();

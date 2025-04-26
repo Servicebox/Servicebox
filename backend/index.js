@@ -32,9 +32,10 @@ const verifyToken = require('./middlewares/verifyToken');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const newsRoutes = require('./routes/newsRoutes');
-const News = require('./models/News'); 
+const News = require('./models/News');
+const promotionRoutes = require('./routes/promotionRoutes');
 const app = express();
-//const User = require('./models/Users');
+const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
 const YANDEX_PASS = process.env.YANDEX_PASS;
 const CLIENT_URL = process.env.CLIENT_URL;
@@ -42,6 +43,8 @@ app.set('trust proxy', true);
 app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
+const authRoutes = require('./routes/auth');
+
 
 // Создание API роутер
 
@@ -83,7 +86,7 @@ io.on('connection', (socket) => {
         { _id: { $in: ids } },
         { $set: { status: 'read' } }
       );
-      
+
       const updatedMessages = await Message.find({ _id: { $in: ids } });
       const room = [messages[0].senderId, readerId].sort().join('_');
       io.to(room).emit('messagesRead', updatedMessages);
@@ -99,19 +102,19 @@ io.on('connection', (socket) => {
 //const emailToken = crypto.randomBytes(64).toString('hex');
 const allowedCors = [
   'http://localhost:5173',
-'https://servicebox35.pp.ru/get-client-id',
+  'https://servicebox35.pp.ru/get-client-id',
   'http://192.168.1.99:5173',
-    'http://localhost:5173',
+  'http://localhost:5173',
   'https://servicebox35.ru',
   'http://servicebox35.ru',
-  'https://servicebox35.pp.ru', 
+  'https://servicebox35.pp.ru',
   'https://servicebox35.ru', // Фронтенд 
   'https://servicebox35.pp.ru', // Бэкенд
   'http://servicebox35.pp.ru',
-  'https://servicebox35.pp.ru/services', 
-  'http://servicebox35.pp.ru/services',  
+  'https://servicebox35.pp.ru/services',
+  'http://servicebox35.pp.ru/services',
   'https://servicebox35.pp.ru/api',
-  'http://servicebox35.pp.ru/api', 
+  'http://servicebox35.pp.ru/api',
   'https://localhost:5000',
   'http://localhost:5000',
   'https://localhost:5000',
@@ -122,7 +125,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/images',
   'https://servicebox35.pp.ru/api/images/like',
   'https://servicebox35.ru/send-request',
-  'https://servicebox35.pp.ru/api/', 
+  'https://servicebox35.pp.ru/api/',
   'https://servicebox35.pp.ru',
   'http://localhost:5000',
   'https://localhost:3000',
@@ -150,12 +153,12 @@ const allowedCors = [
   'https://servicebox35.pp.ru/signup',
   'http://smtp.yandex.ru',
   'https://smtp.yandex.ru',
-'https://servicebox35.pp.ru/verify-email',
-'https://servicebox35.ru/verify-email',
-'https://servicebox35.pp.ru/signup',
-'https://servicebox35.pp.ru/api/gallery/group',
-'https://servicebox35.ru/api/gallery/group'
-  
+  'https://servicebox35.pp.ru/verify-email',
+  'https://servicebox35.ru/verify-email',
+  'https://servicebox35.pp.ru/signup',
+  'https://servicebox35.pp.ru/api/gallery/group',
+  'https://servicebox35.ru/api/gallery/group'
+
 
 ];
 
@@ -180,7 +183,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(compression());
@@ -189,7 +192,7 @@ app.use(
     crossOriginResourcePolicy: false,
   })
 );
-
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -204,18 +207,18 @@ app.use('/uploads', express.static(uploadDirectory, {
   etag: false,
 }));
 
-app.use('/api/news', newsRoutes); 
+app.use('/api/news', newsRoutes);
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
 
-app.use(express.urlencoded({ extended: true }));
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // База данных
 
 app.use('/api', apiRouter);
 mongoose.set('strictQuery', true);
-mongoose.connect( MONGODB_URI )
+mongoose.connect(MONGODB_URI)
   .then(() => console.log('Соединение с базой данных установлено'))
   .catch((error) => console.error('Ошибка подключения к базе данных:', error));
 
@@ -223,19 +226,19 @@ mongoose.connect( MONGODB_URI )
 // Определение моделей
 const Image = require('./models/image');
 const Service = require('./models/service');
-const Product = mongoose.model('Product', {
+const ProductSchema = new mongoose.Schema({
   id: { type: Number, required: true },
   name: { type: String, required: true },
-  image: { type: String, required: true },
+  images: { type: [String], required: true },
   category: { type: String, required: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
+  description: { type: String, required: true },
+  quantity: { type: Number, required: true },
   date: { type: Date, default: Date.now },
-  available: { type: Boolean, default: true },
-   quantity: { type: Number, required: true, default: 0 },
+  available: { type: Boolean, default: true }
 });
-
-
+const Product = mongoose.model('Product', ProductSchema);
 
 // Определение Middleware для CORS
 app.use((req, res, next) => {
@@ -243,7 +246,7 @@ app.use((req, res, next) => {
   if (allowedCors.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Credentials', 'true');
- 
+
     const { method } = req;
     const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
     const requestHeaders = req.headers['access-control-request-headers'];
@@ -264,10 +267,15 @@ app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
+app.use('/promotions', express.static(path.join(__dirname, 'uploads', 'promotions')));
+
+
+app.use('/api/auth', authRoutes);
+
 
 // Обработка форм
 app.use('/api/images', imageRoutes);
-app.get("./",(req, res) => {
+app.get("./", (req, res) => {
   res.send("Express App is runing")
 })
 // Настройки для загрузок файлов
@@ -280,6 +288,8 @@ const storage = multer.diskStorage({
   }
 });
 
+///actions
+app.use('/api/promotions', promotionRoutes);
 
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -291,17 +301,16 @@ const productStorage = multer.diskStorage({
   }
 });
 
+
 const productUpload = multer({ storage: productStorage });
 
-app.post('/api/uploads', productUpload.single('product'), (req, res) => {
-  if (req.file) {
-    res.json({
-      success: 1,
-      image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    });
-  } else {
-    res.status(400).send('No file uploaded.');
+
+app.post('/api/uploads', productUpload.array('product', 3), (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ success: 0, message: 'Файлы не загружены' });
   }
+  const imageUrls = req.files.map(file => `/images/${file.filename}`);
+  res.json({ success: 1, image_urls: imageUrls });
 });
 
 // Директория для сохранения изображений галереи
@@ -320,7 +329,7 @@ const galleryUpload = multer({ storage: galleryStorage });
 app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
   try {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
-    
+
     const { description } = req.body;
     const { filename, mimetype } = req.file;
 
@@ -330,9 +339,9 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
       mimeType: mimetype,
       likes: [],
     });
-    
+
     await newImage.save();
-    
+
     res.status(201).json({
       message: 'Изображение успешно загружено',
       image: {
@@ -360,18 +369,18 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 }));
 
 app.get('/api/images/user-likes', fetchUser, async (req, res) => {
-    try {
-        if (!req.user || !req.user.id) {
-            return res.status(400).json({ message: 'Invalid user ID' });
-        }
-        const userId = req.user.id;
-        const images = await Image.find({ likes: userId }, '_id');
-        const likedImageIds = images.map(img => img._id);
-        res.json(likedImageIds);
-    } catch (error) {
-        console.error('Error fetching user likes:', error.message);
-        res.status(500).json({ message: 'Ошибка сервера' });
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(400).json({ message: 'Invalid user ID' });
     }
+    const userId = req.user.id;
+    const images = await Image.find({ likes: userId }, '_id');
+    const likedImageIds = images.map(img => img._id);
+    res.json(likedImageIds);
+  } catch (error) {
+    console.error('Error fetching user likes:', error.message);
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
 });
 
 app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
@@ -396,23 +405,27 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
 
 // CRUD операций для продуктов
 app.post('/api/addproduct', async (req, res) => {
-  let products = await Product.find({});
-  let id = products.length ? products.slice(-1)[0].id + 1 : 1;
+  try {
+    const lastProduct = await Product.findOne().sort({ id: -1 }).limit(1);
+    const id = lastProduct ? lastProduct.id + 1 : 1;
+    const productData = {
+      id,
+      name: req.body.name,
+      images: req.body.images,
+      category: req.body.category,
+      new_price: Number(req.body.new_price),
+      old_price: Number(req.body.old_price),
+      description: req.body.description,
+      quantity: Number(req.body.quantity)
+    };
+    const product = new Product(productData);
 
-  const product = new Product({
-    id,
-    name: req.body.name,
-    image: req.body.image,
-    category: req.body.category,
-    new_price: req.body.new_price,
-    old_price: req.body.old_price,
-    description: req.body.description,
-    quantity: req.body.quantity, // Добавьте это
-  });
-
-  await product.save();
-  //console.log("Product saved");
-  res.json({ success: true, name: req.body.name });
+    await product.save();
+    res.json({ success: true, product });
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 });
 
 // Схема для сообщений
@@ -462,12 +475,25 @@ app.post('/api/removefromcart', fetchUser, async (req, res) => {
 });
 
 app.get('/api/allproducts', async (req, res) => {
-  let products = await Product.find({}, 'id name image category new_price old_price description quantity');
-  //("All products fetched");
-  res.send(products);
+  try {
+    const products = await Product.find({}).lean();
+
+    // Всегда делай images массивом, даже если внутри нет ничего
+    const productsWithFullUrls = products.map(product => ({
+      ...product,
+      images: Array.isArray(product.images) ? product.images.map(img =>
+        typeof img === 'string' && img.startsWith('http') ? img : `${req.protocol}://${req.get('host')}${img}`
+      ) : [], // если images нет, то вернем []
+    }));
+
+    res.json(productsWithFullUrls);
+  } catch (error) {
+    console.error('Error fetching products:', error)
+    res.status(500).json({ success: false, message: 'Ошибка получения товаров' })
+  }
 });
 
-//
+
 app.get('/allservices', async (req, res) => {
   let products = await Product.find({});
   //console.log("All products fetched");
@@ -500,29 +526,8 @@ app.put('/api/updateproduct/:id', async (req, res) => {
   }
 });
 // Определение модели пользователя
-const UserSchema = new mongoose.Schema({
-    username: { type: String, required: true },
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true },
-    refreshToken: { type: String },
-    phone: { type: String, required: true },
-    emailToken: String,
-    isVerified: { type: Boolean, default: false },
-    resetPasswordToken: String,
-    resetPasswordExpires: Date,
-    cartData: {
-        type: Map,
-        of: Number,
-        default: () => {
-            let initialCart = {};
-            for (let index = 0; index < 301; index++) {
-                initialCart[String(index)] = 0;
-            }
-            return initialCart;
-        }
-    },
-}, { timestamps: true });
-const User = mongoose.model('User', UserSchema);
+
+
 
 // Настройка транспорта nodemailer для Яндекс.Почты
 const transporter = nodemailer.createTransport({
@@ -654,28 +659,28 @@ app.get('/api/verify-email', async (req, res) => {
 });
 
 app.post('/api/login', async (req, res) => {
-    // Validate and find user
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    
-    if (user) {
-        const passCompare = await bcrypt.compare(password, user.password);
-        if (passCompare) {
-            // Generate tokens
-            const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
-            const refreshToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1d' });
+  // Validate and find user
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
 
-            // Store refresh token in the database
-            user.refreshToken = refreshToken;
-            await user.save();
+  if (user) {
+    const passCompare = await bcrypt.compare(password, user.password);
+    if (passCompare) {
+      // Generate tokens
+      const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
+      const refreshToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1d' });
 
-            res.json({ success: true, accessToken, refreshToken });
-        } else {
-            res.status(401).json({ success: false, message: 'Неверный пароль' });
-        }
+      // Store refresh token in the database
+      user.refreshToken = refreshToken;
+      await user.save();
+
+      res.json({ success: true, accessToken, refreshToken });
     } else {
-        res.status(404).json({ success: false, message: 'Пользователь не найден' });
+      res.status(401).json({ success: false, message: 'Неверный пароль' });
     }
+  } else {
+    res.status(404).json({ success: false, message: 'Пользователь не найден' });
+  }
 });
 
 // Маршрут запроса сброса пароля
@@ -741,7 +746,7 @@ app.post('/api/reset-password/:token', [
   }
 
   console.log(`Получен запрос на сброс пароля с токеном: ${token}`);
-  
+
   try {
     const { password } = req.body;
 
@@ -788,36 +793,36 @@ app.post('/api/reset-password/:token', [
   }
 });
 app.post('/api/refresh-token', async (req, res) => {
-    const { token } = req.body;
+  const { token } = req.body;
 
-    if (!token) {
-        return res.sendStatus(401); // Unauthorized
+  if (!token) {
+    return res.sendStatus(401); // Unauthorized
+  }
+
+  try {
+    const user = await User.findOne({ refreshToken: token });
+    if (!user) {
+      return res.sendStatus(403); // Forbidden
     }
 
-    try {
-        const user = await User.findOne({ refreshToken: token });
-        if (!user) {
-            return res.sendStatus(403); // Forbidden
-        }
-
-        // Проверка валидности refreshToken
-        const decoded = jwt.verify(token, JWT_SECRET);
-        if (decoded.id !== user.id) {
-            return res.sendStatus(403);
-        }
-
-        // Генерация нового accessToken
-        const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
-        res.json({ accessToken });
-    } catch (error) {
-        console.error(error);
-        res.sendStatus(500); // Internal Server Error
+    // Проверка валидности refreshToken
+    const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.id !== user.id) {
+      return res.sendStatus(403);
     }
+
+    // Генерация нового accessToken
+    const accessToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '15m' });
+    res.json({ accessToken });
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500); // Internal Server Error
+  }
 });
 // Тестовый маршрут для проверки работы сервера
 //app.get("/", (req, res) => {
-  //res.send("Express App is running");
-    // });
+//res.send("Express App is running");
+// });
 
 // Service CRUD operations
 app.get('/services', async (req, res) => {
@@ -903,9 +908,9 @@ router.post('/api/addtocart', fetchUser, async (req, res) => {
 
     // Атомарно уменьшаем количество и добавляем в корзину
     const product = await Product.findOneAndUpdate(
-      { 
+      {
         id: productId,
-        quantity: { $gt: 0 } 
+        quantity: { $gt: 0 }
       },
       { $inc: { quantity: -1 } },
       { new: true }
@@ -929,7 +934,7 @@ router.post('/api/addtocart', fetchUser, async (req, res) => {
 // Эндпоинт для поиска данных
 app.get('/api/search', async (req, res) => {
   const query = req.query.query;
-  
+
   if (!query) {
     return res.status(400).json({ message: 'Необходимо указать параметр запроса' });
   }
@@ -943,10 +948,10 @@ app.get('/api/search', async (req, res) => {
     // Объединение всех результатов
     const results = [
       ...services.map(service => ({ id: service._id, title: service.serviceName, type: 'Service', description: service.description })),
-      ...products.map(product => ({ id: product._id, title: product.name, type: 'Product', description: product.category,  quantity: product.quantity})),
+      ...products.map(product => ({ id: product._id, title: product.name, type: 'Product', description: product.category, quantity: product.quantity })),
       ...images.map(image => ({ id: image._id, title: image.description, type: 'Image', description: image.filePath }))
     ];
-    
+
     res.json(results);
   } catch (error) {
     console.error('Search error:', error.message);
@@ -974,28 +979,28 @@ app.get('/allservices', async (req, res) => {
   console.log("All products fetched");
   res.send(products);
 });
- //creating enpoint to get cartdata
+//creating enpoint to get cartdata
 app.post('/api/getcart', fetchUser, async (req, res) => {
   console.log("GetCart request received");
   try {
-      console.log(`Fetching cart data for user with ID: ${req.user.id}`);
-      let userData = await User.findOne({_id: req.user.id});
-      
-      if (!userData) {
-          console.log(`User with ID ${req.user.id} not found`);
-          return res.status(404).json({ message: "Пользователь не найден" });
-      }
+    console.log(`Fetching cart data for user with ID: ${req.user.id}`);
+    let userData = await User.findOne({ _id: req.user.id });
 
-      if (!userData.cartData || userData.cartData.size === 0) {
-          console.log(`Cart data not found or empty for user with ID: ${req.user.id}`);
-          return res.status(404).json({ message: "Данные о корзине не найдены" });
-      }
+    if (!userData) {
+      console.log(`User with ID ${req.user.id} not found`);
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
 
-      console.log(`Cart data retrieved successfully for user with ID: ${req.user.id}`);
-      res.json(Object.fromEntries(userData.cartData));
+    if (!userData.cartData || userData.cartData.size === 0) {
+      console.log(`Cart data not found or empty for user with ID: ${req.user.id}`);
+      return res.status(404).json({ message: "Данные о корзине не найдены" });
+    }
+
+    console.log(`Cart data retrieved successfully for user with ID: ${req.user.id}`);
+    res.json(Object.fromEntries(userData.cartData));
   } catch (error) {
-      console.error('Ошибка при получении данных корзины:', error.message);
-      res.status(500).json({ message: "Ошибка сервера" });
+    console.error('Ошибка при получении данных корзины:', error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 
@@ -1117,7 +1122,7 @@ app.post('/admin/create', async (req, res) => {
     email: 'admin@example.com',
     password: 'password123', // не забудьте изменить это на более сложный пароль
   });
-  
+
   await newAdmin.save();
   res.send('Admin created');
 });
@@ -1129,14 +1134,14 @@ app.use('/admin-panel', verifyToken, (req, res) => {
 app.post('/api/send-message', async (req, res) => {
   try {
     const { message, userId } = req.body;
-    
+
     // Сохраняем сообщение в MongoDB
     const newMessage = new Message({
       userId,
       text: message,
       timestamp: new Date()
     });
-    
+
     await newMessage.save();
 
     // Отправляем сообщение через Socket.io
@@ -1147,6 +1152,31 @@ app.post('/api/send-message', async (req, res) => {
   } catch (error) {
     console.error('Error sending message:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+// Dolyami Payment Integration
+app.post('/api/init-payment', async (req, res) => {
+  try {
+    const { orderId, amount } = req.body;
+    // Здесь должна быть логика интеграции с API "Долями"
+    // Пример запроса к API "Долями"
+    const response = await fetch('https://api.dolyami.ru/payment/init', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        orderId,
+        amount,
+        clientId: process.env.DOLYAMI_CLIENT_ID,
+        secret: process.env.DOLYAMI_SECRET
+      })
+    });
+    const data = await response.json();
+    res.json({ success: true, paymentUrl: data.paymentUrl });
+  } catch (error) {
+    console.error('Error initiating payment:', error);
+    res.status(500).json({ success: false, message: 'Ошибка инициализации платежа' });
   }
 });
 

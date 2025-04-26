@@ -28,10 +28,10 @@ module.exports = {
   },
   module: {
     rules: [
-      { 
-        test: /\.js$/, 
-        exclude: /node_modules/, 
-        loader: "babel-loader" 
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader"
       },
       {
         test: /\.css$/,
@@ -54,7 +54,7 @@ module.exports = {
       '/uploads': {
         target: 'https://servicebox35.ru',
         changeOrigin: true,
-        pathRewrite: {'^/uploads' : ''}
+        pathRewrite: { '^/uploads': '' }
       }
     }
   }

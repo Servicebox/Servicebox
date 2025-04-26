@@ -12,16 +12,12 @@ const AdminPanel = () => {
 
   return (
     <div className='admim-panel__root'>
-      <h2>Управление услугами</h2>
-      <AdminPanelRoute />
-
-      
-      <input 
-        type="text" 
-        value={serviceId} 
-        onChange={handleServiceIdChange} 
-        placeholder="ID услуги" 
-      />
+      <aside className="admin-sidebar">
+        <h2>Управление услугами</h2>
+        <AdminPanelRoute isSidebar={true} />
+      </aside>
+      <main className="admin-content">
+      </main>
     </div>
   );
 };

@@ -8,14 +8,14 @@ const CreateImage = () => {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    
+
     if (selectedFiles.some(file => !isValidFile(file))) {
       alert('Один или несколько файлов недопустимы (максимальный размер 5MB, только изображения)');
       return;
     }
 
     setFiles(selectedFiles);
-    
+
     // Создание превью
     const previewUrls = selectedFiles.map(file => URL.createObjectURL(file));
     setPreviews(previewUrls);
@@ -27,7 +27,7 @@ const CreateImage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (files.length === 0) {
       alert('Пожалуйста, выберите файлы для загрузки');
       return;
@@ -44,7 +44,7 @@ const CreateImage = () => {
       });
 
       if (!response.ok) throw new Error('Ошибка загрузки');
-      
+
       const result = await response.json();
       alert('Изображения успешно загружены!');
       resetForm();
@@ -77,7 +77,7 @@ const CreateImage = () => {
             />
             <span>Выберите файлы или перетащите их сюда</span>
           </label>
-          
+
           <div className="preview-grid">
             {previews.map((url, index) => (
               <div key={index} className="preview-item">

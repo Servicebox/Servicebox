@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext();
 
@@ -79,38 +79,38 @@ export const AuthProvider = ({ children }) => {
     }
   }, [logout, extendSession]);
 
- const checkAuth = useCallback(async () => {
-  try {
-    const response = await fetch('https://servicebox35.pp.ru/api/authenticate', {
-      method: 'GET',
-      credentials: 'include',
-    });
+  const checkAuth = useCallback(async () => {
+    try {
+      const response = await fetch('https://servicebox35.pp.ru/api/authenticate', {
+        method: 'GET',
+        credentials: 'include',
+      });
 
-    if (!response.ok) {
-      const contentType = response.headers.get('content-type');
-      let errorMessage = 'Ошибка аутентификации';
-      if (contentType && contentType.includes('application/json')) {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
-      } else {
-        const errorText = await response.text();
-        errorMessage = errorText || errorMessage;
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type');
+        let errorMessage = 'Ошибка аутентификации';
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } else {
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
-      throw new Error(errorMessage);
-    }
 
-    const data = await response.json();
-    if (data.success) {
-      setIsAuthenticated(true);
-      scheduleAutoLogout(data.token);
-    } else {
+      const data = await response.json();
+      if (data.success) {
+        setIsAuthenticated(true);
+        scheduleAutoLogout(data.token);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      console.error('Ошибка при проверке аутентификации:', error);
       setIsAuthenticated(false);
     }
-  } catch (error) {
-    console.error('Ошибка при проверке аутентификации:', error);
-    setIsAuthenticated(false);
-  }
-}, [scheduleAutoLogout]);
+  }, [scheduleAutoLogout]);
 
   useEffect(() => {
     checkAuth();

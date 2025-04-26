@@ -1,298 +1,220 @@
-import React, { useEffect} from 'react';
-import axios from 'axios';
-import './Chat.css'; // Подключение стилей
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
+import "./Chat.css";
+import Cha from "../../images/chatonlain.gif";
+import userIcon from "../../images/user.png";
+import managerIcon from "../../images/manager.svg";
+import Icon from "../../images/Up.svg";
 
-import Cha from '../../images/chatonlain.gif'
-import userIcon from '../../images/user.png';
-import managerIcon from '../../images/manager.svg'; 
-import Icon from '../../images/Up.svg'
-const Chat = () => {
-   useEffect(() => {
-    const handleOpenChat = () => {
-      const chatInstance = new TelegaChat();
-      chatInstance.open();
-      chatInstance.startUpdate();
-      // Добавляем класс 'open' для отображения чата
-      const chatWrap = document.querySelector('.chat__wrap');
-      if (chatWrap) {
-        chatWrap.classList.add('open');
-      }
-    };
-const toggleTheme = () => {
-  document.body.classList.toggle('dark-theme');
-};
-    const handleCloseChat = () => {
-      const chatWrap = document.querySelector('.chat__wrap');
-      if (chatWrap) {
-        chatWrap.classList.remove('open');
-      }
-    };
+// -------- ЭТО ГЛАВНОЕ ДЛЯ РАБОТЫ EMOJI PICKER -------------
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+// ----------------------------------------------------------
 
-    // Получаем кнопку открытия чата
-    const openChatButton = document.getElementById('open-chat-button');
-    if (openChatButton) {
-      openChatButton.addEventListener('click', handleOpenChat);
+const BOT_TOKEN = "7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc";
+const CHAT_ID = "406806305";
+
+function getUserId() {
+  let id = localStorage.getItem('reactchat_userid');
+  if (!id) {
+    id = 'user' + Math.random().toString(36).substr(2, 10);
+    localStorage.setItem('reactchat_userid', id);
+  }
+  return id;
+}
+const USER_ID = getUserId();
+
+function parseBotReplies(updates) {
+  return updates
+    .filter(
+      u =>
+        u.message &&
+        u.message.reply_to_message &&
+        typeof u.message.reply_to_message.text === 'string' &&
+        u.message.reply_to_message.text.includes(USER_ID)
+    )
+    .map(u => ({
+      _id: u.update_id,
+      author: 'manager',
+      text: u.message.text,
+      createdAt: new Date(u.message.date * 1000).toLocaleTimeString(),
+      status: "delivered"
+    }));
+}
+
+function parseUserHistory(items) {
+  if (!Array.isArray(items)) return [];
+  return items.map(msg => ({
+    ...msg,
+    createdAt: msg.createdAt,
+    status: msg.status
+  }));
+}
+
+export default function Chat() {
+  const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [text, setText] = useState('');
+  const [messages, setMessages] = useState(() => {
+    try {
+      return parseUserHistory(JSON.parse(localStorage.getItem('reactchat_history') || '[]'));
+    } catch {
+      return [];
     }
+  });
+  const [showEmoji, setShowEmoji] = useState(false);
+  const chatEndRef = useRef(null);
+  const sndSend = useRef(null);
+  const sndDelivery = useRef(null);
 
-    // Чистим обработчики при размонтировании
-    return () => {
-      if (openChatButton) {
-        openChatButton.removeEventListener('click', handleOpenChat);
+  // Скролл вниз
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, open]);
+
+  // Локальная история
+  useEffect(() => {
+    localStorage.setItem('reactchat_history', JSON.stringify(messages));
+  }, [messages]);
+
+  // Emoji picker (НОВАЯ ФУНКЦИЯ ДЛЯ EMOJI-MART 5)
+  const addEmoji = (emoji) => setText(text + (emoji.native || emoji));
+
+  // Отправка сообщения
+  async function sendMessage(e) {
+    e && e.preventDefault();
+    if (!text.trim()) return;
+    setPending(true);
+
+    const body = `USER:${USER_ID}\n${text.trim()}`;
+    const msgId = Date.now();
+
+    // Звук отправки
+    sndSend.current && sndSend.current.play();
+
+    try {
+      await axios.get(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+        {
+          params: { chat_id: CHAT_ID, text: body },
+        }
+      );
+      setMessages(msgs =>
+        [...msgs, { _id: msgId, author: 'user', text, createdAt: new Date().toLocaleTimeString(), status: "sent" }]
+      );
+      setText('');
+    } finally {
+      setPending(false);
+    }
+  }
+
+  // Polling for replies and "mark delivered"
+  useEffect(() => {
+    if (!open) return;
+    const timer = setInterval(async () => {
+      try {
+        const { data } = await axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
+        const replies = parseBotReplies(data.result || []);
+        if (replies.length) {
+          setMessages(old => {
+            const known = new Set(old.map(m => m._id));
+            let withDelivery = old.map(msg =>
+              msg.author === 'user' && msg.status !== 'delivered'
+                ? { ...msg, status: 'delivered' }
+                : msg
+            );
+            if (replies.some(r => !known.has(r._id))) {
+              sndDelivery.current && sndDelivery.current.play();
+            }
+            return [
+              ...withDelivery,
+              ...replies.filter(r => !known.has(r._id))
+            ];
+          });
+        }
+      } catch (e) {
+        // Ошибки при получении сообщений Telegram игнорируются
       }
-    };
-  }, []);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [open]);
+
+  const handleToggle = () => setOpen(v => !v);
 
   return (
     <div>
-      <button id="open-chat-button" aria-label="Открыть чат">
-        <img className="img-chat"src={Cha} alt="Открыть чат" />
+      <audio src={require('../Assets/send.mp3')} ref={sndSend} />
+      <audio src={require('../Assets/delivered.mp3')} ref={sndDelivery} />
+      <button className="open-chat-btn" onClick={handleToggle} aria-label="Открыть чат">
+        <img className="chat-icon" src={Cha} alt="чат" />
       </button>
+      {open && (
+        <div className="chat-modal">
+          <div className="chat-header">
+            <img src={managerIcon} alt="manager" width={32} style={{ marginRight: 10, borderRadius: 12 }} />
+            <span>Онлайн-консультант</span>
+            <button className="chat-close" onClick={handleToggle}>&times;</button>
+          </div>
+          <div className="chat-messages">
+            {messages.map((msg, idx) => (
+              <div key={msg._id || idx} className={`chat-message ${msg.author === 'user' ? 'user-msg' : 'manager-msg'}`}>
+                {msg.author === 'manager'
+                  ? <img className="chat-ava" src={managerIcon} alt="m" />
+                  : <img className="chat-ava" src={userIcon} alt="u" />}
+                <div className="chat-bubble">
+                  <span dangerouslySetInnerHTML={{ __html: msg.text.replace(/\n/g, '<br/>') }} />
+                  <div className="chat-meta">
+                    <span className="chat-time">{msg.createdAt}</span>
+                    {msg.author === 'user' && (
+                      <span className={`msg-status ${msg.status}`}>{msg.status === 'delivered' ? "✓✓" : "✓"}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div ref={chatEndRef}></div>
+          </div>
+          <form className="chat-input-form" onSubmit={sendMessage} style={{ position: 'relative' }}>
+            <button type="button" className="emoji-btn" onClick={() => setShowEmoji(v => !v)} title="Эмодзи">
+              😊
+            </button>
+            {showEmoji && (
+              <div className="emoji-picker">
+                <button
+                  className="emoji-close-btn"
+                  type="button"
+                  onClick={() => setShowEmoji(false)}
+                  aria-label="Закрыть эмодзи"
+                >×</button>
+                <Picker
+                  data={data}
+                  onEmojiSelect={(emoji) => {
+                    addEmoji(emoji);
+                    setShowEmoji(false);  // уберите строку если не хотите автозакрытия
+                  }}
+                  locale="ru"
+                  theme="light"
+                />
+              </div>
+            )}
+            <textarea
+              className="chat-input"
+              placeholder="Ваше сообщение..."
+              value={text}
+              onChange={e => setText(e.target.value)}
+              rows={1}
+              disabled={pending}
+              style={{ minWidth: 0, maxWidth: "100%", width: "100%" }}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) { sendMessage(e); e.preventDefault(); }
+              }}
+            />
+            <button type="submit" disabled={pending || !text.trim()} className="chat-send-btn">
+              <img src={Icon} alt="send" />
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
-};
-
-  //Стили пишите сами!!!!
-//Картинки и звуки качайте сами!
-
-
-
-window.$ = (el) => {
-  if (document.querySelector(el) !== null) return document.querySelector(el)
-  else console.warn(`${el} не найден в дом дереве`);
-};
-
-window.$$ = (el) => {
-  if (document.querySelectorAll(el) !== null) return document.querySelectorAll(el)
-};
-
-//Фунцкия воспроизведения звуков
-window.soundPush = (url) => {
-  let audio = new Audio(); // Создаём новый элемент Audio
-  //audio.src = url; // Указываем путь к звуку "клика"
-  //audio.autoplay = true; // Автоматически запускаем
-  //audio.volume = 0.7
-  $('body').appendChild(audio)
-  audio.addEventListener("ended", e => audio.remove())
-  return url
 }
-
-
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
-let timeNow = new Date().toLocaleTimeString();
-const token = `7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc
-`; // Получаем тут https://t.me/BotFather
-const chatId = `406806305`;  //получаем при вызове https://api.telegram.org/bot7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc/getupdates в браузере
-const botId = `7903855692`; //
-
-let startChat = false
-let lastMessId, FirstMessId, newMessId, checkReply, Timer, count;
-let idStart = getRandomInt(999)
-
-
-// Имя менагера
-const manager = 'Админ '
-
-let tpl = `<div class="chat__wrap">
-    <div class="chat__title">Онлайн-чат
-    <div class="btm__close chat__close">&times;</div>
-    </div>
-    <div class="chat__body">
-    <div class="chat__body__item chat__body__item__manager">
-    <img class="chat__body__item__user__icon cards__theme"src="${managerIcon}" alt="аватарка менеджера">
-    <span class="chat__body__item__user">${manager} на связи 🤙</span>
-    <span class="chat__body__item__text">Салют! Какой вопрос?</span>
-    <i class="chat__body__item__time">${timeNow}</i>
-    </div>
-    </div>
-    <div class="chat__input">
-        <div class="chat__input__message">
-            <textarea rows="1" wrap="on" type="text" class="chat__main__input" aria-label="Напишите сообщение" placeholder="Напишите сообщение" required ></textarea>
-        </div>
-        <img class="chat__input__submit" src="${Icon}" alt="Отправить" />
-    </div>
-    
-    </div>`;
-
-
-class TelegaChat {
-  open() {
-
-    this.getIp()
-
-    if (window.innerWidth < 768) $("body").classList.add('overflow__hidden')
-
-    if (!$(".chat__wrap")) $("body").insertAdjacentHTML("afterbegin", tpl);
-
-    let store = localStorage.getItem("historyMessages");
-
-    if (store !== null) {
-      $(".chat__body").innerHTML = store;
-    }
-
-    $(".chat__main__input").onkeypress = (e) => {
-      if (e.key === `Enter`) this.submit();
-      if (e.target.value !== '') $(".chat__main__input").classList.remove('validate__error')
-    };
-
-    $(".chat__input__submit").onclick = () => this.submit();
-
-    $(".chat__close").onclick = () => this.close()
-
-    $(".chat__body").scrollTop = 100000;
-
-    $(".chat__wrap").classList.add("open");
-
-    setTimeout(() => {
-      $('.chat__main__input').focus()
-    }, 1000);
-
-
-    axios.get(`https://api.telegram.org/bot${token}/getupdates`)
-    .then((r) => {
-      lastMessId = r.data.result[r.data.result.length - 1].message.message_id;
-      FirstMessId = lastMessId
-    })
-
-    this.deleteItem()
-  }
-
-  close() {
-    clearInterval(Timer)
-    $(".chat__wrap").classList.remove("open");
-    if (window.innerWidth < 768) $("body").classList.remove('overflow__hidden')
-  }
-
-  deleteItem() {
-    $$('.chat__body__item').forEach(el => {
-      if (el.querySelector('.chat__body__item__delete')) el.querySelector('.chat__body__item__delete').onclick = () => {
-        el.remove()
-        localStorage.setItem("historyMessages", $(".chat__body").innerHTML);
-      }
-    });
-  }
-
-getIp() {
-  axios.get(`https://servicebox35.pp.ru/get-ip`)
-    .then(r => {
-      if (r.data && r.data.ip) {
-        idStart = r.data.ip; // Теперь получаем правильный IP-адрес
-      } else {
-        console.error("Не удалось получить IP");
-      }
-    })
-    .catch(error => {
-      console.error("Ошибка при получении IP:", error);
-    });
-}
-  submit() {
-    timeNow = new Date().toLocaleTimeString();
-    let val = $(".chat__main__input").value;
-    if (val !== ``) {
-      $('.chat__main__input').classList.remove('validate__error')
-      let tplItemClient = `<div class="chat__body__item chat__body__item__client">
-          <div class="btm__close chat__body__item__delete cards__theme">×</div>
-          <img class="chat__body__item__user__icon cards__theme" src="${userIcon}" alt="аватарка user">
-        <span class="chat__body__item__user">Вы</span>
-        <span class="chat__body__item__text">${val}</span>
-        <i class="chat__body__item__time">${timeNow}</i></div>`;
-
-      $(".chat__body").innerHTML += tplItemClient;
-
-      $(".chat__body").scrollTop = 100000;
-
-      axios.get(
-        `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=USER:${idStart}
-            ${val}`
-      );
-
-      //soundPush("/sound/set-whatsapp.mp3");
-      localStorage.setItem("historyMessages", $(".chat__body").innerHTML);
-      setTimeout(() =>$(".chat__main__input").value = ``.trim(), 0);
-    
-    } else {
-      alert(`Введите текст`)
-    }
-
-    this.deleteItem()
-    this.startUpdate()
-
-    $(".chat__main__input").value = ``
-
-  }
-
-  startUpdate(){
-    Timer = setInterval(() => this.checkResponse(), 3000);
-  }
-
-  stopUpdate(){
-    clearInterval(Timer)
-  }
-
-  checkResponse() {
-    count++
-    if (count > 120 && lastMessId === FirstMessId) this.stopUpdate()
-
-    axios
-      .get(`https://api.telegram.org/bot${token}/getupdates`)
-      .then((r) => {
-
-        let resLastMess = r.data.result[r.data.result.length - 1].message
-        if (resLastMess.reply_to_message !== undefined) checkReply = resLastMess.reply_to_message.text.includes(idStart)
-        else checkReply = false
-
-        newMessId = resLastMess.message_id;
-
-        // console.log(FirstMessId, lastMessId , newMessId, checkReply);
-
-        if (newMessId > lastMessId && checkReply) {
-
-          // console.log(1);
-
-          $(".chat__wrap").classList.add("open");
-
-          let Text = r.data.result[r.data.result.length - 1].message.text;
-
-          let tplItemMenager = `<div class="chat__body__item chat__body__item__manager">
-              <div class="btm__close chat__body__item__delete cards__theme">×</div>
-              <img class="chat__body__item__user__icon cards__theme" src="${managerIcon}" alt="аватарка менеджера">
-              <span class="chat__body__item__user">${manager}</span>
-                <span class="chat__body__item__text">${Text}</span>
-                <i class="chat__body__item__time">${timeNow}</i></div>`;
-
-          $(".chat__body").innerHTML += tplItemMenager;
-
-          this.deleteItem()
-
-          // soundPush("/sound/get-whatsapp.mp3");
-
-          localStorage.setItem("historyMessages", $(".chat__body").innerHTML);
-
-          $(".chat__body").scrollTop = 100000;
-
-          lastMessId = newMessId
-
-        }
-      })
-  }
-}
-
-
-// Если нужно отправлять сообщения повторно 
-if (localStorage.getItem("historyMessages")) {
-  axios.get(`https://api.telegram.org/bot${token}/getupdates`)
-    .then((r) => {
-      lastMessId = r.data.result[r.data.result.length - 1].message.message_id;
-      FirstMessId = lastMessId
-      //localStorage.setItem("historyMessages", $(".chat__body").innerHTML);
-    })
-  new TelegaChat().open()
-    $(".chat__wrap").classList.remove("open");
-  new TelegaChat().startUpdate()
-}
-
-
-export default Chat;

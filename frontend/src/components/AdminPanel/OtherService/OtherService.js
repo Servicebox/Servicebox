@@ -53,7 +53,7 @@ const OtherServiceList = () => {
           </tr>
         </thead>
         <tbody>
-        {filteredOtherPrices.slice(0, showAll ? filteredOtherPrices.length : 15).map((otherPrice) => (
+          {filteredOtherPrices.slice(0, showAll ? filteredOtherPrices.length : 15).map((otherPrice) => (
             <tr key={otherPrice._id}>
               <td>{otherPrice.serviceName}</td>
               <td>{otherPrice.price}</td>
@@ -67,12 +67,12 @@ const OtherServiceList = () => {
         <button className='glass__btn' onClick={handleHideAll}>Скрыть прайс</button>
       )}
       <p className='glass__sabtitle-one'>* - время ремонта может меняться в зависимости от модели устройства и сложности проводимых работ</p>
-        <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
-        <div className="back__btn"> 
-      <ul>
-      <li><Link to="/">На главную</Link>
-      </li>
-      </ul>
+      <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
+      <div className="back__btn">
+        <ul>
+          <li><Link to="/">На главную</Link>
+          </li>
+        </ul>
       </div>
     </div>
   );

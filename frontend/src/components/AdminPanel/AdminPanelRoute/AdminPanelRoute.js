@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { NavLink, Link, Route, Routes } from 'react-router-dom';
 import "./AdminPanelRoute.css"
 import CreateImage from '../Image/CreateImage';
 import CreateServiceForm from './CreateServiceForm';
@@ -15,22 +15,25 @@ import ImageList from '../Image/ImageList';
 import CreateNewsForm from '../News/CreateNewsForm';
 import ListNews from '../News/ListNews';
 import UpdateNewsForm from '../News/UpdateNewsForm';
+import AdminPromotions from '../AdminPromotions';
 
 
 const AdminPanelRoute = () => {
   return (
     <div className='admin-panel'>
-      <Link className='admin__link' to="/admin-panel/create">Создание Услуги</Link>
-      <Link className='admin__link' to="/admin-panel/delete">Удаление услуги</Link>
-      <Link className='admin__link' to="/admin-panel/update">Обновление услуги</Link>
-      <Link className='admin__link' to="/admin-panel/listservice">Услуги список</Link>
-      <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
-      <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>
-      <Link className='admin__link' to="/admin-panel/listproduct">Товары список</Link>
-      <Link className='admin__link' to="/admin-panel/addproduct">Добавить товар</Link>
-      <Link className='admin__link' to="/admin-panel/imagelist">Фото все</Link>
-      <Link className='admin__link' to="/admin-panel/addnews">Добавить новость</Link>
-      <Link className='admin__link' to="/admin-panel/listnews">Список новостей</Link>
+
+      {/*<Link className='admin__link' to="/admin-panel/create">Создание Услуги</Link>*/}
+      {/*<Link className='admin__link' to="/admin-panel/delete">Удаление услуги</Link>*/}
+      {/*<Link className='admin__link' to="/admin-panel/update">Обновление услуги</Link>*/}
+      <NavLink className='admin__link' to="/admin-panel/listservice">Услуги список</NavLink>
+      {/* <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
+      <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>*/}
+      <NavLink className='admin__link' to="/admin-panel/listproduct">Товары список</NavLink>
+      {/*<Link className='admin__link' to="/admin-panel/addproduct">Добавить товар</Link>*/}
+      <NavLink className='admin__link' to="/admin-panel/imagelist">Фото все</NavLink>
+      <NavLink className='admin__link' to="/admin-panel/addnews">Добавить новость</NavLink>
+      <NavLink className='admin__link' to="/admin-panel/listnews">Список новостей</NavLink>
+      <NavLink className='admin__link' to="/admin-panel/promotions">Акции</NavLink>
 
       <div className='admin-links'>
         <Routes>
@@ -46,8 +49,10 @@ const AdminPanelRoute = () => {
           <Route path="update" element={<UpdateService />} />
           <Route path="imagelist" element={<ImageList />} />
           <Route path="addnews" element={<CreateNewsForm />} />
-      <Route path="listnews" element={<ListNews />} />
+          <Route path="promotions" element={<AdminPromotions />} />
+          <Route path="listnews" element={<ListNews />} />
           <Route path="update-news/:id" element={<UpdateNewsForm />} />
+          <Route path="promotions" element={<AdminPromotions />} />
         </Routes>
       </div>
     </div>

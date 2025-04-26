@@ -1,0 +1,72 @@
+.animated-title {
+color: #ffffff;
+    background-color: #004578;
+    clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
+    letter-spacing: 0.1em;
+    text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0 4px 0 #282828, 0 5px 0 #262626, 0 6px 0 #242424, 0 7px 0 #222, 0 8px 0 #202020, 0 9px 0 #1e1e1e, 0 10px 0 #1c1c1c, 0 11px 0 #1a1a1a, 0 12px 0 #181818, 0 13px 0 #161616, 0 14px 0 #141414, 0 15px 0 #121212, 0 22px 30px rgba(0, 0, 0, 0.9);
+    font-size: 40px;
+ padding-top: 90px;
+    text-align: center;
+    text-transform: uppercase;
+    text-rendering: optimizeLegibility;
+}
+.effect3d { animation-name: effect3d }
+@keyframes effect3d {
+    to {
+        text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0, 0, 0, .1), 0 0 5px rgba(0, 0, 0, .1), 0 1px 3px rgba(0, 0, 0, .3), 0 3px 5px rgba(0, 0, 0, .2), 0 5px 10px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .2), 0 20px 20px rgba(0, 0, 0, .15)
+    }
+}
+.animated-title span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) scaleY(1.15) skewX(-8deg);
+  animation: letter-in 0.65s cubic-bezier(.62,.35,.56,1.28) forwards;
+  /* Каждая буква получит индивидуальную задержку из JS */
+}
+
+@keyframes letter-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1) skewX(0deg);
+
+  }
+}
+@media (max-width: 960px) {
+  .animated-title {
+    font-size: 32px;
+    padding-bottom: 20px;
+padding-top: 80px;
+  }
+}
+@media (max-width: 600px) {
+  .animated-title {
+    font-size: 22px;
+
+    letter-spacing: 0.07em;
+  }
+}
+@media (max-width: 400px) {
+  .animated-title {
+    font-size: 16px;
+
+    clip-path: polygon(0% -2%, 29% 5%, 58% 2%, 100% 12%, 101% 75%, 100% 100%, 12% 98%, 0% 100%);
+    /* чуть проще форма, если хочется адаптивней */
+  }
+}
+@media (max-width: 320px) {
+  .animated-title {
+    font-size: 13px;
+    padding: 11px 2px;
+    letter-spacing: 0.05em;
+  }
+}
+@media (max-width: 400px) {
+  .animated-title span {
+    transform: translateY(16px) scaleY(1.07) skewX(-6deg);
+  }
+}
+@media (max-width: 320px) {
+  .animated-title span {
+    transform: translateY(9px) scaleY(1.04) skewX(-4deg);
+  }
+}

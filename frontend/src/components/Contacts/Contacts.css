@@ -2,7 +2,7 @@
 
 background-color: #004578;
     clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
-    padding-bottom: 50px;
+
     color: #fff;
 
 }
@@ -17,6 +17,8 @@ background-color: #004578;
 .contacts__list-info{
   display: flex;
   flex-direction: column;
+      flex-direction: column;
+    padding-bottom: 14px;
 }
 .contacts-text {
     font-size: 16px;

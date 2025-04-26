@@ -1,7 +1,7 @@
 // ShopContext.js
 
 import React, { createContext, useState, useEffect } from "react";
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 
 export const ShopContext = createContext(null);
 
@@ -157,12 +157,12 @@ const ShopContextProvider = (props) => {
         return totalItem;
     }
 
-    const contextValue = { 
-        getTotalCartAmount, 
-        all_product, 
-        cartItems, 
-        addToCart, 
-        removeFromCart, 
+    const contextValue = {
+        getTotalCartAmount,
+        all_product,
+        cartItems,
+        addToCart,
+        removeFromCart,
         getTotalCartItems,
         isAuthenticated,
         setIsAuthenticated

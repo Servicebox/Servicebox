@@ -37,37 +37,37 @@ export const UpdateService = () => {
   return (
     <form className='create__form' onSubmit={handleSubmit}>
       <input className='admin__input'
-        type="text" 
+        type="text"
         name="serviceId"
-        value={updatedData.serviceId} 
+        value={updatedData.serviceId}
         onChange={handleInputChange}
         placeholder="Service ID"
       />
       <input className='admin__input'
-        type="text" 
+        type="text"
         name="serviceName"
-        value={updatedData.serviceName} 
+        value={updatedData.serviceName}
         onChange={handleInputChange}
         placeholder="Service Name"
       />
       <input className='admin__input'
-        type="text" 
+        type="text"
         name="description"
-        value={updatedData.description} 
+        value={updatedData.description}
         onChange={handleInputChange}
         placeholder="Description"
       />
       <input className='admin__input'
-        type="text" 
+        type="text"
         name="price"
-        value={updatedData.price} 
+        value={updatedData.price}
         onChange={handleInputChange}
         placeholder="Price"
       />
       <input className='admin__input'
-        type="text" 
+        type="text"
         name="category"
-        value={updatedData.category} 
+        value={updatedData.category}
         onChange={handleInputChange}
         placeholder="Category"
       />

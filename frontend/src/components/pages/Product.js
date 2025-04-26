@@ -6,13 +6,19 @@ import Breadcrum from '../Breadcrums/Breadcrum';
 import ProductDisplay from '../ProductDisplay/ProductDisplay';
 
 const Product = () => {
+  // Получаем данные из контекста
+
   const { all_product } = useContext(ShopContext);
+  // Получаем id продукта из URL
   const { productId } = useParams();
+  // Находим продукт по id
+
   const product = all_product.find((e) => e.id === Number(productId));
+
 
   // Проверка на наличие продукта
   if (!product) {
-    return <div>Loading product information...</div>;
+    return <div>Загруззззззка</div>;
   }
 
   return (

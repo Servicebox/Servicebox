@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import "./MainBanner.css";
-
+import SpiralAnimation from './SpiralAnimation';
 import СloseIcon from "../../../images/x.svg";
 
 import Diagnostics from "../../../images/notorang.svg"
@@ -10,331 +10,178 @@ import Eplaceable from "../../../images/telpodmena.svg"
 import Form from '../../Form/Form';
 
 
-import Example1 from '../../../images/chistka.webp';
-import Example2 from '../../../images/gid.webp';
-import Example3 from '../../../images/videocard.webp';
-import Example4 from '../../../images/mnogodet.webp';
-import Example5 from '../../../images/glass.webp';
+import Example1 from '../../../images/1ak.webp';
+import Example2 from '../../../images/2ak.webp';
+import Example3 from '../../../images/3ak.webp';
 
-function Countdown({ endDate }) {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0, hours: 0, minutes: 0, seconds: 0
-  });
+const promoImages = [Example1, Example2, Example3];
 
- const calculateProgress = (current, max) => {
-    return 283 * (1 - current/max); // 283 - длина окружности
-  };
-  
+function PromoImageSlider() {
+  const [current, setCurrent] = useState(0);
+  const touchStartX = React.useRef(null);
+
+  const next = () => setCurrent((prev) => (prev + 1) % promoImages.length);
+  const prev = () => setCurrent((prev) => (prev - 1 + promoImages.length) % promoImages.length);
+
   useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      const difference = endDate - now;
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-      setTimeLeft({ days, hours, minutes, seconds });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [endDate]);
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % promoImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-  function formatTime(unit, singular, few, plural) {
-    if (unit === 1) return `${unit} ${singular}`;
-    else if (unit > 1 && unit < 5) return `${unit} ${few}`;
-    else return `${unit} ${plural}`;
-  }
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartX.current;
+    if (diffX > 40) prev();
+    if (diffX < -40) next();
+    touchStartX.current = null;
+  };
+
+  // Автослайдер
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % promoImages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+
 
   return (
-    <div className='countdown_time'>
-      <div id="timer">
-        <span id="days">{formatTime(timeLeft.days, 'день', 'дня', 'дней')}</span>
-        <span id="hours">{formatTime(timeLeft.hours, 'час', 'часа', 'часов')}</span>
-        <span id="minutes">{formatTime(timeLeft.minutes, 'минута', 'минуты', 'минут')}</span>
-        <span id="seconds">{formatTime(timeLeft.seconds, 'сек', 'сек', 'сек')}</span>
-      </div>
-    </div>
-  );
-}
-
-function PromotionCarousel({ toggleForm }) {
-  const promotions = [
-    {
-      title: "Акция! Комплексная чистка ноутбука всего за 900 руб",
-      endDate: new Date('2025-04-29T23:59:59'),
-      description: "До конца акции осталось:",
-      image: Example1
-    },
-    {
-      title: "При установке ориг дисплея, гидрогелевая пленка в подарок",
-      endDate: new Date('2025-04-30T23:59:59'),
-      description: "До конца акции осталось:",
-      image: Example2
-    },
-    {
-      title: "При ремонте видеокарт на Ленина д.6 скидка на работу 20%",
-      endDate: new Date('2025-04-30T23:59:59'),
-      description: "До конца акции осталось:",
-      image: Example3
-    },
-    {
-      title: " Многодетным скидка на работу 20%",
-      endDate: new Date('2025-04-30T23:59:59'),
-      description: "До конца акции осталось:",
-      image: Example4
-    },
-     {
-      title: " Замена стекла в день обращения, со скидкой на работу в 5%",
-      endDate: new Date('2025-04-15T23:59:59'),
-      description: "До конца акции осталось:",
-      image: Example5
-    }
-
-  ];
-
-  const [currentPromotionIndex, setCurrentPromotionIndex] = useState(0);
-
-  function nextPromotion() {
-    setCurrentPromotionIndex((currentPromotionIndex + 1) % promotions.length);
-  }
-
-  function previousPromotion() {
-    const newIndex = currentPromotionIndex - 1;
-    setCurrentPromotionIndex(newIndex < 0 ? promotions.length - 1 : newIndex);
-  }
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentPromotionIndex(prevIndex => (prevIndex + 1) % promotions.length);
-    }, 4000);
-    return () => clearInterval(intervalId);
-  }, [promotions.length]);
-
- return (
-    <div className="promotion-carousel-container">
-      <div className="fullscreen-slider">
-        {promotions.map((promotion, index) => (
-          <div 
-            key={index}
-            className={`slide ${index === currentPromotionIndex ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${promotion.image})` }}
-          >
-            <div className="slide-content">
-              <h2>{promotion.title}</h2>
-              <p>{promotion.description}</p>
-              <Countdown endDate={promotion.endDate} />
-              <button className="cta-button" onClick={toggleForm}>
-                Записаться
-              </button>
+    <div
+      className="promo-slider"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <button className="promo-slider__arrow left" onClick={prev}>&#8592;</button>
+      <div className="promo-slider__viewport">
+        <div className="promo-slider__track" style={{ transform: `translateX(-${current * 100}%)` }}>
+          {promoImages.map((img, i) => (
+            <div className="promo-slider__slide" key={i}>
+              <img src={img} alt={`Акция ${i + 1}`} className="promo-slider__img" />
             </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="slider-controls">
-        <button className="prev" onClick={previousPromotion}>&#10094;</button>
-        <button className="next" onClick={nextPromotion}>&#10095;</button>
-      </div>
-      
-      <div className="pagination-dots">
-        {promotions.map((_, idx) => (
-          <span 
-            key={idx} 
-            className={idx === currentPromotionIndex ? 'active' : ''}
-            onClick={() => setCurrentPromotionIndex(idx)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-function MainBanner() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isNewsOpen, setIsNewsOpen] = useState(true); // Новое состояние для отображения новости
-
-  const toggleForm = () => {
-    setIsOpen(!isOpen);
-    document.body.style.overflow = isOpen ? 'auto' : 'hidden';
-  };
-
-  const closeNews = () => {
-    setIsNewsOpen(false);
-  };
-
-  useEffect(() => {
-    const handleEsc = (event) => {
-      if (event.keyCode === 27) {
-        setIsOpen(false);
-        document.body.style.overflow = 'auto';
-      }
-    };
-    document.addEventListener('keydown', handleEsc);
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-    };
-  }, []);
-
-  // Animation code
-  useEffect(() => {
-    const isFirefox = typeof InstallTrigger !== 'undefined';
-    const words = "SERVICEBOXЛЕНИНА6";
-    let ANGLE = 360;
-    const ANIMATION_DURATION = 4000;
-
-    const createElements = () => {
-      words.split("").forEach((char, i) => {
-        const createElement = (offset) => {
-          const div = document.createElement("div");
-          div.innerText = char;
-          div.classList.add("character");
-          div.setAttribute("data-offset", offset);
-          div.style.animationDelay = `-${i * (ANIMATION_DURATION / 16) - offset}ms`;
-          return div;
-        };
-
-        document.querySelector("#spiral").append(createElement(0));
-        document.querySelector("#spiral2").append(createElement((isFirefox ? 1 : -1) * (ANIMATION_DURATION / 2)));
-      });
-    };
-
-    createElements();
-    if (isFirefox) {
-      const animation = () => {
-        ANGLE -= 1;
-        document.querySelectorAll(".spiral *").forEach((el, i) => {
-          const translateY = Math.sin(ANGLE * (Math.PI / 120)) * 100;
-          const scale = Math.cos(ANGLE * (Math.PI / 120)) * 0.5 + 0.5;
-          const offset = parseInt(el.dataset.offset);
-          const delay = i * (ANIMATION_DURATION / 16) - offset;
-          setTimeout(() => {
-            el.style.transform = `translateY(${translateY}px) scale(${scale})`;
-          }, delay);
-        });
-        requestAnimationFrame(animation);
-      };
-      animation();
-    }
-  }, []);
-
-  return (
-    <section className="section-plans" id="section-plans">
-      <div className="main-form__plans">
-        {isOpen && <Form toggleForm={toggleForm} />}
-        <PromotionCarousel toggleForm={toggleForm} />
-        <div className='btn-form'>
-          <button className="main-form" onClick={toggleForm}>
-            <span className='title-span'>Записаться</span>
-          </button>
+          ))}
         </div>
       </div>
+      <button className="promo-slider__arrow right" onClick={next}>&#8594;</button>
+      <div className="promo-slider__dots">
+        {promoImages.map((_, i) =>
+          <span key={i} className={i === current ? "active" : ""} onClick={() => setCurrent(i)} />
+        )}
+      </div>
+    </div>
+  );
+}
 
-      <div className="mainHeading__content">
-        <article className="mainHeading__text">
-          <p className="mainHeading__preTitle">всегда на связи с вами</p>
-          <h2 className="mainHeading__title">Проблемы с утройством?</h2>
-          <p className="mainHeading__description">
+const cards = [
+  {
+    frontTitle: 'Подменный телефон',
+    frontIcon: <i className="fas fa-mobile-alt" />,
+    img: Eplaceable,
+    frontHint: 'подробности на обороте',
+    backText: <>
+      Если ремонт займет некоторое время,<br />
+      мы предоставим вам временный телефон — вы всегда останетесь на связи!
+    </>
+  },
+  {
+    frontTitle: 'Незначительные поломки',
+    frontIcon: <i className="fas fa-wrench" />,
+    img: Cleane,
+    frontHint: 'подробности на обороте',
+    backText: <>
+      Получите бесплатный ремонт<br />
+      незначительных поломок цифровой техники.<br />Обращайтесь прямо сегодня!
+    </>
+  },
+  {
+    frontTitle: 'Бесплатная диагностика',
+    frontIcon: <i className="fas fa-search" />,
+    img: Diagnostics,
+    frontHint: 'подробности на обороте',
+    backText: <>
+      Бесплатно диагностируем любые устройства.<br />
+      На ноутбуки/ПК/видеокарты — платно только при отказе от ремонта (от 500 ₽).
+    </>
+  }
+];
+
+function FlipCard({ frontTitle, frontIcon, img, frontHint, backText }) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div className={`flip-card${flipped ? ' flipped' : ''}`} tabIndex={0}
+      onClick={() => setFlipped(f => !f)} onBlur={() => setFlipped(false)}>
+      <div className="flip-card__inner">
+        <div className="flip-card__front">
+          {frontIcon}
+          <h4>{frontTitle}</h4>
+          <img src={img} alt={frontTitle} />
+          <div className="flip-card__hint">{frontHint}</div>
+        </div>
+        <div className="flip-card__back">
+          <div className="flip-card__back-text">
+            {backText}
+          </div>
+          <button className="flip-card__back-btn" type="button"
+            onClick={e => { e.stopPropagation(); setFlipped(false); }}>Назад</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function MainBanner() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
+
+  const toggleForm = () => {
+    setIsFormOpen(o => !o);
+    document.body.style.overflow = isFormOpen ? 'auto' : 'hidden';
+  };
+
+  // После отправки (onSent) всегда закрываем форму
+  const handleSent = () => {
+    setIsFormOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+  const touchStartX = React.useRef(null);
+  return (
+    <section className="main-banner-section">
+      {isFormOpen && <Form toggleForm={toggleForm} />}
+      <PromoImageSlider />
+      <div className="btn-form">
+        <button onClick={() => setIsFormOpen(true)}>Записаться</button>
+        {isFormOpen && <Form close={() => setIsFormOpen(false)} />}
+      </div>
+      <div className="main-banner__content">
+        <div className="main-banner__text">
+          <p className="main-banner__preTitle">всегда на связи с вами</p>
+          <h2 className="main-banner__title">Проблемы с устройством?</h2>
+          <p className="main-banner__subtitle">
             Решаем любые проблемы! Большой склад и опытные мастера
           </p>
           <button className="main-banner__form" onClick={toggleForm}>
             <span className='title-span'>Бесплатная консультация</span>
           </button>
-        </article>
-        <div className="mainHeading__image">
-          <div className="spiral__anim" id="spiral"></div>
-          <div className="spiral__anim" id="spiral2"></div>
+        </div>
+        <div className="main-banner__image">
+          <SpiralAnimation
+            text=" SERVICEBOX ЛЕНИНА 6 "
+            radius={60}        // радиус круга в px (можешь менять!)
+            duration={9000}
+
+          // секунд на полный оборот
+          />
         </div>
       </div>
-     <div className="u-center-text u-margin-bottom-big">
-        <div className="row">
-          <div className="col-1-of-3">
-            <div className="card-neon">
-              <div className="card__side card__side--front-1">
-                <div className="card__titleneon card__titleneon--1">
-                  <i className="fas fa-paper-plane"></i>
-                  <h4 className="card__heading">Подменный телефон </h4>
-                </div>
-                <div className="card__details">
-                  <img className="care-about__youimg" src={Eplaceable} alt="" />
-                   <p className="card__deskriptions">подробности на обороте</p>
-                </div>
-              </div>
-              <div className="card__side card__side--back card__side--back-1">
-                <div className="card__cta">
-                  <div className="card__price-box">
-                    <p className="card__price-only">Описание</p>
-                    <p className="care-about-you___subtitle">
-                      Если ремонт займет некоторое время,
-                      мы предоставим Вам временный телефон,
-                      чтобы Вы могли оставаться на связи со своими близкими,
-                      деловыми партнерами и друзьями.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-1-of-3">
-            <div className="card-neon">
-              <div className="card__side card__side--front-2">
-                <div className="card__titleneon card__titleneon--2">
-                  <i className="fas fa-plane"></i>
-                  <h4 className="card__heading">Незначительные поломки</h4>
-                </div>
-                <div className="card__details">
-                  <img className="care-about__youimg" src={Cleane} alt="удаление" />
-                   <p className="card__deskriptions">подробности на обороте</p>
-                </div>
-              </div>
-              <div className="card__side card__side--back card__side--back-2">
-                <div className="card__cta">
-                  <div className="card__price-box">
-                    <p className="card__price-only">Описание</p>
-                    <p className="care-about-you___subtitle">
-                      Не откладывайте ремонт!
-                      Обращайтесь к нам и получите качественный бесплатный
-                      ремонт незначительных поломок Вашей цифровой техники уже сегодня.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-1-of-3">
-            <div className="card-neon">
-              <div className="card__side card__side--front-3">
-                <div className="card__titleneon card__titleneon--3">
-                  <i className="fas fa-rocket"></i>
-                  <h4 className="card__heading">Бесплатная диагностика</h4>
-                </div>
-                <div className="card__details">
-                  <img className="care-about__youimg" src={Diagnostics} alt="диагностка бесплатная" />
-                  <p className="card__deskriptions">подробности на обороте</p>
-                </div>
-              </div>
-              <div className="card__side card__side--back card__side--back-3">
-                <div className="card__cta">
-                  <div className="card__price-box">
-                    <p className="card__price-only">Описание</p>
-                    <p className="care-about-you___subtitle">
-                      Не откладывайте ремонт!
-                      Диагностика бесплатная всех устройств, кроме ноутбуков,ПК и видеокарт-если происходит отказ
-                      от ремонта, в таком случае диагностика от 500-1500 руб,в зависимости от сложности диагностики.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="u-center-text u-margin-top-huge">
-        </div>
+      <div className="flip-card-row">
+        {cards.map((card, i) => <FlipCard {...card} key={i} />)}
       </div>
     </section>
   );
 }
-
-export default MainBanner;

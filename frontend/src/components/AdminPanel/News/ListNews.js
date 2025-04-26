@@ -13,7 +13,7 @@ const ListNews = () => {
     const fetchNews = async () => {
       try {
         const response = await axios.get('https://servicebox35.pp.ru/api/news');
-        
+
         // Проверка структуры ответа
         if (response.data && response.data.success && Array.isArray(response.data.data)) {
           setNews(response.data.data);
@@ -57,7 +57,7 @@ const ListNews = () => {
   return (
     <div className="list-news">
       <h2>Список Новостей</h2>
-      
+
       {alert && (
         <div className={`alert alert-${alert.type}`}>
           {alert.message}
@@ -67,37 +67,37 @@ const ListNews = () => {
       {news.length > 0 ? (
         <ul className="news-list">
      // ListNews.js
-{news.map((item) => (
-  <li key={item._id} className="news-item">
-    <div className="news-content">
-      <h3>{item.title}</h3>
-      <p className="news-content-text">{item.content}</p> {/* Исправлено с description на content */}
-      
-      {item.image && (
-        <img 
-          src={`https://servicebox35.pp.ru/uploads/${item.image}`}
-          alt={item.title}
-          className="news-image"
-        />
-      )}
-      
-      <div className="news-actions">
-        <Link
-          to={`/admin-panel/update-news/${item._id}`}
-          className="btn-edit"
-        >
-          Редактировать
-        </Link>
-        <button
-          onClick={() => handleDelete(item._id)}
-          className="btn-delete"
-        >
-          Удалить
-        </button>
-      </div>
-    </div>
-  </li>
-))}
+          {news.map((item) => (
+            <li key={item._id} className="news-item">
+              <div className="news-content">
+                <h3>{item.title}</h3>
+                <p className="news-content-text">{item.content}</p> {/* Исправлено с description на content */}
+
+                {item.image && (
+                  <img
+                    src={`https://servicebox35.pp.ru/uploads/${item.image}`}
+                    alt={item.title}
+                    className="news-image"
+                  />
+                )}
+
+                <div className="news-actions">
+                  <Link
+                    to={`/admin-panel/update-news/${item._id}`}
+                    className="btn-edit"
+                  >
+                    Редактировать
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    className="btn-delete"
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </div>
+            </li>
+          ))}
         </ul>
       ) : (
         <div className="empty-list">Новостей пока нет</div>

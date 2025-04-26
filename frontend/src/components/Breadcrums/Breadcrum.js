@@ -5,7 +5,7 @@ import arrow_icon from "../Assets/breadcrum_arrow.png"
 
 
 const getCategoryUrl = (category) => {
-  switch(category) {
+  switch (category) {
     case 'для СЦ':
       return '/parts';
     case 'electronic':
@@ -13,7 +13,7 @@ const getCategoryUrl = (category) => {
     case 'usedsparepart':
       return '/usedspareparts';
     default:
-      return '/parts';  
+      return '/parts';
   }
 };
 
@@ -28,8 +28,8 @@ const BreadCrum = (props) => {
 
   return (
     <div className="breadcrum">
-     <Link to="/" className="breadcrum-link">Домашняя</Link> 
-       <img className='breadcrum-img' src={arrow_icon} alt="стрелочка" />
+      <Link to="/" className="breadcrum-link">Домашняя</Link>
+      <img className='breadcrum-img' src={arrow_icon} alt="стрелочка" />
       <a href="https://servicebox35.ru/parts" className="breadcrum-link">Каталог</a>
       <img className='breadcrum-img' src={arrow_icon} alt="стрелочка" />
       <Link to={getCategoryUrl(product.category)} className="breadcrum-link">{product.category}</Link>

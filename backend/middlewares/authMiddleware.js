@@ -1,19 +1,31 @@
-//middelewares/authMiddeware.js
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'jwtsecret';
 
-module.exports = function (req, res, next) {
-    if (req.method === "OPTIONS") {
-        next()
-    }
+// Только если token есть и он админ
+function requireAdmin(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: "Нет токена" });
     try {
-        const token = req.headers.authorization.split(' ')[1] // Bearer asfasnfkajsfnjk
-        if (!token) {
-            return res.status(401).json({message: "Не авторизован"})
-        }
-        const decoded = jwt.verify(token, process.env.SECRET)
-        req.user = decoded
-        next()
+        const decoded = jwt.verify(token, JWT_SECRET);
+        if (decoded.role !== 'admin') return res.status(403).json({ message: "Требуется админ" });
+        req.user = decoded;
+        next();
     } catch (e) {
-        res.status(401).json({message: "Не авторизован"})
+        return res.status(401).json({ message: "Некорректный токен" });
     }
-};
+}
+
+// Просто требуется юзер (любого типа)
+function requireAuth(req, res, next) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: "Нет токена" });
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (e) {
+        return res.status(401).json({ message: "Некорректный токен" });
+    }
+}
+
+module.exports = { requireAdmin, requireAuth };

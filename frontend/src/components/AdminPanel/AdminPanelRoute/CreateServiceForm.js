@@ -4,16 +4,16 @@ import "./CreateServiceForm.css"
 
 //создание
 const createNewService = async (serviceData) => {
-    try {
-      const response = await axios.post('https://servicebox35.pp.ru/services', serviceData);
-      if (response.status === 201) {
-        // Обработка успешно созданного продукта, например показать сообщение или обновить список услуг
-        console.log("Услуга успешно создана", response.data);
-      }
-    } catch (error) {
-      console.error('Ошибка при создании новой услуги:', error);
+  try {
+    const response = await axios.post('https://servicebox35.pp.ru/services', serviceData);
+    if (response.status === 201) {
+      // Обработка успешно созданного продукта, например показать сообщение или обновить список услуг
+      console.log("Услуга успешно создана", response.data);
     }
-  };
+  } catch (error) {
+    console.error('Ошибка при создании новой услуги:', error);
+  }
+};
 
 
 const CreateServiceForm = () => {

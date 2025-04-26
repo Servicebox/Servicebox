@@ -1,0 +1,34 @@
+.spiral-anim-container {
+  position: relative;
+  width: 220px; height: 220px;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  margin: 0 auto;
+}
+.spiral-anim-ring {
+  position: absolute; left: 50%; top: 50%;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.spiral-anim-letter {
+  position: absolute; left: 0; top: 0;
+  font-size: 3.1rem;
+  font-family: "Bebas Neue";
+  font-weight: 700;
+  color: #023878;
+  text-shadow: 0 2px 12px #cefdff, 0 1px 2px #008bbda0;
+  filter: drop-shadow(1px 2px 8px #23d3e388);
+  user-select: none;
+  white-space: pre;
+  pointer-events: none;
+  transition: font-size .3s;
+}
+/* Еще адаптив! */
+@media (max-width: 800px) {
+  .spiral-anim-container { width: 110px; height: 110px; }
+  .spiral-anim-letter   { font-size: 1.7rem;}
+}
+@media (max-width: 500px) {
+  .spiral-anim-container { width: 82px; height: 82px; }
+  .spiral-anim-letter   { font-size: 1.2rem;}
+}

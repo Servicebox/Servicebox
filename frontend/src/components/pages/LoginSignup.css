@@ -12,6 +12,26 @@
   z-index: 1000;
   animation: fadeIn 0.3s ease-in-out;
 }
+.role-select{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.role-select button{
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999999;
+  transition: color 0.3s;
+  background: transparent;
+  border-radius: 5px;
+}
+.role-select button:hover {
+  color: #333333;
+}
 
 /* Modal Content */
 .modal-content__reg {

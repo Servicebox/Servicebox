@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AnimatedTitle from "../PromotionsPage/AnimatedTitle";
 import './NewsStyles.css';
 
 const PublicNewsList = () => {
@@ -31,15 +32,15 @@ const PublicNewsList = () => {
 
   return (
     <div className="news-page">
-      <h1 className="page-title">Новости компании</h1>
+      <AnimatedTitle className="effect3d ">Новости компании</AnimatedTitle>
       <div className="news-grid">
         {news.map(item => (
           <article key={item._id} className="news-card">
             <Link to={`/news/${item._id}`} className="news-link">
               {item.image && (
                 <div className="news-image-wrapper">
-                  <img 
-                    src={`https://servicebox35.pp.ru/uploads/${item.image}`} 
+                  <img
+                    src={`https://servicebox35.pp.ru/uploads/${item.image}`}
                     alt={item.title}
                     className="news-card-image"
                   />

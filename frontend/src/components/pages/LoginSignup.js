@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './LoginSignup.css';
 
+
 const API_URL = 'https://servicebox35.pp.ru/api';
 
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
-  const { token } = useParams(); // Получаем токен из URL, если есть
-  const [mode, setMode] = useState("Login"); // "Login", "Sign Up", "Forgot Password", "Set New Password"
+  const { token } = useParams();
+  const [mode, setMode] = useState("Login");
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    phone: ""
+    phone: "",
+    role: "user",
   });
   const [emailForReset, setEmailForReset] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -63,36 +65,38 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const login = async () => {
     setLoading(true);
     try {
-      console.log(`Отправка запроса на: ${API_URL}/login`);
-      const response = await fetch(`${API_URL}/login`, { 
+      const response = await fetch('https://servicebox35.pp.ru/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.password })
       });
-
-      console.log(`Загрузка Fetch завершена: POST (${API_URL}/login).`);
-
-  const responseData = await response.json();
-    if (responseData.success) {
-        localStorage.setItem('auth-token', responseData.accessToken);
-        localStorage.setItem('refresh-token', responseData.refreshToken); // Save refresh token
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem('auth-token', data.tokens.accessToken); // !!! обязательно!
+        localStorage.setItem('refresh-token', data.tokens.refreshToken);
+        localStorage.setItem('role', data.role);
+        localStorage.setItem('username', data.username);
         onLoginSuccess();
-        onClose();
-        navigate('/');
-    } else {
-        setMessage(responseData.errors || "Ошибка входа");
-    
+        if (data.role === 'admin') {
+          navigate('/admin-panel');
+        } else {
+          navigate('/');
+        }
+        onClose(); // Закрыть модалку после успешной авторизации
+        if (data.role === "admin") {
+          navigate('/admin-panel');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setMessage(data.message || "Ошибка входа");
       }
-    } catch (error) {
-      console.error("Ошибка при выполнении запроса:", error);
-      setMessage("Ошибка при выполнении запроса.");
+    } catch (err) {
+      setMessage("Ошибка сети");
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   const signup = async () => {
     setLoading(true);
@@ -149,35 +153,35 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       setLoading(false);
     }
   };
-//
-const refreshAuthToken = async () => {
+  //
+  const refreshAuthToken = async () => {
     const refreshToken = localStorage.getItem('refresh-token');
 
     if (!refreshToken) return false; // Нет токена для обновления
 
     try {
-        const response = await fetch(`${API_URL}/refresh-token`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: refreshToken }),
-        });
+      const response = await fetch(`${API_URL}/refresh-token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: refreshToken }),
+      });
 
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('auth-token', data.accessToken); // Сохраняем новый access token
-            return true;
-        } else {
-            console.error('Ошибка обновления токена:', response.statusText);
-            localStorage.removeItem('auth-token');
-            localStorage.removeItem('refresh-token'); // Очистка при ошибке
-            return false;
-        }
-    } catch (error) {
-        console.error('Ошибка обновления токена:', error.message);
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('auth-token', data.accessToken); // Сохраняем новый access token
+        return true;
+      } else {
+        console.error('Ошибка обновления токена:', response.statusText);
+        localStorage.removeItem('auth-token');
+        localStorage.removeItem('refresh-token'); // Очистка при ошибке
         return false;
+      }
+    } catch (error) {
+      console.error('Ошибка обновления токена:', error.message);
+      return false;
     }
-};
-///
+  };
+  ///
   const resetPassword = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -271,27 +275,29 @@ const refreshAuthToken = async () => {
           </form>
         ) : (
           <form className='loginsignup-fields' onSubmit={handleSubmit}>
-            {mode === "Sign Up" && (
-              <>
-                <input
-                  name='username'
-                  value={formData.username}
-                  onChange={changeHandler}
-                  type='text'
-                  placeholder='Имя'
-                  required
-                  autoComplete="username"
-                />
-                <input
-                  name='phone'
-                  value={formData.phone}
-                  onChange={changeHandler}
-                  type='tel'
-                  placeholder='Телефон'
-                  required
-                  autoComplete="tel"
-                />
-              </>
+            {mode === "Login" && (
+              <div className='role-select'>
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="user"
+                    checked={formData.role === "user"}
+                    onChange={() => setFormData({ ...formData, role: "user" })}
+                  />
+                  Пользователь
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="role"
+                    value="admin"
+                    checked={formData.role === "admin"}
+                    onChange={() => setFormData({ ...formData, role: "admin" })}
+                  />
+                  Администратор
+                </label>
+              </div>
             )}
             <input
               name='email'

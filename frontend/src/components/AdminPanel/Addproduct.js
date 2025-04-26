@@ -3,91 +3,65 @@ import './Addproduct.css';
 import upload_area from '../Assets/upload_area.svg';
 
 const Addproduct = () => {
-    const [image, setImage] = useState(null);
     const [productDetails, setProductDetails] = useState({
-        name: "",
-        image: "",
-        category: "",
-        new_price: "",
-        old_price: "",
-        description: "",  // новое поле для описания
-        quantity: "", // Поле для количества
+        name: "", images: [], category: "", new_price: "", old_price: "", description: "", quantity: ""
     });
 
-    const imageHandler = (e) => {
-        setImage(e.target.files[0]);
+    const imageHandler = async (e) => {
+        const files = Array.from(e.target.files).slice(0, 3);
+        if (files.length < 1) {
+            alert("Загрузите хотя бы одно изображение");
+            return;
+        }
+        const formData = new FormData();
+        files.forEach(file => formData.append('product', file));
+        try {
+            const response = await fetch('https://servicebox35.pp.ru/api/uploads', {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
+            if (data.success) {
+                setProductDetails(prev => ({ ...prev, images: data.image_urls }));
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert("Ошибка загрузки изображений");
+        }
     };
 
     const changeHandler = (e) => {
-        setProductDetails({ 
-            ...productDetails, 
-            [e.target.name]: e.target.value
-        });
+        setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
     };
 
-const Add_Product = async () => {
-    if (!productDetails.category) {
-        alert("Please select a category.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('name', productDetails.name);
-    formData.append('category', productDetails.category);
-    formData.append('new_price', productDetails.new_price);
-    formData.append('old_price', productDetails.old_price);
-    formData.append('description', productDetails.description);
-    formData.append('quantity', productDetails.quantity); 
-
-    if (image) {
-        formData.append('product', image);
-
+    const Add_Product = async () => {
+        const payload = {
+            ...productDetails,
+            new_price: Number(productDetails.new_price),
+            old_price: Number(productDetails.old_price),
+            quantity: Number(productDetails.quantity)
+        };
+        if (payload.images.length < 1) {
+            alert("Загрузите хотя бы одно изображение");
+            return;
+        }
         try {
-            const uploadResponse = await fetch('https://servicebox35.pp.ru/api/uploads', {
+            const response = await fetch('https://servicebox35.pp.ru/api/addproduct', {
                 method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                },
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
-
-            if (!uploadResponse.ok) {
-                throw new Error(`Upload failed: ${uploadResponse.statusText}`);
-            }
-
-            const responseData = await uploadResponse.json(); // Объявляем переменную здесь
-
-            if (responseData.success) {
-                productDetails.image = responseData.image_url;
-
-                console.log("Product details being sent:", productDetails);
-
-                const addProductResponse = await fetch('https://servicebox35.pp.ru/api/addproduct', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(productDetails),
-                });
-
-                if (!addProductResponse.ok) {
-                    throw new Error(`Add product failed: ${addProductResponse.statusText}`);
-                }
-
-                const addProductResponseData = await addProductResponse.json();
-                addProductResponseData.success ? alert("Product added") : alert("Failed");
+            if (response.ok) {
+                alert("Товар успешно добавлен!");
+                setProductDetails({ name: "", images: [], category: "", new_price: "", old_price: "", description: "", quantity: "" });
             }
         } catch (error) {
-            console.error("Error during product addition:", error);
-            alert("Something went wrong. Please try again.");
+            console.error("Error:", error);
+            alert("Ошибка добавления товара");
         }
-    } else {
-        alert("Please upload an image.");
-    }
-};
+    };
 
- return (
+    return (
         <div className='add-product'>
             <div className='addproduct-itemfield'>
                 <p>название товара</p>
@@ -108,9 +82,9 @@ const Add_Product = async () => {
                 <textarea value={productDetails.description} onChange={changeHandler} name='description' placeholder='Type here'></textarea>
             </div>
 
-   <div className='addproduct-itemfield'>
+            <div className='addproduct-itemfield'>
                 <p>количество на складе</p>
-                 <input value={productDetails.quantity} onChange={changeHandler} type='number' name='quantity' placeholder='Type here' />
+                <input value={productDetails.quantity} onChange={changeHandler} type='number' name='quantity' placeholder='Type here' />
             </div>
             <div className='addproduct-itemfield'>
                 <p>product category</p>
@@ -123,10 +97,33 @@ const Add_Product = async () => {
             </div>
             <div className='addproduct-itemfield'>
                 <label htmlFor='file-input'>
-                    <img src={image ? URL.createObjectURL(image) : upload_area} className='addproduct-thumnnail-img' alt='' />
+                    <div className="image-preview-container">
+                        {productDetails.images.map((img, index) => (
+                            <img
+                                key={index}
+                                src={img}
+                                className='preview-image'
+                                alt={`Preview ${index}`}
+                                onError={(e) => {
+                                    e.target.src = 'fallback-image-url';
+                                }}
+                            />
+                        ))}
+                    </div>
+                    {productDetails.images.length < 4 && (
+                        <img src={upload_area} className='addproduct-thumnnail-img' alt='' />
+                    )}
                 </label>
-                <input onChange={imageHandler} type='file' name='image' id="file-input" hidden />
+                <input
+                    onChange={imageHandler}
+                    type='file'
+                    multiple
+                    accept="image/*"
+                    id="file-input"
+                    hidden
+                />
             </div>
+
             <button onClick={Add_Product} className='addproduct-btn'>Создать</button>
         </div>
     );

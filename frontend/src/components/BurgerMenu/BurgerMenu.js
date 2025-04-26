@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faBasketShopping, 
-  faMobilePhone, 
-  faMailBulk, 
+import {
+  faBasketShopping,
+  faMobilePhone,
+  faMailBulk,
   faMapLocation,
-  faTimes 
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { ShopContext } from '../Contexst/ShopContext';
@@ -37,7 +37,7 @@ function BurgerMenu({ scrollTo }) {
 
   return (
     <div className={`burger-menu ${isOpen ? "open" : ""}`}>
-      <button 
+      <button
         className={`burger-toggle ${isOpen ? "open" : ""}`}
         onClick={toggleMenu}
         aria-label="Toggle menu"
@@ -48,11 +48,11 @@ function BurgerMenu({ scrollTo }) {
       </button>
 
       <div className="menu-overlay" onClick={toggleMenu}></div>
-      
+
       <nav className="menu-content">
         <div className="menu-header">
           <img className="menu-logo" src={logoImage} alt="ServiceBox Logo" />
-          <button 
+          <button
             className="menu-close"
             onClick={toggleMenu}
             aria-label="Close menu"
@@ -87,9 +87,14 @@ function BurgerMenu({ scrollTo }) {
               Каталог товаров
             </Link>
           </li>
-           <li className="menu-item">
+          <li className="menu-item">
             <Link to="/news" className="menu-link" onClick={toggleMenu}>
               Новости
+            </Link>
+          </li>
+          <li className="menu-item" >
+            <Link to='/promotions-page' className="menu-link" onClick={toggleMenu}>
+              Акции
             </Link>
           </li>
         </ul>
@@ -111,7 +116,7 @@ function BurgerMenu({ scrollTo }) {
               <FontAwesomeIcon icon={faMailBulk} />
               <span>servicebox35@gmail.com</span>
             </div>
-            
+
             <div className="address-block">
               <p>
                 <FontAwesomeIcon icon={faMapLocation} />

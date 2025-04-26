@@ -1,43 +1,157 @@
-    .payform-tinkoff {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        margin: 2px auto;
-        -webkit-box-orient: vertical;
-        -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-        flex-direction: column;
-        max-width: 250px;
-        align-items: center;
-    }
-    .payform-tinkoff-row {
-        margin: 2px;
-        border-radius: 4px;
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
-        flex: 1;
-        -webkit-transition: 0.3s;
-        -o-transition: 0.3s;
-        transition: 0.3s;
-        border: 1px solid #DFE3F3;
-        padding: 15px;
-        outline: none;
-        background-color: #DFE3F3;
-        font-size: 15px;
-    }
-    .payform-tinkoff-row:focus {
-        background-color: #FFFFFF;
-        border: 1px solid #616871;
-        border-radius: 4px;
-    }
-    .payform-tinkoff-btn {
-        width: 200px;
-        height: 50px;
-        background-color: #FBC520;
-        border: 1px solid #FBC520;
-        color: #3C2C0B;
-    }
-    .payform-tinkoff-btn:hover {
-        background-color: #FAB619;
-        border: 1px solid #FAB619;
-    }
+.payform-tinkoff {
+  max-width: 390px;
+  margin: 40px auto 0 auto;
+  padding: 32px 24px 28px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 30px rgba(36, 54, 89, 0.11), 0 0.5px 3px rgba(144, 151, 175, 0.17);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-family: 'Roboto', 'Arial', sans-serif;
+}
+.form-control{
+  margin-bottom: 10px;
+}
+
+.payform-tinkoff h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #263358;
+}
+#payform-tinkoff{
+  margin-top: 20px;
+
+}
+.form-control{
+    padding:20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+.payform-field-group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.form-control:focus{
+    border-color: #339cff;
+}
+.form-control::placeholder{
+    color: #ccc;
+}
+.form-control__description{
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9fafb;
+    color: #263358;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    width: 100%;
+}
+
+
+.payform-tinkoff input[type="text"],
+.payform-tinkoff input[type="email"],
+.payform-tinkoff input[type="tel"] {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.06rem;
+  border: 1.5px solid #e2e6ec;
+  border-radius: 7px;
+  outline: none;
+  background: #f9fafb;
+  transition: border 0.22s, background 0.22s;
+  color: #263358;
+}
+
+.payform-tinkoff input[type="text"]:focus,
+.payform-tinkoff input[type="email"]:focus,
+.payform-tinkoff input[type="tel"]:focus {
+  background: #fff;
+  border: 1.5px solid #339cff;
+}
+
+.payform-tinkoff input[readonly] {
+  background: #f4f6fb;
+  color: #babec9;
+  border-style: dashed;
+}
+
+.payform-tinkoff input[type="submit"],
+.payform-tinkoff-btn {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.09rem;
+  border: none;
+  border-radius: 8px;
+  margin-top: 8px;
+  background-image: linear-gradient(95deg, #FBC520, #ffe181 90%);
+  color: #3C2C0B;
+  font-weight: bold;
+  letter-spacing: 0.01em;
+  box-shadow: 0 2px 6px rgba(251, 197, 32, 0.13);
+  cursor: pointer;
+  transition: background 0.17s, box-shadow 0.17s, transform 0.077s;
+}
+
+.payform-tinkoff input[type="submit"]:hover,
+.payform-tinkoff .payform-tinkoff-btn:hover {
+  background-image: linear-gradient(90deg, #ffd109, #f9ca4a 90%);
+  box-shadow: 0 5px 22px rgba(242, 177, 31, 0.13);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.payform-tinkoff input::placeholder {
+  color: #b1bac7;
+  opacity: 1;
+}
+
+/* Responsive — mobile first */
+@media (max-width: 540px) {
+  .payform-tinkoff {
+    max-width: 98vw;
+    padding: 18px 6px 20px 6px;
+    border-radius: 8px;
+    box-shadow: 0 2px 20px rgba(34, 33, 73, 0.15);
+    gap: 12px;
+  }
+  .payform-tinkoff input[type="submit"] {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
+
+/* Optional: Выделите блок заказа */
+.payform-tinkoff .order-summary {
+  margin: 4px 0 10px 0;
+  padding: 10px 14px;
+  background: #f7f9fb;
+  border-left: 4px solid #FBC520;
+  border-radius: 6px;
+  font-size: 0.99rem;
+  color: #434c67;
+}
+
+.payform-tinkoff label {
+  margin-bottom: 2px;
+  font-size: 0.94rem;
+  font-weight: 510;
+  color: #4a5467;
+  display: block;
+  letter-spacing: 0.01em;
+}
+
+/* Анимация ошибок (по ключу .input-error к input) */
+.payform-tinkoff .input-error {
+  border: 1.4px solid #fc5850;
+  background: #fff6f5;
+  color: #b3261e;
+}

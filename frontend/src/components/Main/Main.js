@@ -10,6 +10,7 @@ import Completed from "./Completed/Completed";
 import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
+import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi";
 
 function Main() {
   const navigate = useNavigate();
@@ -28,7 +29,8 @@ function Main() {
         <MainBanner />
         <ServiceRef />
         <AboutRef />
-        <Completed />
+        {/*<Completed />*/}
+        < ImageGalleryApi />
         <ArronService />
         <AboutMe />
         <Gifts />

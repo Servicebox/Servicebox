@@ -1,0 +1,219 @@
+/* --- Анимация заголовка --- */
+.cssanimation span {
+  display: inline-block;
+  opacity: 0.85;
+  position: relative;
+}
+
+.cssanimation.leWaterWave {
+  font-family: 'Montserrat', 'Arial', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #1e88e5;
+  animation: waterwave 3.8s infinite ease-in-out;
+  /* option: text-shadow for wave effect */
+  text-shadow:
+    0px 2px 5px #b2ebf2,
+    0 6px 20px #81d4fa;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+@keyframes waterwave {
+  0%, 100% {
+    text-shadow:
+      0 2px 8px #b2ebf220,
+      0 7px 32px #03a9f41a,
+      0 1px 0px #039be5;
+    letter-spacing: 2px;
+    color: #2196f3;
+    transform: translateY(0px) scaleY(1.01);
+  }
+  35% {
+    text-shadow:
+      0 8px 40px #00bcd4bb,
+      0 12px 42px #6fffe9bb,
+      0 1px 0px #039be5;
+    color: #1976d2;
+    transform: translateY(3px) scaleY(1.09);
+  }
+  60% {
+    text-shadow:
+      0 2px 12px #40c4ffaa,
+      0 5px 28px #00b8d4aa;
+    color: #29b6f6;
+    letter-spacing: 5px;
+    transform: translateY(0px) scaleY(0.96);
+  }
+}
+
+
+
+.promotions-page {
+  padding: 40px 10vw 50px;
+  background: linear-gradient(120deg, #f5faff 0%, #e1f6ff 100%);
+  min-height: 100vh;
+}
+
+.promo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(330px,1fr));
+  gap: 2rem;
+  margin-top: 30px;
+}
+
+.promotion-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 28px 0 #bdbdbd26, 0 1.5px 12px 0 #90caf941;
+  overflow: hidden;
+  transition: box-shadow 0.22s, transform 0.18s;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.promotion-card:hover {
+  transform: translateY(-6px) scale(1.03) rotateZ(-0.2deg);
+  box-shadow: 0 12px 36px 0 #29b6f6aa, 0 2.5px 16px 0 #b3e5fc66;
+}
+
+.promotion-img {
+  height: 400px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  background: linear-gradient(135deg, #46c6f4 0 40%, #137fae 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 700px) {
+  .promotion-img {
+    height: 180px;
+    min-height: 120px;
+  }
+}
+.promo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 18px 18px 0 0;
+  transition: filter 0.32s;
+  box-shadow: 0 2px 16px 0 #2196f340;
+}
+
+.promo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 18px 18px 0 0;
+  transition: filter 0.32s;
+  box-shadow: 0 2px 16px 0 #2196f340;
+}
+
+.promotion-card:hover .promo-image {
+  filter: brightness(1.10) saturate(1.25) contrast(1.05);
+  box-shadow: 0 5px 28px 0 #40c4ff5b;
+}
+
+.promotion-content {
+  padding: 22px 22px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.promotion-content h2 {
+  font-size: 1.28rem;
+  margin: 0 0 9px 0;
+  color: #1565c0;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.promotion-content p {
+  font-size: 1.01rem;
+  margin-bottom: 10px;
+  color: #444b5e;
+}
+
+.promotion-date {
+  margin: 8px 0 18px 0;
+  font-size: 0.98rem;
+  color: #0288d1;
+}
+
+.promotion-date b {
+  font-weight: 600;
+  color: #004d6c;
+}
+
+.promotion-content button {
+  align-self: flex-start;
+  background: linear-gradient(92deg,#2196f3 60%,#29e6e4);
+  color: white;
+  border: none;
+  padding: 12px 27px;
+  border-radius: 5px;
+  font-size: 1.09rem;
+  font-weight: 600;
+  box-shadow: 0 3px 12px 0 #29b6f60a,
+              0 1px 3.5px 0 #029be543;
+  cursor: pointer;
+  transition: background 0.19s, box-shadow 0.19s, transform 0.14s;
+  letter-spacing: 1px;
+}
+
+.promotion-content button:hover {
+  background: linear-gradient(90deg,#29e6e4,#2196f3 80%);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 16px 0 #9fa8da21;
+}
+
+@media (max-width: 700px) {
+  .promotions-page {
+    padding: 24px 2vw 24px;
+  }
+  .promo-list {
+    gap: 1.14rem;
+  }
+  .promotion-img {
+    height: 149px;
+  }
+}
+
+/* мелкие штрихи */
+.promotion-card:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: -18px;
+  top: -18px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50% 38% 51% 55% / 32% 51% 48% 62%;
+  background: linear-gradient(32deg, #b3e5fc33, #80d8ff11);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(7px);
+}
+
+.promotion-card:after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: -15px;
+  bottom: -2px;
+  width: 38px;
+  height: 38px;
+  border-radius: 65% 43% 50% 57% / 72% 31% 48% 66%;
+  background: linear-gradient(42deg, #29b6f647, #0288d111);
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(6px);
+}

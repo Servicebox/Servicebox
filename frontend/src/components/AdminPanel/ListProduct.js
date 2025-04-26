@@ -6,6 +6,74 @@ const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
 
+  // --- NEW PRODUCT ---
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    category: "",
+    old_price: "",
+    new_price: "",
+    quantity: "",
+    image: ""
+  });
+  const [adding, setAdding] = useState(false);
+
+  // загрузка файла картинки для нового товара
+  const handleNewImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('product', file);
+    try {
+      const response = await fetch('https://servicebox35.pp.ru/api/uploads', {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) throw new Error('Ошибка загрузки фото');
+      const data = await response.json();
+      setNewProduct(prev => ({
+        ...prev,
+        image: data.image_url
+      }));
+    } catch (e) {
+      alert('Ошибка загрузки изображения');
+    }
+  };
+
+  // поля нового товара
+  const handleNewChange = (e, field) => {
+    setNewProduct({
+      ...newProduct,
+      [field]: e.target.value
+    });
+  };
+
+  // Отправка нового товара
+  const handleNewSubmit = async (e) => {
+    e.preventDefault();
+    setAdding(true);
+    try {
+      const response = await fetch('https://servicebox35.pp.ru/api/addproduct', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(newProduct),
+      });
+      if (!response.ok) throw new Error('Ошибка создания товара');
+      setNewProduct({
+        name: "",
+        category: "",
+        old_price: "",
+        new_price: "",
+        quantity: "",
+        image: ""
+      });
+      await fetchInfo();
+    } catch (error) {
+      alert('Ошибка при добавлении товара');
+      console.error(error);
+    }
+    setAdding(false);
+  };
+
   const fetchInfo = async () => {
     try {
       const response = await fetch('https://servicebox35.pp.ru/api/allproducts', {
@@ -29,6 +97,7 @@ const ListProduct = () => {
 
   useEffect(() => {
     fetchInfo();
+    // eslint-disable-next-line
   }, []);
 
   const remove_product = async (id) => {
@@ -39,12 +108,10 @@ const ListProduct = () => {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: id }),
+        body: JSON.stringify({ id }),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       await fetchInfo();
     } catch (error) {
@@ -65,6 +132,7 @@ const ListProduct = () => {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
+    if (!file) return;
     const formData = new FormData();
     formData.append('product', file);
 
@@ -74,10 +142,7 @@ const ListProduct = () => {
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       setEditingProduct({
         ...editingProduct,
@@ -99,9 +164,7 @@ const ListProduct = () => {
         body: JSON.stringify(editingProduct),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
       setEditingProduct(null);
       await fetchInfo();
@@ -122,8 +185,19 @@ const ListProduct = () => {
         <p>Количество</p>
         <p>Действия</p>
       </div>
+      <form className='listproduct-format-main listproduct-create-row' onSubmit={handleNewSubmit}>
+        <>
+          <input type="file" accept="image/*" onChange={handleNewImageChange} />
+          <input placeholder="Название" value={newProduct.name} onChange={e => handleNewChange(e, 'name')} required />
+          <input placeholder="Категория" value={newProduct.category} onChange={e => handleNewChange(e, 'category')} required />
+          <input placeholder="Старая цена" value={newProduct.old_price} onChange={e => handleNewChange(e, 'old_price')} type="number" required />
+          <input placeholder="Новая цена" value={newProduct.new_price} onChange={e => handleNewChange(e, 'new_price')} type="number" required />
+          <input placeholder="Количество" value={newProduct.quantity} onChange={e => handleNewChange(e, 'quantity')} type="number" required />
+          <button className='create__btn' type="submit" disabled={adding}>{adding ? "Сохр..." : "Добавить"}</button>
+        </>
+      </form>
       <div className='listproduct-allproducts'>
-        <hr/>
+        <hr />
         {allproducts.map((product) => (
           <div key={product.id} className='listproduct-format-main listproduct-format'>
             {editingProduct && editingProduct.id === product.id ? (
@@ -135,8 +209,8 @@ const ListProduct = () => {
                 <input value={editingProduct.new_price} onChange={(e) => handleEditChange(e, 'new_price')} type="number" />
                 <input value={editingProduct.quantity} onChange={(e) => handleEditChange(e, 'quantity')} type="number" />
                 <div>
-                  <button onClick={saveEdit}>Сохранить</button>
-                  <button onClick={() => setEditingProduct(null)}>Отмена</button>
+                  <button className='list-button' onClick={saveEdit}>Сохранить</button>
+                  <button className='list-button' onClick={() => setEditingProduct(null)}>Отмена</button>
                 </div>
               </>
             ) : (
@@ -158,6 +232,6 @@ const ListProduct = () => {
       </div>
     </div>
   );
-}
+};
 
 export default ListProduct;

@@ -1,15 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from'react-router-dom';
+import { Link } from 'react-router-dom';
 import './CartItems.css';
-import { ShopContext } from '../Contexst/ShopContext'; 
+import { ShopContext } from '../Contexst/ShopContext';
 import remove_icon from '../Assets/cart_cross_icon.png';
 import TinkoffPayForm from '../TinkoffPayForm/TinkoffPayForm';
 
+// Импортируй DeliveryForm если он есть!
 
 
+const CartItems = () => {
+  const {
+    getTotalCartAmount,
+    all_product,
+    cartItems,
+    addToCart,
+    removeFromCart,    // это subtractFromCart!!!
+    purchaseItems,
+  } = useContext(ShopContext);
 
-const CartItems = (props) => {
-  const { getTotalCartAmount, all_product, cartItems, removeFromCart, addToCart, quantity } = useContext(ShopContext);
   const [isPaid, setIsPaid] = useState(false);
 
   useEffect(() => {
@@ -19,52 +27,74 @@ const CartItems = (props) => {
     }
   }, []);
 
+  // NOTE: receiptData = [{name, price, quantity}]
   const receiptData = all_product.filter(product => cartItems[product.id] > 0)
     .map(product => ({
-      name: product.name, 
+      name: product.name,
       price: product.new_price,
       quantity: cartItems[product.id],
-      quantity: product.quantity,
     }));
 
   if (isPaid) {
     return <DeliveryForm />;
   }
 
+  // Только товары с количеством > 0
+  const visibleCartRows = all_product
+    .filter(e => cartItems[e.id] > 0 && e.quantity > 0);
+
   return (
     <div className="cartitems">
-      <div className="cartitems-format-main">
-        <p>Товары</p>
-        <p>Описание</p>
-        <p>Цена</p>
-        <p>Количество</p>
-        <p>Всего</p>
-        <p>Добавить</p>
-        <p>Удалить</p>
+      <div className="cartitems-header">
+        <div className="cart-col cart-col-img">Товар</div>
+        <div className="cart-col cart-col-name">Описание</div>
+        <div className="cart-col cart-col-price">Цена</div>
+        <div className="cart-col cart-col-controls">Количество</div>
+        <div className="cart-col cart-col-total">Всего</div>
+        <div className="cart-col cart-col-remove">Удалить</div>
       </div>
       <hr />
-      {all_product.map((e, index) => {
-        if (cartItems[e.id] > 0) {
-          return (
-            <div key={index}>
-              <div className="cartitems-format cartitems-format-main">
-                <img src={e.image} alt="изо товара" className="cartitems-product-icon" />
-                <p>{e.name}</p>
-                <p>₽{e.new_price}</p>
-                <button className="cartitems-quantity">{cartItems[e.id]}</button>
-                <p>₽{e.new_price * cartItems[e.id]}</p>
-               <button onClick={() => addToCart(e.id)} disabled={cartItems[e.id] >= e.quantity}>+</button>
-                <img className="cartitems-remove-icon" src={remove_icon} alt="" onClick={() => { removeFromCart(e.id) }} />
+      {
+        visibleCartRows.length === 0
+          ? <div style={{ padding: 16 }}>Корзина пуста</div>
+          : visibleCartRows.map((e) => (
+            <div className="cartitems-row" key={e.id}>
+              <div className="cart-col cart-col-img">
+                <img src={e.images && e.images.length > 0 ? e.images[0] : '/placeholder-image.jpg'} alt={e.name} className="cartitems-product-icon" />
               </div>
-              <hr />
+              <div className="cart-col cart-col-name">{e.name}</div>
+              <div className="cart-col cart-col-price">₽{e.new_price}</div>
+              <div className="cart-col cart-col-controls">
+                <button
+                  className="cartitems-ctrl-btn"
+                  onClick={() => removeFromCart(e.id)}
+                  disabled={cartItems[e.id] <= 1}
+                >-</button>
+                <span className="cartitems-product-amount">{cartItems[e.id]}</span>
+                <button
+                  className="cartitems-ctrl-btn"
+                  onClick={() => addToCart(e.id)}
+                  disabled={cartItems[e.id] >= e.quantity}
+                >+</button>
+              </div>
+              <div className="cart-col cart-col-total">₽{e.new_price * cartItems[e.id]}</div>
+              <div className="cart-col cart-col-remove">
+                <img
+                  className="cartitems-remove-icon"
+                  src={remove_icon}
+                  alt="Удалить товар"
+                  title="Удалить весь товар из корзины"
+                  onClick={() => removeFromCart(e.id)}
+                  style={{ cursor: 'pointer' }}
+                />
+              </div>
             </div>
-          );
-        }
-        return null;
-      })}
+          ))
+      }
+
       <div className="cartitems-down">
         <div className="cartitems-total">
-          <h1>Количество</h1>
+          <h1>Итого</h1>
           <div>
             <div className="cartitems-total-item">
               <p>Цена</p>
@@ -80,12 +110,18 @@ const CartItems = (props) => {
               <h3>Всего</h3>
               <h3>₽{getTotalCartAmount()}</h3>
             </div>
-            <TinkoffPayForm amount={getTotalCartAmount()} receiptData={receiptData} onPaymentSuccess={() => setIsPaid(true)} />
+            <TinkoffPayForm
+              amount={getTotalCartAmount()}
+              receiptData={receiptData}
+              onPaymentSuccess={() => {
+                setIsPaid(true);
+                purchaseItems(receiptData);
+              }}
+            />
           </div>
         </div>
-  
       </div>
-      <div className="back__btn"> 
+      <div className="back__btn">
         <ul>
           <li><Link to="/">На главную</Link></li>
         </ul>

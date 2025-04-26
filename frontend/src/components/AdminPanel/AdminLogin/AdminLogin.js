@@ -9,7 +9,7 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('https://servicebox35.pp.ru/admin/login', { 
+    const response = await fetch('https://servicebox35.pp.ru/admin/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

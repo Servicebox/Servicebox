@@ -1,41 +1,14 @@
-//mjdels/Users.js
-const mongoose = require('mongoose');
+// models/User.js
+const mongoose = require("mongoose");
 
-const UsersSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    sparse: true,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  cartData: {
-    type: Object,
-  },
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
-  emailToken: {
-    type: String,
-  },
-  
-  date: {
-    type: Date,
-    default: Date.now,
-  },
+const UserSchema = new mongoose.Schema({
+  username: String,
+  email: { type: String, unique: true, required: true },
+  password: String, // hash
+  phone: String,
+  role: { type: String, enum: ["user", "admin"], default: "user" },
+  isVerified: { type: Boolean, default: false },
+  refreshToken: String // для jwt
 });
-    
-const Users = mongoose.model('Users', UsersSchema);
-module.exports = Users;
+
+module.exports = mongoose.model("User", UserSchema);

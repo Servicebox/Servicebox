@@ -1,0 +1,200 @@
+/* AdminPromotions.css */
+
+:root {
+  --blue-main: #023878;
+  --accent-blue: #7bb2ff;
+  --danger: #ea244d;
+  --light-bg: #f7faff;
+  --border-color: #cbe1fa;
+  --radius: 12px;
+  --shadow: 0 3px 18px #67a8e218;
+  --form-max: 700px;
+}
+
+body {
+  /* Для предотвращения прокрутки на открытии формы, как в toggleForm */
+  overflow-x: hidden;
+}
+
+/* Обёртка */
+.adminpromos-container {
+  max-width: var(--form-max);
+  margin: 24px auto 34px auto;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 30px 36px 36px 36px;
+}
+
+@media (max-width: 600px) {
+  .adminpromos-container {
+    padding: 12px 4vw 26px 4vw;
+    margin: 12px auto;
+  }
+}
+
+h2, h3 {
+  color: var(--blue-main);
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+  border: 1.2px solid var(--border-color);
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 1.05rem;
+  font-family: 'inherit';
+  background: #fafdff;
+  transition: border-color .16s;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+  border-color: var(--blue-main);
+  outline: none;
+}
+
+textarea {
+  min-height: 82px;
+  resize: vertical;
+}
+
+input[type="file"] {
+  margin-bottom: 2px;
+}
+
+img[alt="preview"] {
+  display: block;
+  margin: 7px 0 2px 0;
+  box-shadow: 0 2px 22px #aacdff22;
+  border-radius: 7px;
+  border: 1.1px solid var(--border-color);
+  object-fit: cover;
+  max-width: 140px;
+  max-height: 200px;
+  background: #eef4fc;
+}
+
+@media (max-width: 480px) {
+  img[alt="preview"] {
+    max-width: 92vw;
+    height: auto;
+  }
+}
+
+button {
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  padding: 8px 20px;
+  color: #fff;
+  background: var(--blue-main);
+  margin-right: 10px;
+  transition: background .12s;
+  cursor: pointer;
+
+  margin-bottom: 4px;
+}
+
+button[type="button"] {
+  background: #d4bba6;
+  color: #fff;
+}
+
+button[type="button"]:hover {
+  background: #6c7899;
+}
+
+button[type="submit"]:hover {
+  background: #0550a5;
+}
+
+button[style*="color: red"] {
+  background: var(--danger);
+  color: #fff !important;
+  margin-left: 8px;
+}
+
+button[style*="color: red"]:hover {
+  background: #a21325;
+}
+
+button:active {
+  filter: brightness(.98);
+}
+
+/* Список акций */
+ol {
+  margin-left: 0;
+  padding-left: 0;
+  counter-reset: promo-counter;
+  list-style: none;
+}
+
+ol > li {
+  counter-increment: promo-counter;
+  margin-bottom: 17px;
+  background: var(--light-bg);
+  border: 1.1px solid var(--border-color);
+  box-shadow: 0 1px 7px #b5dafd12;
+  border-radius: 8px;
+  padding: 12px 15px;
+  position: relative;
+  padding-left: 35px;
+  min-height: 60px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+ol > li:before {
+  content: counter(promo-counter) ".";
+  position: absolute;
+  left: 12px;
+  top: 16px;
+  color: var(--blue-main);
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+li b {
+  color: #243457;
+  font-size: 1.09em;
+}
+
+li i {
+  color: #6388b9;
+}
+
+@media (max-width: 600px) {
+  ol > li {
+    flex-direction: column;
+    gap: 5px;
+    padding: 11px 7vw 11px 31px;
+    font-size: .97em;
+  }
+}
+
+/* Responsive buttons in list */
+ol > li button {
+  margin-bottom: 0;
+  margin-top: 3px;
+  min-width: 80px;
+}
+
+hr {
+  margin: 27px 0 16px 0;
+  border-color: #e2efff33;
+}

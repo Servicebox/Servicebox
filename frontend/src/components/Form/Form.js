@@ -1,19 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import './Form.css';
-import СloseIcon from "../../images/x.svg";
+import CloseIcon from "../../images/x.svg";
 import Modal from "../Modal/Modal";
 
-const Form = ({ toggleForm }) => {
+const Form = ({ close }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
+  const [isFormOpen, setFormOpen] = useState(false); // не нужно!
 
   const [nameDirty, setNameDirty] = useState(false);
   const [phoneDirty, setPhoneDirty] = useState(false);
   const [nameError, setNameError] = useState('Имя не может быть пустым');
   const [phoneError, setPhoneError] = useState('Телефон не может быть пустым');
-
   const [formValid, setFormValid] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleClose = () => {
+    if (typeof close === "function") close();
+  };
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.keyCode === 27) {
+        setIsOpen(false);
+        document.body.style.overflow = 'auto';
+      }
+    };
+
+    document.addEventListener('keydown', handleEsc);
+
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, []);
 
   useEffect(() => {
     if (phoneError || nameError || !name || !phone) {
@@ -47,8 +68,6 @@ const Form = ({ toggleForm }) => {
     setDescription(e.target.value);
   };
 
-  const [submitError, setSubmitError] = useState('');
-
   const submitData = (e) => {
     e.preventDefault();
     fetch('https://servicebox35.pp.ru/telegram', {
@@ -61,10 +80,9 @@ const Form = ({ toggleForm }) => {
       .then((response) => response.json())
       .then((result) => {
         if (result.status === 'ok') {
-          toggleForm(); // Закрытие формы при успешной отправке
+          close(); // Закрытие формы при успешной отправке
         } else {
           setSubmitError(result.message || 'Произошла ошибка при отправке формы');
-          setIsModalOpen(true)
         }
       })
       .catch((error) => {
@@ -86,12 +104,12 @@ const Form = ({ toggleForm }) => {
   };
 
   return (
-    <div className="form-overlay" onKeyDown={(e) => e.key === 'Enter' && submitData(e)}>
+    <div className="form-overlay">
       <div className="form-container">
         <h2 className="form__title">
           Оставьте заявку на <span className="besplatnaya">бесплатную</span> консультацию
         </h2>
-        <form className="form" onSubmit={submitData}> 
+        <form className="form" onSubmit={submitData}>
           {(nameDirty && nameError) && <div className="error1">{nameError}</div>}
           <label className="form__label">
             <input
@@ -131,16 +149,16 @@ const Form = ({ toggleForm }) => {
             Отправить форму
           </button>
         </form>
-       
-        <button className="close-button" onClick={toggleForm}>
-          <img className="close-button__img" src={СloseIcon} alt="Закрыть" />
+
+        <button className="close-button" onClick={close}>
+          <img className="close-button__img" src={CloseIcon} alt="Закрыть" />
         </button>
 
         {submitError && (
           <Modal onClose={() => setSubmitError('')}>
             <h3>Ошибка отправки формы</h3>
             <p>{submitError}</p>
-            <button onClick={() => setSubmitError('')}>Закрыть</button>
+            <button onClick={close}>Закрыть</button>
           </Modal>
         )}
       </div>

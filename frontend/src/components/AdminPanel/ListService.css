@@ -1,69 +1,151 @@
-.list-service{
-display: flex;
-flex-direction: column;
-align-items: center;
-width: 100%;
-height: 740px;
-padding: 10px 50px;
-margin: 30px;
-border-radius: 6px;
-background: white;
-
-}
-.list-btn{
-        display: flex;
-    gap: 20px;
-    height: 40px;
-}
-.list-button{
-        padding: 10px;
-    background-color: deepskyblue;
-}
-.listservice-format-main{
-display: grid;
-grid-template-columns: 1fr 3fr 1fr 1fr 1fr 1fr;
-gap: 10px;
-width: 100%;
-padding: 20px 0px;
-color: #454545;
-font-size: 15px;
-font-weight: 600;
-border-bottom: 2px solid cadetblue;
-}
-.listproduct-format{
-align-items: center;
-font-weight: 500;
-
+.list-service {
+  max-width: 1100px;
+  margin: 45px auto;
+  padding: 24px 10px 50px 10px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 6px 42px rgba(80,115,198,0.08);
+  font-family: 'Inter', 'Arial', sans-serif;
 }
 
-.listservice-allservice{
-overflow-y: auto;
-}
-.listservice-service-icon{
-height: 80px;
-
-}
-.listservice-remove-icon{
-cursor: pointer;
-margin: auto;
+.list-service__title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-@media (max-width: 800px){
-    .list-service{
-        box-sizing: border-box;
-        width: 95%;
-        height: 100%;
-        padding: 10px 30px;
-        margin: 20px auto;
-    }
-    .listservice-format-main{
-        padding: 15px 0px;
-        color: #454545;
-        font-size: 12px;
+.list-service__title-row input[type="text"] {
+  padding: 8px 12px;
+  min-width: 220px;
+  border: 1.5px solid #cbe4fd;
+  border-radius: 9px;
+  font-size: 1rem;
+  background: #f3f9ff;
+  transition: border .13s;
+}
+.list-service__title-row input[type="text"]:focus {
+  border-color: #5baaff;
+  outline: none;
+}
 
-    }
-    .listservice-service-icon{
-        height: 60px;
+.listservice-allservice {
+  margin-top: 18px;
+  background: #f8fafb;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(160,180,210,0.07);
+  padding-bottom: 16px;
+  overflow-x: auto;
+}
 
-    }
+.listservice-format-main {
+  display: grid;
+  grid-template-columns: 1.2fr 2.2fr minmax(90px,1.2fr) 1.2fr 1.2fr;
+  gap: 10px;
+  font-weight: 600;
+  align-items: center;
+  font-size: 1.09rem;
+  padding: 13px 16px 12px 10px;
+  color: #2e4b6a;
+  background: #f0f7ff;
+}
+.listservice-format {
+  font-weight: normal;
+  background: #fff;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(96,166,255,0.04);
+  transition: box-shadow .14s;
+}
+.listservice-format:hover:not(.listservice-create-row) {
+  box-shadow: 0 2px 16px rgba(80,150,211,0.10);
+  background: #f5fbff;
+}
+.listservice-create-row {
+  background: #e7f4ff;
+  font-weight: 550;
+  margin-bottom: 10px;
+}
+
+.listservice-format-main p,
+.listservice-format-main input,
+.listservice-format-main textarea {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Инпуты */
+.admin__input {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1.5px solid #cbe4fd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border .12s;
+  background: #f5fbff;
+}
+.admin__input:focus {
+  border-color: #99c3f9;
+  outline: none;
+}
+
+/* Кнопки */
+.create__btn,
+.list-button,
+.glass__btn-active,
+.glass__btn {
+  padding: 7px 18px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  background: #51aaff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 2px 7px rgba(57,139,255,0.09);
+  transition: background .14s;
+}
+.create__btn[disabled],
+.list-button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.list-button:hover, .create__btn:hover,
+.glass__btn-active:hover {
+  background: #205bb1;
+}
+.glass__btn {
+  background: #fff;
+  border: 1.5px solid #75aeff;
+  color: #19537a;
+}
+.glass__btn:hover {
+  background: #e3efff;
+}
+
+/* Кнопки действий */
+.list-btn {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.listservice-remove-icon {
+  width: 23px;
+  height: 23px;
+  cursor: pointer;
+  transition: filter .13s;
+}
+.listservice-remove-icon:hover {
+  filter: brightness(0.7) sepia(1) hue-rotate(-20deg) saturate(6);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 700px) {
+  .listservice-format-main {
+    grid-template-columns: 1fr 1.3fr 0.6fr 0.8fr 1fr;
+    font-size: .97rem;
+    padding: 8px 3px 8px 3px;
+  }
+  .admin__input { font-size: .95rem; }
+  .list-service { padding: 7px 2px 34px 2px; }
 }

@@ -3,6 +3,7 @@ import "./ImageGalleryApi.css";
 import likeIconUrl from "../../../images/likeactive.png";
 import likeInactiveIconUrl from "../../../images/like.png";
 import ImageModal from "./ImageModal";
+import AnimatedTitle from "../PromotionsPage/AnimatedTitle";
 
 const ImageGalleryApi = () => {
   const [images, setImages] = useState([]);
@@ -10,11 +11,11 @@ const ImageGalleryApi = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [userLikes, setUserLikes] = useState([]);
   const [showAfter, setShowAfter] = useState({});
-    const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    useEffect(() => {
+  useEffect(() => {
     const fetchGroups = async () => {
       try {
         const response = await fetch('https://servicebox35.pp.ru/api/gallery/group');
@@ -27,7 +28,7 @@ const ImageGalleryApi = () => {
     fetchGroups();
   }, []);
 
-    const handleGroupClick = (group, index) => {
+  const handleGroupClick = (group, index) => {
     setSelectedGroup(group);
     setCurrentImageIndex(index);
   };
@@ -158,21 +159,22 @@ const ImageGalleryApi = () => {
   };
 
   return (
-    
+
     <div className="foto">
-      <h1 className="foto__title">Фотографии до и после ремонта</h1>
+
+      <AnimatedTitle className="effect3d ">Фотографии до и после ремонта</AnimatedTitle>
       <div className="group-grid">
         {groups.map(group => (
           <div key={group._id} className="group-card">
             <div className="group-preview">
-             {group.images.slice(0, 4).map((img, index) => (
-  <img
-    key={img._id}
-    src={`https://servicebox35.pp.ru${img.filePath}`} // Добавляем базовый URL
-    alt={group.description}
-    onClick={() => handleGroupClick(group, index)}
-  />
-))}
+              {group.images.slice(0, 4).map((img, index) => (
+                <img
+                  key={img._id}
+                  src={`https://servicebox35.pp.ru${img.filePath}`} // Добавляем базовый URL
+                  alt={group.description}
+                  onClick={() => handleGroupClick(group, index)}
+                />
+              ))}
               {group.images.length > 4 && (
                 <div className="more-images">+{group.images.length - 4}</div>
               )}

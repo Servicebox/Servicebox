@@ -11,25 +11,25 @@ function SearchPage() {
   const [results, setResults] = useState([]);
 
 
-useEffect(() => {
-  if (query) {
-    console.log(`Search query: ${query}`);
-    
-    fetch(`https://servicebox35.pp.ru/api/search?query=${query}`)
-      .then(response => {
-        console.log(`Response status: ${response.status}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Search results:', data);
-        setResults(data);
-      })
-      .catch(err => console.error('Error during fetching search results:', err));
-  }
-}, [query]);
+  useEffect(() => {
+    if (query) {
+      console.log(`Search query: ${query}`);
+
+      fetch(`https://servicebox35.pp.ru/api/search?query=${query}`)
+        .then(response => {
+          console.log(`Response status: ${response.status}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Search results:', data);
+          setResults(data);
+        })
+        .catch(err => console.error('Error during fetching search results:', err));
+    }
+  }, [query]);
 
   return (
     <div>

@@ -38,7 +38,7 @@ const NewsDetail = () => {
       <button onClick={() => navigate(-1)} className="back-button">
         ← Назад к списку
       </button>
-      
+
       <article className="news-detail">
         <header className="news-detail-header">
           <h1 className="news-detail-title">{newsItem.title}</h1>
@@ -62,8 +62,8 @@ const NewsDetail = () => {
           </figure>
         )}
 
-        <div 
-          className="news-detail-content" 
+        <div
+          className="news-detail-content"
           dangerouslySetInnerHTML={{ __html: newsItem.content.replace(/\n/g, '<br/>') }}
         />
 

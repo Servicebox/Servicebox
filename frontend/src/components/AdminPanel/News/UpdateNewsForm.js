@@ -39,7 +39,7 @@ const UpdateNewsForm = () => {
     const formDataToSend = new FormData();
     formDataToSend.append('title', formData.title);
     formDataToSend.append('content', formData.content);
-    
+
     if (formData.image) {
       formDataToSend.append('image', formData.image);
     }
@@ -88,7 +88,7 @@ const UpdateNewsForm = () => {
             required
           />
         </div>
-        
+
         <div className="form-group">
           <label>Содержание</label>
           <textarea
@@ -102,14 +102,14 @@ const UpdateNewsForm = () => {
         <div className="form-group">
           <label>Текущее изображение:</label>
           {formData.existingImage && (
-            <img 
-              src={`https://servicebox35.pp.ru/uploads/${formData.existingImage}`} 
-              alt="Current" 
-              style={{maxWidth: '200px', display: 'block'}}
+            <img
+              src={`https://servicebox35.pp.ru/uploads/${formData.existingImage}`}
+              alt="Current"
+              style={{ maxWidth: '200px', display: 'block' }}
             />
           )}
-          <input 
-            type="file" 
+          <input
+            type="file"
             name="image"
             onChange={handleFileChange}
           />
@@ -119,13 +119,13 @@ const UpdateNewsForm = () => {
           <label>Текущее видео:</label>
           {formData.existingVideo && (
             <div>
-              <video controls style={{maxWidth: '200px'}}>
+              <video controls style={{ maxWidth: '200px' }}>
                 <source src={`https://servicebox35.pp.ru/uploads/${formData.existingVideo}`} />
               </video>
             </div>
           )}
-          <input 
-            type="file" 
+          <input
+            type="file"
             name="video"
             onChange={handleFileChange}
           />

@@ -8,17 +8,18 @@ import ScrollToPlugin from "gsap/ScrollToPlugin";
 import headerLogo from "../../images/Servicebox6.svg";
 import "./Header.css";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
-import Status from "../../images/status.svg";
+
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm"
 import { ShopContext } from '../Contexst/ShopContext';
 import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
-import LoginSignup from "../pages/LoginSignup"
+import LoginSignup from "../Pages/LoginSignup"
 
 import { jwtDecode } from 'jwt-decode'; // Используем именованный импорт
+import PromotionsPage from "../AdminPanel/PromotionsPage/PromotionsPage";
 
 function Header() {
-  const [menu, setMenu] = useState("shop");
+    const [menu, setMenu] = useState("shop");
     const { getTotalCartItems, isAuthenticated, setIsAuthenticated } = useContext(ShopContext);
     gsap.registerPlugin(ScrollToPlugin);
     const location = useLocation();
@@ -26,16 +27,19 @@ function Header() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
     const navigate = useNavigate();
-
+    const [role, setRole] = useState(localStorage.getItem('role') || '');
+    const [username, setUsername] = useState(localStorage.getItem('username') || '');
+    useEffect(() => {
+        setUsername(localStorage.getItem('username') || '');
+    }, [isAuthenticated]);
     useEffect(() => {
         const checkTokenValidity = () => {
             const token = localStorage.getItem('auth-token');
             if (token) {
                 try {
-                    const decoded = jwtDecode(token); // Используем именованный импорт
+                    const decoded = jwtDecode(token);
                     const currentTime = Date.now() / 1000;
                     if (decoded.exp < currentTime) {
-                        // Токен истек
                         localStorage.removeItem('auth-token');
                         localStorage.removeItem('refresh-token');
                         setIsAuthenticated(false);
@@ -43,7 +47,6 @@ function Header() {
                         setIsAuthenticated(true);
                     }
                 } catch (error) {
-                    console.error("Ошибка декодирования токена:", error);
                     localStorage.removeItem('auth-token');
                     localStorage.removeItem('refresh-token');
                     setIsAuthenticated(false);
@@ -52,14 +55,10 @@ function Header() {
                 setIsAuthenticated(false);
             }
         };
-
         checkTokenValidity();
-
-        // Установить интервал для проверки каждые 5 минут
         const interval = setInterval(checkTokenValidity, 5 * 60 * 1000);
-
         return () => clearInterval(interval);
-    }, [setIsAuthenticated]);
+    }, []);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -106,13 +105,17 @@ function Header() {
         setIsAuthenticated(true);
     };
 
-    const handleLogout = () => {
-        localStorage.removeItem('auth-token');
-        localStorage.removeItem('refresh-token');
+    const logout = () => {
+        localStorage.clear();
         setIsAuthenticated(false);
-        alert("Вы успешно вышли из аккаунта.");
+        setRole('');
         navigate('/');
-    };
+    }
+
+    useEffect(() => {
+        // Когда токен меняется
+        setRole(localStorage.getItem('role') || '');
+    }, [isAuthenticated]);
 
     return (
         <header className="header" id="header">
@@ -157,20 +160,20 @@ function Header() {
                     </div>
                     <div className="nav-login-cart">
                         {isAuthenticated ? (
-                            <button className='open-modal-button' onClick={handleLogout}>
-                                Выход
-                            </button>
+                            <>
+                                <span>{username ? username : (role === "admin" ? "Admin" : "User")}</span>
+                                <button onClick={logout}>Выход</button>
+                                {role === "admin" && <Link to="/admin-panel">Админка</Link>}
+                            </>
                         ) : (
-                            <button className='open-modal-button' onClick={openModal}>
-                                Войти
-                            </button>
+                            <button onClick={openModal}>Вход</button>
                         )}
-                        <LoginSignup 
-                            isOpen={isModalOpen} 
-                            onClose={closeModal} 
-                            onLoginSuccess={handleLoginSuccess} 
+                        <LoginSignup
+                            isOpen={isModalOpen}
+                            onClose={closeModal}
+                            onLoginSuccess={handleLoginSuccess}
                         />
-                        <Link to='/cart'> 
+                        <Link to='/cart'>
                             <FontAwesomeIcon icon={faBasketShopping} />
                         </Link>
                         <div className="nav-cart-count">{getTotalCartItems()}</div>
@@ -217,17 +220,24 @@ function Header() {
                             <Link style={{ textDecoration: 'none' }} to='/parts'>
                                 Каталог
                             </Link>
-                            {menu === "parts" ? <hr /> : <></>} 
+                            {menu === "parts" ? <hr /> : <></>}
                         </li>
                         <li className="navigation__list" onClick={() => { setMenu("newsdetail") }}>
                             <Link style={{ textDecoration: 'none' }} to='/news'>
-                            Новости
+                                Новости
                             </Link>
-                            {menu === "newsdetail"? <hr /> : <></>}
+                            {menu === "newsdetail" ? <hr /> : <></>}
+                        </li>
+                        <li className="navigation__list" onClick={() => { setMenu("promotionspage") }}>
+                            <Link style={{ textDecoration: 'none' }} to='/promotions-page'>
+                                Акции
+                            </Link>
+                            {menu === "promotionspage" ? <hr /> : <></>}
                         </li>
                     </ul>
+
                     <a className="button" href="https://pm-31768.promaster.app/index_cl" target="_blank" rel="noopener noreferrer">
-                     
+
                         <span className="button-text">СТАТУС РЕМОНТА</span>
                     </a>
                 </nav>

@@ -53,7 +53,7 @@ const ApplServiceList = () => {
           </tr>
         </thead>
         <tbody>
-        {filteredApplPrices.slice(0, showAll ? filteredApplPrices.length : 15).map((applPrice) => (
+          {filteredApplPrices.slice(0, showAll ? filteredApplPrices.length : 15).map((applPrice) => (
             <tr key={applPrice._id}>
               <td>{applPrice.serviceName}</td>
               <td>{applPrice.price}</td>
@@ -67,12 +67,12 @@ const ApplServiceList = () => {
         <button className='glass__btn' onClick={handleHideAll}>Скрыть прайс</button>
       )}
       <p className='glass__sabtitle-one'>* - время ремонта может меняться в зависимости от модели устройства и сложности проводимых работ</p>
-        <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
-        <div className="back__btn"> 
-      <ul>
-      <li><Link to="/">На главную</Link>
-      </li>
-      </ul>
+      <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
+      <div className="back__btn">
+        <ul>
+          <li><Link to="/">На главную</Link>
+          </li>
+        </ul>
       </div>
     </div>
   );
