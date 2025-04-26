@@ -289,7 +289,7 @@ const storage = multer.diskStorage({
 });
 
 ///actions
-app.use('/api/promotions', promotionRoutes);
+app.use('/api/promotions', promotionRoutes)
 
 const productStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -1102,7 +1102,7 @@ app.post('/admin/login', async (req, res) => {
       return res.status(401).json({ message: "Неправильный email или пароль" });
     }
 
-    const isMatch = (password === admin.password); // Лучше использовать bcrypt для сравнения хешированных паролей
+    const isMatch = await bcrypt.compare(password, admin.password);
 
     if (!isMatch) {
       return res.status(401).json({ message: "Неправильный email или пароль" });
