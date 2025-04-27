@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const Promotion = require('../models/Promotion');
-const { requireAdmin } = require('../middlewares/authMiddleware');
+
 
 const uploadDir = path.join(__dirname, '..', 'uploads', 'promotions');
 fs.mkdirSync(uploadDir, { recursive: true });

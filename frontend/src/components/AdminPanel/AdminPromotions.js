@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import './AdminPromotions.css';
 
@@ -6,16 +7,11 @@ export default function AdminPromotions() {
     const [active, setActive] = useState(null);
     const [form, setForm] = useState({ title: '', description: '', endDate: '', image: null });
     const [imagePreview, setImagePreview] = useState('');
-    const accessToken = localStorage.getItem('accessToken'); // !!!
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleForm = () => {
         setIsOpen(!isOpen);
         document.body.style.overflow = isOpen ? 'auto' : 'hidden';
-    };
-
-    const closeNews = () => {
-        setIsNewsOpen(false);
     };
 
     useEffect(() => {
@@ -68,18 +64,9 @@ export default function AdminPromotions() {
         fd.append("endDate", form.endDate);
         if (form.image) fd.append("image", form.image);
 
-        if (!accessToken) {
-            alert('Нет токена! Перелогиньтесь.');
-            return;
-        }
-        console.log("accessToken:", accessToken); // DEBUG
-
         const options = {
             method: active ? "PUT" : "POST",
-            body: fd,
-            headers: {
-                'Authorization': 'Bearer ' + accessToken
-            }
+            body: fd
         };
 
         const url = active
@@ -100,15 +87,8 @@ export default function AdminPromotions() {
 
     const handleDelete = async (id) => {
         if (window.confirm('Удалить акцию?')) {
-            if (!accessToken) {
-                alert('Нет токена!');
-                return;
-            }
             let req = await fetch("https://servicebox35.pp.ru/api/promotions/" + id, {
-                method: "DELETE",
-                headers: {
-                    'Authorization': 'Bearer ' + accessToken
-                }
+                method: "DELETE"
             });
             if (req.ok) fetchPromos();
         }
