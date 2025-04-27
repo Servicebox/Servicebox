@@ -157,7 +157,8 @@ const allowedCors = [
   'https://servicebox35.ru/verify-email',
   'https://servicebox35.pp.ru/signup',
   'https://servicebox35.pp.ru/api/gallery/group',
-  'https://servicebox35.ru/api/gallery/group'
+  'https://servicebox35.ru/api/gallery/group',
+  'https://servicebox35.pp.ru/api/auth/login',
 
 
 ];

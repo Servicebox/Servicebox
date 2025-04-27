@@ -26,14 +26,14 @@ router.get('/:id', async (req, res) => {
     res.json(promo);
 });
 
-router.post('/', requireAdmin, upload.single('image'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
     const { title, description, endDate } = req.body;
     let imageUrl = "";
     if (req.file) imageUrl = `/uploads/promotions/${req.file.filename}`;
     const promo = await Promotion.create({ title, description, endDate, image: imageUrl });
     res.status(201).json(promo);
 });
-router.put('/:id', requireAdmin, upload.single('image'), async (req, res) => {
+router.put('/:id', upload.single('image'), async (req, res) => {
     const promo = await Promotion.findById(req.params.id);
     if (!promo) return res.status(404).json({ message: "Promotion not found" });
 
@@ -49,7 +49,7 @@ router.put('/:id', requireAdmin, upload.single('image'), async (req, res) => {
     await promo.save();
     res.json(promo);
 });
-router.delete('/:id', requireAdmin, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     const promo = await Promotion.findById(req.params.id);
     if (!promo) return res.status(404).json({ message: "Promotion not found" });
     if (promo.image && promo.image.startsWith("/uploads"))

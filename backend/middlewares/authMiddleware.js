@@ -11,6 +11,7 @@ function requireAdmin(req, res, next) {
         req.user = decoded;
         next();
     } catch (e) {
+        console.log('Token verification error:', e);
         return res.status(401).json({ message: "Некорректный токен" });
     }
 }

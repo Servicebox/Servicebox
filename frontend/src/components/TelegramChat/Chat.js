@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Chat.css";
 import Cha from "../../images/chatonlain.gif";
 import userIcon from "../../images/user.png";
-import managerIcon from "../../images/manager.svg";
+import managerIcon from "../../images/manager.webp";
 import Icon from "../../images/Up.svg";
 
 // -------- ЭТО ГЛАВНОЕ ДЛЯ РАБОТЫ EMOJI PICKER -------------

@@ -13,7 +13,7 @@
   overflow: hidden;
   border-radius: 18px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  height: clamp(220px, 38vw, 410px);
+
   background: #eaf1fd;
 }
 .promo-slider__track {
@@ -155,8 +155,7 @@
   font-family: "Gilroy", Arial, sans-serif;
   line-height: 1.55;
   text-align: center;
-  margin-bottom: 20px;
-  margin-top: 10px;
+
   color: #fffde9;
   text-shadow: 0 1px 5px #0b40468c;
 }
