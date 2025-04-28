@@ -2,212 +2,210 @@ import React, { useState, useEffect } from 'react';
 import './ListProduct.css';
 import cross_icon from '../Assets/cross_icon.png';
 
+const API_URL = 'https://servicebox35.pp.ru';
+
+const emptyProduct = {
+  name: "",
+  description: "",
+  category: "",
+  old_price: "",
+  new_price: "",
+  quantity: "",
+  images: [] // массив строк (url)
+};
+
 const ListProduct = () => {
   const [allproducts, setAllProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
-
-  // --- NEW PRODUCT ---
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    category: "",
-    old_price: "",
-    new_price: "",
-    quantity: "",
-    image: ""
-  });
   const [adding, setAdding] = useState(false);
 
-  // загрузка файла картинки для нового товара
-  const handleNewImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // State for new product
+  const [newProduct, setNewProduct] = useState({ ...emptyProduct, images: [] });
+  const [newProductPreview, setNewProductPreview] = useState([]); // для превью картинок до загрузки
+
+  // ---------- Функции ----------
+
+  // Загрузка картинок (новый товар)
+  const handleNewImages = async (e) => {
+    const files = Array.from(e.target.files).slice(0, 3);
+    if (files.length < 1) return;
+
     const formData = new FormData();
-    formData.append('product', file);
+    files.forEach(file => formData.append('product', file));
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/uploads', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!response.ok) throw new Error('Ошибка загрузки фото');
-      const data = await response.json();
-      setNewProduct(prev => ({
-        ...prev,
-        image: data.image_url
-      }));
-    } catch (e) {
-      alert('Ошибка загрузки изображения');
+      const res = await fetch(`${API_URL}/api/uploads`, { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Ошибка загрузки картинок');
+      const data = await res.json();
+      setNewProduct(prev => ({ ...prev, images: data.image_urls }));
+      setNewProductPreview(data.image_urls);
+    } catch {
+      alert('Ошибка загрузки изображений');
     }
   };
 
-  // поля нового товара
-  const handleNewChange = (e, field) => {
-    setNewProduct({
-      ...newProduct,
-      [field]: e.target.value
-    });
+  // Получение значений форм
+  const handleNewChange = (e) => {
+    setNewProduct(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
   };
 
   // Отправка нового товара
   const handleNewSubmit = async (e) => {
     e.preventDefault();
+    if (!newProduct.images || newProduct.images.length === 0) {
+      alert("Сначала загрузите минимум 1 изображение!");
+      return;
+    }
     setAdding(true);
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/addproduct', {
+      const response = await fetch(`${API_URL}/api/addproduct`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(newProduct),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...newProduct,
+          old_price: Number(newProduct.old_price),
+          new_price: Number(newProduct.new_price),
+          quantity: Number(newProduct.quantity)
+        }),
       });
       if (!response.ok) throw new Error('Ошибка создания товара');
-      setNewProduct({
-        name: "",
-        category: "",
-        old_price: "",
-        new_price: "",
-        quantity: "",
-        image: ""
-      });
+      setNewProduct({ ...emptyProduct, images: [] });
+      setNewProductPreview([]);
       await fetchInfo();
-    } catch (error) {
-      alert('Ошибка при добавлении товара');
-      console.error(error);
+    } catch {
+      alert("Ошибка при добавлении товара");
     }
     setAdding(false);
   };
 
+  // Получить все товары
   const fetchInfo = async () => {
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/allproducts', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTPS error! status: ${response.status}`);
-      }
-
+      const response = await fetch(`${API_URL}/api/allproducts`);
       const data = await response.json();
       setAllProducts(data);
-    } catch (error) {
-      console.error('Fetch error: ', error.message);
+    } catch (e) {
+      alert("Ошибка загрузки списка товаров");
     }
   };
 
-  useEffect(() => {
-    fetchInfo();
-    // eslint-disable-next-line
-  }, []);
+  useEffect(() => { fetchInfo(); }, []);
 
+  // Удаление товара
   const remove_product = async (id) => {
+    if (!window.confirm('Удалить этот товар?')) return;
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/removeproduct', {
+      await fetch(`${API_URL}/api/removeproduct`, {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
       });
-
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
       await fetchInfo();
-    } catch (error) {
-      console.error('Remove product error: ', error.message);
+    } catch {
+      alert("Ошибка удаления");
     }
   };
 
-  const startEditing = (product) => {
-    setEditingProduct({ ...product });
+  // --- Редактирование
+  const startEditing = (p) => {
+    // Копируем, если картинки - массив строк
+    setEditingProduct({ ...p, images: Array.isArray(p.images) ? p.images : [p.images] });
   };
-
-  const handleEditChange = (e, field) => {
-    setEditingProduct({
-      ...editingProduct,
-      [field]: e.target.value
-    });
+  const handleEditChange = (e) => {
+    setEditingProduct(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  // Загрузка новых изображений (replace все картинки)
+  const handleEditImages = async (e) => {
+    const files = Array.from(e.target.files).slice(0, 3);
+    if (files.length < 1) return;
     const formData = new FormData();
-    formData.append('product', file);
-
+    files.forEach(file => formData.append('product', file));
     try {
-      const response = await fetch('https://servicebox35.pp.ru/api/uploads', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      setEditingProduct({
-        ...editingProduct,
-        image: data.image_url
-      });
-    } catch (error) {
-      console.error('Upload image error: ', error.message);
+      const res = await fetch(`${API_URL}/api/uploads`, { method: 'POST', body: formData });
+      if (!res.ok) throw new Error('Ошибка загрузки файлов');
+      const data = await res.json();
+      setEditingProduct(p => ({ ...p, images: data.image_urls }));
+    } catch {
+      alert('Ошибка загрузки изображений');
     }
   };
-
+  // Сохранение измененного товара
   const saveEdit = async () => {
     try {
-      const response = await fetch(`https://servicebox35.pp.ru/api/updateproduct/${editingProduct.id}`, {
+      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct.id}`, {
         method: 'PUT',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editingProduct),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...editingProduct,
+          old_price: Number(editingProduct.old_price),
+          new_price: Number(editingProduct.new_price),
+          quantity: Number(editingProduct.quantity),
+        }),
       });
-
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
+      if (!response.ok) throw new Error();
       setEditingProduct(null);
       await fetchInfo();
-    } catch (error) {
-      console.error('Update product error: ', error.message);
+    } catch {
+      alert("Ошибка обновления товара");
     }
   };
+
+  // ------------- JSX -------------
 
   return (
     <div className='list-product'>
-      <h2>Список всех товаров</h2>
+      <h2>Добавить новый товар</h2>
+      <form className='listproduct-create-row' onSubmit={handleNewSubmit} style={{ marginBottom: 24 }}>
+        <div>
+          <input type="file" multiple accept="image/*" onChange={handleNewImages} />
+          <div style={{ display: 'flex', gap: 8, marginTop: 5 }}>
+            {(newProduct.images?.length > 0 ? newProduct.images : newProductPreview).map((img, i) => (
+              <img key={i} src={img} alt="preview" style={{ width: 48, height: 48, objectFit: 'cover', border: '1px solid #ccc' }} />
+            ))}
+          </div>
+        </div>
+        <input name="name" placeholder="Название" value={newProduct.name} onChange={handleNewChange} required />
+        <textarea name="description" placeholder="Описание" value={newProduct.description} onChange={handleNewChange} rows={3} required />
+        <input name="category" placeholder="Категория" value={newProduct.category} onChange={handleNewChange} required />
+        <input name="old_price" placeholder="Старая цена" value={newProduct.old_price} onChange={handleNewChange} type="number" />
+        <input name="new_price" placeholder="Новая цена" value={newProduct.new_price} onChange={handleNewChange} type="number" required />
+        <input name="quantity" placeholder="Количество" value={newProduct.quantity} onChange={handleNewChange} type="number" required />
+        <button disabled={adding}>{adding ? "Добавление..." : "Добавить"}</button>
+      </form>
+
+      <h2>Все товары</h2>
       <div className='listproduct-format-main'>
         <p>Фото</p>
         <p>Название</p>
+        <p>Описание</p>
         <p>Категория</p>
         <p>Старая цена</p>
         <p>Новая цена</p>
-        <p>Количество</p>
+        <p>Кол-во</p>
         <p>Действия</p>
       </div>
-      <form className='listproduct-format-main listproduct-create-row' onSubmit={handleNewSubmit}>
-        <>
-          <input type="file" accept="image/*" onChange={handleNewImageChange} />
-          <input placeholder="Название" value={newProduct.name} onChange={e => handleNewChange(e, 'name')} required />
-          <input placeholder="Категория" value={newProduct.category} onChange={e => handleNewChange(e, 'category')} required />
-          <input placeholder="Старая цена" value={newProduct.old_price} onChange={e => handleNewChange(e, 'old_price')} type="number" required />
-          <input placeholder="Новая цена" value={newProduct.new_price} onChange={e => handleNewChange(e, 'new_price')} type="number" required />
-          <input placeholder="Количество" value={newProduct.quantity} onChange={e => handleNewChange(e, 'quantity')} type="number" required />
-          <button className='create__btn' type="submit" disabled={adding}>{adding ? "Сохр..." : "Добавить"}</button>
-        </>
-      </form>
       <div className='listproduct-allproducts'>
         <hr />
         {allproducts.map((product) => (
           <div key={product.id} className='listproduct-format-main listproduct-format'>
             {editingProduct && editingProduct.id === product.id ? (
               <>
-                <input type="file" onChange={handleImageChange} />
-                <input value={editingProduct.name} onChange={(e) => handleEditChange(e, 'name')} />
-                <input value={editingProduct.category} onChange={(e) => handleEditChange(e, 'category')} />
-                <input value={editingProduct.old_price} onChange={(e) => handleEditChange(e, 'old_price')} type="number" />
-                <input value={editingProduct.new_price} onChange={(e) => handleEditChange(e, 'new_price')} type="number" />
-                <input value={editingProduct.quantity} onChange={(e) => handleEditChange(e, 'quantity')} type="number" />
+                <div>
+                  <input type="file" multiple accept="image/*" onChange={handleEditImages} />
+                  <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+                    {(editingProduct.images || []).map((img, i) => (
+                      <img key={i} src={img} alt="" style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #ccc' }} />
+                    ))}
+                  </div>
+                </div>
+                <input name="name" value={editingProduct.name} onChange={handleEditChange} />
+                <textarea name="description" value={editingProduct.description} onChange={handleEditChange} rows={3} />
+                <input name="category" value={editingProduct.category} onChange={handleEditChange} />
+                <input name="old_price" value={editingProduct.old_price} onChange={handleEditChange} type="number" />
+                <input name="new_price" value={editingProduct.new_price} onChange={handleEditChange} type="number" />
+                <input name="quantity" value={editingProduct.quantity} onChange={handleEditChange} type="number" />
                 <div>
                   <button className='list-button' onClick={saveEdit}>Сохранить</button>
                   <button className='list-button' onClick={() => setEditingProduct(null)}>Отмена</button>
@@ -215,15 +213,20 @@ const ListProduct = () => {
               </>
             ) : (
               <>
-                <img className='listproduct-product-icon' src={product.image} alt='' />
+                <div>
+                  {(product.images ?? product.image ? [product.image] : []).slice(0, 3).map((img, i) =>
+                    !!img && <img key={i} className='listproduct-product-icon' src={img} alt='' style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #eee', marginRight: 4 }} />
+                  )}
+                </div>
                 <p>{product.name}</p>
+                <p>{product.description}</p>
                 <p>{product.category}</p>
                 <p>₽{product.old_price}</p>
                 <p>₽{product.new_price}</p>
                 <p>{product.quantity}</p>
                 <div className='list-btn'>
                   <button className='list-button' onClick={() => startEditing(product)}>Редактировать</button>
-                  <img onClick={() => remove_product(product.id)} className='listproduct-remove-icon' src={cross_icon} alt='' />
+                  <img onClick={() => remove_product(product.id)} className='listproduct-remove-icon' src={cross_icon} style={{ cursor: 'pointer' }} alt='' />
                 </div>
               </>
             )}

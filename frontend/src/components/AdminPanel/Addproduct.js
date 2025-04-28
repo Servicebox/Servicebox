@@ -123,10 +123,10 @@ const Addproduct = () => {
                     hidden
                 />
             </div>
-
             <button onClick={Add_Product} className='addproduct-btn'>Создать</button>
         </div>
     );
 };
+
 
 export default Addproduct;
