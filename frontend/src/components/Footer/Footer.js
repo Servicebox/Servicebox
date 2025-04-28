@@ -6,7 +6,7 @@ import Sbp from "../../images/MNP.svg";
 import Beznal from "../../images/Payment methods.svg";
 import Dolyami from '../../images/Dolyame.svg';
 import InteractiveMap from '../InteractiveMap/InteractiveMap';
-
+import YandexReviewsWidget from "./YandexReviewsWidget";
 
 function Footer() {
   const [taxiLoaded, setTaxiLoaded] = useState(false);
@@ -28,13 +28,13 @@ function Footer() {
   useEffect(() => {
     if (taxiLoaded) {
       navigator.geolocation.getCurrentPosition(
-        () => {},
+        () => { },
         (error) => {
           setGeoError(`Ошибка геолокации: ${error.message}`);
         },
-        { 
+        {
           timeout: 10000,
-          maximumAge: 60000 
+          maximumAge: 60000
         }
       );
     }
@@ -44,8 +44,8 @@ function Footer() {
     <footer className="footer">
       <div className="footer__map">
         <InteractiveMap />
-        
-        <button 
+
+        <button
           className="taxi-load-button"
           onClick={loadTaxiWidget}
           aria-label="Показать виджеты такси"
@@ -55,7 +55,7 @@ function Footer() {
 
         {taxiLoaded && !geoError && (
           <div className="taxi-widget-container">
-            <div 
+            <div
               className="ya-taxi-widget"
               data-ref="https%3A%2F%2Fservicebox35.ru"
               data-tariff="econom"
@@ -71,7 +71,7 @@ function Footer() {
               data-point-b="39.929117,59.216807"
             ></div>
 
-            <div 
+            <div
               className="ya-taxi-widget"
               data-ref="12114993"
               data-tariff="econom"
@@ -90,7 +90,7 @@ function Footer() {
 
         {geoError && (
           <div className="geo-error">
-            {geoError}. 
+            {geoError}.
             <button onClick={() => window.location.reload()}>
               Попробовать снова
             </button>
@@ -98,11 +98,11 @@ function Footer() {
         )}
 
         <div className="footer__contacts">
-          <a 
-            className="go" 
+          <a
+            className="go"
             href="https://yandex.go.link/?adj_t=i6qgxe_vlce30&adj_adgroup=12114994&adj_campaign=12114994"
           >
-          
+
           </a>
         </div>
       </div>
@@ -112,9 +112,9 @@ function Footer() {
           <div className="company-info">
             <h3 className="info-title">Реквизиты компании</h3>
             <p className="footer__text">
-              Название организации: ООО "СЕРВИС БОКС"<br/>
-              ИНН: 3525475916<br/>
-              КПП: 352501001<br/>
+              Название организации: ООО "СЕРВИС БОКС"<br />
+              ИНН: 3525475916<br />
+              КПП: 352501001<br />
               ОГРН: 1213500018522
             </p>
           </div>
@@ -131,6 +131,17 @@ function Footer() {
             <img className="payment-logo" src={Sbp} alt="СБП" />
             <img className="payment-logo" src={Dolyami} alt="Долями" />
             <img className="payment-logo" src={Oplata} alt="Наличные" />
+          </div>
+
+          <div style={{ margin: "5px auto", padding: "10px" }}>
+            <iframe
+              src="https://yandex.ru/sprav/widget/rating-badge/58578899506?type=award"
+              width="150"
+              height="50"
+              frameBorder="0"
+              title="Отзывы Яндекс"
+              style={{ borderRadius: '3px', boxShadow: '0 2px 8px #0001' }}
+            ></iframe>
           </div>
         </div>
       </div>
