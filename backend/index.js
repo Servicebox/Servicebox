@@ -185,7 +185,6 @@ const apiLimiter = rateLimit({
   message: 'Слишком много запросов к API. Подождите минуту.',
 });
 
-
 app.use(apiLimiter);
 const corsOptions = {
   origin: (origin, callback) => {
