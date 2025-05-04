@@ -46,6 +46,8 @@ const nodemailer = require('nodemailer');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const orderRoutes = require('./routes/order');
+const apicache = require('apicache');
+const cache = apicache.middleware;
 
 // Создание API роутер
 
@@ -100,6 +102,7 @@ io.on('connection', (socket) => {
     console.log('User disconnected:', socket.id);
   });
 });
+
 //const emailToken = crypto.randomBytes(64).toString('hex');
 const allowedCors = [
   'http://localhost:5173',
@@ -169,18 +172,31 @@ const isBehindProxy = false; // Change to true if behind a proxy
 app.set('trust proxy', isBehindProxy);
 
 // Настройка Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 минут
-  max: 200, // Максимум 100 запросов с одного IP за windowMs
-  skip: (req) => req.method === 'OPTIONS', // Пропускаем CORS предзапросы
-  message: 'Слишком много запросов с этого IP, попробуйте позже.',
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 500,
+  message: 'Слишком много запросов. Попробуйте позже.',
 });
 
-app.use(limiter);
+// Индивидуальный лимит для API продуктов
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 минута
+  max: 50,
+  message: 'Слишком много запросов к API. Подождите минуту.',
+});
+
+
+app.use(apiLimiter);
 const corsOptions = {
-  origin: ['https://servicebox35.ru', 'https://servicebox35.pp.ru'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'], // Добавьте 'auth-token'
+  origin: (origin, callback) => {
+    if (allowedCors.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 };
 
@@ -367,6 +383,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
   }
 });
 
+
 app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   maxAge: '3d', // Кэширование на 1 день
@@ -502,7 +519,7 @@ app.get('/api/categories-with-subcategories', async (req, res) => {
   }
 });
 
-app.get('/api/products', async (req, res) => {
+app.get('/api/products', cache('5 minutes'), async (req, res) => {
   const { category, subcategory } = req.query;
   const filter = {};
   if (category) filter.category = category;
@@ -539,7 +556,7 @@ app.post('/api/addproduct', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
-app.get('/api/allproducts', async (req, res) => {
+app.get('/api/allproducts', cache('5 minutes'), async (req, res) => {
   try {
     const products = await Product.find({}).lean();
 
