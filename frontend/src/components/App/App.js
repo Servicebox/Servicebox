@@ -65,6 +65,9 @@ import ListNews from "../AdminPanel/News/ListNews";
 import NewsDetail from "../AdminPanel/News/NewsDetail";
 import PublicNewsList from "../AdminPanel/News/PublicNewsList";
 import PromotionsPage from "../AdminPanel/PromotionsPage/PromotionsPage";
+import AdminUsersPanel from "../AdminPanel/AdminPanelRoute/AdminUsersPanel";
+import Item from "../Item/Item";
+import UserProfile from "../pages/UserProfile";
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
@@ -116,11 +119,14 @@ const App = () => {
             }
           />
           <Route path="/image-gallery-api" element={<ImageGalleryApi />} />
+          <Route path="users" element={<AdminUsersPanel />} />
+          <Route path="/profile" element={<UserProfile />} />
           <Route path="/delete-image" element={<DeleteImage />} />
-          {/* <Route exact path="/" component={ServiceRef} /> */}
-          <Route path="/notebook-service" element={<NotebookService />} />
-          <Route path="/monoblock-service" element={<MonoblockService />} />
-          <Route path="/tv-service" element={<TvService />} />
+          <Route path="ShopContextProvider " element={<ShopContextProvider />} />
+          <Route path="ShopContext" element={<ShopContext />} />
+          <Route path="Item" element={<Item />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/shop/:categoryId" element={<ShopCategory />} />
           <Route path="/tablet-service" element={<TabletService />} />
           <Route path="/telephone-service" element={<TelephoneService />} />
           <Route path="/other-service" element={<OtherService />} />
@@ -185,6 +191,7 @@ const App = () => {
           <Route path="/usedspareparts" element={<ShopCategory category="usedsparepart" />} />
           <Route path="/bread-crums" element={<BreadCrums />} />
           <Route path='/product' element={<Product />} >
+            <Route path='/product/:productId' element={<Product />} />
             <Route path=':productId' element={<Product />} />
             <Route path=':productName' element={<Product />} />
           </Route>

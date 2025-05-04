@@ -4,7 +4,7 @@ const router = express.Router();
 const fetchUser = require('../middlewares/fetchUser');
 const User = require('../models/Users');
 
-router.get('/me', fetchUser, async (req, res) => {
+router.get('/profile', fetchUser, async (req, res) => {
     try {
         const user = await User.findById(req.user.id, '-password -refreshToken -cartData');
         if (!user) return res.status(404).json({ message: 'User not found' });
@@ -12,6 +12,13 @@ router.get('/me', fetchUser, async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Ошибка сервера' });
     }
+});
+
+// Все пользователи (для админа)
+router.get('/all', fetchUser, async (req, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ message: "Нет доступа" });
+    const users = await User.find({}, '-password');
+    res.json(users);
 });
 
 module.exports = router;

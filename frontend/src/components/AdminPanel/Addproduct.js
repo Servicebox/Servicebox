@@ -39,6 +39,8 @@ const Addproduct = () => {
             ...productDetails,
             new_price: Number(productDetails.new_price),
             old_price: Number(productDetails.old_price),
+            category: "Категория",
+            description: productDetails.description,
             quantity: Number(productDetails.quantity)
         };
         if (payload.images.length < 1) {

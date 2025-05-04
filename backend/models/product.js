@@ -9,6 +9,7 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true, text: true },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
+  description: { type: String, required: true },
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true },
   quantity: { type: Number, required: true, default: 0 },
@@ -17,5 +18,4 @@ const productSchema = new mongoose.Schema({
 // Создаем текстовый индекс для поиска
 productSchema.index({ name: 'text', description: 'text', category: 'text' });
 
-module.exports = mongoose.model('Product', productSchema);
 */}

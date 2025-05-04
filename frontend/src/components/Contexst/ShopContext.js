@@ -31,7 +31,6 @@ const fetchWithAuth = async (url, options = {}) => {
 const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
-    const [all_services, setAll_Services] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const checkTokenValidity = () => {
@@ -133,7 +132,6 @@ const ShopContextProvider = (props) => {
             }
         }
     };
-
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for (const item in cartItems) {
@@ -146,6 +144,7 @@ const ShopContextProvider = (props) => {
         }
         return totalAmount;
     }
+
 
     const getTotalCartItems = () => {
         let totalItem = 0;

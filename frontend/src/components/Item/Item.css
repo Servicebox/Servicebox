@@ -76,6 +76,7 @@
   align-items: baseline;
   gap: 11px;
   margin-bottom: 10px;
+  flex-direction: column;
 }
 
 .item-price-new {
@@ -112,6 +113,9 @@
   .item img { height: 110px;}
   .item { padding: 12px 6px;}
   .item-title { font-size: 1rem; }
+  .item-prices{
+    flex-direction: column;
+  }
 }
 @media (max-width: 450px) {
   .item { max-width: 98vw; min-width: unset;}

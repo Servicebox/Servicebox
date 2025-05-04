@@ -29,8 +29,8 @@ function Main() {
         <MainBanner />
         <ServiceRef />
         <AboutRef />
-        {/*<Completed />*/}
-        < ImageGalleryApi />
+        <Completed />
+        {/*< ImageGalleryApi />*/}
         <ArronService />
         <AboutMe />
         <Gifts />

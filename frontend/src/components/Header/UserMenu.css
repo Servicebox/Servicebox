@@ -1,0 +1,107 @@
+.user-menu-dropdown {
+    position: absolute;
+    right: 10px;
+    top: 44px;
+    min-width: 170px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 24px 0 rgba(0,0,0,0.11);
+    padding: 16px 12px 6px;
+    display: flex;
+    flex-direction: column;
+    z-index: 5;
+    animation: fadeDropdown 0.22s;
+}
+@keyframes fadeDropdown {
+    from { opacity:0; transform:translateY(-10px);}
+    to { opacity:1; }
+}
+.user-menu-dropdown a, .user-menu-dropdown button {
+    display: block;
+    color: #222;
+    text-decoration: none;
+    padding: 9px 0 9px 6px;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    transition: background 0.16s;
+}
+.user-menu-dropdown a:hover, .user-menu-dropdown button:hover {
+    background: #eaf6ff;
+}
+.user-menu-logout {
+    color: #de3658 !important;
+    font-weight: 600;
+}
+
+/* Для иконки */
+.nav-user-icon {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap:6px;
+    padding:3px 6px;
+    border-radius:5px;
+    transition:background 0.12s;
+    font-size:1.18em;
+    position: relative;
+}
+.nav-user-icon:hover { background: #eef6fa; }
+.nav-username {
+    font-family: inherit;
+    font-size: 1.08em;
+    margin-left: 8px;
+    font-weight: 600;
+}
+
+/* Админка кнопка */
+.admin-link-btn {
+    margin-left: 12px;
+    padding: 5px 14px !important;
+    border-radius: 8px;
+    background: #ddeafe;
+    color: #095dab;
+    border: none;
+    font-weight: 600;
+    font-size:1em;
+    transition: background .16s;
+}
+.admin-link-btn:hover { background: #d4eef7; }
+
+/* mobile: маска+центрирование */
+.user-menu-mobilemask {
+    position:fixed;
+    left:0; right:0; top:0; bottom:0;
+    background:rgba(0,0,0,0.25);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index: 4999;
+}
+.user-menu-dropdown {
+    min-width:200px;
+}
+@media (max-width: 768px) {
+    .user-menu-dropdown {
+        position:relative;
+        right:auto;
+        top:auto;
+        min-width: 250px;
+        box-shadow: 0 2px 8px 0 rgba(0,0,0,0.13);
+        padding: 20px 18px 12px;
+    }
+    .nav-user-icon .nav-username {
+        font-size:1em;
+        margin-left:7px;
+    }
+    .admin-link-btn { margin-left:8px;padding:6px 10px;}
+}
+
+/* Убираем горизонтальный скролл для меню */
+body.menu-open {
+    overflow: hidden;
+}

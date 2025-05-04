@@ -54,7 +54,7 @@
   letter-spacing:.01em;
   border-radius: 26px 26px 0 0;
 }
-.chat-header span { flex:1; margin-left: 8px; }
+.chat-header span { flex:1; margin-left: 8px;color: #575757;}
 
 .chat-close {
   border: none;

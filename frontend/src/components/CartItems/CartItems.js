@@ -4,6 +4,7 @@ import './CartItems.css';
 import { ShopContext } from '../Contexst/ShopContext';
 import remove_icon from '../Assets/cart_cross_icon.png';
 import TinkoffPayForm from '../TinkoffPayForm/TinkoffPayForm';
+import { Description } from '@mui/icons-material';
 
 // Импортируй DeliveryForm если он есть!
 
@@ -14,7 +15,7 @@ const CartItems = () => {
     all_product,
     cartItems,
     addToCart,
-    removeFromCart,    // это subtractFromCart!!!
+    removeFromCart,
     purchaseItems,
   } = useContext(ShopContext);
 
@@ -33,6 +34,7 @@ const CartItems = () => {
       name: product.name,
       price: product.new_price,
       quantity: cartItems[product.id],
+      Description: product.description,
     }));
 
   if (isPaid) {
@@ -49,7 +51,7 @@ const CartItems = () => {
         <div className="cart-col cart-col-img">Товар</div>
         <div className="cart-col cart-col-name">Описание</div>
         <div className="cart-col cart-col-price">Цена</div>
-        <div className="cart-col cart-col-controls">Количество</div>
+        <div className="cart-col cart-col-controls">Кол-во</div>
         <div className="cart-col cart-col-total">Всего</div>
         <div className="cart-col cart-col-remove">Удалить</div>
       </div>
@@ -74,7 +76,7 @@ const CartItems = () => {
                 <button
                   className="cartitems-ctrl-btn"
                   onClick={() => addToCart(e.id)}
-                  disabled={cartItems[e.id] >= e.quantity}
+                  disabled={cartItems[e.id] <= -1}
                 >+</button>
               </div>
               <div className="cart-col cart-col-total">₽{e.new_price * cartItems[e.id]}</div>

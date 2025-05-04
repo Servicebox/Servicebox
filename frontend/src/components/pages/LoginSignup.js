@@ -13,7 +13,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     email: "",
     password: "",
     phone: "",
-    role: "user",
+
   });
   const [emailForReset, setEmailForReset] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -72,7 +72,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('auth-token', data.tokens.accessToken); // !!! обязательно!
+        localStorage.setItem('auth-token', data.tokens.accessToken);
         localStorage.setItem('refresh-token', data.tokens.refreshToken);
         localStorage.setItem('role', data.role);
         localStorage.setItem('username', data.username);
@@ -201,6 +201,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         body: JSON.stringify({ password: newPassword }),
       });
 
+
       const responseData = await response.json();
       if (responseData.success) {
         localStorage.setItem('auth-token', responseData.token); // Сохранение токена для авторизации
@@ -275,30 +276,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
           </form>
         ) : (
           <form className='loginsignup-fields' onSubmit={handleSubmit}>
-            {mode === "Login" && (
-              <div className='role-select'>
-                <label>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="user"
-                    checked={formData.role === "user"}
-                    onChange={() => setFormData({ ...formData, role: "user" })}
-                  />
-                  Пользователь
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="role"
-                    value="admin"
-                    checked={formData.role === "admin"}
-                    onChange={() => setFormData({ ...formData, role: "admin" })}
-                  />
-                  Администратор
-                </label>
-              </div>
-            )}
+
             <input
               name='email'
               value={formData.email}

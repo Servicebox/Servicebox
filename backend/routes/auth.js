@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users');
 const JWT_SECRET = process.env.JWT_SECRET || 'jwtsecret';
+const fetchUser = require('../middlewares/fetchUser');
+
 
 // Для генерации токенов, с ролью
 function createTokens(user) {
@@ -20,6 +22,17 @@ function createTokens(user) {
     return { accessToken, refreshToken };
 }
 
+router.get('/profile', async (req, res) => {
+    const user = await User.findById(req.user.id, '-password -refreshToken');
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+});
+
+router.get('/all', fetchUser, async (req, res) => {
+    if (req.user.role !== "admin") return res.status(403).json({ message: "Нет доступа" });
+    const users = await User.find({}, '-password');
+    res.json(users);
+});
 // USER REGISTRATION
 router.post('/register', async (req, res) => {
     try {
@@ -38,8 +51,9 @@ router.post('/register', async (req, res) => {
 
         const user = await User.create({
             username, email, phone,
-            password: await bcrypt.hash(password, 10)
-        });
+            password: await bcrypt.hash(password, 10),
+            role: "user"
+        }); // по умолчанию role = user
         const tokens = createTokens(user);
         user.refreshToken = tokens.refreshToken;
         await user.save();
@@ -55,6 +69,18 @@ router.post('/register', async (req, res) => {
     }
 });
 
+
+router.post('/signup', async (req, res) => {
+    const { username, email, password, phone } = req.body;
+    if (!username || !email || !password) return res.status(400).json({ message: "Заполните все поля" });
+    if (await User.findOne({ email })) return res.status(409).json({ message: "Email занят" });
+
+    const hash = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, email, password: hash, phone });
+    res.json({ message: "Регистрация успешна" });
+});
+
+// USER LOGIN
 // USER LOGIN
 router.post('/login', async (req, res) => {
     try {

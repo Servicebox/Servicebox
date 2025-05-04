@@ -44,7 +44,8 @@ app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
 const authRoutes = require('./routes/auth');
-
+const userRoutes = require('./routes/user');
+const orderRoutes = require('./routes/order');
 
 // Создание API роутер
 
@@ -212,7 +213,9 @@ app.use('/api/news', newsRoutes);
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
-
+app.use('/api/user', require('./routes/user.js'));
+app.use('/api', userRoutes);
+app.use('/api/order', orderRoutes);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // База данных
@@ -232,6 +235,7 @@ const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true },
   images: { type: [String], required: true },
   category: { type: String, required: true },
+  subcategory: { type: String },
   new_price: { type: Number, required: true },
   old_price: { type: Number, required: true },
   description: { type: String, required: true },
@@ -405,7 +409,7 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
 });
 
 // CRUD операций для продуктов
-app.post('/api/addproduct', async (req, res) => {
+{/*app.post('/api/addproduct', async (req, res) => {
   try {
     const lastProduct = await Product.findOne().sort({ id: -1 }).limit(1);
     const id = lastProduct ? lastProduct.id + 1 : 1;
@@ -428,6 +432,7 @@ app.post('/api/addproduct', async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 });
+*/}
 
 // Схема для сообщений
 const messageSchema = new mongoose.Schema({
@@ -442,39 +447,98 @@ const Message = mongoose.model('Message', messageSchema);
 app.post('/api/removefromcart', fetchUser, async (req, res) => {
   try {
     const productId = req.body.itemId;
+    if (!productId) return res.status(400).json({ message: "Некорректный ID товара" });
 
-    // Валидация itemId
-    if (typeof productId !== 'number' && typeof productId !== 'string') {
-      return res.status(400).json({ message: "Некорректный ID товара" });
-    }
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "Пользователь не найден" });
 
-    const product = await Product.findOne({ id: productId });
+    const product = await Product.findOne({ id: Number(productId) });
+    if (!product) return res.status(404).json({ message: "Товар не найден" });
 
-    if (!product) {
-      return res.status(404).json({ message: "Товар не найден" });
-    }
+    const cartKey = String(productId);
+    const currentQuantity = user.cartData.get(cartKey) || 0;
 
-    const userData = await User.findOne({ _id: req.user.id });
+    if (currentQuantity < 1)
+      return res.status(400).json({ message: "В корзине такого количества нет" });
 
-    const productIdStr = String(productId);
+    // Уменьшаем количество в корзине:
+    user.cartData.set(cartKey, currentQuantity - 1);
+    // Увеличиваем на складе:
+    product.quantity += 1;
 
-    const currentQuantity = userData.cartData.get(productIdStr) || 0;
-
-    if (currentQuantity > 0) {
-      userData.cartData.set(productIdStr, currentQuantity - 1);
-      product.quantity += 1;
-      await product.save();
-      await userData.save();
-      res.json({ message: "Removed" });
-    } else {
-      res.status(400).json({ message: "Нельзя удалить, так как количество равно нулю" });
-    }
+    await user.save();
+    await product.save();
+    res.json({ message: 'Товар удалён из корзины', cart: Object.fromEntries(user.cartData) });
   } catch (error) {
-    console.error('Error while removing from cart:', error.message);
+    console.error('Error while removing from cart:', error);
     res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 
+
+// Получить все категории и подкатегории
+app.get('/api/categories-with-subcategories', async (req, res) => {
+  try {
+    const products = await Product.find({}, 'category subcategory').lean();
+
+    // Собираем уникальные категории и для каждой — подкатегории
+    const result = {};
+    for (const p of products) {
+      if (!p.category) continue;
+      if (!result[p.category]) result[p.category] = new Set();
+      if (p.subcategory) result[p.category].add(p.subcategory);
+    }
+
+    // Преобразуем Set в массив
+    const categories = Object.entries(result).map(([category, subSet]) => ({
+      category,
+      subcategories: Array.from(subSet).filter(Boolean) // без пустых
+    }));
+
+    res.json(categories);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+app.get('/api/products', async (req, res) => {
+  const { category, subcategory } = req.query;
+  const filter = {};
+  if (category) filter.category = category;
+  if (subcategory) filter.subcategory = subcategory;
+  try {
+    const products = await Product.find(filter).lean();
+    res.json(products);
+  } catch (e) {
+    res.status(500).json({ message: 'Ошибка сервера' });
+  }
+});
+
+app.post('/api/addproduct', async (req, res) => {
+  try {
+    const lastProduct = await Product.findOne().sort({ id: -1 }).limit(1);
+    const id = lastProduct ? lastProduct.id + 1 : 1;
+    const productData = {
+      id,
+      name: req.body.name,
+      images: req.body.images,
+      category: req.body.category,
+      subcategory: req.body.subcategory,           // НОВОЕ!
+      new_price: Number(req.body.new_price),
+      old_price: Number(req.body.old_price),
+      description: req.body.description,
+      quantity: Number(req.body.quantity)
+    };
+    const product = new Product(productData);
+
+    await product.save();
+    res.json({ success: true, product });
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 app.get('/api/allproducts', async (req, res) => {
   try {
     const products = await Product.find({}).lean();
@@ -512,6 +576,7 @@ app.put('/api/updateproduct/:id', async (req, res) => {
         category: req.body.category,
         old_price: req.body.old_price,
         new_price: req.body.new_price,
+        description: req.body.description,
         quantity: req.body.quantity
       },
       { new: true }
