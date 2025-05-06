@@ -278,18 +278,12 @@ app.use((req, res, next) => {
 
 // Служить статические файлы
 app.use(express.static(path.join(__dirname, 'build')));
-
-
 app.use('/uploads', express.static(uploadDirectory));
 app.use('/api', router);
 app.use('/images', express.static(path.join(__dirname, 'uploads', 'images')));
 app.use('/gallery', express.static(path.join(__dirname, 'uploads', 'gallery')));
 app.use('/promotions', express.static(path.join(__dirname, 'uploads', 'promotions')));
-
-
 app.use('/api/auth', authRoutes);
-
-
 // Обработка форм
 app.use('/api/images', imageRoutes);
 app.get("./", (req, res) => {
