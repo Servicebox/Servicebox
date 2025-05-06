@@ -604,7 +604,7 @@ color: white;
   position: relative;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 2;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 

@@ -6,9 +6,6 @@ import AdminPanelRoute from './AdminPanelRoute/AdminPanelRoute';
 const AdminPanel = () => {
   const [serviceId, setServiceId] = useState('');
 
-  const handleServiceIdChange = (e) => {
-    setServiceId(e.target.value);
-  };
 
   return (
     <div className='admim-panel__root'>

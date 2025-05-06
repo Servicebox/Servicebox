@@ -48,6 +48,7 @@ const userRoutes = require('./routes/user');
 const orderRoutes = require('./routes/order');
 const apicache = require('apicache');
 const cache = apicache.middleware;
+const sharp = require('sharp');
 
 // Создание API роутер
 
@@ -172,32 +173,22 @@ const isBehindProxy = false; // Change to true if behind a proxy
 app.set('trust proxy', isBehindProxy);
 
 // Настройка Rate Limiting
-const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 500,
-  message: 'Слишком много запросов. Попробуйте позже.',
+// Настройка Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 200, // Максимум 100 запросов с одного IP за windowMs
+  skip: (req) => req.method === 'OPTIONS', // Пропускаем CORS предзапросы
+  message: 'Слишком много запросов с этого IP, попробуйте позже.',
 });
 
-// Индивидуальный лимит для API продуктов
-const apiLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 минута
-  max: 50,
-  message: 'Слишком много запросов к API. Подождите минуту.',
-});
-
-app.use(apiLimiter);
+app.use(limiter);
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedCors.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: ['https://servicebox35.ru', 'https://servicebox35.pp.ru'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'], // Добавьте 'auth-token'
   credentials: true
 };
+
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
@@ -211,14 +202,18 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 
-
+const optimizeImage = async (buffer) => {
+  return sharp(buffer)
+    .resize(800, 800, { fit: 'inside', withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toBuffer();
+};
 
 // Папка для загрузок
 const uploadDirectory = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDirectory)) {
   fs.mkdirSync(uploadDirectory, { recursive: true });
 }
-
 app.use('/uploads', express.static(uploadDirectory, {
   maxAge: '3d',
   etag: false,
@@ -257,6 +252,8 @@ const ProductSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
   date: { type: Date, default: Date.now },
   available: { type: Boolean, default: true }
+}, {
+  versionKey: false
 });
 const Product = mongoose.model('Product', ProductSchema);
 
@@ -320,7 +317,6 @@ const productStorage = multer.diskStorage({
     cb(null, `product_${Date.now()}${path.extname(file.originalname)}`);
   }
 });
-
 
 const productUpload = multer({ storage: productStorage });
 
@@ -540,7 +536,7 @@ app.post('/api/addproduct', async (req, res) => {
       name: req.body.name,
       images: req.body.images,
       category: req.body.category,
-      subcategory: req.body.subcategory,           // НОВОЕ!
+      subcategory: req.body.subcategory,
       new_price: Number(req.body.new_price),
       old_price: Number(req.body.old_price),
       description: req.body.description,

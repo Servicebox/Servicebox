@@ -71,14 +71,24 @@ const ShopContextProvider = (props) => {
         const fetchProducts = async () => {
             try {
                 const response = await fetchWithAuth('https://servicebox35.pp.ru/api/allproducts');
-                if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
                 const data = await response.json();
-                setAll_Product(data);
+
+                // Проверка на уникальность ID
+                const ids = new Set();
+                const uniqueProducts = data.filter(product => {
+                    if (ids.has(product.id)) {
+                        console.error(`Duplicate product ID: ${product.id}`);
+                        return false;
+                    }
+                    ids.add(product.id);
+                    return true;
+                });
+
+                setAll_Product(uniqueProducts);
             } catch (error) {
                 console.error('Fetch products error:', error);
             }
         };
-
         const fetchCartItems = async () => {
             const token = localStorage.getItem('auth-token');
             if (token) {

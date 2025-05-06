@@ -194,6 +194,6 @@
 @media (max-width: 560px) {
   .shopcategory-grid { --col: 1; }
   .shopcategory-sidebar { padding-left:11px; }
-  .shopcategory-searchwrap { width: 99vw; max-width: 99vw;}
+  .shopcategory-searchwrap { width: 80vw; max-width: 99vw;margin: auto;}
   .shopcategory-content { margin-right: 0;}
 }

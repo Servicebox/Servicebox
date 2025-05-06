@@ -22,6 +22,18 @@ function PromoImageSlider() {
 
   const next = () => setCurrent((prev) => (prev + 1) % promoImages.length);
   const prev = () => setCurrent((prev) => (prev - 1 + promoImages.length) % promoImages.length);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const handleOpenForm = () => {
+    setIsFormOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    document.body.style.overflow = "auto";
+  };
+
+  const toggleForm = () => setIsFormOpen(v => !v);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -138,6 +150,15 @@ function FlipCard({ frontTitle, frontIcon, img, frontHint, backText }) {
 export default function MainBanner() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  const handleOpenForm = () => {
+    setIsFormOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseForm = () => {
+    setIsFormOpen(false);
+    document.body.style.overflow = "auto";
+  };
 
   const toggleForm = () => {
     setIsFormOpen(o => !o);
@@ -152,11 +173,11 @@ export default function MainBanner() {
   const touchStartX = React.useRef(null);
   return (
     <section className="main-banner-section">
-      {isFormOpen && <Form toggleForm={toggleForm} />}
+      {isFormOpen && <Form onClose={handleCloseForm} />}
       <PromoImageSlider />
       <div className="btn-form">
-        <button onClick={() => setIsFormOpen(true)}>Записаться</button>
-        {isFormOpen && <Form close={() => setIsFormOpen(false)} />}
+        <button onClick={handleOpenForm}>Записаться</button>
+
       </div>
       <div className="main-banner__content">
         <div className="main-banner__text">
@@ -165,8 +186,8 @@ export default function MainBanner() {
           <p className="main-banner__subtitle">
             Решаем любые проблемы! Большой склад и опытные мастера
           </p>
-          <button className="main-banner__form" onClick={toggleForm}>
-            <span className='title-span'>Бесплатная консультация</span>
+          <button className="main-banner__form" onClick={handleOpenForm}>
+            <span className="title-span">Бесплатная консультация</span>
           </button>
         </div>
         <div className="main-banner__image">

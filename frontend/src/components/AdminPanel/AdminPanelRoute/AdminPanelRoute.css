@@ -22,8 +22,7 @@
 }
 
 .admin-sidebar {
-  min-width: 240px;
-  max-width: 320px;
+
   background: var(--admin-sidebar-bg);
   border-right: 1px solid #e2e8f0;
   display: flex;
@@ -56,8 +55,7 @@
   .admin-sidebar {
     flex-direction: row;
     flex-wrap: wrap;
-    min-width: unset;
-    max-width: unset;
+
     border-right: none;
     border-bottom: 1.5px solid #e2e8f0;
     padding: 0 0 6px 0;

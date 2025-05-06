@@ -66,8 +66,9 @@ import NewsDetail from "../AdminPanel/News/NewsDetail";
 import PublicNewsList from "../AdminPanel/News/PublicNewsList";
 import PromotionsPage from "../AdminPanel/PromotionsPage/PromotionsPage";
 import AdminUsersPanel from "../AdminPanel/AdminPanelRoute/AdminUsersPanel";
-import Item from "../Item/Item";
+
 import UserProfile from "../pages/UserProfile";
+
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
@@ -81,6 +82,8 @@ const App = () => {
   gsap.registerPlugin(ScrollToPlugin);
 
   const toggleForm = () => setIsFormOpen(!isFormOpen);
+  const [showForm, setShowForm] = useState(false);
+  const handleFormToggle = () => setShowForm(prev => !prev);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -122,11 +125,11 @@ const App = () => {
           <Route path="users" element={<AdminUsersPanel />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/delete-image" element={<DeleteImage />} />
-          <Route path="ShopContextProvider " element={<ShopContextProvider />} />
-          <Route path="ShopContext" element={<ShopContext />} />
-          <Route path="Item" element={<Item />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/:categoryId" element={<ShopCategory />} />
+          <Route pach="form" element={<Form />} />
+          {/* <Route exact path="/" component={ServiceRef} /> */}
+          <Route path="/notebook-service" element={<NotebookService />} />
+          <Route path="/monoblock-service" element={<MonoblockService />} />
+          <Route path="/tv-service" element={<TvService />} />
           <Route path="/tablet-service" element={<TabletService />} />
           <Route path="/telephone-service" element={<TelephoneService />} />
           <Route path="/other-service" element={<OtherService />} />
@@ -142,8 +145,6 @@ const App = () => {
           <Route path="/loginsignup" element={<LoginSignup />} />
           <Route path="/cart-items" element={<CartItems />} />
           <Route path="/shop" element={<Shop />} />
-
-          <Route path="/addproduct" element={<Addproduct />} />
           <Route path="/news-detali/:id" element={<NewsDetail />} />
           <Route path="/news" element={<PublicNewsList />} />
           <Route path="/news/:id" element={<NewsDetail />} />
@@ -173,14 +174,14 @@ const App = () => {
           <Route path="/appl-service" element={<ApplService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="CreateServiceForm" element={<CreateServiceForm />} />
-          <Route path="/admin-panel/*" element={<AdminPanelRoute />} />
+          <Route path="/admin-panel/*" element={<AdminRoute><AdminPanel /></AdminRoute>} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/service" element={<Service />} />
 
           <Route path="/loginsignup" element={<LoginSignup />} />
           <Route path="/cart-items" element={<CartItems />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/addproduct" element={<Addproduct />} />
+
           <Route path="/listproduct" element={<ListProduct />} />
           <Route path="/listservice" element={<ListService />} />
 
@@ -191,7 +192,6 @@ const App = () => {
           <Route path="/usedspareparts" element={<ShopCategory category="usedsparepart" />} />
           <Route path="/bread-crums" element={<BreadCrums />} />
           <Route path='/product' element={<Product />} >
-            <Route path='/product/:productId' element={<Product />} />
             <Route path=':productId' element={<Product />} />
             <Route path=':productName' element={<Product />} />
           </Route>
@@ -215,8 +215,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
 
         </Routes>
-
-        {isFormOpen && <Form toggleForm={toggleForm} />}
+        {showForm && <Form toggleForm={handleFormToggle} />}
         <CookieMessage />
 
 

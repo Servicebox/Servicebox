@@ -10,12 +10,21 @@
     background: transparent;
     backdrop-filter: blur(3px);
     border-radius: 15px;
+    align-items: center;
 }
 .gifts__title{
 
     padding-bottom: 10px;
 }
+.form-overlay__btn.active {
+  background-color: #4CAF50; /* Зеленый цвет для активной кнопки */
+  cursor: pointer;
+}
 
+.form-overlay__btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
 .form__title{
     margin: 0 auto;
     text-align: center;
@@ -82,7 +91,7 @@ animation-play-state: paused;
     display: flex;
     gap: 21px;
   }
-  .close-button{
+  .close{
     font-size: 0;
       box-shadow: none;
       color: white;

@@ -110,7 +110,7 @@
   .item { max-width: 92vw; }
 }
 @media (max-width: 600px) {
-  .item img { height: 110px;}
+  .item img { height: 130px;}
   .item { padding: 12px 6px;}
   .item-title { font-size: 1rem; }
   .item-prices{

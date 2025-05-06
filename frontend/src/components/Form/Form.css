@@ -1,203 +1,156 @@
-.icon-content_soshial{
+.form-overlay {
   position: fixed;
-  margin: 0 auto;
+  inset: 0;
+  background: rgba(18, 20, 34, 0.68);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
-.form__input {
-  width: 300px;
-  padding: 0 40px 0;
-  height: 46px;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  background-color: #e6e6e6;
-  border: none;
-  border-radius: 10px;
-  outline: none;
-  color: rgb(0, 0, 0);
-}
-.form__title{
-text-align: center;
-}
-.error1 {
-font-size: 10px;
-    color: red;
-    position: absolute;
-    width: 400px;
-    top: 82px;
-    left: -90px;
-}
-.error3{
-  font-size: 14px;
-  color: red;
-  position: absolute;
-  width: 400px;
-  top: 250px;
-    left: 126px;
-}
-.form {
-  margin: 20px auto 0;
+
+.form-container {
+  background: #fafcff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgb(50 50 90 / 17%);
+  max-width: 430px;
+  width: 94vw;
+  padding: 32px 24px 36px 24px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  max-width: 396px;
-  color: white;
-  align-items: center;
+  animation: popIn 0.24s;
 }
-.form-overlay__btn {
-  display: flex;
-  max-width: 420px;
-  padding: 18px 45px;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
-  border-radius: 15px;
-  background-color: #e6e6e6;
-  border: none;
-  margin: 20px auto;
 
+@keyframes popIn {
+  from { transform: scale(0.97) translateY(-8px);}
+  to   { transform: scale(1) translateY(0);}
 }
+
+.besplatnaya {
+  background: linear-gradient(90deg, #fb2c5c, #f99f0e);
+  color: #fff;
+  border-radius: 3px;
+  padding: 0 6px;
+  font-weight: 600;
+}
+
+.form__title {
+  font-weight: 700;
+  margin-bottom: 13px;
+  color: #273046;
+  font-size: 1.16rem;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  margin-top: 7px;
+}
+
 .form__label {
-  margin: 20px 0 10px 0;
-  font-size: 10px;
-  color: #000000;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
   display: flex;
-  gap: 21px;
-  width: 320px;
+  flex-direction: column;
+  position: relative;
 }
 
-.form-overlay {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh; /* Минимальная высота контейнера равна высоте видимой части страницы */
-  z-index: 99;
-  width: 100%;
-  background: #FFF;
-  position: fixed;
-  top: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-}
-.form-container{
-  max-width: 505px;
+.form__input {
+  background: #f2f3f6;
+  border: 1.5px solid #e4e7ee;
+  padding: 10px 13px 12px 13px;
+  border-radius: 7px;
+  font-size: 1rem;
+  color: #1c2641;
+  outline: none;
+  transition: border-color 0.18s, background 0.21s;
   width: 100%;
   box-sizing: border-box;
-  background: white;
-  position: fixed;
-  z-index: 99;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: stretch;
-  border-radius: 10px;
-  padding: 20px 40px;
 }
 
-.form__text{
-  border: 1px solid rgb(0, 0, 0);
-  max-width: 324px;
-  height: 84px;
-}
-.besplatnaya {
-  color: red;
-}
-.close-button{
-  font-size: 0;
-    box-shadow: none;
-    color: white;
-    cursor: pointer;
-    border: none;
-    max-width: 30px;
-    width: 100%;
-    min-height: 32px;
-    background-color: rgba(0, 0, 0, 0);
-    transition: 0.2s ease;
-    background-repeat: no-repeat;
-    font-weight: 400;
-    position: absolute;
-    right: 0;
-    top: -30px;
+.form__input:focus {
+  border-color: #0676d9;
+  background: #eef6ff;
 }
 
+.form__input.form__error {
+  border-color: #e01026;
+  background: #ffebed;
+}
 
-@media screen and (max-width: 490px) {
-  .form-overlay__btn{
-    margin: 5px auto 20px;
- 
-    padding: 15px 30px;
-  }
-  .form{
-margin: 0 auto;
-  }
-  .form__label-text{
-    margin-left: 20px;
-    margin-right: 20px;
-    max-width: 200px;
-  }
-  .form__text{
-    max-width: 250px;
-  }
-.form-container{
-  max-width: 280px;
-  top: 50%;
-}
-.form__title{
-  font-size: 18px;
-  margin: 10px auto 0 auto;
-  text-align: center;
-
-}
-.form__label{
-  margin: 10px auto 5px auto;
-  max-width: 200px;
-  width: 250px;
-}
-.form__input{
-  max-width: 200px;
-  width: 200px;
-  font-size: 10px;
-  height: 40px;
-  padding: 0 30px 0;
-}
-.close-button{
-  top: -35px;
-  right: -5px;
-}
-.error1 {
-font-size: 9px;
-    position: absolute;
-    top: 70px;
-    left: 49%;
-    transform: translateX(-50%);
-    width: 400px;
-}
-.error3 {
-  font-size: 10px;
+.form__placeholder {
   position: absolute;
-  top: 170px;
-  left: 90%;
-  transform: translateX(-50%);
-  width: 400px;
+  left: 19px;
+  top: 10px;
+  font-size: 0.93rem;
+  color: #bfc9db;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s;
 }
-}
-@media screen and (min-width: 491px) and (max-width: 768px) {
-.form-container{
-  max-width: 400px;
-}
-.error1{
-    top: 82px;
-    left: -87px;
-    font-size: 11px;
 
+.form__input::placeholder {
+  color: #acb6cb;
+  opacity: 1;
 }
-.error3{
-  top: 287px;
-  left: 100px;
+
+.error-msg {
+  color: #e01026;
+  font-size: 0.92em;
+  margin-top: -9px;
+  margin-bottom: 2px;
+  margin-left: 3px;
+  letter-spacing: 0.01em;
 }
+
+.success-text {
+  font-size: 1.2em;
+  color: #28ad32;
+  text-align: center;
+  margin: 14px 0;
 }
+
+.form-overlay__btn {
+  margin-top: 8px;
+  background: #dde4ea;
+  color: #6d7586;
+  font-weight: 600;
+  font-size: 1.02rem;
+  border-radius: 7px;
+  border: none;
+  padding: 12px 14px;
+  cursor: not-allowed;
+  transition: background 0.18s, color 0.18s;
+  outline: none;
+}
+
+.form-overlay__btn.active {
+  background: linear-gradient(90deg, #2884fa, #09decb);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 6px #13bdc785;
+}
+
+.form-overlay__btn:disabled {
+  background: #dde4ea;
+  color: #8391a7;
+}
+
+.close-button {
+  position: absolute;
+background: #0676d9;
+  top: 13px;
+  right: 13px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.close-button__img {
+  width: 26px;
+  height: 26px;
+  opacity: .72;
+  transition: opacity .18s;
+}
+.close-button__img:hover { opacity: 1; }

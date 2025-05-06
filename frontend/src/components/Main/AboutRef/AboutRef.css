@@ -8,8 +8,8 @@
 .about__content{
 
     text-align: center;
-    max-width: 1100px;
-    width: 100%;
+
+    width: 90%;
     margin: 0 auto;
     background: transparent;
     backdrop-filter: blur(1px);
@@ -75,7 +75,7 @@ line-height: normal;
 margin: 0 auto;
     }
     .about__content{
-        max-width: 350px;
+       width: 90%;
     }
     .about__tech{
         display: flex;
@@ -97,6 +97,7 @@ margin: 0 auto;
         flex-direction: column;
         align-items: center;
         padding-bottom: 50px;
+        width: 80%;
     }
     .about__title{
         color: #13171D;
@@ -145,8 +146,7 @@ font-size: 12px;
 .about__content{
     display: flex;
     flex-direction: column;
-    max-width: 700px;
-    width: 100%;
+    width: 90%;
 }
 .about__tech{
     display: flex;

@@ -1,151 +1,176 @@
-import React, { useEffect, useState } from 'react';
-import './Form.css';
-import СloseIcon from "../../images/x.svg";
+import React, { useEffect, useState, useRef } from "react";
+import "./Form.css";
+import CloseIcon from "../../images/x.svg";
 import Modal from "../Modal/Modal";
 
-const Form = ({ toggleForm }) => {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [description, setDescription] = useState('');
+const initialState = { name: "", phone: "", description: "" };
 
-  const [nameDirty, setNameDirty] = useState(false);
-  const [phoneDirty, setPhoneDirty] = useState(false);
-  const [nameError, setNameError] = useState('Имя не может быть пустым');
-  const [phoneError, setPhoneError] = useState('Телефон не может быть пустым');
+export default function Form({ onClose }) {
+  const [values, setValues] = useState(initialState);
+  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const inputRefs = {
+    name: useRef(null),
+    phone: useRef(null),
+    description: useRef(null),
+  };
 
-  const [formValid, setFormValid] = useState(false);
-
+  // Валидация
   useEffect(() => {
-    if (phoneError || nameError || !name || !phone) {
-      setFormValid(false);
-    } else {
-      setFormValid(true);
-    }
-  }, [phoneError, nameError, name, phone]);
+    setErrors(validate(values));
+  }, [values]);
 
-  const changeName = (e) => {
-    setName(e.target.value);
-    const re = /^([а-я]{1}[а-яё]{2,23}|[a-z]{1}[a-z]{1,23})$/;
-    if (!re.test(String(e.target.value).toLowerCase())) {
-      setNameError('Некорректное имя');
-    } else {
-      setNameError('');
+  // esc закрывает
+  useEffect(() => {
+    function onEsc(e) {
+      if (e.key === "Escape") onClose();
     }
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [onClose]);
+
+  function validate(v) {
+    const err = {};
+    if (!v.name.trim()) err.name = "Имя не может быть пустым";
+    else if (!/^([а-яёa-z]{2,})$/i.test(v.name)) err.name = "Только буквы, минимум 2 символа";
+    if (!v.phone.trim()) err.phone = "Телефон не может быть пустым";
+    else if (!/^\+?[78][-(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/.test(v.phone.trim())) err.phone = "Некорректный номер";
+    return err;
+  }
+
+  const isValid = Object.keys(errors).length === 0 && values.name && values.phone;
+
+  const onChange = e => {
+    setValues(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const changeHandlerPhone = (e) => {
-    setPhone(e.target.value);
-    const re = /^\+?[78][-\(]?\d{3}\)?-?\d{3}-?\d{2}-?\d{2}$/;
-    if (!re.test(String(e.target.value).toLowerCase())) {
-      setPhoneError('Некорректный номер телефона');
-    } else {
-      setPhoneError('');
-    }
+  const onBlur = e => {
+    setTouched(prev => ({ ...prev, [e.target.name]: true }));
   };
 
-  const changeHandlerDescription = (e) => {
-    setDescription(e.target.value);
+  const onFocus = e => {
+    // Подсветка реализована через CSS :focus, но если нужно сюда можно добавить логику
   };
-
-  const [submitError, setSubmitError] = useState('');
-
-  const submitData = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    fetch('https://servicebox35.pp.ru/telegram', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, phone, description }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.status === 'ok') {
-          toggleForm(); // Закрытие формы при успешной отправке
-        } else {
-          setSubmitError(result.message || 'Произошла ошибка при отправке формы');
-          setIsModalOpen(true)
-        }
-      })
-      .catch((error) => {
-        setSubmitError('Ошибка соединения с сервером');
+    setTouched({ name: true, phone: true });
+    if (!isValid) return;
+    setIsLoading(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("https://servicebox35.pp.ru/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
-  };
-
-  const blurHandler = (e) => {
-    switch (e.target.name) {
-      case 'name':
-        setNameDirty(true);
-        break;
-      case 'phone':
-        setPhoneDirty(true);
-        break;
-      default:
-        break;
+      const result = await res.json();
+      if (result.status === "ok") {
+        setSuccess(true);
+        setTimeout(() => {
+          setSuccess(false);
+          setValues(initialState);
+          onClose(); // закрываем форму
+        }, 1200);
+      } else {
+        setSubmitError(result.message || "Ошибка при отправке");
+      }
+    } catch (e) {
+      setSubmitError("Ошибка соединения");
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="form-overlay" onKeyDown={(e) => e.key === 'Enter' && submitData(e)}>
-      <div className="form-container">
+    <div className="form-overlay">
+      <div className="form-container" tabIndex={-1}>
         <h2 className="form__title">
           Оставьте заявку на <span className="besplatnaya">бесплатную</span> консультацию
         </h2>
-        <form className="form" onSubmit={submitData}>
-          {(nameDirty && nameError) && <div className="error1">{nameError}</div>}
+        <form className="form" onSubmit={handleSubmit} autoComplete="off">
           <label className="form__label">
             <input
-              className="input"
+              className={`form__input${touched.name && errors.name ? " form__error" : ""}`}
+              ref={inputRefs.name}
               type="text"
-              value={name}
+              maxLength={24}
               name="name"
-              onChange={changeName}
-              onBlur={blurHandler}
-              placeholder="Введите Ваше имя:"
+              value={values.name}
+              placeholder="Введите Ваше имя"
+              onChange={onChange}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              autoFocus
             />
+            <span className="form__placeholder">Имя</span>
           </label>
-          {(phoneDirty && phoneError) && <div className="error4">{phoneError}</div>}
+          {touched.name && errors.name && <div className="error-msg">{errors.name}</div>}
+
           <label className="form__label">
             <input
-              className="input"
-              onChange={changeHandlerPhone}
-              onBlur={blurHandler}
+              className={`form__input${touched.phone && errors.phone ? " form__error" : ""}`}
+              ref={inputRefs.phone}
               type="text"
-              value={phone}
+              maxLength={18}
               name="phone"
-              placeholder="Введите номер телефона:"
+              value={values.phone}
+              placeholder="Введите номер телефона"
+              onChange={onChange}
+              onBlur={onBlur}
+              onFocus={onFocus}
             />
+            <span className="form__placeholder">Телефон</span>
           </label>
+          {touched.phone && errors.phone && <div className="error-msg">{errors.phone}</div>}
+
           <label className="form__label">
             <textarea
-              className="input"
-              onChange={changeHandlerDescription}
+              className="form__input"
+              ref={inputRefs.description}
               name="description"
+              value={values.description}
               placeholder="Опишите Вашу проблему..."
-              value={description}
-              cols="30"
-              rows="3"
-            ></textarea>
+              onChange={onChange}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              rows={3}
+              maxLength={300}
+              style={{ resize: "none" }}
+            />
+            <span className="form__placeholder">Комментарий</span>
           </label>
-          <button className="form-overlay__btn" disabled={!formValid} type="submit">
-            Отправить форму
+
+          <button
+            className={`form-overlay__btn${isValid ? " active" : ""}`}
+            type="submit"
+            disabled={!isValid || isLoading}
+          >
+            {isLoading ? "Отправка..." : "Отправить форму"}
           </button>
         </form>
-
-        <button className="close-button" onClick={toggleForm}>
-          <img className="close-button__img" src={СloseIcon} alt="Закрыть" />
+        <button className="close-button" type="button" aria-label="Закрыть" onClick={onClose}>
+          <img className="close-button__img" src={CloseIcon} alt="Закрыть" />
         </button>
 
         {submitError && (
-          <Modal onClose={() => setSubmitError('')}>
-            <h3>Ошибка отправки формы</h3>
+          <Modal onClose={() => setSubmitError("")}>
+            <h3>Ошибка</h3>
             <p>{submitError}</p>
-            <button onClick={() => setSubmitError('')}>Закрыть</button>
+            <button type="button" onClick={() => setSubmitError("")}>
+              Закрыть
+            </button>
+          </Modal>
+        )}
+
+        {success && (
+          <Modal onClose={onClose}>
+            <p className="success-text">Ваше сообщение успешно отправлено!</p>
           </Modal>
         )}
       </div>
     </div>
   );
-};
-
-export default Form;
+}

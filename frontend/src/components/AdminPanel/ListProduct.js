@@ -56,14 +56,24 @@ const ListProduct = () => {
 
     const formData = new FormData();
     files.forEach(file => formData.append('product', file));
+
     try {
-      const res = await fetch(`${API_URL}/api/uploads`, { method: 'POST', body: formData });
-      if (!res.ok) throw new Error('Ошибка загрузки картинок');
+      const res = await fetch(`${API_URL}/api/uploads`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`Ошибка сервера: ${errorText}`);
+      }
+
       const data = await res.json();
       setNewProduct(prev => ({ ...prev, images: data.image_urls }));
       setNewProductPreview(data.image_urls);
-    } catch {
-      alert('Ошибка загрузки изображений');
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert(`Ошибка загрузки: ${error.message}`);
     }
   };
 
@@ -138,13 +148,13 @@ const ListProduct = () => {
   useEffect(() => { fetchInfo(); }, []);
 
   // Удаление товара
-  const remove_product = async (id) => {
+  const remove_product = async (_id) => {
     if (!window.confirm('Удалить этот товар?')) return;
     try {
       await fetch(`${API_URL}/api/removeproduct`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id })
+        body: JSON.stringify({ _id })
       });
       await fetchInfo();
     } catch {
@@ -225,7 +235,7 @@ const ListProduct = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct.id}`, {
+      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct._id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -254,7 +264,12 @@ const ListProduct = () => {
           <input type="file" multiple accept="image/*" onChange={handleNewImages} />
           <div style={{ display: 'flex', gap: 8, marginTop: 5 }}>
             {(newProduct.images?.length > 0 ? newProduct.images : newProductPreview).map((img, i) => (
-              <img key={i} src={img} alt="preview" style={{ width: 48, height: 48, objectFit: 'cover', border: '1px solid #ccc' }} />
+              <img
+                key={`new-img-${img}`} // Используем URL изображения как ключ
+                src={img}
+                alt="preview"
+                style={{ width: 48, height: 48, objectFit: 'cover', border: '1px solid #ccc' }}
+              />
             ))}
           </div>
         </div>
@@ -363,14 +378,19 @@ const ListProduct = () => {
       <div className='listproduct-allproducts'>
         <hr />
         {allproducts.map((product) => (
-          <div key={product.id} className='listproduct-format-main listproduct-format'>
-            {editingProduct && editingProduct.id === product.id ? (
+          <div key={product._id} className='listproduct-format-main listproduct-format'>
+            {editingProduct && editingProduct._id === product._id ? (
               <>
                 <div>
                   <input type="file" multiple accept="image/*" onChange={handleEditImages} />
                   <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
-                    {(editingProduct.images || []).map((img, i) => (
-                      <img key={i} src={img} alt="" style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #ccc' }} />
+                    {(editingProduct.images || []).map((img) => (
+                      <img
+                        key={`edit-img-${img}`}
+                        src={img}
+                        alt=""
+                        style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #ccc' }}
+                      />
                     ))}
                   </div>
                 </div>
@@ -461,8 +481,16 @@ const ListProduct = () => {
             ) : (
               <>
                 <div>
-                  {(product.images ?? product.image ? [product.image] : []).slice(0, 3).map((img, i) =>
-                    !!img && <img key={i} className='listproduct-product-icon' src={img} alt='' style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #eee', marginRight: 4 }} />
+                 // В списке товаров
+                  {(product.images ?? product.image ? [product.image] : []).slice(0, 3).map((img) =>
+                    !!img && <img
+                      key={`prod-img-${img}`}
+                      className='listproduct-product-icon'
+                      src={img}
+                      alt=''
+                      style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #eee', marginRight: 4 }}
+                    />
+
                   )}
                 </div>
                 <p>{product.name}</p>
@@ -474,7 +502,7 @@ const ListProduct = () => {
                 <p>{product.quantity}</p>
                 <div className='list-btn'>
                   <button className='list-button' onClick={() => startEditing(product)}>Редактировать</button>
-                  <img onClick={() => remove_product(product.id)} className='listproduct-remove-icon' src={cross_icon} style={{ cursor: 'pointer' }} alt='' />
+                  <img onClick={() => remove_product(product._id)} className='listproduct-remove-icon' src={cross_icon} style={{ cursor: 'pointer' }} alt='' />
                 </div>
               </>
             )}

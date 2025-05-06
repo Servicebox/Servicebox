@@ -154,8 +154,7 @@ const ShopCategory = () => {
           <div className="shopcategory-empty"><b>Нет товаров.</b></div>
         ) : (
           <div className="shopcategory-grid">
-            {products.map(product =>
-              <Item key={product.id} {...product} />
+            {products.map(product => <Item key={product._id} {...product} />
             )}
           </div>
         )}
