@@ -574,16 +574,18 @@ app.get('/allservices', async (req, res) => {
 //редактирование товара
 app.put('/api/updateproduct/:id', async (req, res) => {
   try {
+    // Используем Number(id) — айди продукта по схеме!
     const updatedProduct = await Product.findOneAndUpdate(
-      { id: req.params.id },
+      { id: Number(req.params.id) },
       {
         name: req.body.name,
-        image: req.body.image,
+        images: req.body.images,
         category: req.body.category,
-        old_price: req.body.old_price,
-        new_price: req.body.new_price,
+        subcategory: req.body.subcategory,
+        old_price: Number(req.body.old_price),
+        new_price: Number(req.body.new_price),
         description: req.body.description,
-        quantity: req.body.quantity
+        quantity: Number(req.body.quantity)
       },
       { new: true }
     );

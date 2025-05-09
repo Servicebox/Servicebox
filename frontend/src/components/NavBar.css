@@ -30,7 +30,7 @@
     font-weight: 700;
        font-family: Montserrat;
     line-height: 1;
-    padding-right: 40px;
+
 }
 
 .nav-menu li {
@@ -47,8 +47,6 @@
 .nav-menu{
     margin: 0;
     border: none;
-    width: 40%;
-   
     border-radius: 10px;
     
 }

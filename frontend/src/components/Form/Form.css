@@ -141,7 +141,7 @@
 background: #0676d9;
   top: 13px;
   right: 13px;
-  background: none;
+
   border: none;
   cursor: pointer;
   z-index: 2;
@@ -154,3 +154,17 @@ background: #0676d9;
   transition: opacity .18s;
 }
 .close-button__img:hover { opacity: 1; }
+
+ @media screen and (max-width: 767px) {
+  .form-container {
+    width: 90%;
+  }
+  .close-button__img{
+    width: 15px;
+    height: 15px;
+    position: relative;
+    top: 0;
+    left: -11px;
+
+  }
+}

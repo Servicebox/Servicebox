@@ -40,8 +40,6 @@ const AdminPanelRoute = () => {
       <div className='admin-links'>
         <Routes>
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin-panel/*" element={<PrivateRoute><AdminPanelRoute /></PrivateRoute>} />
-          <Route path="addproduct" element={<Addproduct />} />
           <Route path="listproduct" element={<ListProduct />} />
           <Route path="listservice" element={<ListService />} />
           <Route path="create-image" element={<CreateImage />} />

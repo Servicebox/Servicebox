@@ -189,7 +189,7 @@
 }
 @media (max-width: 650px) {
   .promo-slider { max-width: 100vw; }
-  .promo-slider__viewport { height: 190px; }
+
   .flip-card { width: 170px; height: 220px; font-size: .70em; border-radius: 13px;}
   .flip-card__front, .flip-card__back { border-radius: 13px; padding: 20px 10px 7px;}
   .flip-card__front img { max-width: 74px; max-height: 74px;}

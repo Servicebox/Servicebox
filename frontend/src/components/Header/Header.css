@@ -34,7 +34,7 @@ height: 25px;
 .nav__info{
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 3px;
   padding-right: 15px;
 }
 .tag-cloud span {
@@ -651,6 +651,7 @@ display: none;
 .navigation {
   margin: 0 auto;
   display: flex;
+  justify-content: space-between;
   gap: 24px;
   padding: 0 15px;
 }
@@ -660,13 +661,13 @@ display: none;
     border: 1px solid #000000;
     border-radius: 15px;
     color: #ffffff;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
     background: linear-gradient(to bottom right, #f9a92c, #02578b);
     clip-path: path('M 0 0 L 100% 0 C 100% 50%, 0 100%, 0 100% Z');
     cursor: pointer;
     font-family: Bebas Neue;
-    padding: 10px 15px;
+    padding: 5px 5px;
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
@@ -908,7 +909,7 @@ position: absolute;
     z-index: 999;
 }
   .header__top{
-max-width: 600px;
+width: 95%;
     padding-top: 10px;
 
   }
@@ -916,7 +917,7 @@ max-width: 600px;
 
 @media (min-width: 320px) and (max-width: 501px) {
   .header__top{
-max-width: 320px;
+
     padding-top: 10px;
 
   }
@@ -1136,7 +1137,7 @@ width: 40px;
   .header__top{
    
     padding-top: 10px;
-    max-width: 500px;
+
   }
   .header__middle{
     display: none;
@@ -1253,7 +1254,7 @@ letter-spacing: -0.2px;
 @media (min-width: 769px) and (max-width: 990px) {
   .header__top{
    width: calc(100% - 1*80px);
-   max-width: 700px;
+
    
   }
   .nav_middle{

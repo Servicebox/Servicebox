@@ -22,6 +22,7 @@ const ListProduct = () => {
   const [adding, setAdding] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // State for new product
   const [newProduct, setNewProduct] = useState({ ...emptyProduct, images: [] });
@@ -235,7 +236,7 @@ const ListProduct = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct._id}`, {
+      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -255,10 +256,28 @@ const ListProduct = () => {
     }
   };
 
+  const filteredProducts = allproducts.filter(product => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      (product.name && product.name.toLowerCase().includes(q)) ||
+      (product.description && product.description.toLowerCase().includes(q)) ||
+      (product.category && product.category.toLowerCase().includes(q)) ||
+      (product.subcategory && product.subcategory.toLowerCase().includes(q))
+    );
+  });
+
+
   // ------------- JSX -------------
   return (
     <div className='list-product'>
       <h2>Добавить новый товар</h2>
+      <input
+        type="text"
+        placeholder="Поиск."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
       <form className='listproduct-create-row' onSubmit={handleNewSubmit} style={{ marginBottom: 24 }}>
         <div>
           <input type="file" multiple accept="image/*" onChange={handleNewImages} />
@@ -377,7 +396,7 @@ const ListProduct = () => {
       </div>
       <div className='listproduct-allproducts'>
         <hr />
-        {allproducts.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product._id} className='listproduct-format-main listproduct-format'>
             {editingProduct && editingProduct._id === product._id ? (
               <>

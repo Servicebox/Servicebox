@@ -73,7 +73,6 @@
   transform-style: preserve-3d;
   transition: ease all 2.3s;
   z-index: 3;
- max-width: 150px;
   transform: translateZ(0px);
 }
 .card__title-one{
@@ -82,7 +81,7 @@
 .card-cover {
   max-width: 100%;
   height: auto;
-  max-height: 200px;
+ width: 50%;
 }
 
 .card-back {
@@ -352,11 +351,8 @@ text-align: center;
   }
   .card__title-one{
     position: fixed;
-    top: 61%;
-    right: 8%;
     font-size: 0.9em;
     z-index: 2;
-    width: 156px;
     font-weight: 600;
   
   }

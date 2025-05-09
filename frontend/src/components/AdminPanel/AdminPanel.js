@@ -13,8 +13,10 @@ const AdminPanel = () => {
         <h2>Управление услугами</h2>
         <AdminPanelRoute isSidebar={true} />
       </aside>
-      <main className="admin-content">
-      </main>
+      <div>
+        <main className="admin-content">
+        </main>
+      </div>
     </div>
   );
 };

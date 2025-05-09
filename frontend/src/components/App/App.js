@@ -112,15 +112,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/header" element={<Header />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin-panel"
-            element={
-              <AdminRoute>
-                <AdminPanel />
-              </AdminRoute>
-            }
-          />
+          <Route path="/admin-panel/*" element={<AdminPanel />} />
           <Route path="/image-gallery-api" element={<ImageGalleryApi />} />
           <Route path="users" element={<AdminUsersPanel />} />
           <Route path="/profile" element={<UserProfile />} />

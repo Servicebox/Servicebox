@@ -108,7 +108,7 @@ button {
 }
 
 button[type="button"] {
-  background: #7bcaff;
+  background: var(--blue-main);
   color: #fff;
 }
 
@@ -117,7 +117,7 @@ button[type="button"]:hover {
 }
 
 button[type="submit"]:hover {
-  background: #0550a5;
+  background: #023876;
 }
 
 button[style*="color: red"] {
