@@ -14,6 +14,10 @@
   overflow: hidden;
   margin-bottom: 8px;
 }
+.shopitem-prices{
+  font-weight: bold;
+  color: #29426a;
+}
 
 .item:hover {
   box-shadow: 0 6px 32px 4px rgba(45, 56, 130, 0.14);

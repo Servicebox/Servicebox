@@ -115,6 +115,7 @@
   margin-right: auto;
   color: #234db7;
   letter-spacing: .02em;
+  margin: 10px auto;
 }
 .shopcategory-searchwrap {
   position: relative;
@@ -181,8 +182,8 @@
   .shopcategory-root { flex-direction: column;}
   .shopcategory-sidebar, .shopcategory-content {
     margin: 10px auto 0 auto;
-    width: 92vw;
-    max-width: 95vw;
+    width: 100vw;
+    max-width: 100vw;
     min-width: unset;
     padding: 15px 2vw 18px 2vw;
   }
