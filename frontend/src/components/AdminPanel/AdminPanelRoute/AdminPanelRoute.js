@@ -17,6 +17,7 @@ import ListNews from '../News/ListNews';
 import UpdateNewsForm from '../News/UpdateNewsForm';
 import AdminPromotions from '../AdminPromotions';
 import AdminUsersPanel from './AdminUsersPanel';
+import DepositoryPage from '../DepositoryPage';
 
 
 const AdminPanelRoute = () => {
@@ -36,6 +37,7 @@ const AdminPanelRoute = () => {
       <NavLink className='admin__link' to="/admin-panel/listnews">Список новостей</NavLink>
       <NavLink className='admin__link' to="/admin-panel/promotions">Акции</NavLink>
       <NavLink className='admin__link' to="/admin-panel/users">Пользователи</NavLink>
+      <NavLink to="/depository">Депозиторий файлов</NavLink>
 
       <div className='admin-links'>
         <Routes>
@@ -54,6 +56,7 @@ const AdminPanelRoute = () => {
           <Route path="update-news/:id" element={<UpdateNewsForm />} />
           <Route path="promotions" element={<AdminPromotions />} />
           <Route path="users" element={<AdminUsersPanel />} />
+
         </Routes>
       </div>
     </div>

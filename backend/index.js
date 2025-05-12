@@ -49,7 +49,7 @@ const orderRoutes = require('./routes/order');
 const apicache = require('apicache');
 const cache = apicache.middleware;
 const sharp = require('sharp');
-
+const Category = require('./models/Category');
 // Создание API роутер
 
 const apiRouter = express.Router();
@@ -257,7 +257,13 @@ const ProductSchema = new mongoose.Schema({
 });
 const Product = mongoose.model('Product', ProductSchema);
 
-// Определение Middleware для CORS
+ProductSchema.index({
+  name: "text",
+  description: "text",
+  category: "text",
+  subcategory: "text"
+});
+
 app.use((req, res, next) => {
   const { origin } = req.headers;
   if (allowedCors.includes(origin)) {
@@ -1201,7 +1207,157 @@ app.post('/admin/create', async (req, res) => {
   await newAdmin.save();
   res.send('Admin created');
 });
+///
 
+const fileSchema = new mongoose.Schema({
+  originalName: String,
+  storedName: String,
+  mimetype: String,
+  size: Number,
+  uploader: String, // user id или email
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+  createdAt: { type: Date, default: Date.now },
+});
+const DepositoryFile = mongoose.model('DepositoryFile', fileSchema);
+
+// === Multer storage для uploads ===
+const uploadDir = path.join(__dirname, 'uploads', 'depository');
+fs.mkdirSync(uploadDir, { recursive: true });
+
+
+const depoStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    let dir = path.join(__dirname, 'uploads', 'depository');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const depoUpload = multer({ storage: depoStorage });
+// ==== Middleware: Проверка авторизации user ====
+
+
+// ==== Получить список файлов ====
+router.get('/categories', async (req, res) => {
+  const all = await Category.find({});
+  // Плоский массив для фронта:
+  res.json(all);
+});
+
+// Создать новую категорию (или подкатегорию)
+router.post('/categories', async (req, res) => {
+  let { name, parent } = req.body;
+  name = (name || '').trim();
+  parent = parent && parent !== '' ? parent : null;
+  if (!name) {
+    return res.status(400).json({ message: 'Название обязательно' });
+  }
+  try {
+    // (по необходимости — чтобы не создавать дубликаты с тем же именем и parent)
+    const exists = await Category.findOne({ name, parent });
+    if (exists) {
+      return res.status(409).json({ message: 'Такая категория уже есть' });
+    }
+    const cat = new Category({ name, parent });
+    await cat.save();
+    res.status(201).json(cat);
+  } catch (e) {
+    res.status(500).json({ message: 'Ошибка сервера: ' + e.message });
+  }
+});
+
+
+// ==== Загрузка файла (авторизация обязательна) ====
+// front: formData: {file, category: Zamery/BIOS/Foto-Scan и т.д}
+router.post('/files', depoUpload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'Файл не найден.' });
+    let { category, newSubcategory } = req.body;
+
+    if (!category) return res.status(400).json({ message: "Категория не указана" });
+
+    // Если есть newSubcategory, и оно непустое, то ищи/создай подкатегорию
+    if (newSubcategory && newSubcategory.trim()) {
+      let name = newSubcategory.trim();
+      let subCat = await Category.findOne({ name, parent: category });
+      if (!subCat) {
+        subCat = new Category({ name, parent: category });
+        await subCat.save();
+      }
+      category = subCat._id;
+    }
+
+    const uploader = req.user?.email || req.user?.username || 'anonymous';
+    const newFile = new DepositoryFile({
+      originalName: req.file.originalname,
+      storedName: req.file.filename,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      uploader,
+      category
+    });
+    await newFile.save();
+    res.status(201).json(newFile);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Ошибка сервера при загрузке файла" });
+  }
+});
+
+// ==== Удалить файл (ТОЛЬКО админ, сюда добавь миддлвар isAdmin, если нужно) ====
+
+
+// ==== Получить список файлов ====
+router.get('/files', async (req, res) => {
+  const { category } = req.query;
+  let q = {};
+  if (category) {
+    // Рекурсивно ищем все вложенные
+    const allCatIds = [category];
+    const stack = [category];
+    while (stack.length) {
+      const parent = stack.pop();
+      // (!) await внутри цикла — ок для малых деревьев
+      const children = await Category.find({ parent: parent }).select('_id').lean();
+      for (let child of children) {
+        allCatIds.push(child._id.toString());
+        stack.push(child._id.toString());
+      }
+    }
+    q.category = { $in: allCatIds };
+  }
+  const files = await DepositoryFile.find(q).sort({ createdAt: -1 }).populate('category');
+  res.json(files);
+});
+// ... После всех предыдущих /files, до app.use('/api/depository', router);
+router.delete('/files/:id', async (req, res) => {
+  try {
+    const file = await DepositoryFile.findByIdAndDelete(req.params.id);
+    if (!file) return res.status(404).json({ message: 'Файл не найден' });
+
+    // Удалить физический файл с диска:
+    const absPath = path.join(__dirname, 'uploads', 'depository', file.storedName || '');
+    fs.unlink(absPath, (err) => { /* log only! */ });
+
+    res.json({ success: true, message: 'Файл удалён', id: file._id });
+  } catch (e) {
+    res.status(500).json({ message: 'Ошибка сервера: ' + e.message });
+  }
+});
+router.get('/files/:id/download', async (req, res) => {
+  const file = await DepositoryFile.findById(req.params.id);
+  if (!file) return res.status(404).send('Файл не найден');
+
+  const absPath = path.join(__dirname, 'uploads', 'depository', file.storedName);
+  if (!fs.existsSync(absPath)) return res.status(404).send('Файл не найден на сервере');
+
+  res.download(absPath, file.originalName); // Будет сохраняться с оригинальным именем
+});
+
+
+app.use('/api/depository', router);
 app.use('/admin-panel', verifyToken, (req, res) => {
   // Ваши административные маршруты
 });

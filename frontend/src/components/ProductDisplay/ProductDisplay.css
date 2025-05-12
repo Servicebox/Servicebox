@@ -159,7 +159,7 @@ height: 100px;
 }
 .productdisplay-img-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
 }
 .productdisplay-img-list img {
@@ -229,7 +229,7 @@ height: 100px;
   font-weight: bold;
   margin-bottom: 6px;
 }
-@media (min-width: 600px) {
+@media (max-width: 800px) {
   .productdisplay-left {
     flex-direction: column-reverse;
     gap: 12px;

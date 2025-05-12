@@ -1,0 +1,88 @@
+.search-bar-wrap {
+    max-width: 540px;
+    margin: 40px auto 32px auto;
+    padding: 20px 24px 32px 24px;
+    border-radius: 22px;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.09), 0 0 0 1px rgba(0,0,0,0.04);
+    background: #fff;
+}
+
+.search-bar-form {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.search-bar-input {
+    flex: 1 1 auto;
+    padding: 12px 18px;
+    font-size: 1.15rem;
+    border: 1.7px solid #dee2e6;
+    border-radius: 18px 0 0 18px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.search-bar-input:focus {
+    border-color: #8bb9ff;
+}
+
+.search-bar-btn {
+    padding: 12px 24px;
+    font-size: 1.12rem;
+    background: #2E77DD;
+    color: #fff;
+    border: none;
+    border-radius: 0 18px 18px 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-bar-btn:hover {
+    background: #175aab;
+}
+
+.search-bar-loading {
+    margin: 18px 2px;
+}
+
+.search-bar-results {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0 0;
+    max-height: 350px;
+    overflow-y: auto;
+    border-top: 1px solid #e9ecef;
+}
+
+.search-bar-result-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #f1f3f8;
+    font-size: 1.04rem;
+    transition: background 0.13s;
+}
+
+.search-bar-result-item:hover {
+    background: #f6f7fb;
+}
+
+.search-type {
+    padding: .1em .68em;
+    margin-left: 9px;
+    font-size: .85em;
+    border-radius: 13px;
+    background: #eaf2ff;
+    color: #2582e1;
+    text-transform: lowercase;
+}
+
+.search-type__product { background: #e2ffe8; color: #32996a;}
+.search-type__service { background: #ebecff; color: #555bbd;}
+.search-type__image { background: #fef7ef; color: #af7a39;}
+
+.search-bar-desc {
+    color: #607086;
+    margin-top: 5px;
+    font-size: .97em;
+    word-break: break-word;
+}

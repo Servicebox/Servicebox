@@ -13,8 +13,8 @@ import Form from '../../Form/Form';
 import Example1 from '../../../images/1ak.webp';
 import Example2 from '../../../images/2ak.webp';
 import Example3 from '../../../images/3ak.webp';
-
-const promoImages = [Example1, Example2, Example3];
+import Example4 from '../../../images/4ak.webp';
+const promoImages = [Example1, Example2, Example3, Example4];
 
 function PromoImageSlider() {
   const [current, setCurrent] = useState(0);
@@ -38,7 +38,7 @@ function PromoImageSlider() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % promoImages.length);
-    }, 3000);
+    }, 9000);
     return () => clearInterval(interval);
   }, []);
 
@@ -58,7 +58,7 @@ function PromoImageSlider() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % promoImages.length);
-    }, 3000);
+    }, 9000);
     return () => clearInterval(interval);
   }, []);
 

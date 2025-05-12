@@ -169,6 +169,13 @@ function Header() {
                             <Link style={{ textDecoration: 'none' }} to='/promotions-page'>Акции</Link>
                             {menu === "promotionspage" ? <hr /> : <></>}
                         </li>
+                        <li className="navigation__list" onClick={() => setMenu("depository")}>
+                            <Link to="/depository-public" className="depository-btn">
+
+                                Схемы/Bios
+                            </Link>
+                            {menu === "depository" ? <hr /> : null}
+                        </li>
 
                     </ul>
                     <a className="nav-login" href="https://pm-31768.promaster.app/index_cl" target="_blank" rel="noopener noreferrer">

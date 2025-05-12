@@ -213,10 +213,14 @@
 
 .nav-button.prev {
   left: 1rem;
+  z-index: 999;
+  color: #004578;
 }
 
 .nav-button.next {
   right: 1rem;
+  color: #004578;
+  z-index: 999;
 }
 
 /* Точки пагинации */

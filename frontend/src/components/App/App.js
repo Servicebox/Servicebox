@@ -66,8 +66,10 @@ import NewsDetail from "../AdminPanel/News/NewsDetail";
 import PublicNewsList from "../AdminPanel/News/PublicNewsList";
 import PromotionsPage from "../AdminPanel/PromotionsPage/PromotionsPage";
 import AdminUsersPanel from "../AdminPanel/AdminPanelRoute/AdminUsersPanel";
-
+import SearchBar from "../pages/SearchBar"
 import UserProfile from "../pages/UserProfile";
+import DepositoryPage from "../AdminPanel/DepositoryPage";
+import DepositoryPublic from '../pages/DepositoryPublic';
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -113,6 +115,8 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/header" element={<Header />} />
           <Route path="/admin-panel/*" element={<AdminPanel />} />
+          <Route path="/depository-public" element={<DepositoryPublic />} />
+          <Route path="/depository" element={<DepositoryPage />} />
           <Route path="/image-gallery-api" element={<ImageGalleryApi />} />
           <Route path="users" element={<AdminUsersPanel />} />
           <Route path="/profile" element={<UserProfile />} />
@@ -169,11 +173,11 @@ const App = () => {
           <Route path="/admin-panel/*" element={<AdminRoute><AdminPanel /></AdminRoute>} />
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/service" element={<Service />} />
-
+          <Route path="search-bar" element={<SearchBar />} />
           <Route path="/loginsignup" element={<LoginSignup />} />
           <Route path="/cart-items" element={<CartItems />} />
           <Route path="/shop" element={<Shop />} />
-
+          <Route path="/depository" element={<DepositoryPage />} />
           <Route path="/listproduct" element={<ListProduct />} />
           <Route path="/listservice" element={<ListService />} />
 

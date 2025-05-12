@@ -11,6 +11,7 @@ import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
 import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi";
+import SerchBar from "../pages/SearchBar";
 
 function Main() {
   const navigate = useNavigate();
