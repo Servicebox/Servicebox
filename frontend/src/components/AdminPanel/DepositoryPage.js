@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 
-const API = "https://servicebox35.pp.ru/api/depository"; // отредактируй если надо
+const API = "https://servicebox35.pp.ru/api/depository";
 
 const colors = {
     accent: "#2C88F8", accentHover: "#106FE2",

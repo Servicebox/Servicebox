@@ -193,7 +193,7 @@ export default function DepositoryPublic() {
                         </table>
                     </div>
                 ) : (
-                    <div className="cards">
+                    <div className="cards-depository">
                         {filterFiles.length === 0 && (
                             <div className="nothing">По вашему запросу ничего не найдено.</div>
                         )}

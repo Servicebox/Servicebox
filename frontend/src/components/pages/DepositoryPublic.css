@@ -201,7 +201,7 @@
 }
 
 /* Карточки файлов для малых экранов */
-.cards {
+.cards-depository {
   display: flex;
   flex-direction: column;
   gap: 20px;
