@@ -170,13 +170,17 @@ function Header() {
                             {menu === "promotionspage" ? <hr /> : <></>}
                         </li>
                         <li className="navigation__list" onClick={() => setMenu("depository")}>
-                            <Link to="/depository-public" className="depository-btn">
-
+                            <Link to="/depository-public" >
                                 Схемы/Bios
                             </Link>
                             {menu === "depository" ? <hr /> : null}
                         </li>
-
+                        <li className="navigation__list" onClick={() => { setMenu("chatwithgpt") }}>
+                            <Link to="/chat-with-gpt" >
+                                🤖 GPT-Чат
+                            </Link>
+                            {menu === "chatwithgpt" ? <hr /> : <></>}
+                        </li>
                     </ul>
                     <a className="nav-login" href="https://pm-31768.promaster.app/index_cl" target="_blank" rel="noopener noreferrer">
                         <span className="button-text">СТАТУС РЕМОНТА</span>

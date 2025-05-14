@@ -184,7 +184,8 @@
 
 /* Кнопка скачать */
 .repoDlBtn, .cardFile .repoDlBtn {
-  background: linear-gradient(93deg, var(--primary) 40%, var(--accent) 93%);
+      background: linear-gradient(93deg, #2561cd 40%, #00cddd 93%);
+    background: linear-gradient(93deg, var(--primary) 40%, var(--accent));
   color: #fff;
   border: none;
   border-radius: 7.5px;
@@ -206,6 +207,7 @@
   flex-direction: column;
   gap: 20px;
   margin-top: 10px;
+  align-items: center;
 }
 .cardFile {
   background: var(--surface);
@@ -214,10 +216,12 @@
   padding: 15px 13px 15px 16px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 7px;
+  width: 80%;
 }
 .cardFile .fileName { color: var(--primary); }
-.cardFile .repoDlBtn { margin-top: 10px; width: 74%; min-width: 130px; align-self: flex-start; }
+.cardFile .repoDlBtn { margin-top: 10px; width: 74%; min-width: 130px;  }
 
 .nothing {
   color: #abbfdf;

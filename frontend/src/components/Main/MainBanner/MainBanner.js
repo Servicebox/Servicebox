@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import "./MainBanner.css";
 import SpiralAnimation from './SpiralAnimation';
@@ -14,7 +15,8 @@ import Example1 from '../../../images/1ak.webp';
 import Example2 from '../../../images/2ak.webp';
 import Example3 from '../../../images/3ak.webp';
 import Example4 from '../../../images/4ak.webp';
-const promoImages = [Example1, Example2, Example3, Example4];
+import Example5 from '../../../images/5ak.webp';
+const promoImages = [Example1, Example2, Example3, Example4, Example5];
 
 function PromoImageSlider() {
   const [current, setCurrent] = useState(0);
@@ -74,8 +76,13 @@ function PromoImageSlider() {
       <div className="promo-slider__viewport">
         <div className="promo-slider__track" style={{ transform: `translateX(-${current * 100}%)` }}>
           {promoImages.map((img, i) => (
-            <div className="promo-slider__slide" key={i}>
+            <div className="promo-slider__slide" key={i} style={{ position: "relative" }}>
               <img src={img} alt={`Акция ${i + 1}`} className="promo-slider__img" />
+              {i === 4 && (
+                <Link to="/chat-with-gpt" className="gpt-banner-btn">
+                  🤖 GPT-Чат
+                </Link>
+              )}
             </div>
           ))}
         </div>

@@ -97,6 +97,16 @@ function BurgerMenu({ scrollTo }) {
               Акции
             </Link>
           </li>
+          <li className=" menu-item" >
+            <Link to="/depository-public" className="menu-link" onClick={toggleMenu}>
+              Схемы/Bios
+            </Link>
+          </li>
+          <li className="menu-item" >
+            <Link to="/chat-with-gpt" className="menu-link" onClick={toggleMenu} >
+              🤖 GPT-Чат
+            </Link>
+          </li>
         </ul>
 
         <div className="menu-footer">

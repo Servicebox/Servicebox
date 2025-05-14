@@ -1,0 +1,183 @@
+/* ---------- АНИМАЦИЯ и ХВОСТИКИ ---------- */
+@keyframes bubbleAppear {
+  from { transform: scale(0.2) translateY(10px); opacity: 0; }
+  to   { transform: scale(1) translateY(0); opacity: 1; }
+}
+.message-bubble { animation: bubbleAppear .3s cubic-bezier(.27,.86,.44,1.05); }
+.chat-header__gpt {
+text-align: center;
+    /* margin-bottom: 25px; */
+    display: flex
+;
+    font-family: Bebas Neue;
+    align-items: center;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 1.11rem;
+    height: 120px;
+    padding: 0 16px 0 13px;
+    justify-content: center;
+    border: 1px solid rgb(76, 17, 186);
+    letter-spacing: .01em;
+    border-radius: 68px;
+    margin: 0;
+    background-color: #004a7e;
+
+}
+.message-row .user{
+display: flex  ;
+flex-direction: row;
+align-items: center;
+}
+.user{
+display: flex
+;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 10px;
+       background: radial-gradient(circle at 0% 70%, #6ad7ff -7%, transparent 95%);
+    border-radius: 16px;
+}
+.input-row {
+display: flex;
+gap: 8px;
+margin-top: 0.7rem;
+}
+
+.chat-container {
+    height: 90vh;
+    max-height: 780px;
+    background: linear-gradient(111deg, #e9f8ff 13%, #d1fff8 100%);
+    width: 90%;
+    display: flex
+;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0 auto;
+    border-radius: 24px;
+    padding: 0 10px 20px;
+    box-shadow: 0px 6px 28px 1px rgb(73, 219, 248);
+    margin-bottom: 80px;
+        
+}
+.messages-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-bottom: 18px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.message-row .assistant{
+      display: flex
+;
+    flex-direction: row;
+    align-items: center;
+}
+.assistant{
+display: flex
+;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 10px;
+    background: radial-gradient(circle at 0% 70%, #aee9ff -7%, transparent 95%);
+    border-radius: 16px;
+}
+.message-row.user .message-bubble::after {
+  content: "";
+  position: absolute;
+  right: -10px; bottom: 13px;
+  width: 18px; height: 24px;
+
+  filter: blur(.5px);
+  z-index: 2;
+}
+.message-row.assistant .message-bubble::after {
+  content: "";
+  position: absolute;
+  left: -10px; bottom: 13px;
+  width: 18px; height: 24px;
+
+  filter: blur(.5px);
+  z-index: 2;
+}
+
+/* ---------- ХОРОШИЕ ИЗОБРАЖЕНИЯ ---------- */
+.generated-image {
+  max-width: 240px;
+  border-radius: 12px;
+  margin-top: 7px;
+  box-shadow: 0 6px 16px #c2d0ec4d;
+  border: 1.5px solid #eaeefe;
+  transition: transform .15s, box-shadow .15s;
+}
+.generated-image:hover {
+  transform: scale(1.04);
+  box-shadow: 0 10px 30px #b8bcf855;
+  border-color: #b4d0ff;
+}
+
+/* ---------- ПЛАВНОСТЬ КНОПОК И INPUT ---------- */
+.send-button {
+  transition: background 0.18s, transform 0.1s;
+}
+.send-button:active {
+  transform: scale(0.2);
+}
+
+.bubble-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #8ab4f8;
+}
+.bubble-btn.loading::before {
+  content: '';
+  display: inline-block;
+  width: 14px; height: 14px;
+  margin-right: 6px;
+  border-radius: 50%;
+  border: 2px solid #c4dafe;
+  border-top-color: #4778e9;
+  animation: spin .7s linear infinite;
+  vertical-align: middle;
+}
+@keyframes spin { to { transform: rotate(1turn); } }
+
+.chat-textarea:focus {
+  border: 1.6px solid #51a6fc;
+  box-shadow: 0 2px 8px 0 #bcdcff55;
+}
+
+/* ---------- PLACEHOLDER красивый ---------- */
+.chat-textarea::placeholder {
+  opacity: 0.37;
+  font-style: italic;
+  color: #6094e5;
+  letter-spacing: .01em;
+}
+
+/* ---------- SYSTEM CARD ---------- */
+.message-row.system .message-bubble {
+    background: linear-gradient(110deg, #d7e5ff99 50%, #ebf4ff 100%);
+    font-style: italic;
+    color: #7ea1ce;
+    border-radius: 12px;
+    box-shadow: none;
+    border: 1px dashed #bcd1ef82;
+}
+
+/* ---------- HOVER BUBBLE ---------- */
+.message-bubble:hover {
+  filter: brightness(1.04) drop-shadow(0 2px 10px #bcdcff22);
+  transition: 0.18s;
+}
+@media (max-width: 500px) {
+  .chat-header__gpt {
+    font-size: 1rem;
+  }
+  .input-row{
+    flex-direction: column;
+  }
+
+}

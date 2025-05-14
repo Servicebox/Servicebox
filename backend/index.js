@@ -293,6 +293,7 @@ app.use('/promotions', express.static(path.join(__dirname, 'uploads', 'promotion
 app.use('/api/auth', authRoutes);
 // Обработка форм
 app.use('/api/images', imageRoutes);
+app.use('/api/gpt', require('./routes/gpt'));
 app.get("./", (req, res) => {
   res.send("Express App is runing")
 })

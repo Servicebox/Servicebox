@@ -70,6 +70,7 @@ import SearchBar from "../pages/SearchBar"
 import UserProfile from "../pages/UserProfile";
 import DepositoryPage from "../AdminPanel/DepositoryPage";
 import DepositoryPublic from '../pages/DepositoryPublic';
+import ChatWithGpt from "../ChatWithGpt/ChatWithGpt";
 
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -180,7 +181,7 @@ const App = () => {
           <Route path="/depository" element={<DepositoryPage />} />
           <Route path="/listproduct" element={<ListProduct />} />
           <Route path="/listservice" element={<ListService />} />
-
+          <Route path="/chat-with-gpt" element={<ChatWithGpt />} />
           <Route path="/nav-bar" element={<Navbar />} />
           <Route path="/product-display" element={<ProductDisplay />} />
           <Route path="/parts" element={<ShopCategory category="part" />} />

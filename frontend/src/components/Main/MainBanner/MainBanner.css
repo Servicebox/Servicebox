@@ -8,6 +8,38 @@
   position: relative;
 
 }
+
+.gpt-banner-btn {
+  position: absolute;
+  bottom: 20px;   /* Подвиньте по вкусу */
+left: 20px;
+  z-index: 5;
+  font-size: 1.18rem;
+  padding: 18px 30px;
+  background: linear-gradient(90deg, #119bd2 45%, #f9a92c 112%);
+
+  border: 2px solid #224553;
+
+  border-radius: 20px;
+  box-shadow: 0 4px 24px ;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: .03em;
+  transition: 0.18s;
+  cursor: pointer;
+}
+.gpt-banner-btn:hover {
+  background: linear-gradient(90deg, #1ad1ff 0%, #f9a92c 91%);
+  color: #fff;
+  box-shadow: 0 4px 34px #119bd275;
+  transform: scale(1.04);
+}
+@media (max-width: 600px) {
+  .gpt-banner-btn {
+    padding: 7px 16px;
+    bottom: 10px; right: 10px; font-size: 1rem;
+  }
+}
 .promo-slider__viewport {
   width: 100%;
   overflow: hidden;
