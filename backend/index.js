@@ -50,6 +50,10 @@ const apicache = require('apicache');
 const cache = apicache.middleware;
 const sharp = require('sharp');
 const Category = require('./models/Category');
+const BOT_TOKEN = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
+const CHAT_ID = '406806305';
+const ReactDOMServer = require('react-dom/server');
+const ProductPage = require('./views/ProductPage');
 // Создание API роутер
 
 const apiRouter = express.Router();
@@ -185,7 +189,7 @@ app.use(limiter);
 const corsOptions = {
   origin: ['https://servicebox35.ru', 'https://servicebox35.pp.ru'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'], // Добавьте 'auth-token'
+  allowedHeaders: ['Content-Type', 'Authorization', 'auth-token'],
   credentials: true
 };
 
@@ -194,14 +198,76 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use(compression());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(compression({ level: 6 }));
+app.use(express.json({ limit: '10kb' }));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jsx');
+app.engine('jsx', require('express-react-views').createEngine());
 app.use(
   helmet({
     crossOriginResourcePolicy: false,
   })
 );
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use('/static', express.static(path.join(__dirname, 'static'), {
+  maxAge: '365d',
+  etag: true,
+  lastModified: true
+}));
+app.use((req, res, next) => {
+  res.status(404).json({
+    status: 'error',
+    message: 'Resource not found'
+  });
+});
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    status: 'error',
+    message: 'Internal server error'
+  });
+});
+// Динамическая генерация sitemap.xml
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const products = await Product.find({}, 'id updatedAt');
+    const services = await Service.find({}, 'id updatedAt');
 
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <!-- Статические страницы -->
+        <url>
+          <loc>https://servicebox35.ru/</loc>
+          <lastmod>${new Date().toISOString()}</lastmod>
+          <priority>1.0</priority>
+        </url>
+        
+        <!-- Динамические страницы -->
+        ${products.map(p => `
+          <url>
+            <loc>https://servicebox35.ru/product/${p.id}</loc>
+            <lastmod>${new Date(p.updatedAt).toISOString()}</lastmod>
+            <priority>0.8</priority>
+          </url>
+        `).join('')}
+        
+        ${services.map(s => `
+          <url>
+            <loc>https://servicebox35.ru/service/${s.id}</loc>
+            <lastmod>${new Date(s.updatedAt).toISOString()}</lastmod>
+            <priority>0.8</priority>
+          </url>
+        `).join('')}
+      </urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(sitemap);
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 const optimizeImage = async (buffer) => {
   return sharp(buffer)
     .resize(800, 800, { fit: 'inside', withoutEnlargement: true })
@@ -297,6 +363,33 @@ app.use('/api/gpt', require('./routes/gpt'));
 app.get("./", (req, res) => {
   res.send("Express App is runing")
 })
+app.get('/product/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    // Рендеринг React-компонента в HTML
+    const html = ReactDOMServer.renderToString(
+      React.createElement(ProductPage, { product })
+    );
+
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${product.name}</title>
+          <meta name="description" content="${product.description.substring(0, 160)}">
+          <link rel="stylesheet" href="/styles.css">
+        </head>
+        <body>
+          <div id="root">${html}</div>
+          <script src="/client-bundle.js"></script>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    res.status(404).send('Product not found');
+  }
+});
 // Настройки для загрузок файлов
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -1409,6 +1502,115 @@ app.post('/api/init-payment', async (req, res) => {
   } catch (error) {
     console.error('Error initiating payment:', error);
     res.status(500).json({ success: false, message: 'Ошибка инициализации платежа' });
+  }
+});
+
+///
+// Модель для хранения соответствия userId и telegramMessageId
+const userMessageSchema = new mongoose.Schema({
+  userId: String,
+  telegramMessageId: Number,
+  createdAt: { type: Date, default: Date.now, expires: 604800 } // Автоудаление через 7 дней
+});
+const UserMessage = mongoose.model('UserMessage', userMessageSchema);
+// Маршрут для получения сообщений
+app.post('/api/send-message', async (req, res) => {
+  const { userId, userName, text } = req.body;
+
+  if (!userId || !userName || !text) {
+    return res.status(400).json({
+      success: false,
+      error: 'Недостаточно данных для отправки сообщения'
+    });
+  }
+
+  try {
+    const messageText = `✉️ Новое сообщение от ${userName} (ID: ${userId}):\n\n${text}`;
+
+    const telegramResponse = await axios.post(
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+      {
+        chat_id: CHAT_ID,
+        text: messageText,
+        parse_mode: 'HTML'
+      }
+    );
+
+    // Сохраняем соответствие messageId и userId
+    const telegramMessageId = telegramResponse.data.result.message_id;
+    await new UserMessage({ userId, telegramMessageId }).save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Сообщение отправлено',
+      data: telegramResponse.data
+    });
+  } catch (error) {
+    console.error('Ошибка Telegram API:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message
+    });
+
+    res.status(500).json({
+      success: false,
+      error: 'Ошибка отправки сообщения',
+      details: error.message
+    });
+  }
+});
+
+// Маршрут для получения сообщений
+app.get('/api/get-messages', async (req, res) => {
+  const userId = req.query.userId;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'Missing userId parameter' });
+  }
+
+  try {
+    // Получаем все сохраненные соответствия для этого пользователя
+    const userMessages = await UserMessage.find({ userId });
+    const messageIds = userMessages.map(msg => msg.telegramMessageId);
+
+    // Получаем обновления из Telegram
+    const response = await axios.get(
+      `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`
+    );
+
+    const updates = response.data.result || [];
+    const userMessagesForClient = [];
+
+    // Фильтруем ответы на сообщения пользователя
+    for (const update of updates) {
+      const message = update.message || update.edited_message;
+      if (message && message.reply_to_message) {
+        const replyId = message.reply_to_message.message_id;
+
+        // Проверяем, что это ответ на сообщение этого пользователя
+        if (messageIds.includes(replyId)) {
+          userMessagesForClient.push({
+            _id: update.update_id.toString(),
+            author: 'manager',
+            text: message.text || '[Сообщение без текста]',
+            createdAt: new Date(message.date * 1000).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            }),
+            status: "delivered"
+          });
+        }
+      }
+    }
+
+    res.status(200).json(userMessagesForClient);
+  } catch (error) {
+    console.error('Error getting messages:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Error getting messages',
+      details: error.message
+    });
   }
 });
 

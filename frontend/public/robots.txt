@@ -2,4 +2,6 @@
 User-agent: *
 Disallow: /css
 Disallow: /admin-panel/
+Disallow: /admin
+Disallow: /api
 Sitemap: https://servicebox35.ru/sitemap.xml

@@ -1,0 +1,345 @@
+/* components/ServicePricePage.css */
+:root {
+  --primary: #006699;
+  --primary-dark: #00aaff;
+  --secondary: #4cc9f0;
+  --accent: #f72585;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --success: #4ade80;
+  --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.service-price-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: 'Gilroy', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(to bottom right, #f8f9ff, #f0f4ff);
+  min-height: 100vh;
+}
+
+.price-header {
+  text-align: center;
+  margin-bottom: 50px;
+  padding: 20px;
+}
+
+.price-header h1 {
+  font-size: 2.8rem;
+  color: var(--primary-dark);
+  margin-bottom: 15px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.price-header p {
+  font-size: 1.2rem;
+  color: var(--gray);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-bottom: 40px;
+  max-width: 1200px;
+  margin: 0 auto 50px;
+}
+
+.search-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 18px 25px 18px 55px;
+  border: 2px solid #e0e7ff;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  background: white;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.search-container input:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 5px 25px rgba(76, 201, 240, 0.3);
+}
+
+.search-container input::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+.category-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.category-btn {
+  padding: 12px 24px;
+  background: white;
+  border: 2px solid #e0e7ff;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.category-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(0,0,0,0.1);
+  border-color: var(--secondary);
+}
+
+.category-btn.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 7px 20px rgba(67, 97, 238, 0.3);
+}
+
+.category-icon {
+  font-size: 1.2rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.service-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  border: 1px solid #f9a92c;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding-right: 15px;
+}
+
+.price-tag {
+  background:#f9a92c;
+  color: var(--primary);
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.card-body {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  color: #4a5568;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  font-size: 1rem;
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(67, 97, 238, 0.1);
+  color: var(--primary);
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+.no-results {
+  text-align: center;
+  padding: 60px 30px;
+  background: white;
+  border-radius: 20px;
+  margin-top: 30px;
+  box-shadow: var(--card-shadow);
+  max-width: 800px;
+  margin: 40px auto;
+}
+
+.no-results h3 {
+  color: var(--primary-dark);
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+.no-results p {
+  color: var(--gray);
+  max-width: 500px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.loading-spinner {
+  border: 5px solid rgba(67, 97, 238, 0.1);
+  border-top: 5px solid var(--primary);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 30px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .service-price-page {
+    padding: 20px 15px;
+  }
+  
+  .price-header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .price-header p {
+    font-size: 1rem;
+  }
+  
+  .category-filter {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    margin: 0 -15px;
+    padding: 0 15px 15px;
+  }
+  
+  .category-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+  
+  .search-container input {
+    padding: 16px 20px 16px 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+  }
+  
+  .price-tag {
+    align-self: flex-start;
+    font-size: 1.1rem;
+    padding: 6px 15px;
+  }
+  
+  .card-body {
+    padding: 20px;
+  }
+  
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .price-header h1 {
+    font-size: 1.8rem;
+  }
+}

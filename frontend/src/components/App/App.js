@@ -21,6 +21,7 @@ import MonoblockService from "../AdminPanel/MonobloсkService/MonobloсkService"
 import TelephoneService from "../AdminPanel/TelephoneService/TelephoneService";
 import TabletService from "../AdminPanel/TabletService/TabletService";
 import TvService from "../AdminPanel/TvService/TvService"
+
 import GlassReplacementPriceList from "../AdminPanel/GlassReplacementPriceList/GlassReplacementPriceList";
 import ApplService from "../ApplService/ApplService";
 import OtherService from "../AdminPanel/OtherService/OtherService"
@@ -71,7 +72,7 @@ import UserProfile from "../pages/UserProfile";
 import DepositoryPage from "../AdminPanel/DepositoryPage";
 import DepositoryPublic from '../pages/DepositoryPublic';
 import ChatWithGpt from "../ChatWithGpt/ChatWithGpt";
-
+import ServicePricePage from '../ServicePricePage/ServicePricePage';
 const App = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
@@ -166,7 +167,6 @@ const App = () => {
           <Route path="/tablet-service" element={<TabletService />} />
           <Route path="/telephone-service" element={<TelephoneService />} />
           <Route path="/other-service" element={<OtherService />} />
-          <Route path="/videocard" element={<VideoCard />} />
           <Route path="/glass-replacement-price-lists" element={<GlassReplacementPriceList />} />
           <Route path="/appl-service" element={<ApplService />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -193,6 +193,8 @@ const App = () => {
             <Route path=':productName' element={<Product />} />
           </Route>
           <Route path='/cart' element={<Cart />} />
+          <Route path="/prices" element={<ServicePricePage />} />
+
 
           <Route
             path="/login"

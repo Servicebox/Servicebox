@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-const API_URL = 'https://servicebox35.pp.ru';
+const API_URL = 'https://servicebox35.ru';
 
 export const createClaim = async (data) => {
   try {

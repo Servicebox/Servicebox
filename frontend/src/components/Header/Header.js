@@ -149,8 +149,8 @@ function Header() {
                         <li className="navigation__list" onClick={() => setMenu("about")}>
                             <Link className="navigation__list" to="/about">О нас {menu === "about" && <hr />}</Link>
                         </li>
-                        <li className="navigation__list" onClick={() => setMenu("service")}>
-                            <Link className="navigation__list" to="/service">Услуги {menu === "service" && <hr />}</Link>
+                        <li className="navigation__list" onClick={() => setMenu("price-list")}>
+                            <Link className="navigation__list" to="/prices">Цены {menu === "price-list" && <hr />}</Link>
                         </li>
                         <li className="navigation__list" onClick={() => setMenu("gallery")}>
                             <Link className="navigation__list" to="/image-gallery-api">Фото {menu === "gallery" && <hr />}</Link>
