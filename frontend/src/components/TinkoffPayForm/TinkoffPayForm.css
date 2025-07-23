@@ -8,7 +8,7 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
-  font-family: 'Roboto', 'Arial', sans-serif;
+
 }
 .form-control{
   margin-bottom: 10px;

@@ -1,0 +1,217 @@
+/* BookingForm.css */
+.booking-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* Добавляем размытие фона */
+}
+
+.booking-form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-out; /* Анимация появления */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #023878;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 10;
+}
+
+.close-button:hover {
+    background: #e9ecef;
+}
+
+.close-button img {
+    width: 15px;
+    height: 15px;
+}
+
+.service-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #4e73df;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: all 0.2s;
+    background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group input.error,
+.form-group textarea.error {
+    border-color: #e74a3b;
+}
+
+.error-text {
+    color: #e74a3b;
+
+    margin-top: 5px;
+    display: block;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+
+}
+
+.submit-btn {
+    background: #4e73df;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: #2e59d9;
+}
+
+.submit-btn:disabled {
+    background: #a0aec0;
+    cursor: not-allowed;
+}
+
+/* Стили для успешного состояния */
+.booking-success {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.booking-success h2 {
+    color: #1cc88a;
+    margin-bottom: 15px;
+
+}
+
+.tracking-code {
+
+    color: #4e73df;
+    margin: 20px 0;
+    display: block;
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px dashed #4e73df;
+}
+
+.success-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.btn-track {
+    background: #4e73df;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 150px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-close {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 150px;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-track:hover {
+    background: #2e59d9;
+}
+
+.btn-close:hover {
+    background: #5a6268;
+}
+
+/* Адаптивность */
+@media (max-width: 576px) {
+    .booking-form-container {
+        padding: 20px;
+    }
+    
+    .success-actions {
+        flex-direction: column;
+    }
+    
+    .btn-track, .btn-close {
+        width: 100%;
+    }
+}

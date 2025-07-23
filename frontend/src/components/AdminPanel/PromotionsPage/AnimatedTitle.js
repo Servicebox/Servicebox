@@ -3,7 +3,7 @@ import "./AnimatedTitle.css";
 
 export default function AnimatedTitle({ children }) {
     return (
-        <h1 className="animated-title">
+        <h2 className="animated-title">
             {Array.from(children).map((char, i) =>
                 char === " " ?
                     <span key={i}>&nbsp;</span> :
@@ -11,6 +11,6 @@ export default function AnimatedTitle({ children }) {
                         {char}
                     </span>
             )}
-        </h1>
+        </h2>
     );
 }

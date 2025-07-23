@@ -1,9 +1,7 @@
 .search__error {
     margin: 0 auto;
     color: #ee3465;
-    font-weight: 500;
-    font-size: 9px;
-    line-height: 34px;
+
     margin-top: 20px;
     }
     
@@ -30,10 +28,5 @@
     .search__filterCheckbox-slider_on {
       background-image: url(../../images/smalltumb.svg);
     }
-    .search__filterCheckbox-span {
-      font-size: 13px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 18px;
-    }
+
   

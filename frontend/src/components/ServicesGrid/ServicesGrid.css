@@ -1,0 +1,159 @@
+/* components/ServicesGrid/ServicesGrid.css */
+.services-grid-section {
+  padding: 80px 20px;
+  background: linear-gradient(to bottom, #f8f9fc 0%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.section-header h2 {
+
+  margin-bottom: 15px;
+  color: #2e3a59;
+
+}
+
+.section-header p {
+
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.servicecard__book {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-header {
+  padding: 30px 20px 60px;
+  position: relative;
+  color: white;
+  text-align: center;
+}
+
+.card-header h3 {
+
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.service-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+}
+
+.card-body {
+  padding: 30px 20px 25px;
+  flex-grow: 1;
+  background: white;
+  border-radius: 15px;
+  margin-top: -30px;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-body p {
+  color: #5a5c69;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.service-link {
+  display: inline-block;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 10px 0;
+  position: relative;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.service-link::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.service-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+  .services-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .services-grid-section {
+    padding: 60px 15px;
+  }
+  
+
+  
+
+}
+
+@media (max-width: 576px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .card-header {
+    padding: 25px 15px 50px;
+  }
+}

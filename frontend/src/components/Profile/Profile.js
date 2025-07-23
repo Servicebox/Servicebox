@@ -8,7 +8,7 @@ import useForm from "../hooks/useForm"
 
 
 function Profile({ loggedIn, isLoading, onUpdateUser, signOut }) {
-  const currentUser = useContext(CurrentUserContext)
+  const currentUser = useContext(CurrentUserContext);
 
   const { enteredValues, errors, handleChangeInput, isFormValid, resetForm } =
     useForm()
@@ -41,7 +41,13 @@ function Profile({ loggedIn, isLoading, onUpdateUser, signOut }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enteredValues])
 
-  return (
+  if (!currentUser) {
+    return (
+      <div className="profile-loading">
+        <p>Загрузка профиля...</p>
+      </div>
+    );
+  }
     <>
       <Header loggedIn={loggedIn} />
       <section className="profile">
@@ -109,7 +115,10 @@ function Profile({ loggedIn, isLoading, onUpdateUser, signOut }) {
         </form>
       </section>
     </>
-  )
+
 }
+
+
+
 
 export default Profile

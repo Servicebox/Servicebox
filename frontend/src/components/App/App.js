@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
 import {
-  BrowserRouter as Router,
   Route,
   Routes,
   useNavigate,
@@ -26,7 +25,6 @@ import GlassReplacementPriceList from "../AdminPanel/GlassReplacementPriceList/G
 import ApplService from "../ApplService/ApplService";
 import OtherService from "../AdminPanel/OtherService/OtherService"
 import CreateServiceForm from "../AdminPanel/AdminPanelRoute/CreateServiceForm";
-import AdminPanelRoute from "../AdminPanel/AdminPanelRoute/AdminPanelRoute"
 
 import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi"
 import DeleteImage from "../AdminPanel/Image/DeleteImage";
@@ -39,18 +37,14 @@ import LoginSignup from "../pages/LoginSignup"
 import ShopCategory from "../pages/ShopCategory";
 import Product from "../pages/Product";
 import CartItems from "../CartItems/CartItems";
-import { ShopContext } from "../Contexst/ShopContext";
 import BubbleBackground from "../BubbleBackground/BubbleBackground";
 import BreadCrums from "../Breadcrums/Breadcrum";
 import ProductDisplay from "../ProductDisplay/ProductDisplay";
-import { useParams } from 'react-router-dom';
 import "./App.css";
 import Navbar from "../NavBar";
-import Addproduct from "../AdminPanel/Addproduct";
 import ListProduct from "../AdminPanel/ListProduct";
 import ListService from "../AdminPanel/ListService";
 import Footer from "../Footer/Footer";
-import AdminLogin from "../AdminPanel/AdminLogin/AdminLogin";
 import AdminRoute from '../PrivateRoute/PrivateRoute';
 import AdminPanel from "../AdminPanel/AdminPanel";
 import VideoCard from "../AdminPanel/VideoCard/VideoCard"
@@ -59,9 +53,7 @@ import VerifyEmail from '../pages/VerifyEmail';
 import ResetPasswordWrapper from '../pages/ResetPasswordWrapper';
 import { AuthProvider } from "../pages/AuthContext";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-import UpdateNewsForm from "../AdminPanel/News/UpdateNewsForm";
 import CreateNewsForm from "../AdminPanel/News/CreateNewsForm";
-import ShopContextProvider from '../pages/ShopCategory';
 import ListNews from "../AdminPanel/News/ListNews";
 import NewsDetail from "../AdminPanel/News/NewsDetail";
 import PublicNewsList from "../AdminPanel/News/PublicNewsList";
@@ -73,7 +65,16 @@ import DepositoryPage from "../AdminPanel/DepositoryPage";
 import DepositoryPublic from '../pages/DepositoryPublic';
 import ChatWithGpt from "../ChatWithGpt/ChatWithGpt";
 import ServicePricePage from '../ServicePricePage/ServicePricePage';
+import ServicesGrid from '../ServicesGrid/ServicesGrid';
+import ServiceCategoryPage from '../ServiceCategoryPage/ServiceCategoryPage';
+import AllServicesPage from '../AllServicesPage/AllServicesPage';
+import BookingsAdmin from "../AdminPanel/BookingsAdmin/BookingsAdmin";
+import BookingForm from "../BookingForm/BookingForm";
+
 const App = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
   const navigate = useNavigate();
@@ -101,11 +102,59 @@ const App = () => {
   }, []);
 
   const scrollTo = (target) => gsap.to(window, { duration: 1, scrollTo: target });
-  const handleLoginSuccess = () => {
-    // Обновите состояние аутентификации в вашем приложении
-  };
 
+  useEffect(() => {
+ const checkAuth = async () => {
+  const token = localStorage.getItem('auth-token');
+  if (!token) return;
+  
+  try {
+    const response = await fetch('https://servicebox35.pp.ru/api/auth/validate-token', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      // Исправлено: сохраняем user из ответа
+      setCurrentUser(data.user);
+      setIsLoggedIn(true);
+      
+      // Сохраняем данные в localStorage
+      localStorage.setItem('username', data.user.username);
+      localStorage.setItem('role', data.user.role);
+    } else {
+      signOut();
+    }
+  } catch (error) {
+    signOut();
+  }
+};
+
+    checkAuth();
+  }, []);
+
+const handleLoginSuccess = (responseData) => {
+  // Сохраняем полные данные пользователя
+  localStorage.setItem('auth-token', responseData.token);
+  localStorage.setItem('refresh-token', responseData.refreshToken);
+  localStorage.setItem('username', responseData.user.username);
+  localStorage.setItem('role', responseData.user.role);
+  
+  setCurrentUser(responseData.user);
+  setIsLoggedIn(true);
+};
+
+  const signOut = () => {
+    localStorage.removeItem('auth-token');
+    localStorage.removeItem('refresh-token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
+    setCurrentUser(null);
+    setIsLoggedIn(false);
+    navigate('/');
+  };
   return (
+    <AuthProvider value={{ currentUser, isLoggedIn, signOut, handleLoginSuccess }}>
     <div className="">
       <Header />
       <div className="page__wrapper">
@@ -115,6 +164,11 @@ const App = () => {
 
         <Routes>
           <Route path="/" element={<Main />} />
+           <Route path="/profile" element={
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        } />
           <Route path="/header" element={<Header />} />
           <Route path="/admin-panel/*" element={<AdminPanel />} />
           <Route path="/depository-public" element={<DepositoryPublic />} />
@@ -124,6 +178,17 @@ const App = () => {
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/delete-image" element={<DeleteImage />} />
           <Route pach="form" element={<Form />} />
+          <Route path="/booking" element={<BookingForm />} />
+          <Route path="/bookings" element={<BookingsAdmin />} />
+          <Route path="/booking/:admin" element={<BookingsAdmin />} />
+          <Route path="/booking/:id" element={<BookingForm />} />
+          <Route path="/booking/:id/:admin" element={<BookingForm />} />
+          <Route path="/booking/:id/:admin/:status" element={<BookingForm />} />
+          <Route path="/booking/:id/:admin/:status/:user" element={<BookingForm />} />
+       
+           <Route path="/" element={<ServicesGrid />} />
+            <Route path="/services/:categoryId" element={<ServiceCategoryPage />} />
+              <Route path="/prices" element={<AllServicesPage />} />
           {/* <Route exact path="/" component={ServiceRef} /> */}
           <Route path="/notebook-service" element={<NotebookService />} />
           <Route path="/monoblock-service" element={<MonoblockService />} />
@@ -214,6 +279,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
 
         </Routes>
+        
         {showForm && <Form toggleForm={handleFormToggle} />}
         <CookieMessage />
 
@@ -221,8 +287,10 @@ const App = () => {
         <Chat />
 
         <Footer />
+        
       </div>
     </div>
+    </AuthProvider>
   )
 
 }

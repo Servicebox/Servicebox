@@ -73,7 +73,7 @@ const Service = forwardRef((_props, ref) => {
   return (
     <section id="service" className="service">
       <div className="service-content">
-        <h2 className="service__title open">Мы работаем с устройствами:</h2>
+        <h2 className="animated-title open">Мы работаем с устройствами:</h2>
         <div className="tech">
           {cardsData.map((card, index) => (
             <Card

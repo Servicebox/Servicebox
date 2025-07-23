@@ -5,14 +5,13 @@
   background: #fff;
   border-radius: 24px;
   box-shadow: 0 6px 42px rgba(80, 115, 198, 0.08);
-  font-family: 'Inter', 'Arial', sans-serif;
+
 }
 
 h2 {
-  margin: 0 0 18px 7px;
-  font-size: 1.5rem;
+
   color: #29426a;
-  font-weight: 700;
+
 }
 
 .listproduct-format-main {
@@ -20,8 +19,7 @@ h2 {
   grid-template-columns: 1fr 1.2fr 1.4fr 1fr 1.1fr 1fr 1fr 1fr 1.2fr;
   gap: 10px;
   align-items: center;
-  font-weight: 600;
-  font-size: 1.07rem;
+
   padding: 13px 16px 12px 10px;
   color: #35609b;
 }
@@ -55,7 +53,7 @@ h2 {
 input[type="file"] {
   background: none;
   border: none;
-  font-size: .97rem;
+
 }
 
 input[type="number"], .listproduct-format-main input[type="text"], .listproduct-format-main input[type="number"] {
@@ -63,7 +61,7 @@ input[type="number"], .listproduct-format-main input[type="text"], .listproduct-
   padding: 7px 7px;
   border-radius: 5px;
   border: 1.2px solid #b4dcf9;
-  font-size: 0.96rem;
+
   background: #f5fbff;
   transition: border .12s;
 }
@@ -89,8 +87,7 @@ input[type="number"]:focus, input[type="text"]:focus {
   cursor: pointer;
   background: #2389ea;
   color: #fff;
-  font-weight: 600;
-  font-size: .97rem;
+
   margin-right: 3px;
   box-shadow: 0 2px 7px rgba(57,139,255,0.09);
   transition: background .14s;
@@ -123,7 +120,7 @@ input[type="number"]:focus, input[type="text"]:focus {
 @media (max-width: 850px) {
   .listproduct-format-main {
     grid-template-columns: 0.9fr 0.95fr 0.8fr 0.95fr 0.95fr 0.6fr 1fr;
-    font-size: .97rem;
+
     padding: 8px 3px 8px 3px;
   }
   .list-product { padding: 7px 2px 22px 2px; }

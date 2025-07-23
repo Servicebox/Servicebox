@@ -19,9 +19,7 @@
   .form__title-one {
     color: #000000;
     padding: 40px 0;
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 29px;
+
   }
   
   .register-form {
@@ -39,9 +37,6 @@
     border-radius: 3px;
     color: white;
     border-radius: 3px;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
     text-align: center;
     cursor: pointer;
   }
@@ -67,18 +62,14 @@
   .form__text {
     padding-top: 16px;
     text-align: center;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
+
     color: #8b8b8b;
   }
   
   .form__link {
     text-decoration: none;
     color: #4285f4;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
+
   }
   
   .form__link:hover {
@@ -88,9 +79,7 @@
   .form__label {
     position: relative;
     margin: 0 0 31px;
-    font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
+
     color: #8b8b8b;
   }
   
@@ -115,9 +104,7 @@
     top: 69px;
     left: 0;
     margin: 0;
-    font-weight: 400;
-    font-size: 10px;
-    line-height: 12px;
+ 
     color: #ff4062;
   }
   
@@ -145,21 +132,14 @@
       min-height: 468px;
     }
   
-    .form__button-save {
-      font-size: 12px;
-      line-height: 15px;
-    }
+
   
     .form__text {
       padding-top: 14px;
-      font-size: 12px;
-      line-height: 15px;
+
     }
   
-    .form__link {
-      font-size: 12px;
-      line-height: 15px;
-    }
+
   }
   
   @media screen and (max-width: 464px) {

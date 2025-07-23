@@ -12,9 +12,6 @@
 }
 .spiral-anim-letter {
   position: absolute; left: 0; top: 0;
-  font-size: 3.1rem;
-  font-family: "Bebas Neue";
-  font-weight: 700;
   color: #023878;
   text-shadow: 0 2px 12px #cefdff, 0 1px 2px #008bbda0;
   filter: drop-shadow(1px 2px 8px #23d3e388);

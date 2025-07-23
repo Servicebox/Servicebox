@@ -22,7 +22,7 @@
 .role-select button{
   background: none;
   border: none;
-  font-size: 28px;
+
   cursor: pointer;
   color: #999999;
   transition: color 0.3s;
@@ -57,15 +57,15 @@
 
 .modal-header__reg h2 {
   margin: 0;
-  font-size: 24px;
+
   color: #333333;
-   font-family: Bebas Neue;
+
 }
 
 .close-buttonreg{
   background: none;
   border: none;
-  font-size: 28px;
+
   cursor: pointer;
   color: #999999;
   transition: color 0.3s;
@@ -73,9 +73,8 @@
   border-radius: 5px;
   width: 50px;
   height: 50px;
-  font-size: 30px;
       cursor: pointer;
-    font-family: Bebas Neue;
+
     margin:0px;
 }
 
@@ -95,7 +94,6 @@
   padding: 15px 20px;
   border: 1px solid #dddddd;
   border-radius: 5px;
-  font-size: 16px;
   color: #333333;
   transition: border-color 0.3s;
 }
@@ -113,8 +111,6 @@
   border: none;
   border-radius: 5px;
   color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.3s;
   margin-top: 20px;
@@ -129,7 +125,6 @@
 .toggle-state {
   text-align: center;
   margin-top: 15px;
-  font-size: 16px;
   color: #555555;
 }
 
@@ -150,7 +145,6 @@
   align-items: flex-start;
   gap: 10px;
   margin-top: 20px;
-  font-size: 14px;
   color: #555555;
 }
 
@@ -181,27 +175,19 @@
     padding: 20px 25px;
   }
 
-  .modal-header__reg h2 {
-    font-size: 20px;
-  }
 
   .loginsignup-fields input {
     padding: 12px 15px;
-    font-size: 14px;
+
   }
 
   .submit-button {
     padding: 12px;
-    font-size: 16px;
+
   }
 
-  .toggle-state {
-    font-size: 14px;
-  }
 
-  .agree-section {
-    font-size: 12px;
-  }
+
 }
 @media (min-width: 320px) and (max-width: 500px) {
     .loginsignup-container {
@@ -213,7 +199,7 @@
     border: 1px solid black;
 }
 .close-buttonreg {
-    font-size: 30px;
+
     margin: 0px;
     width: 60px;
     height: 50px;
@@ -229,7 +215,7 @@
     height: 50px;
 }
 .loginsignup-agree {
-    font-size: 12px;
+
     width: 200px;
 }
 .loginsignup-fields input{
@@ -249,7 +235,7 @@
     height: 40px;
 }
 .loginsignup-agree {
-    font-size: 12px;
+
     width: 220px;
 }
 }
@@ -285,7 +271,6 @@
 .close-buttonreg {
   background-color: transparent;
   border: none;
-  font-size: 1.5rem;
   cursor: pointer;
 }
 
@@ -311,10 +296,7 @@
     padding: 15px;
   }
 
-  .loginsignup-fields input,
-  .submit-button {
-    font-size: 0.9rem;
-  }
+ 
 }
 /* Overlay для модального окна */
 .modal-overlay {
@@ -351,13 +333,13 @@
 
 .modal-header__reg h2 {
   margin: 0;
-  font-size: 24px;
+
 }
 
 .close-buttonreg {
   background: none;
   border: none;
-  font-size: 24px;
+
   cursor: pointer;
 }
 
@@ -488,13 +470,13 @@
 
 .modal-header__reg h2 {
   margin: 0;
-  font-size: 24px;
+
 }
 
 .close-buttonreg {
   background: none;
   border: none;
-  font-size: 24px;
+
   cursor: pointer;
 }
 

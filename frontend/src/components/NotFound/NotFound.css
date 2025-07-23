@@ -8,10 +8,6 @@
   
   .notFound__title {
     margin: 0 auto;
-    font-size: 140px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
     max-width: 267px;
     padding-top: 246px;
     
@@ -21,10 +17,6 @@
     margin: 5px auto;
     width: 400px;
     text-align: center;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
   }
   
   .notFound__button {
@@ -35,11 +27,6 @@
     width: 400px;
     color: #4285f4;
     text-align: center;
-    font-family: Inter;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
     background-color: transparent;
     border: none;
   }
@@ -71,18 +58,18 @@
       margin: 14px auto 0;
       max-width: 152px;
       padding-top: 246px;
-      font-size: 80px;
+  
     
     }
     .notFound__subtitle {
       margin: 10px auto;
-      font-size: 12px;
+
       max-width: 160px;
     }
     .notFound__button {
       margin: 284px auto 0;
       width: 50px;
-      font-size: 12px;
+
       padding: 0;
     }
   }

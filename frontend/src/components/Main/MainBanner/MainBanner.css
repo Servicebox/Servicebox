@@ -14,7 +14,7 @@
   bottom: 20px;   /* Подвиньте по вкусу */
 left: 20px;
   z-index: 5;
-  font-size: 1.18rem;
+
   padding: 18px 30px;
   background: linear-gradient(90deg, #119bd2 45%, #f9a92c 112%);
 
@@ -37,7 +37,7 @@ left: 20px;
 @media (max-width: 600px) {
   .gpt-banner-btn {
     padding: 7px 16px;
-    bottom: 10px; right: 10px; font-size: 1rem;
+    bottom: 10px; right: 10px;
   }
 }
 .promo-slider__viewport {
@@ -73,7 +73,7 @@ left: 20px;
   position: absolute;
   top: 50%;
   z-index: 2;
-  font-size: 2.5rem;
+
   background: rgba(0,0,0,0.21);
   border: none;
   color: #fff;
@@ -105,7 +105,7 @@ left: 20px;
 }
 /* --- Flip Cards --- */
 .flip-card-row {
-  margin: 40px 0 0;
+padding-top: 50px;
   display: flex;
   gap: 36px;
   flex-wrap: wrap;
@@ -139,13 +139,13 @@ left: 20px;
   padding: 32px 20px 22px;
   transition: box-shadow .25s;
   box-shadow: 0 2px 8px #1e6a7511;
-  font-family: "Gilroy", Arial, sans-serif;
+
   backface-visibility: hidden;
 }
 
 .flip-card__front h4 {
-  font-family: 'Bebas Neue', Arial, sans-serif;
-  font-size: 1.3rem;
+
+
   letter-spacing: 0.03em;
   font-weight: 700;
   color: #023878;
@@ -153,7 +153,7 @@ left: 20px;
   text-align: center;
 }
 .flip-card__front i {
-  color: #ffd86c; font-size: 3.1em; margin-bottom: 0.5em;
+  color: #ffd86c;  margin-bottom: 0.5em;
   filter: drop-shadow(0 3px 7px #2a91e234);
 }
 .flip-card__front img {
@@ -165,7 +165,7 @@ left: 20px;
 }
 .flip-card__hint {
   color: #8bafbe;
-  font-size: 1rem;
+
   margin-top: auto;
   border-top: 1px dashed #b6efff;
   padding-top: 16px;
@@ -175,7 +175,7 @@ left: 20px;
 }
 
 .flip-card__back {
-  background: linear-gradient(155deg,#119bd2 20%,#f9a92c 92%);
+     background: linear-gradient(155deg, #119bd2 20%, #023878 92%);
   color: #fff;
   transform: rotateY(180deg);
   justify-content: center;
@@ -183,9 +183,7 @@ left: 20px;
   position: absolute;
 }
 .flip-card__back-text {
-  font-size: 0.9rem;
-  font-family: "Gilroy", Arial, sans-serif;
-  line-height: 1.55;
+
   text-align: center;
 
   color: #fffde9;
@@ -196,7 +194,6 @@ left: 20px;
   color: #119bd2;
   border: none;
   font-weight: 600;
-  font-size: 0.8rem;
   border-radius: 18px;
   padding: 8px 30px;
   margin-top: 12px;
@@ -222,11 +219,10 @@ left: 20px;
 @media (max-width: 650px) {
   .promo-slider { max-width: 100vw; }
 
-  .flip-card { width: 170px; height: 220px; font-size: .70em; border-radius: 13px;}
+  .flip-card { width: 200px; height: 260px; border-radius: 13px;}
   .flip-card__front, .flip-card__back { border-radius: 13px; padding: 20px 10px 7px;}
   .flip-card__front img { max-width: 74px; max-height: 74px;}
-  .flip-card__front h4 { font-size: 0.9rem; }
-  .flip-card__hint{ font-size: 0.7rem; }
+
 }
 /* --- Стандарты для секции-Баннера --- */
 .main-banner-section {
@@ -257,38 +253,35 @@ left: 20px;
 
 .main-banner__text {
   max-width: 470px;
-  font-family: "Bebas Neue", Arial, sans-serif;
+  padding-bottom: 30px;
+
 }
 .main-banner__preTitle {
-  font-size: 1.1rem;
-  font-weight: 400;
-  letter-spacing: 0.06em;
+
   color: #023878;
   margin: 0;
 }
 .main-banner__title {
-  font-size: 2.5em;
+
   color: #222;
-  letter-spacing: .01em;
-  font-weight: 800;
+
   margin: 0 0 18px;
 }
 .main-banner__subtitle {
   color: #445;
-  font-size: 1.15em;
+
   margin-bottom: 22px;
-  font-family: "Gilroy", Arial, sans-serif;
-  letter-spacing: -.01em;
+
 }
 .main-banner__form {
-  background: linear-gradient(90deg,#119bd2 30%,#f9a92c 132%);
+      background: var(--blue-main);
   color: #fff;
   border: none;
   border-radius: 14px;
   padding: 16px 30px;
-  font-size: 1.02rem;
+
   font-weight: 700;
-  letter-spacing: .1em;
+
   box-shadow: 0 2px 8px #119bd238;
   cursor: pointer;
   outline: none;
@@ -298,7 +291,7 @@ left: 20px;
   overflow: hidden;
 }
 .main-banner__form:hover, .main-banner__form:focus{
-  background: linear-gradient(90deg,#1ad1ff 0%,#f9a92c 98%);
+  background:#1ad1ff ;
   color: #fff;
 }
 .title-span { border-radius: 20px; /* финт для совместимости старых стилей */ }
@@ -310,11 +303,11 @@ left: 20px;
   .main-banner-section { padding: 12px 2px 14px; border-radius: 0; }
   .main-banner__content { flex-direction: column; gap: 22px; }
   .main-banner__text { max-width: 98vw; text-align: center;}
-  .main-banner__title { font-size: 1.3em; }
-  .main-banner__subtitle, .main-banner__preTitle { font-size: .95em; }
-  .main-banner__form { padding: 11px 18px; font-size: .91rem; }
+
+ 
+  .main-banner__form { padding: 11px 18px;  }
 }
 @media (max-width: 430px) {
-  .main-banner__form { font-size: .86rem; padding: 9px 9px; }
+  .main-banner__form {  padding: 9px 9px; }
   .flip-card-row { gap: 7px; }
 }

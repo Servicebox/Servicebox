@@ -41,34 +41,24 @@ table {
     color: #000;
     margin: 0 auto;
     text-align: center;
-    font-weight: 700;
-    font-family: Montserrat;
-    font-size: 30px;
   
   }
-  .smaller-font {
-    font-family: Gilroy;
-    font-size: 0.8em;  
-  }
+
   @media screen and (min-width: 320px) and (max-width: 400px) {
     .monoblock__title{
-      font-family: Gilroy;
+  
       max-width: 300px;
-      font-size: 13px;
       padding: 10px;
     }
     .smaller-font{
-      font-family: Gilroy;
-      font-size: 9px;
       text-align: center;
       margin: 0 auto;
     }
   }
   @media screen and (min-width: 401px) and (max-width: 768px) {
     .monoblock__title{
-      font-family: Gilroy;
+
       max-width: 300px;
-      font-size: 16px;
       padding: 15px;
     }
   }

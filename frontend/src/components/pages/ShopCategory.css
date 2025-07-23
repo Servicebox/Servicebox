@@ -3,7 +3,7 @@
   align-items: flex-start;
   min-height: 100vh;
   background: #f7f9fb;
-  font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+
 }
 .shopcategory-sidebar {
   background: #fff;
@@ -16,11 +16,10 @@
   width: 23vw;
 }
 .shopcategory-sidebar-title {
-  font-weight: 700;
-  font-size: 1.25rem;
+
   color: #3151af;
   margin-bottom: 18px;
-  letter-spacing: .01em;
+
 }
 .shopcategory-menu,
 .shopcategory-submenu {
@@ -38,9 +37,7 @@
   width: 100%;
   background: none;
   border: none;
-  font: inherit;
-  font-weight: 500;
-  font-size: 1rem;
+
   color: #2a3355;
   text-align: left;
   padding: 10px 10px 10px 0;
@@ -81,8 +78,7 @@
   color: #6772a9;
   background: none;
   border: none;
-  font: inherit;
-  font-size: 0.98rem;
+
   text-align: left;
   width: 100%;
   padding: 5px 0 5px 3px;
@@ -110,11 +106,10 @@
   flex-wrap: wrap;
 }
 .shopcategory-topbar h1 {
-  font-size: 1.9rem;
-  font-weight: 770;
+
   margin-right: auto;
   color: #234db7;
-  letter-spacing: .02em;
+
   margin: 10px auto;
 }
 .shopcategory-searchwrap {
@@ -125,7 +120,7 @@
 .shopcategory-search {
   width: 100%;
   padding: 9px 36px 9px 16px;
-  font-size: 1rem;
+
   border-radius: 8px;
   border: 1.6px solid #dae2f5;
   outline: none;
@@ -145,7 +140,7 @@
   transform: translateY(-50%);
   background: none;
   border: none;
-  font-size: 1.35rem;
+
   color: #b4b8cd;
   cursor: pointer;
   transition: color .11s;
@@ -155,11 +150,11 @@
 
 .shopcategory-loader {
   margin:80px auto 0 auto; padding: 60px 0; text-align:center; color: #567;
-  font-size: 1.25rem; font-weight: 700; letter-spacing: .02em;
+
 }
 .shopcategory-empty {
   margin:120px auto 40px auto; padding: 60px 0; text-align:center; color: #bbb;
-  font-size: 1.2rem;
+
 }
 .shopcategory-grid {
   display: grid;

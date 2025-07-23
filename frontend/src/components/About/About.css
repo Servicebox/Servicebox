@@ -5,9 +5,10 @@ width: 100%;
 
 .about__text {
     position: relative;
-    font-family: Arial, sans-serif;
+
     color: #333;
     margin:0;
+
  
 }
 
@@ -25,8 +26,8 @@ width: 100%;
 .about-me__quote::before,
 .about-me__quote::after {
   
-    font-size: 4em;
-    color: #ff6347; /* Красный оттенок (или любой другой цвет по вашему выбору) */
+
+    color:#004578; /* Красный оттенок (или любой другой цвет по вашему выбору) */
     position: absolute;
     top: -10px;
 }

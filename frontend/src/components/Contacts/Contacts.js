@@ -1,116 +1,191 @@
-import React, { forwardRef } from 'react'; // Добавляем forwardRef
-import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
+import React, { forwardRef } from 'react';
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapLocation } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faMapLocation, 
+  faMobilePhone, 
+  faMailBulk,
+  faClock
+} from '@fortawesome/free-solid-svg-icons';
+import { 
+  faVk, 
+  faTelegram, 
+  faWhatsapp 
+} from '@fortawesome/free-brands-svg-icons';
 
 import "./Contacts.css";
 
-
-import { faMobilePhone, faMailBulk } from '@fortawesome/free-solid-svg-icons';
-import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
-
-import AnimatedTitle from '../AdminPanel/PromotionsPage/AnimatedTitle';
-
 const Contacts = forwardRef((props, ref) => {
   const handlePhoneCall = () => {
-    window.location.href = "tel:+7 911 501 88 28";
+    window.location.href = "tel:+79115018828";
   };
 
   const handleMailTo = () => {
     window.location.href = "mailto:servicebox35@gmail.com";
   };
 
+  const openMap = (address) => {
+    const encodedAddress = encodeURIComponent(address);
+    window.open(`https://yandex.ru/maps/?text=${encodedAddress}`, '_blank');
+  };
+
   return (
-    <section id="contacts" className="contacts">
-      <div className="footer__links">
-        <div className="contacts__list">
-
-          <AnimatedTitle className="effect3d ">Наши контактные данные</AnimatedTitle>
-          <p className='contacts-text' >Здесь вы найдете всю необходимую информацию для связи с нами по вопросам ремонта ноутбуков, телефонов и планшетов. Мы предлагаем профессиональные услуги по ремонту электроники, быстро и качественно восстановим ваше устройство.
-
-            Вы можете связаться с нами по указанному номеру телефона или отправить запрос по электронной почте. Наши специалисты ответят на все ваши вопросы и помогут найти оптимальное решение для восстановления вашего гаджета.
-
-            Кроме того, вы можете посетить наш сервисный центр лично, наш адрес указан на сайте. Мы всегда готовы принять ваше устройство для диагностики и ремонта. Наши высококвалифицированные техники обладают богатым опытом работы с различными видами устройств, и готовы устранить любые неисправности.
-
-            Свяжитесь с нами уже сегодня, и мы с удовольствием поможем вам вернуть вашу технику в рабочее состояние. Надежный и качественный ремонт гаджетов – это наша специализация!</p>
+    <section id="contacts" className="contacts" ref={ref}>
+      <div className="contacts__container">
+        <div className="contacts__header">
+          <h2 className="animated-title">Контактная информация</h2>
+          <p className="contacts__intro">
+            Ищете профессиональный ремонт ноутбуков, видеокарт, материнских плат, смартфонов и планшетов в Вологде? 
+            Сервисный центр ServiceBox предлагает комплексные решения для вашей электроники. 
+            Наши квалифицированные специалисты с многолетним опытом оперативно диагностируют 
+            и устранят любые неисправности, используя оригинальные комплектующие и современное оборудование.
+          </p>
         </div>
-        <div className="contacts__list-info">
-          <div onClick={handlePhoneCall} className="contacts__block">
 
-            <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-              <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
-              +7 911 501 88 28
-            </p>
-          </div>
-          <div onClick={handleMailTo} className="contacts__block">
-            <p className="contacts__text">
-              <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
-              servicebox35@gmail.com</p>
-          </div>
-          <div className="contacts__block">
-            <p className="contacts__text">
-              <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
-              г. Вологда, ул. Северная, 7А, офис 405</p>
-            <div className="contacts__block"></div>
+        <div className="contacts__grid">
+          <div className="contacts__info">
+            <h2 className="contacts__subtitle">Как с нами связаться</h2>
+            
+            <div className="contacts__block" onClick={handlePhoneCall}>
+              <div className="contacts__icon-wrapper">
+                <FontAwesomeIcon icon={faMobilePhone} className="contacts__icon" />
+              </div>
+              <div className='contacts__text-wrapper'>
+                <h3 className="contacts__block-title">Телефон</h3>
+                <p className="contacts__text contacts__link">+7 (911) 501-88-28</p>
+                <p className="contacts__note">Звонки принимаем ежедневно с 9:00 до 20:00</p>
+              </div>
+            </div>
 
-          </div>
-          <div onClick={handlePhoneCall} className="contacts__block">
+            <div className="contacts__block" onClick={handleMailTo}>
+              <div className="contacts__icon-wrapper">
+                <FontAwesomeIcon icon={faMailBulk} className="contacts__icon" />
+              </div>
+              <div className='contacts__text-wrapper'>
+                <h3 className="contacts__block-title">Электронная почта</h3>
+                <p className="contacts__text contacts__link">servicebox35@gmail.com</p>
+                <p className="contacts__note">Отвечаем в течение 1 рабочего дня</p>
+              </div>
+            </div>
 
-            <p className="contact-text" onClick={handlePhoneCall} style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-              <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '5px' }} />
-              +7 911 501 88 28
-            </p>
-          </div>
-          <div onClick={handleMailTo} className="contacts__block">
-            <p className="contacts__text">
-              <FontAwesomeIcon icon={faMailBulk} style={{ marginRight: '5px' }} />
-              servicebox35@gmail.com</p>
-          </div>
-          <div className="contacts__block">
+            <div className="contacts__block">
+              <div className="contacts__icon-wrapper">
+                <FontAwesomeIcon icon={faClock} className="contacts__icon" />
+              </div>
+              <div className='contacts__text-wrapper'>
+                <h3 className="contacts__block-title">Режим работы</h3>
+                <p className="contacts__text">Пн-Пт: 10:00 - 19:00</p>
+                <p className="contacts__text">Сб-Вс: Выходные дни</p>
+                
+              </div>
+            </div>
 
-            <p className="contacts__text">
-              <FontAwesomeIcon icon={faMapLocation} style={{ marginRight: '5px' }} />
-              г. Вологда, ул. Ленина, 6</p>
-
-          </div>
-          <div className="contacts__block-sochial">
-            <ul className="contacts__icon">
-              <li className="contacts__icon-sochial pulse-one">
-                <a href="https://vk.com/servicebox35">
+            <div className="contacts__social">
+              <h3 className="contacts__subtitle">Мы в социальных сетях</h3>
+              <div className="social__grid">
+                <a 
+                  href="https://vk.com/servicebox35" 
+                  className="social__link pulse-one"
+                  aria-label="Наша группа ВКонтакте"
+                >
                   <FontAwesomeIcon icon={faVk} />
-                  <span>VK</span>
+                  <span>ВКонтакте</span>
                 </a>
-              </li>
-              <li className="contacts__icon-sochial pulse-two">
-                <a href="whatsapp://send?phone=79062960353">
+                <a 
+                  href="whatsapp://send?phone=79062960353" 
+                  className="social__link pulse-two"
+                  aria-label="Написать в WhatsApp"
+                >
                   <FontAwesomeIcon icon={faWhatsapp} />
-                  <span>Watsapp</span>
+                  <span>WhatsApp</span>
                 </a>
-              </li>
-              <li className="contacts__icon-sochial pulse-three">
-                <a href="tg://resolve?domain=@Tomkka">
+                <a 
+                  href="tg://resolve?domain=@Tomkka" 
+                  className="social__link pulse-three"
+                  aria-label="Написать в Telegram"
+                >
                   <FontAwesomeIcon icon={faTelegram} />
                   <span>Telegram</span>
                 </a>
-              </li>
-            </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="contacts__locations">
+            <h2 className="contacts__subtitle">Наши сервисные центры в Вологде</h2>
+            
+            <div className="location__card" onClick={() => openMap("г. Вологда, ул. Северная, 7А, офис 405")}>
+              <div className="location__header">
+                <FontAwesomeIcon icon={faMapLocation} className="location__icon" />
+                <h3 className="location__title">Центральный сервис</h3>
+              </div>
+              <p className="location__address">
+                г. Вологда, ул. Северная, 7А, офис 405
+              </p>
+              <p className="location__description">
+                Наш главный сервисный центр с полным циклом ремонтных работ. 
+                Здесь проводится сложный ремонт материнских плат, замена чипов, 
+                восстановление после залития жидкостью.
+              </p>
+              <button className="location__map-btn">
+                Открыть на карте
+              </button>
+            </div>
+            
+            <div className="location__card" onClick={() => openMap("г. Вологда, ул. Ленина, 6")}>
+              <div className="location__header">
+                <FontAwesomeIcon icon={faMapLocation} className="location__icon" />
+                <h3 className="location__title">Сервис в центре города</h3>
+              </div>
+              <p className="location__address">
+                г. Вологда, ул. Ленина, 6
+              </p>
+              <p className="location__description">
+                Удобно расположенный сервис для быстрого ремонта: замена экранов, 
+                батарей, разъемов зарядки. Работаем без предварительной записи 
+                в удобное для вас время.
+              </p>
+              <button className="location__map-btn">
+                Открыть на карте
+              </button>
+            </div>
           </div>
         </div>
-        <div className="footer__contacts">
 
-        </div>
-        <div className="back__btn">
-          <ul>
-            <li><Link to="/">На главную</Link>
-            </li>
+        <div className="contacts__seo">
+          <h2 className="contacts__subtitle">Профессиональный ремонт техники в Вологде</h2>
+          <p className="location__description">
+            ServiceBox - это современный сервисный центр в Вологде, специализирующийся 
+            на ремонте ноутбуков, смартфонов, планшетов и другой электроники. 
+            Мы предлагаем полный спектр услуг: от замены экранов и батарей до 
+            сложного ремонта материнских плат и восстановления данных.
+          </p>
+          <p className="contacts__subtitle">
+            Наши преимущества:
+          </p>
+          <ul className="contacts__benefits">
+            <li>Бесплатная диагностика в присутствии клиента</li>
+            <li>Гарантия от 1 месяца до 6 месяцев на все виды работ</li>
+            <li>Использование оригинальных запчастей</li>
+            <li>Срочный ремонт за 30-60 минут</li>
+            <li>Опытные инженеры с сертификатами</li>
+            <li>Прозрачная система ценообразования</li>
           </ul>
+          <p className="location__description">
+            Не откладывайте ремонт вашего устройства! Приезжайте в любой из наших 
+            сервисных центров в Вологде или свяжитесь с нами для консультации. 
+            Мы вернем к жизни вашу технику быстро, качественно и по доступной цене.
+          </p>
+        </div>
+
+        <div className="contacts__navigation">
+          <Link to="/prices" className="nav__link">Наши услуги</Link>
+          <Link to="/" className="nav__link">На главную</Link>
+          <Link to="/booking" className="nav__link">Записаться на ремонт</Link>
         </div>
       </div>
     </section>
   );
-
-
-
 });
 
 export default Contacts;

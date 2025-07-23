@@ -29,11 +29,6 @@
     margin: 0 auto;
     text-align: center;
     color: #13171D;
-    font-family: Bebas Neue;
-    font-size: 35px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
 }
 .form__with {
     position: relative;
@@ -83,7 +78,7 @@ animation-play-state: paused;
 }
 .form__label {
     margin: 20px 0 10px 0;
-    font-size: 10px;
+
     color: #000000;
     font-style: normal;
     font-weight: 400;
@@ -92,7 +87,7 @@ animation-play-state: paused;
     gap: 21px;
   }
   .close{
-    font-size: 0;
+
       box-shadow: none;
       color: white;
       cursor: pointer;
@@ -148,7 +143,7 @@ font-size: 10px;
     top: 50%;
   }
   .form__title{
-    font-size: 18px;
+
     margin: 10px auto 0 auto;
     text-align: center;
   
@@ -160,7 +155,7 @@ font-size: 10px;
   .form__input{
     max-width: 200px;
     width: 200px;
-    font-size: 10px;
+
     height: 40px;
     padding: 0 30px 0;
   }
@@ -169,7 +164,7 @@ font-size: 10px;
     right: -5px;
     width: 15px;
     height: 30px;
-    background: #0099ff;
+    background: #023878;
   }
   .error2 {
     font-size: 9px;
@@ -194,8 +189,8 @@ font-size: 9px;
   }
   .gifts__title{
     padding-top: 40px;
-    font-size: 26px;
-    line-height: normal;
+
+
     grid-row: 5/2;
     justify-items: center;
     justify-content: center;
@@ -208,24 +203,19 @@ font-size: 9px;
  top: 77px;
     left: 54px;
     width: 164px;
-    font-size: 11px;
+
 
   }
   .error4{
   top: 177px;
     width: 200px;
     left: 16px;
-    font-size: 11px;
+
   }
   }
   @media screen and (min-width: 320px) and (max-width: 490px) {
     .gifts__title{
-    
-    font-family: Bebas Neue;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 26px;
+ 
     max-width: 268px;
     padding-bottom: 20px;
     text-align: center;
@@ -251,8 +241,7 @@ font-size: 9px;
 
 .heading {
   text-align: center;
-  font-weight: 900;
-  font-size: 30px;
+
   color: rgb(16, 137, 211);
 }
 
@@ -292,7 +281,7 @@ font-size: 9px;
 }
 
 .form .forgot-password a {
-  font-size: 11px;
+
   color: #0099ff;
   text-decoration: none;
 }
@@ -301,7 +290,7 @@ font-size: 9px;
   display: block;
   width: 100%;
   font-weight: bold;
-  background: linear-gradient(45deg, rgb(16, 137, 211) 0%, rgb(18, 177, 209) 100%);
+  background: #023878;
   color: white;
   padding-block: 15px;
   margin: 20px auto;
@@ -328,7 +317,7 @@ font-size: 9px;
 .social-account-container .title {
   display: block;
   text-align: center;
-  font-size: 10px;
+
   color: rgb(170, 170, 170);
 }
 
@@ -375,7 +364,7 @@ font-size: 9px;
 .agreement a {
   text-decoration: none;
   color: #0099ff;
-  font-size: 9px;
+
 }
 .example{
   display: flex;

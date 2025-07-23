@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from "axios";
 import './DepositoryPublic.css';
-import AnimatedTitle from "../AdminPanel/PromotionsPage/AnimatedTitle";
+
 
 const API = "https://servicebox35.pp.ru/api/depository";
 
@@ -130,7 +130,7 @@ export default function DepositoryPublic() {
 
     return (
         <div className="repoRoot">
-            <AnimatedTitle className="effect3d ">Депозитарий файлов</AnimatedTitle>
+            <h2 className="animated-title ">Депозитарий файлов</h2>
             <div className="repoFilter">
                 <CategoryDropdown categories={categories} value={category} onChange={setCategory} />
                 <input

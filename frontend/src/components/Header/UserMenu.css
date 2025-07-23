@@ -23,7 +23,6 @@
     padding: 9px 0 9px 6px;
     background: none;
     border: none;
-    font-size: 1rem;
     cursor: pointer;
     text-align: left;
     border-radius: 4px;
@@ -47,27 +46,24 @@
     padding:3px 6px;
     border-radius:5px;
     transition:background 0.12s;
-    font-size:1.18em;
+
     position: relative;
 }
 .nav-user-icon:hover { background: #eef6fa; }
 .nav-username {
-    font-family: inherit;
-    font-size: 1.08em;
     margin-left: 8px;
-    font-weight: 600;
+
 }
 
 /* Админка кнопка */
 .admin-link-btn {
-    margin-left: 12px;
+
     padding: 5px 14px !important;
     border-radius: 8px;
     background: #ddeafe;
     color: #095dab;
     border: none;
-    font-weight: 600;
-    font-size:1em;
+
     transition: background .16s;
 }
 .admin-link-btn:hover { background: #d4eef7; }
@@ -95,7 +91,7 @@
         padding: 20px 18px 12px;
     }
     .nav-user-icon .nav-username {
-        font-size:1em;
+
         margin-left:7px;
     }
     .admin-link-btn { margin-left:8px;padding:6px 10px;}

@@ -2,14 +2,13 @@
 .open-modal-button {
      position: fixed;
     background: transparent;
-   background: linear-gradient(to bottom right, #ffffff, #00aaff);
+   background: #023878;
     clip-path: path('M 0 0 L 100% 0 C 100% 50%, 0 100%, 0 100% Z');
     color: #ffffff;
     border: none;
     border-radius: 20px;
     padding: 15px 25px;
-    font-size: 16px;
-    font-weight: 600;
+
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, transform 0.3s;
@@ -44,7 +43,7 @@ height: 25px;
   background-color: #4285f4;
   color: #fff;
   border-radius: 20px;
-  font-size: 1rem;
+
   cursor: pointer;
   transition: transform 0.4s, background-color 0.4s;
 }
@@ -178,26 +177,15 @@ height: 25px;
   background-color: #0077b5;
 }
 
-* {
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border: 0;
-  outline: 0;
-  -webkit-tap-highlight-color: transparent;
-  text-decoration: none;
-  color: inherit;
-  box-sizing: border-box;
-}
+
 *:focus {
   outline: 0;
 }
 
-body {
-  font-family: "Raleway", sans-serif;
-}
 
+
+
+/* Синий акцент для подзаголовков */
 .mainNav {
   width: 100%;
   height: 80px;
@@ -215,11 +203,8 @@ body {
     padding: 0 20px;
   }
 }
-.mainNav__logo {
-  font-weight: 800;
-  letter-spacing: 1px;
-  font-size: 18px;
-}
+
+
 .mainNav__links {
   display: flex;
 }
@@ -229,10 +214,9 @@ body {
   }
 }
 .mainNav__link {
-  letter-spacing: 1px;
-  font-size: 14px;
+
   margin-left: 20px;
-  font-weight: 600;
+
   box-shadow: inset 0px -10px 0px rgba(255, 255, 255, 0.5);
   transition: all 0.4s ease, transform 0.2s ease;
   padding: 2px 4px;
@@ -345,29 +329,18 @@ margin:0 15px;
 }
 .mainHeading__title {
   text-transform: uppercase;
-  font-weight: bold;
-  letter-spacing: 2px;
 
-  font-size: 40px;
   color: #ffffff;
 }
 @media screen and (max-width: 799px) {
-  .mainHeading__title {
 
-    font-size: 28px;
-  }
 }
 .mainHeading__description {
- letter-spacing: 0.5px;
-    font-size: 18px;
-    line-height: 26px;
-    font-weight: 600;
+
     color: #ffffff;
 }
 @media screen and (max-width: 799px) {
-  .mainHeading__description {
-    font-size: 14px;
-  }
+
 }
 .mainHeading__image {
 top: -260px;
@@ -432,7 +405,7 @@ top: -260px;
   color: #637498;
   background-color: transparent;
   border: 1px solid rgba(99, 116, 152, 0.4);
-  font-family: "Raleway", sans-serif;
+ 
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 600;
@@ -465,15 +438,15 @@ align-items: center;
 gap: 0;
 position: absolute;
 color: #000000;
-font-family: "Bebas Neue";
-font-size: 60rem;
+
+
 height: 80%;
 margin: 0;
 display: flex;
 justify-content: center;
 align-items: center;
 overflow: hidden;
-font-size: 62.5%
+
 }
 
 @keyframes spiral{
@@ -486,7 +459,7 @@ font-size: 62.5%
 }
 
 .character{
-  font-size: 2.8rem;
+
   color: rgb(0, 0, 0);
   text-transform: uppercase;
   transform: translateY(calc(sin(var(--angle)) * 100px)) scale(calc(cos(var(--angle)) * 0.5 + 0.5));
@@ -499,9 +472,7 @@ font-size: 62.5%
 }
 
 @media (max-width: 490px){
-.character{
-  font-size: 2.2rem
-}
+
 }
 .spiral{
 height: 100%;
@@ -511,7 +482,7 @@ justify-content: center;
 align-items: center;
 color: #040509;
 overflow: hidden;
-font-size: 62.5%
+
 
 }
 
@@ -525,7 +496,7 @@ font-size: 62.5%
     width: 100%;
     padding: 1% 5%;
     gap: 24px;
-    color: #b3b3b3;
+
     flex-direction: row;
     align-content: center;
     align-items: center;
@@ -534,12 +505,7 @@ font-size: 62.5%
 
 .content-holder{
 color: white;
-    font-family: Gilroy;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    letter-spacing: 0.9px;
+line-height: normal;
     text-decoration: none;
     width: 20%;
    
@@ -573,7 +539,7 @@ color: white;
   color: #fff;
   padding: 5px;
   border-radius: 3px;
-  font-size: 14px;
+
 }
 
 .contacts__icon-sochial a:hover span {
@@ -661,12 +627,10 @@ display: none;
     border: 1px solid #000000;
     border-radius: 15px;
     color: #ffffff;
-    font-size: 15px;
-    font-weight: 600;
-    background: linear-gradient(to bottom right, #f9a92c, #02578b);
-    clip-path: path('M 0 0 L 100% 0 C 100% 50%, 0 100%, 0 100% Z');
+
+    background:#023878 ;
     cursor: pointer;
-    font-family: Bebas Neue;
+
     padding: 5px 5px;
     justify-content: space-around;
     flex-direction: column;
@@ -685,12 +649,8 @@ display: none;
   align-items: center;
   list-style: none;
   color: #ffffff;
-  font-family: Gilroy;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.16px;
+padding: 0 20px;
+
   text-decoration: none;
   cursor: pointer;
 
@@ -706,11 +666,7 @@ display: none;
 
 .contact-info__map-link {
   color: #ffffff;
-  font-family: Montserrat;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+
   text-decoration-line: underline;
   margin: 0 auto;
   cursor: pointer;
@@ -718,6 +674,7 @@ display: none;
 }
 .contact-info__map-link:hover {
   color: #F9A92C;
+  border-radius: 15px;
 }
 
 .contact-info__map-link:hover {
@@ -727,9 +684,7 @@ display: none;
 .navigation__list a {
   color: rgb(0, 0, 0);
   text-decoration: none;
-  font-size: 15px;
-  font-family: Montserrat;
-  line-height: 1;
+
 }
 
 .navigation__lists {
@@ -746,6 +701,8 @@ display: none;
 .navigation__list a:hover {
   background-color: #F9A92C;
   color: rgb(0, 0, 0);
+  border-radius: 15px;
+  padding: 1px 2px;
 }
 
 .contact-info {
@@ -753,31 +710,21 @@ display: none;
   flex-direction: column;
   align-items: center;
   margin: 0;
-  gap: 20px;
+gap: 5px;
+  line-height: normal;
 }
 
 .contact-info__location {
   color: #ffffff;
-  font-family: Montserrat;
-  font-size: 11px;
-  font-style: normal;
-  font-weight: bold;
-  line-height: normal;
   padding: 0;
   margin: 0;
 }
 
 .contact-info__number {
   color: #000000;
-
-font-family: Montserrat;
-    font-size: 15px;
-    font-weight: 700;
-  line-height: normal;
-  letter-spacing: -0.2px;
   padding: 0;
   margin:  auto;
-  max-width: 125px;
+
   cursor: pointer;
 }
 
@@ -796,12 +743,6 @@ font-family: Montserrat;
 }
 .header__middle-link{
   position: relative;
-  font-family: Gilroy;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  letter-spacing: -0.16px;
   text-decoration: none;
   cursor: pointer;
   color: #000000;
@@ -882,9 +823,7 @@ display: flex;
     background: linear-gradient(90deg, #007cf0 60%, #00dfd8 100%);
     color: #fff;
     border-radius: 7px;
-    font-weight: bold;
     padding: 7px 18px 7px 10px;
-    font-size: 16px;
     transition: background .21s, box-shadow .21s;
     box-shadow: 0 2px 11px 0 rgba(44,136,248,0.12);
     border: none;
@@ -898,7 +837,7 @@ display: flex;
 }
 @media (max-width: 700px) {
   .depository-btn {
-    font-size: 14px;
+
     padding: 8px 10px 8px 7px;
   }
 }
@@ -907,18 +846,18 @@ position: absolute;
     top: 50%;
     left: 42%;
 
-    font-family: Montserrat;
+
     transform: translate(-50%, -50%);
     color: #000;
-    font-size: 10px;
-    font-weight: bold;
-    line-height: 1;
+
    background: linear-gradient(to bottom right, #f9a92c, #0699f4);
     padding: 12px;
     border-radius: 10px;
 }
 .button-text {
   white-space: nowrap;
+  font-size: 0.7em;
+  font-weight: bold;
 }
 /* Медиазапросы */
 @media (min-width: 501px) and (max-width: 768px) {
@@ -946,15 +885,21 @@ width: 95%;
     padding-top: 10px;
 
   }
+  .nav-user{
+    display: flex;
+  }
+  .contacts__block{
+    display: none;
+  }
   .nav-login-cart button {
         margin-right: 20px;
   }
   .nav-menu{
-    font-size: 12px;
+
     gap: 8px;
   }
   .navigation__lists{
-    font-size: 12px;
+
     gap: 10px;
   }
   .contacts__icon {
@@ -969,9 +914,7 @@ width: 95%;
   .navigation{
     gap: 10px;
   }
-  .navigation__list a{
-    font-size: 12px;
-  }
+
   .header__middle{
     display: none;
   }
@@ -994,11 +937,9 @@ width: 95%;
         border-radius: 15px;
         color: white;
         text-align: center;
-        font-size: 12px;
-        font-weight: bold;
       
         cursor: pointer;
-         font-family: Bebas Neue;
+  
         margin: 0 auto;
     
         align-items: center;
@@ -1014,7 +955,7 @@ width: 95%;
     margin-top: -26px;
     margin-left: -29px;
     border-radius: 11px;
-    font-size: 8px;
+
     background: red;
     color: white;
 }
@@ -1063,12 +1004,7 @@ display: none;
   .burger::after {
     bottom: -6px;
   }
-.contact-info__number{
-  font-size: 12px;
-  font-weight: 600;
-  line-height: normal;
 
-}
 .burger-icon{
 width: 40px;
     height: 40px;
@@ -1083,9 +1019,7 @@ width: 40px;
  
 
 }
-.contact-info__map-link{
-  font-size: 8px;
-}
+
   .button img{
     width: 100px;
     display: none !important;;
@@ -1094,29 +1028,18 @@ width: 40px;
     width: 15px;
     height: 15px;
 }
-.contact-info__location{
-  font-size: 8px;
-}
+
   .button span{
-    font-size: 7px;
+
     left: 41px;
-    font-weight: bold;
+
   }
   .contact-info__map-link:hover {
     color: #F9A92C;
   }
-  .mainHeading__preTitle{
-    font-size: 11px;
-    letter-spacing: 0px;
-  }
-  .mainHeading__title{
-    font-size: 13px;
-  }
-  .mainHeading__description{
-    letter-spacing: 0.5px;
-    line-height: 14px;
-    font-size: 12px;
-  }
+
+
+
   .mainHeading__content{
  
     top: 0px;
@@ -1173,53 +1096,25 @@ width: 40px;
   width: 20px;
   height: 20px;
 }
-  .contact-info__number{
-    font-family: Gilroy;
-font-size: 10px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-letter-spacing: -0.2px;
-
-  }
-  .contact-info__map-link{
-    font-size: 9px;
-  }
 
 
-  .button span{
-    font-size: 5px;
-    font-weight: bold;
-  }
   .button img{
     max-width: 80px;
   }
   .content-holder{
    display: none;
   }
-  .mainHeading__preTitle{
-    font-size: 13px;
-  }
+
   .container__contacts{
 
-        gap: 0px;
+        gap: 40px;
   }
 
-.mainHeading__title{
-  font-size: 18px;
-  font-weight: bold;
-}
-.mainHeading__description{
-  font-size: 14px;
-  line-height: 18px;
-}
 .mainHeading__image{
   width: 67%;
   top: -147px;
 }
-.contact-info__location{
-  font-size: 9px;
-}
+
 .contact-info{
   display: none;
 }
@@ -1252,8 +1147,8 @@ letter-spacing: -0.2px;
   display: flex;
   gap: 10px;
   cursor: pointer;
-  font-size: 13px;
-  font-family: Montserrat;
+
+
   font-weight: bold;
   background-image: linear-gradient(to right, #ffffff 50%, #f9a92c 50%);
   background-size: 200% 100%;
@@ -1269,9 +1164,7 @@ letter-spacing: -0.2px;
     text-decoration: none;
   }
   .card__subtitle-img{
-    font-family: Montserrat;
-    font-size: 15px;
-    font-weight: 700;
+
     margin: 0;
   }
 
@@ -1294,7 +1187,4 @@ display: flex;
 align-items: center;
 gap: 10px;
 
-font-size: 13px;
-font-family: Montserrat;
-font-weight: bold;
 }

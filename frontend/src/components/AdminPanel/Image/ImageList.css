@@ -4,11 +4,10 @@
   padding: 24px;
   background: #ffffff;
   border-radius: 14px;
-  box-shadow: 0 6px 32px #acd2f122;
-  font-family: 'Inter', sans-serif;
+
 }
 h1, h2 {
-  color: #1c395e;
+
   font-weight: bold;
 }
 .upload-container {
@@ -61,8 +60,7 @@ h1, h2 {
   color: #195f9c;
   border-radius: 4px;
   padding: 1px 5px;
-  font-size: .85em;
-  font-weight: bold;
+
 }
 .description-field {
   display: flex;
@@ -74,13 +72,12 @@ h1, h2 {
   flex: 1;
   border-radius: 5px;
   border: 1.1px solid #b4d7ff;
-  font-size: 1rem;
   padding: 7px 8px;
   background: #f9fcff;
   resize: vertical;
 }
 .char-counter {
-  font-size: .91em;
+
   color: #8ba2cc;
 }
 .upload-button {
@@ -90,8 +87,6 @@ h1, h2 {
   color: #fff;
   border: none;
   border-radius: 7px;
-  font-weight: 600;
-  font-size: 1rem;
   transition: background .13s;
   cursor: pointer;
   box-shadow: 0 2px 8px #7dc8f422;
@@ -129,7 +124,7 @@ h1, h2 {
 }
 .image-info p, .desc-muted {
   margin: 0 0 4px 0;
-  font-size: .96em;
+
   color: #19344b;
 }
 .desc-muted { color: #a6b1c4; }
@@ -139,8 +134,6 @@ h1, h2 {
   color: #fff;
   padding: 6px 13px;
   border-radius: 6px;
-  font-size: .96em;
-  font-weight: 600;
   cursor: pointer;
   transition: background .13s;
   margin-top: 3px;

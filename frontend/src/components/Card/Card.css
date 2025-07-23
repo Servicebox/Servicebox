@@ -11,23 +11,14 @@
     justify-content: space-between;
   }
   .card__text{
-    font-family: Gilroy;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 25px;
     margin: 5px auto;
   }
   .card-text{
-    font-family: Gilroy;
-    font-size: 13px;
-    font-style: normal;
-    font-weight: normal;
-    line-height: 20px;
     max-height: 5.6em; 
     overflow: hidden;
   text-overflow: ellipsis; /* Добавляет многоточие в конце текста, если он выходит за пределы */
   display: -webkit-box;
+  line-clamp: 5;
   -webkit-line-clamp: 5; /* Количество строк, которые вы хотите отобразить */
   -webkit-box-orient: vertical;
   
@@ -62,7 +53,6 @@
     width: fit-content;
     padding: 0.5rem 1rem;
     display: block;
-    font-size: 1rem;
     background-color: var(--color-white);
     color: var(--color-primary);
     border: 2px solid var(--color-primary);
@@ -99,7 +89,6 @@
     background: none;
     border: none;
     color: #ffffff;
-    font-size: 50px;
     cursor: pointer;
   }
   .card__text,

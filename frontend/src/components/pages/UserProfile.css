@@ -7,7 +7,7 @@
   padding: 48px 32px;
   position: relative;
 }
-.userprof-details { font-size: 1.2rem; margin-bottom: 20px; }
+.userprof-details {  margin-bottom: 20px; }
 .userprof-verified { color: green; font-weight: 600; padding-left: 8px; }
 .userprof-notverif { color: #c00; font-weight: 600; padding-left: 8px; }
 .userprof-loader, .userprof-error, .userprof-ntfound { text-align: center; }

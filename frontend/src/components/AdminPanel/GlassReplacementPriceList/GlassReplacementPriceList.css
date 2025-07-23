@@ -1,112 +1,357 @@
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 30px;
-}
-
-th,
-td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-thead {
-  background-color: #f4f4f4;
-}
-
-th {
-  height: 50px;
-}
-
-tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
-}
-
-tbody tr:hover {
-  background-color: #f1f1f1;
-}
-.glass{
+/* GlassReplacementPriceList.css */
+.glass-container {
   max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+
+  color: #333;
+}
+
+.glass-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  padding: 4rem 2rem;
+  border-radius: 20px;
+    background: linear-gradient(135deg, #023878 0%, #004c7f 100%);
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(106, 17, 203, 0.25);
+}
+
+.glass-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="none" width="200" height="200"/><path fill="rgba(255,255,255,0.05)" d="M40,40 Q100,20 160,40 L160,160 Q100,180 40,160 Z"/></svg>');
+  background-size: cover;
+}
+
+.glass-title {
+  color: white;
+  margin-bottom: 1.5rem;
+  position: relative;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.glass-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.glass-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 992px) {
+  .glass-content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.glass-process {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.process-title {
+
+  margin-bottom: 1.5rem;
+background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  background-clip: text ;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.process-description {
+
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.step-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(106, 17, 203, 0.15);
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 1rem;
+}
+
+.step-text {
+
+  color: #444;
+}
+
+.process-result {
+  color: #555;
+  padding: 1.5rem;
+  background: rgba(37, 117, 252, 0.05);
+  border-radius: 15px;
+  border-left: 4px solid #2575fc;
+}
+
+.pricing-section {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 
+    0 8px 32px rgba(31, 38, 135, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.pricing-header {
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .pricing-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.pricing-info h3 {
+
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  background-clip: text ;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pricing-info p {
+  color: #666;
+
+}
+
+.highlight {
+  color: #2575fc;
+  font-weight: 600;
+}
+
+.modern-search {
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .modern-search {
+    margin-top: 0;
+    width: 300px;
+  }
+}
+
+.price-table-container {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.price-table {
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.table-header {
+  display: flex;
+  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.header-cell {
+  padding: 1.2rem 1.5rem;
+  flex: 1;
+}
+
+.table-body {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.table-row:hover {
+  background: rgba(149, 117, 205, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.row-cell {
+  padding: 1.3rem 1.5rem;
+  flex: 1;
+  display: flex;
   align-items: center;
-  position: relative;
-}
-.glass__title{
-    padding: 50px 201px;
-    background-color: #f9a92c;
-    clip-path: polygon(0 0, 25% 10%, 75% 0, 100% 10%, 100% 85%, 75% 100%, 25% 90%, 0 100%);
-    color: #000;
-    margin: 0 auto;
-    text-align: center;
-    font-weight: 700;
-    font-family: Montserrat;
-    font-size: 30px;
-
-}
-.glass__sabtitle{
-  padding-bottom: 20px;
- 
-  margin: 0 auto;
-  font-family: Gilroy;
-  font-size: 10px;
-}
-.glass__sabtitle-one{
-  margin: 0 auto;
-  font-family: Gilroy;
-  font-size: 10px;
-  padding-top: 50px;
-  
-}
-.smaller-font {
-  font-family: Gilroy;
-  font-size: 0.8em;  
-      padding-top: 50px;
-    padding-bottom: 50px;
 }
 
-.glass__btn{
-  margin-top: 10px;
-  border-radius: 10px;
-  background-color: #000000;
-  color: white;
+.device-cell {
+  font-weight: 500;
+  color: #333;
+}
+
+.device-icon {
+  margin-right: 12px;
+
+}
+
+.price-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(37, 117, 252, 0.1);
+  color: #2575fc;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  min-width: 100px;
+  box-shadow: 0 4px 10px rgba(37, 117, 252, 0.1);
+}
+
+.table-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.show-more-btn, .show-less-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.9rem 2rem;
+
   border: none;
-  padding: 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-.glass__btn:hover{
-  background-color: #F9A92C;
-}
-.glass__btn-active{
-  margin-top: 10px;
-  border-radius: 10px;
-  background-color: #000000;
+
+.show-more-btn {
+  background-color: #023878;
   color: white;
-  border: none;
-  padding: 10px;
+  box-shadow: 0 8px 25px rgba(106, 17, 203, 0.25);
+}
+
+.show-less-btn {
+  background: transparent;
+  color: #2575fc;
+  border: 2px solid #6a11cb;
+}
+
+.show-more-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(106, 17, 203, 0.35);
+}
+
+.show-less-btn:hover {
+  background: rgba(106, 17, 203, 0.05);
+}
+
+.additional-info {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.info-note {
+  color: #6c757d;
+
+  margin-bottom: 0.5rem;
+}
+
+.legal-note {
+  color: #adb5bd;
 
 }
-.glass__btn-active:hover{
-  background-color: #F9A92C;
+
+.navigation-links {
+  display: flex;
+  justify-content: center;
 }
-@media screen and (min-width: 320px) and (max-width: 400px) {
-  .glass__title{
-    max-width: 300px;
-    font-size: 13px;
-    padding: 10px;
-  }
-  .smaller-font{
-    font-size: 9px;
-    text-align: center;
-    margin: 0 auto;
-  }
+
+.home-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+ color: #2575fc;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.8rem 1.8rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  background: rgba(106, 17, 203, 0.05);
 }
-@media screen and (min-width: 401px) and (max-width: 768px) {
-  .glass__title{
-    font-family: Gilroy;
-    max-width: 300px;
-    font-size: 16px;
-    padding: 15px;
-  }
+
+.home-link:hover {
+   background-color: #f9a92c;
+  transform: translateX(-5px);
+}
+
+.home-link svg {
+  transition: transform 0.3s ease;
+}
+
+.home-link:hover svg {
+  transform: translateX(-3px);
 }

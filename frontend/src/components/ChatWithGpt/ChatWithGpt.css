@@ -9,16 +9,15 @@ text-align: center;
     /* margin-bottom: 25px; */
     display: flex
 ;
-    font-family: Bebas Neue;
+
     align-items: center;
     color: #ffffff;
-    font-weight: bold;
-    font-size: 1.11rem;
+
     height: 120px;
     padding: 0 16px 0 13px;
     justify-content: center;
     border: 1px solid rgb(76, 17, 186);
-    letter-spacing: .01em;
+
     border-radius: 68px;
     margin: 0;
     background-color: #004a7e;
@@ -173,9 +172,7 @@ display: flex
   transition: 0.18s;
 }
 @media (max-width: 500px) {
-  .chat-header__gpt {
-    font-size: 1rem;
-  }
+
   .input-row{
     flex-direction: column;
   }

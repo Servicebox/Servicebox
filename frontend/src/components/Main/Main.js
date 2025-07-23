@@ -31,7 +31,7 @@ function Main() {
         <ServiceRef />
         <AboutRef />
         <Completed />
-        {/*< ImageGalleryApi />*/}
+
         <ArronService />
         <AboutMe />
         <Gifts />

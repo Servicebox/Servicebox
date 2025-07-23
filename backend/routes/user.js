@@ -5,13 +5,13 @@ const fetchUser = require('../middlewares/fetchUser');
 const User = require('../models/Users');
 
 router.get('/profile', fetchUser, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id, '-password -refreshToken -cartData');
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        res.json(user);
-    } catch (err) {
-        res.status(500).json({ message: 'Ошибка сервера' });
-    }
+  try {
+    const user = await User.findById(req.user.id, '-password -refreshToken');
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // Все пользователи (для админа)

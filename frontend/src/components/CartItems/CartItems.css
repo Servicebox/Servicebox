@@ -50,7 +50,7 @@
     height: 32px;
     color: black;
     background: #42424263;
-    font-size: 20px;
+
     border-radius: 100%;
     padding: 0;
     border: none;
@@ -139,7 +139,7 @@
     width: 32px;
     height: 32px;
     background: #42424263;
-    font-size: 20px;
+
     border-radius: 50%;
     border: none;
     cursor: pointer;
@@ -187,7 +187,7 @@
 }
 .back__btn a {
     color: #1976d2;
-    font-size: 1rem;
+
     text-decoration: none;
 }
 .back__btn a:hover {
@@ -208,7 +208,7 @@
     .cart-col-controls { width: 82px; }
     .cart-col-remove { width: 42px; }
     .cart-col { padding: 4px 4px; }
-    .cartitems-total { padding: 10px 8px; font-size: 0.98rem; }
+    .cartitems-total { padding: 10px 8px;}
 }
 
 /* -------- Планшет (портрет) и маленькие ноутбуки --------- */
@@ -220,7 +220,7 @@
     }
     .cart-col-img { width: 65px; }
     .cart-col-img img { width: 48px; height: 48px; }
-    .cart-col-name { font-size: 0.97em; }
+
     .cart-col-price, .cart-col-total { width: 56px; }
     .cart-col-controls { width: 70px; }
 }
@@ -247,7 +247,7 @@
         border-bottom: 1px dashed #f4f4f4;
         justify-content: flex-start;
         padding: 6px 5px 6px 0;
-        font-size: 0.98em;
+
         min-height: unset;
     }
     .cart-col:last-child {
@@ -268,15 +268,14 @@
     }
     .cart-col-name,
     .cart-col-description {
-        font-size: 1.02em;
-        font-weight: 500;
+   
         margin-bottom: 2px;
     }
     /* Добавляем маленькие ярлыки */
-    .cart-col-name:before { content:"Наименование: "; color:#888; font-size:0.92em; font-weight:normal;}
-    .cart-col-price:before { content:"Цена: "; color:#888; font-size:0.92em; font-weight:normal;}
-    .cart-col-controls:before { content:"Кол-во: "; color:#888; font-size:0.92em; font-weight:normal;}
-    .cart-col-total:before { content:"Сумма: "; color:#888; font-size:0.92em; font-weight:normal;}
+    .cart-col-name:before { content:"Наименование: "; color:#888; }
+    .cart-col-price:before { content:"Цена: "; color:#888; }
+    .cart-col-controls:before { content:"Кол-во: "; color:#888;}
+    .cart-col-total:before { content:"Сумма: "; color:#888;}
     .cart-col-remove:before { content:""; }
     .cartitems-product-amount {
         padding: 0 6px;
@@ -285,7 +284,7 @@
     .cartitems-ctrl-btn {
         width: 25px;
         height: 25px;
-        font-size: 17px;
+ 
         padding: 0;
     }
     .cartitems-remove-icon {
@@ -296,7 +295,7 @@
     .cartitems-total {
         border-radius: 8px;
         padding: 8px 4px;
-        font-size: 0.99em;
+
     }
     .cartitems-total-item {
         margin-bottom: 6px;

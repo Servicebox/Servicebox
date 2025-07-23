@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const http = require('http');
 const mongoose = require('mongoose');
 const path = require('path');
+const bookingsRouter = require('./routes/bookings');
 const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
@@ -38,7 +39,7 @@ const app = express();
 const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
 const YANDEX_PASS = process.env.YANDEX_PASS;
-const CLIENT_URL = process.env.CLIENT_URL;
+const CLIENT_URL = 'https://servicebox35.ru';
 app.set('trust proxy', true);
 app.use(requestIp.mw());
 const PORT = 8000;
@@ -49,6 +50,7 @@ const orderRoutes = require('./routes/order');
 const apicache = require('apicache');
 const cache = apicache.middleware;
 const sharp = require('sharp');
+const Booking = require('./models/Booking');
 const Category = require('./models/Category');
 const BOT_TOKEN = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
 const CHAT_ID = '406806305';
@@ -168,6 +170,9 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/gallery/group',
   'https://servicebox35.ru/api/gallery/group',
   'https://servicebox35.pp.ru/api/auth/login',
+  'https://servicebox35.pp.ru/api/bookings',
+  'https://servicebox35.pp.ru/api/bookings/',
+  'https://servicebox35.pp.ru/api/bookings/admin/bookings',
 
 
 ];
@@ -215,12 +220,7 @@ app.use('/static', express.static(path.join(__dirname, 'static'), {
   etag: true,
   lastModified: true
 }));
-app.use((req, res, next) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'Resource not found'
-  });
-});
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -228,6 +228,7 @@ app.use((err, req, res, next) => {
     message: 'Internal server error'
   });
 });
+app.use('/api/bookings', bookingsRouter);
 // Динамическая генерация sitemap.xml
 app.get('/sitemap.xml', async (req, res) => {
   try {
@@ -292,7 +293,8 @@ app.use('/admin', adminRoutes);
 app.use('/api/user', require('./routes/user.js'));
 app.use('/api', userRoutes);
 app.use('/api/order', orderRoutes);
-
+app.use('/api', userRoutes);
+app.use('/api', authRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // База данных
 
@@ -540,7 +542,48 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
   }
 });
 */}
+router.get('/admin/bookings', async (req, res) => {
+  try {
+    const { status, date } = req.query;
+    const filter = {};
+    
+    if (status && status !== 'all') filter.status = status;
+    if (date) filter.bookingDate = { $gte: new Date(date), $lt: new Date(date).setDate(new Date(date).getDate() + 1) };
+    
+    const bookings = await Booking.find(filter).sort({ bookingDate: 1 });
+    res.json(bookings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
+// Обновление статуса записи
+router.patch('/admin/bookings/:id', async (req, res) => {
+  try {
+    console.log(`Updating booking ${req.params.id} to status: ${req.body.status}`);
+    const { status } = req.body;
+    const booking = await Booking.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    
+    // Отправка уведомления клиенту
+    if (booking.userEmail) {
+      const mailOptions = {
+        from: process.env.YANDEX_USER,
+        to: booking.userEmail,
+        subject: `Статус вашей записи изменен`,
+        html: `<p>Статус вашей записи (#${booking.trackingCode}) изменен на: <strong>${status}</strong></p>`
+      };
+      await transporter.sendMail(mailOptions);
+    }
+    
+    res.json(booking);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 // Схема для сообщений
 const messageSchema = new mongoose.Schema({
   userId: String,
@@ -550,6 +593,9 @@ const messageSchema = new mongoose.Schema({
 });
 
 const Message = mongoose.model('Message', messageSchema);
+
+
+
 //
 app.post('/api/removefromcart', fetchUser, async (req, res) => {
   try {
@@ -703,8 +749,7 @@ app.put('/api/updateproduct/:id', async (req, res) => {
 // Определение модели пользователя
 
 
-
-// Настройка транспорта nodemailer для Яндекс.Почты
+// Настройка почтового транспорта
 const transporter = nodemailer.createTransport({
   host: 'smtp.yandex.ru',
   port: 465,
@@ -713,6 +758,116 @@ const transporter = nodemailer.createTransport({
     user: process.env.YANDEX_USER,
     pass: process.env.YANDEX_PASS,
   },
+});
+// Вход пользователя
+// Вход пользователя
+router.post('/login', [
+  body('email').isEmail().withMessage('Некорректный email'),
+  body('password').exists().withMessage('Пароль обязателен')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  try {
+    // Проверка пользователя
+    let user = await User.findOne({ email });
+    let isAdmin = false;
+
+    if (!user) {
+      // Проверка администратора
+      const admin = await Admin.findOne({ email });
+      if (admin && await bcrypt.compare(password, admin.password)) {
+        isAdmin = true;
+        user = admin;
+      } else {
+        return res.status(401).json({ message: 'Неверные учетные данные' });
+      }
+    } else {
+      // Проверка пароля обычного пользователя
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Неверные учетные данные' });
+      }
+    }
+
+    // Генерация токена
+    const payload = {
+      id: user.id,
+      role: isAdmin ? 'admin' : 'user'
+    };
+
+      const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    // Сохранение refreshToken в базе
+    if (isAdmin) {
+      await Admin.findByIdAndUpdate(user.id, { refreshToken });
+    } else {
+      await User.findByIdAndUpdate(user.id, { refreshToken });
+    }
+
+    res.json({
+      token,
+      refreshToken,
+      role: payload.role,
+      username: user.username
+    });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Ошибка сервера');
+  }
+});
+
+// Регистрация пользователя
+router.post('/signup', [
+  body('username').notEmpty().withMessage('Имя обязательно'),
+  body('email').isEmail().withMessage('Некорректный email'),
+  body('password').isLength({ min: 6 }).withMessage('Пароль должен быть не менее 6 символов'),
+  body('phone').notEmpty().withMessage('Телефон обязателен'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { username, email, password, phone } = req.body;
+
+  try {
+    // Проверка существования пользователя
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'Пользователь уже существует' });
+    }
+
+    // Хеширование пароля
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Создание токена подтверждения
+    const emailToken = crypto.randomBytes(64).toString('hex');
+
+    await user.save();
+
+    // Отправка письма подтверждения
+    const mailOptions = {
+      from: process.env.YANDEX_USER,
+      to: email,
+      subject: 'Подтверждение email',
+      html: `<p>Кликните по ссылке для подтверждения: <a href="${CLIENT_URL}/verify-email?token=${emailToken}">Подтвердить Email</a></p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'Регистрация успешна! Подтвердите email.' });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Ошибка сервера');
+  }
 });
 
 transporter.verify(function (error, success) {
@@ -1618,6 +1773,12 @@ app.get('/get-ip', (req, res) => {
   const ip = req.clientIp;
   console.log(`Получен IP: ${ip}`);
   res.json({ ip });
+});
+app.use((req, res, next) => {
+  res.status(404).json({
+    status: 'error',
+    message: 'Resource not found'
+  });
 });
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

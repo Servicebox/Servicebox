@@ -41,34 +41,152 @@ table {
     color: #000;
     margin: 0 auto;
     text-align: center;
-    font-weight: 700;
-    font-family: Montserrat;
-    font-size: 30px;
   
   }
-  .smaller-font {
-    font-family: Gilroy; 
-    font-size: 0.8em;  
-  }
+
   @media screen and (min-width: 320px) and (max-width: 400px) {
     .telephone__title{
-      font-family: Gilroy;
+
       max-width: 300px;
-      font-size: 13px;
+
       padding: 10px;
     }
     .smaller-font{
-      font-family: Gilroy;
-      font-size: 9px;
+
       text-align: center;
       margin: 0 auto;
     }
   }
   @media screen and (min-width: 401px) and (max-width: 768px) {
     .telephone__title{
-      font-family: Gilroy;
+  
       max-width: 300px;
-      font-size: 16px;
+
       padding: 15px;
     }
   }
+  /* TelephoneService.css */
+.repair-services {
+  background: rgba(37, 117, 252, 0.05);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.repair-services h3 {
+
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.repair-services ul {
+  padding-left: 1.5rem;
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.repair-services li {
+  margin-bottom: 0.8rem;
+  line-height: 1.6;
+  color: #34495e;
+  break-inside: avoid;
+}
+
+.brands-section {
+  margin: 3rem 0;
+}
+
+.brands-section h2 {
+  text-align: center;
+
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.8rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.brand-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.brand-logo {
+
+  margin-bottom: 1rem;
+}
+
+.brand-card h3 {
+
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+
+.brand-card p {
+  color: #7f8c8d;
+
+}
+
+.service-benefits {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.service-benefits h2 {
+
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  background-clip: unset;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.benefit-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+}
+
+.benefit-icon {
+
+  margin-bottom: 1rem;
+}
+
+.benefit-card h3 {
+
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+
+.benefit-card p {
+  color: #7f8c8d;
+  line-height: 1.6;
+}

@@ -189,7 +189,7 @@ export default function MainBanner() {
       <div className="main-banner__content">
         <div className="main-banner__text">
           <p className="main-banner__preTitle">всегда на связи с вами</p>
-          <h2 className="main-banner__title">Проблемы с устройством?</h2>
+          <h1 className="main-banner__title">Проблемы с устройством?</h1>
           <p className="main-banner__subtitle">
             Решаем любые проблемы! Большой склад и опытные мастера
           </p>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './LoginSignup.css';
 
-
 const API_URL = 'https://servicebox35.pp.ru/api';
 
 const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
@@ -12,15 +11,14 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     username: "",
     email: "",
     password: "",
-    phone: "",
-
+    phone: ""
   });
   const [emailForReset, setEmailForReset] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showWrongPasswordModal, setShowWrongPasswordModal] = useState(false);
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false); // Новое состояние загрузки
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -71,12 +69,16 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         body: JSON.stringify({ email: formData.email, password: formData.password })
       });
       const data = await response.json();
+      
       if (response.ok) {
         localStorage.setItem('auth-token', data.tokens.accessToken);
         localStorage.setItem('refresh-token', data.tokens.refreshToken);
         localStorage.setItem('role', data.role);
         localStorage.setItem('username', data.username);
+        
         onLoginSuccess();
+        onClose();
+        
         if (data.role === 'admin') {
           navigate('/admin-panel');
         } else {
@@ -96,9 +98,20 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const signup = async () => {
+    // Валидация на клиенте
+    if (!formData.username.trim()) {
+      setMessage("Имя обязательно");
+      return;
+    }
+    
+    if (!formData.phone.trim()) {
+      setMessage("Телефон обязателен");
+      return;
+    }
+    
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/signup`, {
@@ -111,16 +124,16 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       });
 
       const responseData = await response.json();
+      
       if (response.ok) {
+         // Автоматически входим после регистрации
+    await login(formData.email, formData.password);
         setMessage(responseData.message || "Регистрация успешна! Подтвердите email.");
-        // Опционально, переключиться на режим "Login"
         setMode("Login");
       } else {
         setMessage(responseData.message || "Ошибка при регистрации.");
       }
-
     } catch (error) {
-      console.error("Ошибка при выполнении запроса:", error);
       setMessage("Ошибка при выполнении запроса.");
     } finally {
       setLoading(false);
@@ -138,7 +151,9 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         },
         body: JSON.stringify({ email: emailForReset }),
       });
+      
       const responseData = await response.json();
+      
       if (response.ok) {
         alert(responseData.message);
         setMode("Login");
@@ -190,6 +205,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
       alert("Пароли не совпадают");
       return;
     }
+    
     setLoading(true);
     try {
       const response = await fetch(`${API_URL}/reset-password/${token}`, {
@@ -201,14 +217,13 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
         body: JSON.stringify({ password: newPassword }),
       });
 
-
       const responseData = await response.json();
       if (responseData.success) {
         localStorage.setItem('auth-token', responseData.token); // Сохранение токена для авторизации
         alert(responseData.message);
         onLoginSuccess();
         onClose();
-        navigate('/'); // Перенаправление на главную страницу
+        navigate('/');
       } else {
         setMessage(responseData.message || "Ошибка при сбросе пароля.");
       }
@@ -276,9 +291,30 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
           </form>
         ) : (
           <form className='loginsignup-fields' onSubmit={handleSubmit}>
-
+            {/* Добавлены поля для имени и телефона при регистрации */}
+            {mode === "Sign Up" && (
+              <>
+                <input
+                  name="username"
+                  value={formData.username}
+                  onChange={changeHandler}
+                  type="text"
+                  placeholder="Имя"
+                  required
+                />
+                <input
+                  name="phone"
+                  value={formData.phone}
+                  onChange={changeHandler}
+                  type="tel"
+                  placeholder="Телефон"
+                  required
+                />
+              </>
+            )}
+            
             <input
-              name='email'
+              name="email"
               value={formData.email}
               onChange={changeHandler}
               type="email"
@@ -287,7 +323,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
               autoComplete="email"
             />
             <input
-              name='password'
+              name="password"
               value={formData.password}
               onChange={changeHandler}
               type="password"

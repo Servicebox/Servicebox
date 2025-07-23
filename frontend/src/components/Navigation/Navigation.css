@@ -31,11 +31,6 @@
     color: #fff;
     margin: 0 auto;
     text-align: center;
-    font-family: Inter;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
   }
   .navigation__link_active{
     background: transparent;
@@ -101,11 +96,6 @@
       text-decoration: none;
       text-align: center;
       font-feature-settings: 'clig' off, 'liga' off;
-      font-family: Inter;
-      font-size: 18px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
       gap: 26px;
     }
   
@@ -149,9 +139,7 @@
     .navigation {
       gap: 14px;
     }
-    .navigation__link {
-      font-size: 18px;
-    }
+
     .navigation__profile-button {
       left: 46%;
       transform: translateX(-50%);

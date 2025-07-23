@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
+import "./Header.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShopContext } from '../Contexst/ShopContext';
 import headerLogo from "../../images/Servicebox6.svg";
@@ -9,7 +10,7 @@ import { faBasketShopping, faMobilePhone, faUser } from "@fortawesome/free-solid
 import { faVk, faTelegram, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import gsap from "gsap";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
-import "./Header.css";
+
 import "./UserMenu.css"; // Ниже стили
 
 function Header() {
@@ -99,7 +100,7 @@ function Header() {
                     </div>
                     <div className="nav-login-cart">
                         {isAuthenticated ? (
-                            <div className="userin-nav">
+                            <div className="nav-user">
                                 {/* Иконка человека */}
                                 <span className="nav-user-icon" onClick={() => setShowUserMenu(!showUserMenu)}>
                                     <FontAwesomeIcon icon={faUser} size="lg" />

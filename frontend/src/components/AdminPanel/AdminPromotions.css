@@ -51,8 +51,7 @@ textarea {
   border: 1.2px solid var(--border-color);
   border-radius: 7px;
   padding: 8px 12px;
-  font-size: 1.05rem;
-  font-family: 'inherit';
+
   background: #fafdff;
   transition: border-color .16s;
 }
@@ -93,8 +92,7 @@ img[alt="preview"] {
 }
 
 button {
-  font-size: 1rem;
-  font-weight: 500;
+
   border-radius: 6px;
   border: none;
   padding: 8px 20px;
@@ -165,13 +163,12 @@ ol > li:before {
   left: 12px;
   top: 16px;
   color: var(--blue-main);
-  font-weight: 700;
-  font-size: 1.1em;
+
 }
 
 li b {
   color: #243457;
-  font-size: 1.09em;
+
 }
 
 li i {
@@ -183,7 +180,7 @@ li i {
     flex-direction: column;
     gap: 5px;
     padding: 11px 7vw 11px 31px;
-    font-size: .97em;
+
   }
 }
 

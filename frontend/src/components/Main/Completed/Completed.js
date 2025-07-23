@@ -17,120 +17,159 @@ import Twelve from "../../../images/13.webp";
 import Thirteen from "../../../images/14.webp";
 import Foourteen from "../../../images/15.webp";
 
+// Создаем массив фотографий с защитой от отсутствующих значений
+const PHOTOS = [
+  { image: One, text: "Замена аккумулятора на роботе-пылесосе" },
+  { image: Two, text: "Замена материнской платы на Ipad" },
+  { image: Three, text: "Замена HDMI порта" },
+  { image: Four, text: "Комплексная чистка и замена аккумулятора на macbook" },
+  { image: Five, text: "Комплексная чистка macbook pro" },
+  { image: Six, text: "Замена аккумулятора на телефоне" },
+  { image: Seven, text: "Замена сокета на материнской плате" },
+  { image: Eight, text: "Восстановление подсветки дисплея и замена динамика на видеорегистраторе" },
+  { image: Nine, text: "Ребол процессора на материнской плате" },
+  { image: Ten, text: "Замена дисплейного модуля и задней крышки" },
+  { image: Eleven, text: "Комплексная чистка, замена куллера и установка драйверов на ноутбуке" },
+  { image: Twelve, text: "Замена хаба на материнской плате" },
+  { image: Thirteen, text: "Замена дисплейного модуля на Iphone" },
+  { image: Foourteen, text: "Комплексное обслуживание Macbook pro и замена touch bar" },
+].filter(item => item.image); // Фильтруем элементы без изображения
+
 function Completed() {
   const [currentPhoto, setCurrentPhoto] = useState(0);
-  const [activeSlide, setActiveSlide] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  let touchStartX = 0;
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  const photos = [
-    { image: One, text: "Замена аккумулятора на роботе-пылесосе" },
-    { image: Two, text: "Замена материнской платы на Ipad" },
-    { image: Three, text: "Замена HDMI порта" },
-    { image: Four, text: "Комплексная чистка и замена аккумулятора на macbook" },
-    { image: Five, text: "Комплексная чистка macbook pro" },
-    { image: Six, text: "Замена аккумулятора на телефоне" },
-    { image: Seven, text: "Замена сокета на материнской плате" },
-    { image: Eight, text: "Восстановление подсветки дисплея и замена динамика на видеорегистраторе" },
-    { image: Nine, text: "Ребол процессора на материннской плате" },
-    { image: Ten, text: "замена дисплейного модуля и задней крышки" },
-    { image: Eleven, text: "Комплексная чистка, замена куллера и установка драйверов на ноутбуке" },
-    { image: Twelve, text: "Замена хаба на материнской плате" },
-    { image: Thirteen, text: "Замена дисплейного модуля на Iphone" },
-    { image: Foourteen, text: "Комлексное обслуживание Macbook pro и замена touch bar" },
-  ];
-
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
-  };
-
+  // Обработчик изменения размера окна
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
     };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Проверка на мобильное устройство
+  const isMobile = windowWidth <= 768;
 
-  const handleNext = () => {
-    setCurrentPhoto((prevPhoto) => (prevPhoto === photos.length - 1 ? 0 : prevPhoto + 1));
-    setActiveSlide((prevSlide) => (prevSlide === photos.length - 1 ? 0 : prevSlide + 1));
-  };
-  
-  const handlePrev = () => {
-    setCurrentPhoto((prevPhoto) => (prevPhoto === 0 ? photos.length - 1 : prevPhoto - 1));
-    setActiveSlide((prevSlide) => (prevSlide === 0 ? photos.length - 1 : prevSlide - 1));
-  };
-
-  const handleSlideClick = (index) => {
-    setActiveSlide(index);
-    setCurrentPhoto(index);
-  };
-
-  const handleSwipeLeft = () => {
-    handleNext();
-  };
-
-  const handleSwipeRight = () => {
-    handlePrev();
+  // Функции навигации с анимацией
+  const navigate = (direction) => {
+    if (isAnimating || PHOTOS.length === 0) return;
+    
+    setIsAnimating(true);
+    
+    setTimeout(() => {
+      if (direction === 'next') {
+        setCurrentPhoto(prev => (prev === PHOTOS.length - 1 ? 0 : prev + 1));
+      } else {
+        setCurrentPhoto(prev => (prev === 0 ? PHOTOS.length - 1 : prev - 1));
+      }
+      setIsAnimating(false);
+    }, 300);
   };
 
+  // Обработчики свайпа
+  const handleSwipeStart = (e) => {
+    touchStartX = e.touches[0].clientX;
+  };
+
+  const handleSwipeMove = (e) => {
+    if (!touchStartX) return;
+    
+    const touchEndX = e.touches[0].clientX;
+    const diff = touchEndX - touchStartX;
+    
+    if (diff > 50) {
+      navigate('prev');
+      touchStartX = null;
+    } else if (diff < -50) {
+      navigate('next');
+      touchStartX = null;
+    }
+  };
+
+  // Защита от пустого массива
+  if (PHOTOS.length === 0) {
+    return (
+      <section className="completed">
+        <h2 className="animated-title">Наши работы</h2>
+        <div className="error-message">
+          Изображения временно недоступны
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="completed">
-      <h2 className="completed__title">Наши работы</h2>
-      {windowWidth >= 320 && windowWidth <= 768 ? (
-        <div
-          className="completed__carousel"
-          onTouchStart={(e) => {
-            touchStartX = e.touches[0].clientX;
-          }}
-          onTouchMove={(e) => {
-            const touchEndX = e.touches[0].clientX;
-            if (touchEndX > touchStartX + 50) {
-              handleSwipeRight();
-            }
-            if (touchEndX < touchStartX - 50) {
-              handleSwipeLeft();
-            }
-          }}
+      <h2 className="animated-title">Наши работы</h2>
+      
+      {isMobile ? (
+        <div 
+          className={`completed__carousel ${isAnimating ? 'animating' : ''}`}
+          onTouchStart={handleSwipeStart}
+          onTouchMove={handleSwipeMove}
         >
-           <img src={photos[currentPhoto].image} alt="Фотография" className="completed__carousel-img" />
-          <div className="completed__carousel-overlay">
-            <span className="completed__carousel-text">{photos[currentPhoto].text}</span>
+          <div className="slide-container">
+            <img 
+              src={PHOTOS[currentPhoto].image} 
+              alt="Пример нашей работы" 
+              className="completed__carousel-img"
+              onError={(e) => e.target.src = '/fallback-image.webp'} // Запасное изображение
+            />
+            <div className="completed__carousel-overlay">
+              <span className="completed__carousel-text">
+                {PHOTOS[currentPhoto].text}
+              </span>
+            </div>
           </div>
+          
           <div className="completed__dots">
-          {photos.map((photo, index) => (
-            <span 
-            key={index} 
-            className={`completed__dot ${activeSlide === index ? "active" : ""}`}
-            onClick={() => handleSlideClick(index)}
-          ></span>
-           )
-            )}
+            {PHOTOS.map((_, index) => (
+              <span 
+                key={index} 
+                className={`completed__dot ${currentPhoto === index ? "active" : ""}`}
+                onClick={() => {
+                  if (!isAnimating) setCurrentPhoto(index);
+                }}
+              />
+            ))}
           </div>
+          
           <div className="completed__carousel-controls">
-            <button className="completed__carousel-btn" onClick={handlePrev}>
+            <button 
+              className="completed__carousel-btn" 
+              onClick={() => navigate('prev')}
+              aria-label="Предыдущая работа"
+            >
               <img className="completted__prev-image" src={PrevButton} alt="Назад" />
             </button>
-            <button className="completed__carousel-btn" onClick={handleNext}>
+            <button 
+              className="completed__carousel-btn" 
+              onClick={() => navigate('next')}
+              aria-label="Следующая работа"
+            >
               <img className="completted__next-image" src={NextButton} alt="Вперед" />
             </button>
           </div>
         </div>
       ) : (
-        <div className="completed__image">
-          {photos.map((photo, index) => (
+        <div className="completed__grid">
+          {PHOTOS.map((photo, index) => (
             <div
               key={index}
-              className={`completed__img-container ${currentPhoto === index ? "active" : ""}`}
+              className="completed__grid-item"
               onMouseEnter={() => setCurrentPhoto(index)}
-              onMouseLeave={() => setCurrentPhoto(null)}
             >
-              <img src={photo.image} alt="Фотография" className="completed__img" />
-              <div className="completed__img-overlay">
-                <span className="completed__img-text">{photo.text}</span>
+              <img 
+                src={photo.image} 
+                alt="Пример нашей работы" 
+                className="completed__grid-img"
+                onError={(e) => e.target.src = '/fallback-image.webp'} // Запасное изображение
+              />
+              <div className="completed__grid-overlay">
+                <span className="completed__grid-text">{photo.text}</span>
               </div>
             </div>
           ))}

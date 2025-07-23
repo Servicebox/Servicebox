@@ -21,11 +21,14 @@ function createTokens(user) {
     );
     return { accessToken, refreshToken };
 }
-
-router.get('/profile', async (req, res) => {
+router.get('/profile', fetchUser, async (req, res) => {
+  try {
     const user = await User.findById(req.user.id, '-password -refreshToken');
     if (!user) return res.status(404).json({ message: "User not found" });
     res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 router.get('/all', fetchUser, async (req, res) => {
@@ -79,7 +82,34 @@ router.post('/signup', async (req, res) => {
     const user = await User.create({ username, email, password: hash, phone });
     res.json({ message: "Регистрация успешна" });
 });
+router.get('/validate-token', async (req, res) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  
+  if (!token) {
+    return res.status(401).json({ valid: false, message: "Token missing" });
+  }
 
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.id, '-password -refreshToken');
+    
+    if (!user) {
+      return res.status(404).json({ valid: false, message: "User not found" });
+    }
+
+    res.json({
+      valid: true,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    res.status(401).json({ valid: false, message: "Invalid token" });
+  }
+});
 // USER LOGIN
 // USER LOGIN
 router.post('/login', async (req, res) => {

@@ -26,5 +26,4 @@ const fetchUser = (req, res, next) => {
         return res.status(403).json({ message: 'Токен недействителен' });
     }
 };
-
 module.exports = fetchUser;

@@ -17,14 +17,12 @@
 
 .offers-left h1 {
     color: #171717;
-    font-size: 80px;
-    font-weight: 600;
+
 }
 
 .offers-left p {
     color: #171717;
-    font-size: 22px;
-    font-weight: 600;
+
 }
 
 .offers-left button {
@@ -34,8 +32,6 @@
     background: #ff4141;
     border: none;
     color: white;
-    font-size: 22px;
-    font-weight: 500;
     margin-top: 30px;
     cursor: pointer;
 }

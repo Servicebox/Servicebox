@@ -38,7 +38,7 @@ const About = forwardRef((_props, ref) => {
   return (
     <section id="aboutRef" className="aboutRef" ref={ref}>
       <div className="about__content">
-        <AnimatedTitle className="effect3d ">О компании ServiceBox</AnimatedTitle>
+        <h2 className="animated-title">О компании ServiceBox</h2>
         <h3 className="about__text">
           Быстрый и профессиональный ремонт в Вологде!</h3>
         <h4 className="about__text">
@@ -94,24 +94,25 @@ const About = forwardRef((_props, ref) => {
           </div>
 
         </div>
-        <div className="about__tech">
-          <div className="about__tech_content">
-            <img src={Clock} className="about__image" alt="Clock" />
-            <h3 className="about__text-tech"> Работы от 30 минут</h3>
-            <p className="about__subtitle">Время работы или настройки занимает
-              от 30 минут до несколько часов.</p>
-          </div>
-          <div className="about__tech_content">
-            <img src={Card} className="about__image" alt="Card" />
-            <h3 className="about__text-tech"> Удобный способ оплаты</h3>
-            <p className="about__subtitle">Оплата наличными или по перечеслению компаниям.</p>
-          </div>
-          <div className="about__tech_content">
-            <img src={Secure} className="about__image" alt="Secure" />
-            <h3 className="about__text-tech"> Гарантия на все выполненые услуги</h3>
-            <p className="about__subtitle">Запчасти, фотографии и сообщения под Вашим контролем. После работ инженер отдаст Вам старые запчасти.</p>
-          </div>
-        </div>
+        <div className="features-grid">
+                    <div className="feature-card">
+                        <img src={Clock} className="feature-icon pulse" alt="Быстрый ремонт" />
+                        <h3>Ремонт от 30 минут</h3>
+                        <p>Срочный ремонт без очередей - большинство работ выполняем при вас</p>
+                    </div>
+                    
+                    <div className="feature-card">
+                        <img src={Secure} className="feature-icon" alt="Гарантия качества" />
+                        <h3>Гарантия до 12 месяцев</h3>
+                        <p>Даём официальную гарантию на все виды работ и запчасти</p>
+                    </div>
+                    
+                    <div className="feature-card">
+                        <img src={Card} className="feature-icon" alt="Удобная оплата" />
+                        <h3>Любые формы оплаты</h3>
+                        <p>Наличные, карты, безнал для юрлиц - вам решать как платить</p>
+                    </div>
+                </div>
 
       </div>
       <div className="back__btn">

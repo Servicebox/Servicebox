@@ -10,7 +10,7 @@
 .addproduct-itemfield{
 width: 100;
 color: #7b7b7b;
-font-size: 16px;
+
 
 }
 .addproduct-itemfield input{
@@ -22,8 +22,8 @@ padding-left: 15px;
 border: 1px solid #c3c3c3;
 outline: none;
 color: #7b7b7b;
-font-family: poppins;
-font-size: 14px;
+
+
 
 
 }
@@ -36,7 +36,7 @@ gap: 40px;
 padding: 10px;
 width: 100%;
 height: 50px;
-font-size: 14px;
+
 color: #7b7b7b;
 border: 1px solid #7b7b7b8a;
 border-radius: 4px;
@@ -57,7 +57,7 @@ border-radius: 4px;
     background: #6079ff;
     border: none;
     color: white;
-    font-size: 16px;
+
     font-weight: 500;
 }
 @media(max-width:800px){

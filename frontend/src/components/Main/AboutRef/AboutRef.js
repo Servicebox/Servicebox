@@ -8,7 +8,7 @@ const AboutRef = forwardRef((_props, ref) => {
     return (
         <section id="aboutRef" className="aboutRef" ref={ref}>
             <div className="about__content">
-                <h2 id="about-title" className="about__title">О компании ServiceBox
+                <h2 id="about-title" className="animated-title">О компании ServiceBox
                 </h2>
                 <h3 className="about__text">
                     Быстрый и профессиональный ремонт в Вологде!</h3>
@@ -37,23 +37,36 @@ const AboutRef = forwardRef((_props, ref) => {
                     в режиме онлайн.
                     Доверьте свои гаджеты "ServiceBox" - Ваша техника будет в надежных руках.
                 </p>
-                <div className="about__tech">
-                    <div className="about__tech_content">
-                        <img src={Clock} className="about__image" alt="Clock" />
-                        <h3 className="about__text-tech"> Работы от 30 минут</h3>
-                        <p className="about__subtitle">Время работы или настройки занимает
-                            от 30 минут до несколько часов.</p>
+                 <div className="features-grid">
+                    <div className="feature-card">
+                        <img src={Clock} className="feature-icon pulse" alt="Быстрый ремонт" />
+                        <h3>Ремонт от 30 минут</h3>
+                        <p>Срочный ремонт без очередей - большинство работ выполняем при вас</p>
                     </div>
-                    <div className="about__tech_content">
-                        <img src={Card} className="about__image" alt="Card" />
-                        <h3 className="about__text-tech"> Удобный способ оплаты</h3>
-                        <p className="about__subtitle">Оплата наличными или по перечеслению компаниям.</p>
+                    
+                    <div className="feature-card">
+                        <img src={Secure} className="feature-icon" alt="Гарантия качества" />
+                        <h3>Гарантия до 12 месяцев</h3>
+                        <p>Даём официальную гарантию на все виды работ и запчасти</p>
                     </div>
-                    <div className="about__tech_content">
-                        <img src={Secure} className="about__image" alt="Secure" />
-                        <h3 className="about__text-tech"> Гарантия на все выполненые услуги</h3>
-                        <p className="about__subtitle">Запчасти, фотографии и сообщения под Вашим контролем. После работ инженер отдаст Вам старые запчасти.</p>
+                    
+                    <div className="feature-card">
+                        <img src={Card} className="feature-icon" alt="Удобная оплата" />
+                        <h3>Любые формы оплаты</h3>
+                        <p>Наличные, карты, безнал для юрлиц - вам решать как платить</p>
                     </div>
+                </div>
+
+                <div className="repair-services">
+                    <h2>Что мы ремонтируем:</h2>
+                    <ul className="services-list">
+                        <li>💻 Ноутбуки всех брендов</li>
+                        <li>🎮 Игровые консоли PlayStation/Xbox</li>
+                        <li>📱 Смартфоны и планшеты</li>
+                        <li>🖥️ Видеокарты и материнские платы</li>
+                        <li> Техника Apple</li>
+                        <li>📺 Телевизоры и мониторы</li>
+                    </ul>
                 </div>
 
             </div>

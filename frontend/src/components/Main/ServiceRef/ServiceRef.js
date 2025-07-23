@@ -57,7 +57,7 @@ import Card from "../MainBanner/Card";
 
     {
       title: "Видеокартами",
-      subtitle: "Сложный ремонт и обслуживание видеокарт и асиков ",
+      subtitle: "Сложный ремонт и обслуживание видеокарт ",
       image: "Videocard",
       linkTo:"/videocard"
     },
@@ -73,7 +73,7 @@ import Card from "../MainBanner/Card";
     return (
       <section id="serviceRef" className="serviceRef">
         <div className="service__content">
-          <h2 className="service__title">Мы работаем с устройствами:</h2>
+          <h2 className="animated-title">Мы работаем с устройствами:</h2>
           <div className="tech">
             {cardsData.map((card, index) => (
               <Card

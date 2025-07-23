@@ -1,44 +1,79 @@
 // components/ServicePricePage.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './ServicePricePage.css';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
+import './ServicePricePage.css';
+import BookingForm from "../BookingForm/BookingForm";
+
+// Импорт иконок
+import Notebook from "../../images/notebook.webp";
+import Monoblok from "../../images/monoblok.webp";
+import Applefon from "../../images/apple.webp";
+import Android from "../../images/android.webp";
+import Tablet from "../../images/tablet.webp";
+import Tv from "../../images/tv.webp";
+import Glass from "../../images/glass.webp";
+import Videocard from "../../images/videocard.webp";
+import Devices from "../../images/Devices.webp";
 
 const ServicePricePage = () => {
+    const location = useLocation();
     const [services, setServices] = useState([]);
     const [filteredServices, setFilteredServices] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('Все');
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [activeService, setActiveService] = useState(null);
+      const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
 
-    // Маппинг категорий для отображения с иконками
-    const categoryDisplayData = {
-        'Ноутбук': { name: 'Ноутбуки', icon: '💻' },
-        'Моноблок': { name: 'Компьютеры и моноблоки', icon: '🖥️' },
-        'Аппл': { name: 'Apple техника', icon: '🍎' },
-        'Телефон': { name: 'Телефоны', icon: '📱' },
-        'Планшеты': { name: 'Планшеты', icon: '📱' },
-        'Телевизор': { name: 'Телевизоры', icon: '📺' },
-        'Замена стекла': { name: 'Замена стекла', icon: '🔍' },
-        'Видеокарты': { name: 'Видеокарты', icon: '🎮' },
-        'Другие': { name: 'Другие устройства', icon: '🔌' }
+    // Категории с иконками и цветами
+    const categoryData = {
+        'Ноутбук': { icon: Notebook, color: '#4e73df', name: 'Ноутбуки' },
+        'Моноблок': { icon: Monoblok, color: '#1cc88a', name: 'Компьютеры и моноблоки' },
+        'Аппл': { icon: Applefon, color: '#36b9cc', name: 'Apple техника' },
+        'Телефон': { icon: Android, color: '#f6c23e', name: 'Телефоны' },
+        'Планшеты': { icon: Tablet, color: '#e74a3b', name: 'Планшеты' },
+        'Телевизор': { icon: Tv, color: '#6f42c1', name: 'Телевизоры' },
+        'Замена стекла': { icon: Glass, color: '#fd7e14', name: 'Замена стекла' },
+        'Видеокарты': { icon: Videocard, color: '#20c997', name: 'Видеокарты' },
+        'Другие': { icon: Devices, color: '#6610f2', name: 'Другие устройства' },
+        'Замена переднего стекла на телефонах': { icon: Glass, color: '#e83e8c', name: 'Замена стекла' }
     };
 
+    // Группировка услуг по категориям
+    const groupedServices = useMemo(() => {
+        const groups = {};
+        
+        filteredServices.forEach(service => {
+            const category = service.category || 'Другие';
+            if (!groups[category]) {
+                groups[category] = [];
+            }
+            groups[category].push(service);
+        });
+        
+        return groups;
+    }, [filteredServices]);
+
+    // Загрузка услуг
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await axios.get('https://servicebox35.pp.ru/services');
-                // Фильтруем услуги с невалидными данными
-                const validServices = response.data.filter(service =>
+                const response = await fetch('https://servicebox35.pp.ru/services');
+                const data = await response.json();
+                
+                // Фильтрация невалидных услуг
+                const validServices = data.filter(service => 
                     service.serviceName && service.description
                 );
-
+                
                 setServices(validServices);
                 setFilteredServices(validServices);
-
-                // Извлекаем уникальные категории
-                const uniqueCategories = [...new Set(validServices.map(s => s.category))];
+                
+                // Извлечение уникальных категорий
+                const uniqueCategories = [...new Set(validServices.map(s => s.category || 'Другие'))];
                 setCategories(['Все', ...uniqueCategories]);
                 setLoading(false);
             } catch (error) {
@@ -50,17 +85,18 @@ const ServicePricePage = () => {
         fetchServices();
     }, []);
 
+    // Обработка фильтрации
     useEffect(() => {
         let result = services;
-
+        
         // Фильтрация по категории
         if (selectedCategory !== 'Все') {
-            result = result.filter(service =>
+            result = result.filter(service => 
                 service.category === selectedCategory
             );
         }
-
-        // Фильтрация по поисковому запросу (с защитой от undefined)
+        
+        // Фильтрация по поиску
         if (searchQuery) {
             const query = searchQuery.toLowerCase();
             result = result.filter(service => {
@@ -69,21 +105,28 @@ const ServicePricePage = () => {
                 return name.includes(query) || desc.includes(query);
             });
         }
-
+        
         setFilteredServices(result);
     }, [searchQuery, selectedCategory, services]);
+  const handleBookingClick = (service) => {
+    setSelectedService(service);
+    setIsBookingFormOpen(true);
+    setActiveService(null); // Закрываем детали услуги
+  };
 
-    // Форматирование цены с добавлением знака рубля
+  // Обработчик успешной записи
+const handleBookingSuccess = (bookingData) => {
+  alert(`Запись создана! Ваш код: ${bookingData.trackingCode}`);
+  setIsBookingFormOpen(false);
+};
+    // Форматирование цены
     const formatPrice = (price) => {
         if (!price) return '';
-        // Если цена уже содержит знак рубля, оставляем как есть
         if (price.includes('₽') || price.includes('руб')) return price;
-
-        // Добавляем знак рубля к числовым значениям
         return `${price} ₽`;
     };
 
-    // Анимация появления элементов
+    // Анимации
     const container = {
         hidden: { opacity: 0 },
         show: {
@@ -101,12 +144,7 @@ const ServicePricePage = () => {
 
     if (loading) {
         return (
-            <motion.div
-                className="service-price-page"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-            >
+            <motion.div className="service-price-page">
                 <div className="loading-container">
                     <div className="loading-spinner"></div>
                     <p>Загружаем услуги...</p>
@@ -123,7 +161,7 @@ const ServicePricePage = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <div className="price-header">
+            <div className="animated-title">
                 <motion.h1
                     initial={{ y: -20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -149,7 +187,7 @@ const ServicePricePage = () => {
                 >
                     <input
                         type="text"
-                        placeholder="🔍 Поиск услуги..."
+                        placeholder=" Поиск услуги..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -161,22 +199,42 @@ const ServicePricePage = () => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
                 >
-                    {categories.map(category => (
-                        <motion.button
-                            key={category}
-                            className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(category)}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            {category === 'Все' ? 'Все' : (
-                                <>
-                                    <span className="category-icon">{categoryDisplayData[category]?.icon || '📋'}</span>
-                                    {categoryDisplayData[category]?.name || category}
-                                </>
-                            )}
-                        </motion.button>
-                    ))}
+                    {categories.map(category => {
+                        const displayData = categoryData[category] || {};
+                        
+                        return (
+                            <motion.button
+                                key={category}
+                                className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                                onClick={() => setSelectedCategory(category)}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                style={{ 
+                                    backgroundColor: selectedCategory === category 
+                                        ? displayData.color || '#4e73df' 
+                                        : 'transparent',
+                                    borderColor: displayData.color || '#4e73df'
+                                }}
+                            >
+                                {category === 'Все' ? 'Все' : (
+                                    <>
+                                        <span className="category-icon">
+                                            {displayData.icon ? (
+                                                <img 
+                                                    src={displayData.icon} 
+                                                    alt={category} 
+                                                    className="category-img"
+                                                />
+                                            ) : (
+                                                '📋'
+                                            )}
+                                        </span>
+                                        {displayData.name || category}
+                                    </>
+                                )}
+                            </motion.button>
+                        );
+                    })}
                 </motion.div>
             </div>
 
@@ -190,33 +248,106 @@ const ServicePricePage = () => {
                     <p>Попробуйте изменить критерии поиска или выбрать другую категорию</p>
                 </motion.div>
             ) : (
-                <motion.div
-                    className="services-grid"
-                    variants={container}
-                    initial="hidden"
-                    animate="show"
-                >
-                    {filteredServices.map(service => (
-                        <motion.div
-                            key={service._id}
-                            className="service-card"
-                            variants={item}
-                            whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0,0,0,0.15)' }}
-                        >
-                            <div className="card-header">
-                                <h3>{service.serviceName}</h3>
-                                <span className="price-tag">{formatPrice(service.price)}</span>
-                            </div>
-                            <div className="card-body">
-                                <p className="description">{service.description}</p>
-                                <div className="category-badge">
-                                    {categoryDisplayData[service.category]?.icon || '📋'}
-                                    {categoryDisplayData[service.category]?.name || service.category}
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
+                <div className="services-container">
+                    {Object.keys(groupedServices).map(category => {
+                        const categoryServices = groupedServices[category];
+                        const displayData = categoryData[category] || {};
+                        
+                        return (
+                            <motion.div 
+                                key={category}
+                                className="category-group"
+                                variants={container}
+                                initial="hidden"
+                                animate="show"
+                            >
+                                {selectedCategory === 'Все' && (
+                                    <div className="category-header">
+                                        <div className="category-icon-title">
+                                            {displayData.icon ? (
+                                                <img 
+                                                    src={displayData.icon} 
+                                                    alt={category} 
+                                                    className="category-title-img"
+                                                />
+                                            ) : (
+                                                <span className="category-icon">📋</span>
+                                            )}
+                                            <h2 className="category-title">
+                                                {displayData.name || category}
+                                            </h2>
+                                        </div>
+                                        <div 
+                                            className="category-divider"
+                                            style={{ backgroundColor: displayData.color || '#4e73df' }}
+                                        ></div>
+                                    </div>
+                                )}
+                                
+                                <motion.div 
+                                    className="services-grid"
+                                    variants={container}
+                                >
+                                    {categoryServices.map(service => (
+                                        <motion.div
+                                            key={service._id}
+                                            className={`service-card ${activeService === service._id ? 'active' : ''}`}
+                                            variants={item}
+                                            whileHover={{ y: -5 }}
+                                            onClick={() => setActiveService(activeService === service._id ? null : service._id)}
+                                        >
+                                            <div className="card-header">
+                                                <h3>{service.serviceName}</h3>
+                                                <span className="price-tag">
+                                                    {formatPrice(service.price)}
+                                                </span>
+                                            </div>
+                                            <div className="card-body">
+                                                <p className="description">{service.description}</p>
+                                            </div>
+                                            
+                                            {activeService === service._id && (
+                                                <motion.div 
+                                                    className="service-details"
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    transition={{ duration: 0.3 }}
+                                                >
+                                                    <div className="service-meta">
+                                                        <span className="category-badge">
+                                                            {displayData.icon ? (
+                                                                <img 
+                                                                    src={displayData.icon} 
+                                                                    alt={category} 
+                                                                    className="badge-icon"
+                                                                />
+                                                            ) : (
+                                                                '📋'
+                                                            )}
+                                                            {displayData.name || service.category}
+                                                        </span>
+                                                    </div>
+                                                    {isBookingFormOpen && (
+        <BookingForm 
+          service={selectedService}
+          onClose={() => setIsBookingFormOpen(false)}
+          onBookingSuccess={handleBookingSuccess}
+        />
+      )}
+ <div className="service-actions">
+
+     
+                                                      
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </motion.div>
+                                    ))}
+                                </motion.div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
             )}
         </motion.div>
     );

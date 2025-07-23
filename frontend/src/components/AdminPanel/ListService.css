@@ -5,7 +5,7 @@
   background: #fff;
   border-radius: 24px;
   box-shadow: 0 6px 42px rgba(80,115,198,0.08);
-  font-family: 'Inter', 'Arial', sans-serif;
+
 }
 
 .list-service__title-row {
@@ -19,7 +19,7 @@
   min-width: 220px;
   border: 1.5px solid #cbe4fd;
   border-radius: 9px;
-  font-size: 1rem;
+
   background: #f3f9ff;
   transition: border .13s;
 }
@@ -43,7 +43,6 @@
   gap: 10px;
   font-weight: 600;
   align-items: center;
-  font-size: 1.09rem;
   padding: 13px 16px 12px 10px;
   color: #2e4b6a;
   background: #f0f7ff;
@@ -79,7 +78,7 @@
   padding: 7px 9px;
   border: 1.5px solid #cbe4fd;
   border-radius: 6px;
-  font-size: 1rem;
+
   transition: border .12s;
   background: #f5fbff;
 }
@@ -99,8 +98,7 @@
   cursor: pointer;
   background: #51aaff;
   color: #fff;
-  font-weight: 600;
-  font-size: 1rem;
+
   box-shadow: 0 2px 7px rgba(57,139,255,0.09);
   transition: background .14s;
 }
@@ -143,9 +141,9 @@
 @media (max-width: 700px) {
   .listservice-format-main {
     grid-template-columns: 1fr 1.3fr 0.6fr 0.8fr 1fr;
-    font-size: .97rem;
+
     padding: 8px 3px 8px 3px;
   }
-  .admin__input { font-size: .95rem; }
+
   .list-service { padding: 7px 2px 34px 2px; }
 }

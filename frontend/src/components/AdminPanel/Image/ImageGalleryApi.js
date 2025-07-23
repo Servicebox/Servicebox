@@ -3,7 +3,7 @@ import "./ImageGalleryApi.css";
 import likeIconUrl from "../../../images/likeactive.png";
 import likeInactiveIconUrl from "../../../images/like.png";
 import ImageModal from "./ImageModal";
-import AnimatedTitle from "../PromotionsPage/AnimatedTitle";
+
 
 const ImageGalleryApi = () => {
   const [images, setImages] = useState([]);
@@ -162,7 +162,7 @@ const ImageGalleryApi = () => {
 
     <div className="foto">
 
-      <AnimatedTitle className="effect3d ">Фотографии до и после ремонта</AnimatedTitle>
+      <h2 className="animated-title ">Фотографии до и после ремонта</h2>
       <div className="group-grid">
         {groups.map(group => (
           <div key={group._id} className="group-card">

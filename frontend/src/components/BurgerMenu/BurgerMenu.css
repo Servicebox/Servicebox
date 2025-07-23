@@ -1,15 +1,16 @@
 .burger-menu {
   position: relative;
   z-index: 1000;
+  padding-left: 5px;
 }
 
 .burger-toggle {
   position: relative !important;
-
+margin: 0;
   top: 0px;
 left: 0px;
-     background: linear-gradient(to bottom right, #f9a92c, #02578b);
-  border: none;
+
+  border: 1px solid black;
   padding: 15px;
   border-radius: 30%;
   cursor: pointer;
@@ -122,7 +123,7 @@ display: none !important;
 .menu-link {
   color: white;
   text-decoration: none;
-  font-size: 1.2rem;
+
   padding: 12px 20px;
   border-radius: 8px;
   display: block;
@@ -141,7 +142,7 @@ display: none !important;
 
 .status-button {
   display: block;
-  background: #007bff;
+  background: #023878;
   color: white;
   padding: 12px 20px;
   border-radius: 8px;
@@ -156,6 +157,7 @@ display: none !important;
 
 .contact-info {
   color: white;
+  line-height: normal;
 }
 
 .address-block {
@@ -186,7 +188,7 @@ display: none !important;
 }
 
 .social-link {
-  font-size: 1.5rem;
+
   color: white;
   transition: transform 0.2s ease;
 }

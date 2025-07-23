@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import AnimatedTitle from "../PromotionsPage/AnimatedTitle";
+
 import './NewsStyles.css';
 
 const PublicNewsList = () => {
@@ -32,7 +32,7 @@ const PublicNewsList = () => {
 
   return (
     <div className="news-page">
-      <AnimatedTitle className="effect3d ">Новости компании</AnimatedTitle>
+      <h2 className="animated-title ">Новости компании</h2>
       <div className="news-grid">
         {news.map(item => (
           <article key={item._id} className="news-card">

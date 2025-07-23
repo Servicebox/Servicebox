@@ -16,14 +16,12 @@
 
 .hero-left h2 {
     color: #090909;
-    font-size: 26px;
-    font-weight: 600;
+
 }
 
 .hero-left p {
     color: #171717;
-    font-size: 100px;
-    font-weight: 700;
+
 }
 
 .hero-hand-icon {
@@ -47,8 +45,7 @@
     margin-top: 30px;
     background: #ff4141;
     color: white;
-    font-size: 22px;
-    font-weight: 500;
+ 
 }
 
 .hero-right {

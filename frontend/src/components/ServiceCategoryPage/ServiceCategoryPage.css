@@ -1,0 +1,343 @@
+/* ServiceCategoryPage.css */
+.service-category-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+    color: #333;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+
+    color: #4e73df;
+}
+
+.category-header {
+    position: relative;
+    height: 200px;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.category-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+        background: linear-gradient(to right, rgba(0, 0, 0, 0), #f9aa2c49);
+    z-index: 1;
+}
+
+.header-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.header-content h1 {
+
+    margin-bottom: 20px;
+
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.header-content p {
+
+    max-width: 700px;
+
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.category-content {
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.search-container {
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.search-container input {
+    width: 100%;
+    padding: 15px 20px 15px 50px;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+
+    transition: all 0.3s ease;
+    background: #f8f9fc;
+}
+
+.search-container input:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.2);
+    outline: none;
+    background: white;
+}
+
+.search-container::before {
+
+
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    color: #6c757d;
+}
+
+.services-table {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+}
+
+.table-header {
+    display: flex;
+    background: #023878;
+    color: white;
+    font-weight: 600;
+    padding: 15px 20px;
+}
+
+.table-header div {
+    flex: 1;
+    padding: 10px;
+}
+
+.table-header div:first-child {
+    flex: 3;
+}
+
+.table-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.service-row {
+    display: flex;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.service-row:hover {
+    background-color: #f8f9fc;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.service-row div {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.service-row div:first-child {
+    flex: 3;
+    font-weight: 500;
+}
+
+.service-row div:last-child {
+    color: #023878;
+    font-weight: 600;
+    justify-content: flex-end;
+}
+
+.toggle-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background: #023878;
+    color: white;
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(78, 115, 223, 0.3);
+}
+
+.toggle-btn:hover {
+    background: #023878;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(78, 115, 223, 0.4);
+}
+
+.disclaimer {
+    background: #f8f9fc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-left: 4px solid #023878;
+}
+
+.disclaimer p {
+    margin-bottom: 10px;
+
+    color: #6c757d;
+
+}
+
+.disclaimer p:last-child {
+    margin-bottom: 0;
+}
+
+.back-link {
+    text-align: center;
+}
+
+.back-link a {
+    display: inline-flex;
+    align-items: center;
+    color: #023878;
+    text-decoration: none;
+
+    transition: all 0.3s ease;
+}
+
+.back-link a:hover {
+    color: #023878;
+    transform: translateX(-5px);
+}
+
+.back-link a::before {
+    content: "←";
+    margin-right: 8px;
+    transition: transform 0.3s ease;
+}
+
+.back-link a:hover::before {
+    transform: translateX(-5px);
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.service-row {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Кастомный скроллбар */
+.table-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-body::-webkit-scrollbar-thumb {
+    background: #023878;
+    border-radius: 10px;
+}
+
+.table-body::-webkit-scrollbar-thumb:hover {
+    background: #023878;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .category-header {
+        height: 250px;
+    }
+    
+
+}
+
+@media (max-width: 768px) {
+    .service-category-page {
+        padding: 15px;
+    }
+    
+    .category-header {
+        height: 200px;
+        margin-bottom: 30px;
+    }
+    
+    .header-content {
+        padding: 25px;
+    }
+    
+
+    
+
+    .category-content {
+        padding: 20px;
+    }
+    
+    .table-header {
+        padding: 12px 15px;
+
+    }
+    
+    .service-row {
+        padding: 12px 15px;
+
+    }
+    
+    .toggle-btn {
+        padding: 12px;
+
+    }
+}
+
+@media (max-width: 576px) {
+    .category-header {
+        height: 180px;
+    }
+    
+    .header-content {
+        padding: 20px;
+    }
+    
+  
+    
+    .table-header {
+        flex-direction: column;
+        padding: 10px;
+    }
+    
+    .table-header div {
+        padding: 8px 10px;
+    }
+    
+    .service-row {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    .service-row div {
+        padding: 8px 0;
+    }
+    
+    .service-row div:last-child {
+        justify-content: flex-start;
+        border-top: 1px dashed #eee;
+        padding-top: 12px;
+        margin-top: 8px;
+    }
+}

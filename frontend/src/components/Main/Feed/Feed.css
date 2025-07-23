@@ -6,11 +6,6 @@ position:relative;
 }
 .feed__title{
     color: #13171D;
-    font-family: Bebas Neue;
-    font-size: 56px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 56px; /* 100% */
     text-align: center;
 }
 .feed__iframe_map{

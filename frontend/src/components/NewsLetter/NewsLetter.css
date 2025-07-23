@@ -14,13 +14,12 @@
 
 .newsletter h1 {
     color: #454545;
-    font-size: 55px;
-    font-weight: 600;
+
 }
 
 .newsletter p {
     color: #454545;
-    font-size: 20px;
+
 }
 
 .newsletter div {
@@ -39,9 +38,8 @@
     margin-left: 30px;
     border: none;
     outline: none;
-    color: #616161;
-    font-family: Poppins;
-    font-size: 16px;
+
+    
 }
 
 .newsletter div button {
@@ -50,6 +48,6 @@
     border-radius: 80px;
     background: black;
     color: white;
-    font-size: 16px;
+
     cursor: pointer;
 }

@@ -6,10 +6,7 @@
 }
 
 .cssanimation.leWaterWave {
-  font-family: 'Montserrat', 'Arial', sans-serif;
-  font-size: 2.8rem;
-  font-weight: 800;
-  letter-spacing: 2px;
+ 
   color: #1e88e5;
   animation: waterwave 3.8s infinite ease-in-out;
   /* option: text-shadow for wave effect */
@@ -129,22 +126,20 @@
 }
 
 .promotion-content h2 {
-  font-size: 1.28rem;
+
   margin: 0 0 9px 0;
   color: #1565c0;
-  font-weight: 700;
-  letter-spacing: 1px;
+
 }
 
 .promotion-content p {
-  font-size: 1.01rem;
+
   margin-bottom: 10px;
   color: #444b5e;
 }
 
 .promotion-date {
   margin: 8px 0 18px 0;
-  font-size: 0.98rem;
   color: #0288d1;
 }
 
@@ -160,13 +155,12 @@
   border: none;
   padding: 12px 27px;
   border-radius: 5px;
-  font-size: 1.09rem;
-  font-weight: 600;
+
   box-shadow: 0 3px 12px 0 #29b6f60a,
               0 1px 3.5px 0 #029be543;
   cursor: pointer;
   transition: background 0.19s, box-shadow 0.19s, transform 0.14s;
-  letter-spacing: 1px;
+
 }
 
 .promotion-content button:hover {

@@ -23,11 +23,6 @@ border-radius: 15px;
 }
 .arron-service__title-text{
     color: #13171D;
-    font-family: Bebas Neue;
-    font-size: 70px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
     margin: 0 auto;
     padding-bottom: 25px;
     text-align: center;
@@ -47,11 +42,6 @@ border-radius: 15px;
   .arron-service__list-item {
     position: relative;
     color: #000000;
-    font-family: Montserrat;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 18px; /* 133.333% */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -62,11 +52,6 @@ border-radius: 15px;
 
 .arron-service__title{
     color: #13171D;
-font-family: Bebas Neue;
-font-size: 48px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
 width: 427px;
 height: 157px;
 flex-shrink: 0;
@@ -75,10 +60,8 @@ flex-shrink: 0;
 .arron-servise_text{
   margin: 0 auto;
   max-width: 115px;
-  font-weight: 600;
-  font-size: 10px;
   text-align: center;
-  line-height: normal;
+
 }
 .about__image-arron-service{
     width: 35px;
@@ -86,11 +69,6 @@ flex-shrink: 0;
 }
 .arron-service__subtitle{
     color: #000;
-font-family: Montserrat;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
 width: 288px;
 
 flex-shrink: 0;
@@ -109,21 +87,12 @@ gap: 40px;
   .arron-service__title{
     color: #13171D;
 text-align: center;
-font-family: Bebas Neue;
-font-size: 26px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
 max-width: 300px;
 margin: 0 auto;
 
   }
   .arron-service__subtitle{
-    font-family: Montserrat;
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+
 max-width: 239px;
 margin: 0 auto;
   }
@@ -132,11 +101,7 @@ margin: 0 auto;
     max-height: 50px;
     color: #FFF;
     text-align: center;
-font-family: Montserrat;
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: 26px;
+
   }
   .arron-service__list{
     margin: 0 auto;
@@ -146,19 +111,11 @@ line-height: 26px;
   }
   .arron-service__title-text{
     text-align: center;
-font-family: Bebas Neue;
-font-size: 26px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
+
 
   }
   .arron-service__list-item{
-    font-family: Montserrat;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 20px;
+
 padding-bottom: 5px;
 padding-left: 8px;
   }
@@ -194,11 +151,7 @@ max-width: 370px;
   max-width: 300px;
   margin: 0 auto;
   text-align: center;
-font-family: Bebas Neue;
-font-size: 26px;
-font-style: normal;
-font-weight: 700;
-line-height: 26px; /* 100% */
+
 }
 .arron-service__bullet{
   top: 33%;
@@ -210,17 +163,7 @@ line-height: 26px; /* 100% */
   max-width: 140px;
   margin: 0 auto;
   color: #444;
-  font-family: Montserrat;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
 padding: 0;
-font-family: Montserrat;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 20px; /* 142.857% */
 
 }
 .arron-service__img{
@@ -229,7 +172,7 @@ line-height: 20px; /* 142.857% */
   line-height: 1;
 }
 .arron-servise_text{
-  font-size: 8px;
+
   max-width: 100px;
   line-height: normal;
 }
@@ -253,17 +196,12 @@ padding-bottom: 40px;
 
 }
 .arron-service__list-item{
-  line-height: 16px;
-  font-size: 14px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.arron-servise_text{
-  font-size: 10px;
-  font-weight: 600;
 
-}
 .arron-service__img{
   width: 35px;
   height: 35px;

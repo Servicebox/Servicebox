@@ -45,42 +45,131 @@ const TabletServiceList = () => {
 
 
   return (
-    <div className='tablet'>
-      <h1 className='tablet__title'>Цены на работу по ремноту планшетов </h1>
-      <p>Диагностика бесплатная! Наш мастер произведет диагностику, сообщит о проблеме и предложит решение. Мы договоримся о цене и сроках, мастер начнет работу.</p>
-      <span className="smaller-font">Если не нашли, что искали звоните 8911 501 88 28. Цены указаны без учета запчастей</span>
-      <Search value={searchQuery} onChange={handleSearch} placeholder="Поиск по названию" />
-      <table>
-        <thead>
-          <tr>
-            <th>Название услуги</th>
-            <th>Цена</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTabletPrices.slice(0, showAll ? filteredTabletPrices.length : 15).map((tabletPrice) => (
-            <tr key={tabletPrice._id}>
-              <td>{tabletPrice.serviceName}</td>
-              <td>{tabletPrice.price}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {!showAll ? (
-        <button className='glass__btn-active' onClick={handleShowAll}>Посмотреть прайс</button>
-      ) : (
-        <button className='glass__btn' onClick={handleHideAll}>Скрыть прайс</button>
-      )}
-      <p className='glass__sabtitle-one'>* - время ремонта может меняться в зависимости от модели устройства и сложности проводимых работ</p>
-      <p className='glass__sabtitle'>Информация о ценах, возможных выгодах и условиях приобретения доступна в сервисном центре Servicebox Не является публичной офертой.</p>
-      <div className="back__btn">
-        <ul>
-          <li><Link to="/">На главную</Link>
-          </li>
-        </ul>
+    <div className='glass-container'>
+      <div className="glass-header">
+        <h1 className='glass-title'>Ремонт планшетов </h1>
+        <div className="glass-badge">Цены на ремонт</div>
+      </div>
+
+      <div className="glass-content">
+        <div className="glass-process">
+          <h2 className="process-title">Процесс ремонта</h2>
+          <p className="process-description">
+            
+          </p>
+          
+          <div className="process-steps">
+            <div className="step-card">
+               <div className="step-number">1</div>
+              <h3 className="step-title">Бесплатная диагностика</h3>
+              <p className="step-text">Точное определение неисправности с помощью профессионального оборудования</p>
+            </div>
+            <div className="step-card">
+              <div className="step-number">2</div>
+              <h3 className="step-title">Подбор комплектующих</h3>
+              <p className="step-text">Подбор оригинальных или качественных аналоговых запчастей</p>
+            </div>
+            <div className="step-card">
+              <div className="step-number">3</div>
+              <h3 className="step-title">Согласование с клиентом</h3>
+              <p className="step-text">Утверждение стоимости и сроков ремонта перед началом работ</p>
+            </div>
+            <div className="step-card">
+              <div className="step-number">4</div>
+              <h3 className="step-title">Профессиональный ремонт</h3>
+              <p className="step-text">Выполнение работ в чистой лаборатории с антистатической защитой</p>
+            </div>
+            <div className="step-card">
+              <div className="step-number">5</div>
+              <h3 className="step-title">Тестирование устройства</h3>
+              <p className="step-text">Проверка всех функций устройства после ремонта</p>
+            </div>
+            <div className="step-card">
+              <div className="step-number">6</div>
+              <h3 className="step-title">Гарантия от 1 месяца до 6 месяцев</h3>
+              <p className="step-text">Официальная гарантия на все виды работ и установленные компоненты</p>
+            </div>
+          </div>
+          
+         <p className="process-result">
+            После выполнения всех процедур аппарат снова в рабочем состоянии . 
+          
+          </p>
+        </div>
+
+        <div className="pricing-section">
+          <div className="pricing-header">
+            <div className="pricing-info">
+              <h3>Цены</h3>
+              <p>По другим моделям уточняйте по номеру <span className="highlight">8911 501 88 28</span></p>
+            </div>
+            <Search 
+              value={searchQuery} 
+              onChange={handleSearch} 
+              placeholder="Поиск по модели"
+              className="modern-search"
+            />
+          </div>
+
+          <div className="price-table-container">
+            <div className="price-table">
+              <div className="table-header">
+                <div className="header-cell">Модель устройства</div>
+                <div className="header-cell">Стоимость</div>
+              </div>
+              <div className="table-body">
+                {filteredTabletPrices.slice(0, showAll ? filteredTabletPrices.length : 15).map((tabletPrice) => (
+                  <div className="table-row" key={tabletPrice._id}>
+                    <div className="row-cell device-cell">
+                      <span className="device-icon">📱</span>
+                      {tabletPrice.serviceName}
+                    </div>
+                    <div className="row-cell price-cell">
+                      <div className="price-badge">{tabletPrice.price} ₽</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="table-controls">
+            {!showAll ? (
+              <button className="show-more-btn" onClick={handleShowAll}>
+                <span>Показать все модели</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 15L12 8L19 15" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+              </button>
+            ) : (
+              <button className="show-less-btn" onClick={handleHideAll}>
+                <span>Свернуть список</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M19 9L12 16L5 9" stroke="currentColor" strokeWidth="2"/>
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="additional-info">
+        <p className="info-note">* Время ремонта может меняться в зависимости от модели устройства и сложности работ</p>
+        <p className="legal-note">Информация о ценах доступна в сервисных центрах Servicebox. Не является публичной офертой.</p>
+      </div>
+
+      <div className="navigation-links">
+        <Link to="/" className="home-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2"/>
+            <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="2"/>
+          </svg>
+          На главную
+        </Link>
       </div>
     </div>
   );
 }
+
 
 export default TabletServiceList;

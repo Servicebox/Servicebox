@@ -46,8 +46,8 @@ const Card = ({ title, subtitle, image, linkTo }) => {
           
             <h4 className="card__subtitle-one">{subtitle}</h4>
             <Link className="link-card" to={linkTo}>
-              Посмотреть прайс
-            </Link>
+    <span>Посмотреть прайс</span>
+</Link>
           </div>
         </div>
       </div>

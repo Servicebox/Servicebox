@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PromotionForm from '../../Form/Form'; // Модалка “Записаться”
 import './PromotionsPage.css';
-import AnimatedTitle from "./AnimatedTitle";
+
 
 export default function PromotionsPage() {
     const [promotions, setPromotions] = useState([]);
@@ -23,7 +23,7 @@ export default function PromotionsPage() {
 
     return (
         <div className='promotions-page'>
-            <AnimatedTitle className="effect3d ">Актуальные акции</AnimatedTitle>
+            <h2 className="animated-title ">Актуальные акции</h2>
             <div className='promo-list'>
                 {promotions.map((promo) => (
                     <div className='promotion-card' key={promo._id}>

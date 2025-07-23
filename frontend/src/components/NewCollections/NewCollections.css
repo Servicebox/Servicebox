@@ -13,10 +13,6 @@
 }
 .newcollections-text{
 text-align: center;
-    font-family: Gilroy;
-    font-size: 30px;
-    font-weight: 600;
-    font-family: Montserrat;
     padding: 5px;
     color: white;
     background: #f9a92c;
@@ -41,9 +37,7 @@ text-align: center;
 
 .newcollections-text {
     text-align: center;
-    font-family: Montserrat, sans-serif;
-    font-size: 30px;
-    font-weight: 600;
+
     padding: 5px;
     color: white;
     background: #f9a92c;
@@ -74,27 +68,21 @@ text-align: center;
     .collections {
         grid-template-columns: 1fr;
     }
-    .newcollections-text {
-        font-size: 18px;
-    }
+   
 }
 
 @media screen and (min-width: 481px) and (max-width: 767px) {
     .collections {
         grid-template-columns: repeat(1, 1fr);
     }
-    .newcollections-text{
-        font-size: 18px;
-    }
+   
 }
 
 @media screen and (min-width: 768px) {
     .collections {
         grid-template-columns: repeat(2, 1fr);
     }
-    .newcollections-text {
-        font-size: 20px;
-    }
+ 
 }
 
 @media screen and (min-width: 1024px) {

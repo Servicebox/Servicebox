@@ -18,6 +18,8 @@ import UpdateNewsForm from '../News/UpdateNewsForm';
 import AdminPromotions from '../AdminPromotions';
 import AdminUsersPanel from './AdminUsersPanel';
 import DepositoryPage from '../DepositoryPage';
+import BookingsAdmin from '../BookingsAdmin/BookingsAdmin';
+import TrackingPage from '../../TrackingPage/TrackingPage';
 
 
 const AdminPanelRoute = () => {
@@ -37,6 +39,10 @@ const AdminPanelRoute = () => {
       <NavLink className='admin__link' to="/admin-panel/listnews">Список новостей</NavLink>
       <NavLink className='admin__link' to="/admin-panel/promotions">Акции</NavLink>
       <NavLink className='admin__link' to="/admin-panel/users">Пользователи</NavLink>
+        <NavLink className='admin__link' to="/admin-panel/bookings">Бронирования</NavLink>
+        
+      <NavLink className='admin__link' to="/admin-panel/tracking">Отслеживание</NavLink>
+
       <NavLink to="/depository">Депозиторий файлов</NavLink>
 
       <div className='admin-links'>
@@ -56,6 +62,10 @@ const AdminPanelRoute = () => {
           <Route path="update-news/:id" element={<UpdateNewsForm />} />
           <Route path="promotions" element={<AdminPromotions />} />
           <Route path="users" element={<AdminUsersPanel />} />
+          <Route path="bookings" element={<BookingsAdmin />} />
+          <Route path="depository" element={<DepositoryPage />} />
+   
+          <Route path="tracking" element={<TrackingPage />} />
 
         </Routes>
       </div>

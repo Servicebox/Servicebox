@@ -101,14 +101,13 @@ background: linear-gradient(to bottom right, #003366, #006699);
 
 .info-title {
   color: #ffffff;
-  font-size: 1.2rem;
+
   margin-bottom: 1rem;
 }
 
 .footer__text {
   color: #7f8c8d;
-  line-height: 1.6;
-  font-size: 0.9rem;
+
 }
 
 .privacy-link {
@@ -129,7 +128,7 @@ background: linear-gradient(to bottom right, #003366, #006699);
 
 .payment-title {
   color: #ffffff;
-  font-size: 1.2rem;
+
   margin-bottom: 1rem;
 }
 
@@ -161,7 +160,7 @@ background: linear-gradient(to bottom right, #003366, #006699);
 
 .footer__author {
   color: #95a5a6;
-  font-size: 0.9rem;
+
   margin: 0;
 }
 
@@ -196,7 +195,5 @@ background: linear-gradient(to bottom right, #003366, #006699);
     height: 30px;
   }
   
-  .footer__text {
-    font-size: 0.8rem;
-  }
+
 }

@@ -8,15 +8,18 @@ import "./UserProfile.css";
 const API_URL = "https://servicebox35.pp.ru/api";
 
 const fetchWithAuth = async (url, options = {}) => {
-    const token = localStorage.getItem('auth-token');
-    const headers = options.headers || {};
-    if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-        headers['Accept'] = 'application/json';
-        headers['Content-Type'] = 'application/json';
-    }
-    const newOptions = { ...options, headers };
-    return fetch(url, newOptions);
+  const token = localStorage.getItem('auth-token');
+  const headers = options.headers || {};
+  
+  if (token) {
+    // Исправлено: правильный формат заголовка
+    headers['Authorization'] = `Bearer ${token}`;
+    headers['Accept'] = 'application/json';
+    headers['Content-Type'] = 'application/json';
+  }
+  
+  const newOptions = { ...options, headers };
+  return fetch(url, newOptions);
 };
 
 const UserOrderList = React.forwardRef(({ orders }, ref) => (
