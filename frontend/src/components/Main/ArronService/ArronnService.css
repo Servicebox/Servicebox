@@ -6,6 +6,7 @@
 .arron-service__content{
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
 }
 .arron-service{
 display: flex;
@@ -183,9 +184,7 @@ padding: 0;
 padding-bottom: 40px;
   margin: 0 auto;
 }
-.arron-service__content{
-  max-width: 400px;
-}
+
 .arron-service__list{
   padding: 0;
   margin: 0 auto;

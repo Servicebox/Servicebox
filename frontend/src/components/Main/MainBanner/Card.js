@@ -44,7 +44,7 @@ const Card = ({ title, subtitle, image, linkTo }) => {
          
           <div className="card-back">
           
-            <h4 className="card__subtitle-one">{subtitle}</h4>
+            <p className="card__subtitle-one">{subtitle}</p>
             <Link className="link-card" to={linkTo}>
     <span>Посмотреть прайс</span>
 </Link>

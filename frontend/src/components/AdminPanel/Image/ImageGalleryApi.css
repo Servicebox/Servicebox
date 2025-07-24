@@ -160,7 +160,7 @@
   backdrop-filter: blur(10px);
 }
 
-.modal-content {
+.modal-content__img {
   position: relative;
   max-width: 90vw;
   max-height: 90vh;
@@ -263,7 +263,7 @@
     bottom: 1rem;
   }
   
-  .modal-content {
+  .modal-content__img {
     max-width: 95vw;
     max-height: 95vh;
   }
@@ -275,7 +275,7 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-.modal-content {
+.modal-content__img {
   animation: slideIn 0.3s ease-out;
 }
 

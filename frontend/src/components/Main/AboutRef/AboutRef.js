@@ -45,13 +45,13 @@ const AboutRef = forwardRef((_props, ref) => {
                     </div>
                     
                     <div className="feature-card">
-                        <img src={Secure} className="feature-icon" alt="Гарантия качества" />
+                        <img src={Secure} className="feature-icon pulse" alt="Гарантия качества" />
                         <h3>Гарантия до 12 месяцев</h3>
                         <p>Даём официальную гарантию на все виды работ и запчасти</p>
                     </div>
                     
                     <div className="feature-card">
-                        <img src={Card} className="feature-icon" alt="Удобная оплата" />
+                        <img src={Card} className="feature-icon pulse" alt="Удобная оплата" />
                         <h3>Любые формы оплаты</h3>
                         <p>Наличные, карты, безнал для юрлиц - вам решать как платить</p>
                     </div>

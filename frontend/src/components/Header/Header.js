@@ -157,7 +157,7 @@ function Header() {
                             <Link className="navigation__list" to="/image-gallery-api">Фото {menu === "gallery" && <hr />}</Link>
                         </li>
                     </ul>
-                    <ul className='nav-menu'>
+                    <ul className='navigation__lists'>
                         <li className="navigation__list" onClick={() => { setMenu("parts") }}>
                             <Link style={{ textDecoration: 'none' }} to='/parts'>Каталог</Link>
                             {menu === "parts" ? <hr /> : <></>}

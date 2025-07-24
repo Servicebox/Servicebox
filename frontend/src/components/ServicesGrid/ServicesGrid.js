@@ -23,7 +23,7 @@ const ServicesGrid = () => {
       description: "Ремонт любой сложности. Замена мультиконтроллеров, USB портов, кулеров и разъемов зарядки", 
       icon: Notebook,
       link: "/notebook-service",
-      color: "#4e73df"
+      color: "#092e9eff"
     },
     { 
 
@@ -31,7 +31,7 @@ const ServicesGrid = () => {
       description: "Ремонт компьютеров и моноблоков, настройка и сборка", 
       icon: Monoblok,
       link: "/monoblock-service",
-      color: "#1cc88a"
+      color: "#bfc81cff"
     },
     { 
 
@@ -55,7 +55,7 @@ const ServicesGrid = () => {
       description: "Быстрый и надежный ремонт планшетов любых марок и моделей", 
       icon: Tablet,
       link: "/tablet-service",
-      color: "#e74a3b"
+      color: "#ffe627ff"
     },
     { 
 
@@ -63,7 +63,7 @@ const ServicesGrid = () => {
       description: "Профессиональный ремонт: замена подсветки, ремонт системной платы", 
       icon: Tv,
       link: "/tv-service",
-      color: "#6f42c1"
+      color: "#1cc6ffff"
     },
     { 
   
@@ -79,7 +79,7 @@ const ServicesGrid = () => {
       description: "Сложный ремонт и обслуживание видеокарт и асиков", 
       icon: Videocard,
       link: "/videocard",
-      color: "#20c997"
+      color: "#53fff4ff"
     },
     { 
  
@@ -87,7 +87,7 @@ const ServicesGrid = () => {
       description: "Ремонт Bluetooth-колонок, пылесосов, электронных книг и игровых приставок", 
       icon: Devices,
       link: "/other-service",
-      color: "#6610f2"
+      color: "#2710f2ff"
     }
   ];
 

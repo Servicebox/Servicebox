@@ -262,10 +262,48 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
 }
+/* Contacts.css */
+.contacts__benefits li .highlight {
+  font-weight: 600;
+  color: #e74c3c; /* Красный для акцента */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
+.contacts__benefits li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.nested-list {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 8px;
+}
+
+.nested-list li {
+  position: relative;
+  padding-left: 20px;
+}
+
+.nested-list li:before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #3498db;
+}
+.free {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.paid {
+  color: #c0392b;
+  font-weight: 900;
+}
 .contacts__benefits {
   padding-left: 20px;
   margin: 20px 0;
+  list-style: none;
 }
 
 .contacts__benefits li {

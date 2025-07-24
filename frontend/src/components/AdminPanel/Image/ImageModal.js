@@ -17,11 +17,11 @@ const ImageModal = ({ group, currentIndex, onClose, onNavigate }) => {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-content__img" onClick={(e) => e.stopPropagation()}>
         <button className="close-button" onClick={onClose}>×</button>
 
-        <div className="image-container">
-          <img
+        <div className="image-container__foto">
+          <img className="modal-image__foto"
             src={`https://servicebox35.pp.ru${group.images[currentIndex].filePath}`}
             alt={group.description}
             onError={e => { e.target.onerror = null; e.target.src = PLACEHOLDER; }} // Добавьте fallback изображение
