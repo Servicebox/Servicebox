@@ -32,7 +32,7 @@ const PublicNewsList = () => {
 
   return (
     <div className="news-page">
-      <h2 className="animated-title ">Новости компании</h2>
+      <h2 className="animated-title ">Новости</h2>
       <div className="news-grid">
         {news.map(item => (
           <article key={item._id} className="news-card">

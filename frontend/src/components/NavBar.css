@@ -83,8 +83,8 @@ gap: 25px;
 }
 
 .nav-cart-count {
-width: 11px;
-        height: 11px;
+width: 22px;
+        height: 22px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -97,7 +97,7 @@ width: 11px;
 }
 @media (min-width: 501px) and (max-width: 768px) {
     .nav-login-cart{
-               height: 70px;
+        height: 70px;
         display: flex
 ;
         outline: none;

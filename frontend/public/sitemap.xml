@@ -39,6 +39,59 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+    <url>
+    <loc>https://servicebox35.ru/appl-service</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+    <url>
+    <loc>https://servicebox35.ru/telephone-service</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+    <url>
+    <loc>https://servicebox35.ru/tablet-service</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+    <url>
+    <loc>https://servicebox35.ru/tv-service</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+      <url>
+    <loc>https://servicebox35.ru/glass-replacement-price-lists</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+      <url>
+    <loc>https://servicebox35.ru/videocard</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+      <url>
+    <loc>https://servicebox35.ru/other-service</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+   <url>
+    <loc>https://servicebox35.ru/image-gallery-api</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+      <loc>https://servicebox35.ru/contacts</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <!-- Добавьте аналогично другие услуги -->
   
   <!-- Каталог -->
@@ -69,17 +122,24 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://servicebox35.ru/promotions</loc>
+    <loc>https://servicebox35.ru/promotions-page</loc>
     <lastmod>2024-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://servicebox35.ru/gallery</loc>
+    <loc>https://servicebox35.ru/parts</loc>
     <lastmod>2024-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
+    <url>
+    <loc>  https://servicebox35.ru/product</loc>
+    <lastmod>2024-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
   
   <!-- Пользовательские разделы -->
   <url>
@@ -89,7 +149,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://servicebox35.ru/profile</loc>
+    <loc>https://servicebox35.ru/about</loc>
     <lastmod>2024-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -97,13 +157,13 @@
   
   <!-- Дополнительные сервисы -->
   <url>
-    <loc>https://servicebox35.ru/chat-support</loc>
+    <loc>https://servicebox35.ru/prices</loc>
     <lastmod>2024-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://servicebox35.ru/depository</loc>
+    <loc>https://servicebox35.ru/depository-public</loc>
     <lastmod>2024-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.4</priority>
