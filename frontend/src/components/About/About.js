@@ -7,7 +7,7 @@ import Secure from "../../images/secure.svg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import Photo0 from "../../images/photo5.webp";
-import Photo1 from "../../images/dima.webp";
+import Photo1 from "../../images/ya.webp";
 import Photo2 from "../../images/noutbook.webp";
 import Photo3 from "../../images/okul.webp";
 import Photo4 from "../../images/photo1.webp";

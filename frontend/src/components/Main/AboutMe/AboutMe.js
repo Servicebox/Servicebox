@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AboutMe.css";
 import Photo0 from "../../../images/photo5.webp";
-import Photo1 from "../../../images/dima.webp";
+import Photo1 from "../../../images/ya.webp";
 import Photo2 from "../../../images/noutbook.webp";
 import Photo3 from "../../../images/okul.webp";
 import Photo4 from "../../../images/photo1.webp";

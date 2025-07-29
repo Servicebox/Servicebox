@@ -56,8 +56,9 @@ const BOT_TOKEN = '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
 const CHAT_ID = '406806305';
 const ReactDOMServer = require('react-dom/server');
 const ProductPage = require('./views/ProductPage');
+const Subcategory = require('./models/Subcategory');
 // Создание API роутер
-
+const categoryRoutes = express.Router();
 const apiRouter = express.Router();
 
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
@@ -67,7 +68,7 @@ const server = http.createServer(app); // Используйте server вмес
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || 'https://servicebox35.ru',
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   }
 });
 io.on('connection', (socket) => {
@@ -645,7 +646,7 @@ app.get('/api/categories-with-subcategories', async (req, res) => {
     // Преобразуем Set в массив
     const categories = Object.entries(result).map(([category, subSet]) => ({
       category,
-      subcategories: Array.from(subSet).filter(Boolean) // без пустых
+      subcategories: Array.from(subSet).filter(Boolean)
     }));
 
     res.json(categories);
@@ -701,7 +702,7 @@ app.get('/api/allproducts', cache('5 minutes'), async (req, res) => {
       ...product,
       images: Array.isArray(product.images) ? product.images.map(img =>
         typeof img === 'string' && img.startsWith('http') ? img : `${req.protocol}://${req.get('host')}${img}`
-      ) : [], // если images нет, то вернем []
+      ) : [],
     }));
 
     res.json(productsWithFullUrls);
@@ -710,8 +711,133 @@ app.get('/api/allproducts', cache('5 minutes'), async (req, res) => {
     res.status(500).json({ success: false, message: 'Ошибка получения товаров' })
   }
 });
+ ////
 
 
+
+
+// Получение подкатегорий для категории
+
+app.get('/api/categories-full', async (req, res) => {
+  try {
+    const categories = await Category.find().populate('subcategories');
+    res.json(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Ошибка сервера',
+      error: error.message
+    });
+  }
+});
+
+// Получение подкатегорий для категории
+app.get('/api/categories/:categoryId/subcategories', async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.categoryId)
+      .populate('subcategories');
+    
+    if (!category) {
+      return res.status(404).json({ message: 'Категория не найдена' });
+    }
+    
+    res.json(category.subcategories || []);
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: 'Ошибка сервера',
+      error: error.message
+    });
+  }
+});
+
+// Добавление подкатегории
+app.post('/api/categories/:categoryId/subcategories', async (req, res) => {
+  const { categoryId } = req.params;
+  const { name } = req.body;
+
+  try {
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: 'Категория не найдена' });
+    }
+
+    // Создаем подкатегорию
+    const subcategory = new Subcategory({ 
+      name, 
+      category: categoryId 
+    });
+    await subcategory.save();
+
+    // Добавляем подкатегорию в категорию
+    category.subcategories.push(subcategory._id);
+    await category.save();
+
+    res.status(201).json(subcategory);
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: 'Ошибка сервера',
+      error: error.message
+    });
+  }
+});
+
+// Обновление подкатегории
+app.put('/api/subcategories/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    const subcategory = await Subcategory.findByIdAndUpdate(
+      id, 
+      { name }, 
+      { new: true, runValidators: true }
+    );
+    
+    if (!subcategory) {
+      return res.status(404).json({ message: 'Подкатегория не найдена' });
+    }
+    
+    res.json(subcategory);
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: 'Ошибка сервера',
+      error: error.message
+    });
+  }
+});
+
+// Удаление подкатегории
+app.delete('/api/subcategories/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const subcategory = await Subcategory.findById(id);
+    if (!subcategory) {
+      return res.status(404).json({ message: 'Подкатегория не найдена' });
+    }
+
+    // Удаляем подкатегорию из категории
+    await Category.updateOne(
+      { _id: subcategory.category },
+      { $pull: { subcategories: subcategory._id } }
+    );
+
+    // Удаляем саму подкатегорию
+    await Subcategory.findByIdAndDelete(id);
+
+    res.json({ success: true, message: 'Подкатегория удалена' });
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      message: 'Ошибка сервера',
+      error: error.message
+    });
+  }
+});
 app.get('/allservices', async (req, res) => {
   let products = await Product.find({});
   //console.log("All products fetched");

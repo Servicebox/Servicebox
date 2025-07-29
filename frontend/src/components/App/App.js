@@ -70,6 +70,7 @@ import ServiceCategoryPage from '../ServiceCategoryPage/ServiceCategoryPage';
 import AllServicesPage from '../AllServicesPage/AllServicesPage';
 import BookingsAdmin from "../AdminPanel/BookingsAdmin/BookingsAdmin";
 import BookingForm from "../BookingForm/BookingForm";
+import { Categories } from "emoji-picker-react";
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -215,6 +216,7 @@ const handleLoginSuccess = (responseData) => {
           <Route path="/create-news-form" element={<CreateNewsForm />} />
           <Route path="/listnews" element={<ListNews />} />
           <Route path="/listproduct" element={<ListProduct />} />
+      
           <Route path="/listservice" element={<ListService />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/nav-bar" element={<Navbar />} />

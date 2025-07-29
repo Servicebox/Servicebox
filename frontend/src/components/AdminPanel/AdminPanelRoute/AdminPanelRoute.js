@@ -20,6 +20,8 @@ import AdminUsersPanel from './AdminUsersPanel';
 import DepositoryPage from '../DepositoryPage';
 import BookingsAdmin from '../BookingsAdmin/BookingsAdmin';
 import TrackingPage from '../../TrackingPage/TrackingPage';
+import CategoriesList from '../CategoriesList';
+import SubcategoriesList from '../SubcategoriesList';
 
 
 const AdminPanelRoute = () => {
@@ -33,6 +35,8 @@ const AdminPanelRoute = () => {
       {/* <Link className='admin__link' to="/admin-panel/create-image">Загрузка Изображения</Link>
       <Link className='admin__link' to="/admin-panel/delete-image">Удаление Изображения</Link>*/}
       <NavLink className='admin__link' to="/admin-panel/listproduct">Товары список</NavLink>
+       <NavLink className='admin__link' to="/admin-panel/categories">Категории</NavLink>
+      <NavLink className='admin__link' to="/admin-panel/subcategories">Подкатегории</NavLink>
       {/*<Link className='admin__link' to="/admin-panel/addproduct">Добавить товар</Link>*/}
       <NavLink className='admin__link' to="/admin-panel/imagelist">Фото все</NavLink>
       <NavLink className='admin__link' to="/admin-panel/addnews">Добавить новость</NavLink>
@@ -49,6 +53,8 @@ const AdminPanelRoute = () => {
         <Routes>
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="listproduct" element={<ListProduct />} />
+             <Route path="categories" element={<CategoriesList />} />
+          <Route path="subcategories" element={<SubcategoriesList />} />
           <Route path="listservice" element={<ListService />} />
           <Route path="create-image" element={<CreateImage />} />
           <Route path="delete-image" element={<DeleteImage />} />
