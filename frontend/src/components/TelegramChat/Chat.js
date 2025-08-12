@@ -108,7 +108,7 @@ export default function Chat() {
 
     try {
       // Отправляем через наш бэкенд
-      await axios.post(`${API_BASE_URL}/api/telegram/send`, {
+      await axios.post(`${API_BASE_URL}/telegram/send`, {
         userId: USER_ID,
         userName,
         text: text.trim()
@@ -137,7 +137,7 @@ export default function Chat() {
   const loadMessageHistory = async () => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/telegram/updates?userId=${USER_ID}`
+        `${API_BASE_URL}/telegram/updates?userId=${USER_ID}`
       );
       const replies = response.data || [];
 
@@ -166,7 +166,7 @@ export default function Chat() {
     const timer = setInterval(async () => {
       try {
         const response = await axios.get(
-          `${API_BASE_URL}/api/telegram/updates?userId=${USER_ID}`
+          `${API_BASE_URL}/telegram/updates?userId=${USER_ID}`
         );
         const replies = response.data || [];
         

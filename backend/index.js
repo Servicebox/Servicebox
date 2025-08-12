@@ -1898,7 +1898,7 @@ app.get('/api/get-messages', async (req, res) => {
 });
 // Эндпоинт для отправки сообщений в Telegram
 // Эндпоинты Telegram
-app.post('/api/telegram/send', express.json(), async (req, res) => {
+app.post('/telegram/send', express.json(), async (req, res) => {
   try {
     const { userId, userName, text } = req.body;
     const body = `✉️ Сообщение от ${userName} (ID:${userId}):\n\n${text}`;
@@ -1919,7 +1919,7 @@ app.post('/api/telegram/send', express.json(), async (req, res) => {
   }
 });
 
-app.get('/api/telegram/updates', async (req, res) => {
+app.get('/telegram/updates', async (req, res) => {
   try {
     const userId = req.query.userId;
     const response = await axios.get(
