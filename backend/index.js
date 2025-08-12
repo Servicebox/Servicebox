@@ -1581,7 +1581,7 @@ app.use('/admin-panel', verifyToken, express.static(path.join(__dirname, 'build'
 app.post('/admin/create', async (req, res) => {
   const newAdmin = new Admin({
     email: 'admin@example.com',
-    password: 'password123', // не забудьте изменить это на более сложный пароль
+    password: 'password123',
   });
 
   await newAdmin.save();
@@ -1635,7 +1635,7 @@ router.post('/categories', async (req, res) => {
     return res.status(400).json({ message: 'Название обязательно' });
   }
   try {
-    // (по необходимости — чтобы не создавать дубликаты с тем же именем и parent)
+
     const exists = await Category.findOne({ name, parent });
     if (exists) {
       return res.status(409).json({ message: 'Такая категория уже есть' });
@@ -1648,9 +1648,6 @@ router.post('/categories', async (req, res) => {
   }
 });
 
-
-// ==== Загрузка файла (авторизация обязательна) ====
-// front: formData: {file, category: Zamery/BIOS/Foto-Scan и т.д}
 router.post('/files', depoUpload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: 'Файл не найден.' });
@@ -1952,6 +1949,7 @@ app.get('/api/telegram/updates', async (req, res) => {
     res.status(500).json({ error: 'Failed to get updates' });
   }
 });
+///
 app.get('/get-ip', (req, res) => {
   const ip = req.clientIp;
   console.log(`Получен IP: ${ip}`);
