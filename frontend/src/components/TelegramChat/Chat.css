@@ -527,11 +527,11 @@
 
 .emoji-close-btn {
   position: absolute;
-  top: 5px;
+  top: 10px;
   right: 5px;
   background: rgba(255, 255, 255, 0.8);
   border: none;
-  border-radius: 50%;
+  border-radius: 50px;
   width: 25px;
   height: 25px;
   font-size: 1.1rem;

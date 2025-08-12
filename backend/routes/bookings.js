@@ -3,7 +3,7 @@ const router = express.Router();
 const Booking = require('../models/Booking');
 const Service = require('../models/service');
 const axios = require('axios');
-const BOT_TOKEN = process.env.BOT_TOKEN || '7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc';
+const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHAT_ID = process.env.CHAT_ID || '406806305';
 
 // Создание записи

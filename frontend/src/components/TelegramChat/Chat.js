@@ -8,9 +8,6 @@ import Icon from "../../images/Up.svg";
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 
-const BOT_TOKEN = "7903855692:AAEsBiERZ5B7apWoaQJvX0nNRB-PEJjmBcc";
-const CHAT_ID = "406806305";
-
 // Генерация и сохранение ID пользователя
 function getUserId() {
   let id = localStorage.getItem('reactchat_userid');
@@ -20,33 +17,16 @@ function getUserId() {
   }
   return id;
 }
-const USER_ID = getUserId();
 
 // Сохранение имени пользователя в localStorage
 function getUserName() {
   return localStorage.getItem('chat_userName') || '';
 }
 
-// Парсинг ответов от Telegram
-function parseBotReplies(updates) {
-  return updates
-    .filter(
-      u =>
-        u.message &&
-        u.message.reply_to_message &&
-        typeof u.message.reply_to_message.text === 'string' &&
-        u.message.reply_to_message.text.includes(USER_ID)
-    )
-    .map(u => ({
-      _id: u.update_id,
-      author: 'manager',
-      text: u.message.text,
-      createdAt: new Date(u.message.date * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      status: "delivered"
-    }));
-}
-
 export default function Chat() {
+  const USER_ID = getUserId();
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://servicebox35.pp.ru';
+  
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [text, setText] = useState('');
@@ -92,19 +72,74 @@ export default function Chat() {
       if (!userName) {
         setShowNameModal(true);
       } else {
-        // Загружаем историю сообщений при открытии
         loadMessageHistory();
       }
     }
   }, [open, userName]);
 
+  // Emoji picker
+   const addEmoji = (emoji) => {
+    setText(prevText => prevText + (emoji.native || emoji));
+    setShowEmoji(false); // Закрываем пикер после выбора
+  };
+
+  // Сохраняем имя
+  const saveName = () => {
+    const newName = tempName.trim();
+    if (!newName) return;
+
+    setUserName(newName);
+    localStorage.setItem('chat_userName', newName);
+    setIsEditingName(false);
+    setShowNameModal(false);
+    loadMessageHistory();
+  };
+
+  // Отправка сообщения
+  async function sendMessage(e) {
+    e?.preventDefault();
+    if (!text.trim() || !userName) return;
+    setPending(true);
+
+    const msgId = Date.now();
+
+    // Звук отправки
+    sndSend.current?.play();
+
+    try {
+      // Отправляем через наш бэкенд
+      await axios.post(`${API_BASE_URL}/api/telegram/send`, {
+        userId: USER_ID,
+        userName,
+        text: text.trim()
+      });
+
+      setMessages(msgs => [
+        ...msgs,
+        {
+          _id: msgId,
+          author: 'user',
+          text,
+          userName,
+          createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          status: "sent"
+        }
+      ]);
+      setText('');
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setPending(false);
+    }
+  }
+
   // Загрузка истории сообщений
   const loadMessageHistory = async () => {
     try {
       const response = await axios.get(
-        `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`
+        `${API_BASE_URL}/api/telegram/updates?userId=${USER_ID}`
       );
-      const replies = parseBotReplies(response.data.result || []);
+      const replies = response.data || [];
 
       setMessages(old => {
         const known = new Set(old.map(m => m._id));
@@ -124,69 +159,17 @@ export default function Chat() {
     }
   };
 
-  // Emoji picker
-  const addEmoji = (emoji) => setText(text + (emoji.native || emoji));
-
-  // Сохраняем имя
-  const saveName = () => {
-    const newName = tempName.trim();
-    if (!newName) return;
-
-    setUserName(newName);
-    localStorage.setItem('chat_userName', newName);
-    setIsEditingName(false);
-    setShowNameModal(false);
-
-    // Загружаем историю после сохранения имени
-    loadMessageHistory();
-  };
-
-  // Отправка сообщения
-  async function sendMessage(e) {
-    e && e.preventDefault();
-    if (!text.trim() || !userName) return;
-    setPending(true);
-
-    const body = `✉️ Сообщение от ${userName} (ID:${USER_ID}):\n\n${text.trim()}`;
-    const msgId = Date.now();
-
-    // Звук отправки
-    sndSend.current && sndSend.current.play();
-
-    try {
-      await axios.get(
-        `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-        {
-          params: {
-            chat_id: CHAT_ID,
-            text: body,
-            parse_mode: 'HTML'
-          },
-        }
-      );
-      setMessages(msgs =>
-        [...msgs, {
-          _id: msgId,
-          author: 'user',
-          text,
-          userName,
-          createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          status: "sent"
-        }]
-      );
-      setText('');
-    } finally {
-      setPending(false);
-    }
-  }
-
-  // Polling for replies and "mark delivered"
+  // Polling for replies
   useEffect(() => {
     if (!open || !userName) return;
+    
     const timer = setInterval(async () => {
       try {
-        const { data } = await axios.get(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`);
-        const replies = parseBotReplies(data.result || []);
+        const response = await axios.get(
+          `${API_BASE_URL}/api/telegram/updates?userId=${USER_ID}`
+        );
+        const replies = response.data || [];
+        
         if (replies.length) {
           setMessages(old => {
             const known = new Set(old.map(m => m._id));
@@ -195,19 +178,20 @@ export default function Chat() {
                 ? { ...msg, status: 'delivered' }
                 : msg
             );
-            if (replies.some(r => !known.has(r._id))) {
-              sndDelivery.current && sndDelivery.current.play();
+            
+            const newMessages = replies.filter(r => !known.has(r._id));
+            if (newMessages.length) {
+              sndDelivery.current?.play();
             }
-            return [
-              ...withDelivery,
-              ...replies.filter(r => !known.has(r._id))
-            ];
+            
+            return [...withDelivery, ...newMessages];
           });
         }
       } catch (e) {
-        // Ошибки при получении сообщений Telegram игнорируются
+        console.error("Polling error:", e);
       }
     }, 3500);
+    
     return () => clearInterval(timer);
   }, [open, userName]);
 
@@ -223,12 +207,9 @@ export default function Chat() {
 
   return (
     <div className="chat-container-tg">
-
       <audio src={require('../Assets/send.mp3')} ref={sndSend} />
       <audio src={require('../Assets/delivered.mp3')} ref={sndDelivery} />
 
-
-      {/* Кнопка открытия чата (скрывается при открытом чате) */}
       {!open && (
         <button className="open-chat-btn" onClick={handleToggle} aria-label="Открыть чат">
           <img className="chat-icon" src={Cha} alt="чат" />
@@ -238,14 +219,10 @@ export default function Chat() {
 
       {open && (
         <div className="chat-modal">
-          {/* Модалка для ввода имени */}
           {showNameModal && (
             <div className="name-modal">
               <div className="name-modal-content">
-                <button
-                  className="name-modal-close"
-                  onClick={closeNameModal}
-                >
+                <button className="name-modal-close" onClick={closeNameModal}>
                   &times;
                 </button>
                 <h3>Как к вам обращаться?</h3>
@@ -282,7 +259,6 @@ export default function Chat() {
             <button className="chat-close" onClick={handleToggle}>&times;</button>
           </div>
 
-          {/* Бейдж с именем пользователя */}
           {userName && (
             <div className="user-name-badge">
               <span>Ваше имя: </span>
@@ -299,7 +275,6 @@ export default function Chat() {
             </div>
           )}
 
-          {/* Редактирование имени */}
           {isEditingName && (
             <div className="edit-name-container">
               <input
@@ -342,11 +317,13 @@ export default function Chat() {
                 </div>
               </div>
             ) : (
-              messages.map((msg, idx) => (
-                <div key={msg._id || idx} className={`chat-message ${msg.author === 'user' ? 'user-msg' : 'manager-msg'}`}>
-                  {msg.author === 'manager'
-                    ? <img className="chat-ava" src={managerIcon} alt="Поддержка" />
-                    : <img className="chat-ava" src={userIcon} alt="Вы" />}
+              messages.map((msg) => (
+                <div key={msg._id} className={`chat-message ${msg.author === 'user' ? 'user-msg' : 'manager-msg'}`}>
+                  {msg.author === 'manager' ? (
+                    <img className="chat-ava" src={managerIcon} alt="Поддержка" />
+                  ) : (
+                    <img className="chat-ava" src={userIcon} alt="Вы" />
+                  )}
                   <div className="chat-bubble">
                     {msg.author === 'user' && (
                       <div className="message-user-name">{msg.userName || userName}</div>

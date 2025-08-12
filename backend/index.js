@@ -63,7 +63,8 @@ const apiRouter = express.Router();
 
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
 const server = http.createServer(app); // Используйте server вместо http для создания экземпляра socket.io
-
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8313768073:AAGepLKCeWcrDr3KyfivGSRYuD_XNx6-Eso';
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '406806305';
 // Инициализация Socket.io сразу после создания сервера
 const io = new Server(server, {
   cors: {
@@ -140,7 +141,7 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/',
   'https://servicebox35.pp.ru',
   'http://localhost:5000',
-  'https://localhost:3000',
+  'https://servicebox35.ru',
   'https://servicebox35.ru',
   'https://localhost:8000',
   'https://servicebox35.pp.ru',
@@ -199,7 +200,11 @@ const corsOptions = {
   credentials: true
 };
 
-
+// Мидлварь для проверки токена Telegram
+const telegramTokenMiddleware = (req, res, next) => {
+ 
+  next();
+};
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json());
@@ -1894,7 +1899,59 @@ app.get('/api/get-messages', async (req, res) => {
     });
   }
 });
+// Эндпоинт для отправки сообщений в Telegram
+// Эндпоинты Telegram
+app.post('/api/telegram/send', express.json(), async (req, res) => {
+  try {
+    const { userId, userName, text } = req.body;
+    const body = `✉️ Сообщение от ${userName} (ID:${userId}):\n\n${text}`;
 
+    const response = await axios.post(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: body,
+        parse_mode: 'HTML'
+      }
+    );
+
+    res.json({ success: true, data: response.data });
+  } catch (error) {
+    console.error('Telegram send error:', error.response?.data);
+    res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
+app.get('/api/telegram/updates', async (req, res) => {
+  try {
+    const userId = req.query.userId;
+    const response = await axios.get(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates`
+    );
+
+    const updates = response.data.result || [];
+    
+    const replies = updates
+      .filter(u => 
+        u.message?.reply_to_message?.text?.includes(userId)
+      )
+      .map(u => ({
+        _id: u.update_id,
+        author: 'manager',
+        text: u.message.text,
+        createdAt: new Date(u.message.date * 1000).toLocaleTimeString('ru-RU', { 
+          hour: '2-digit', 
+          minute: '2-digit'
+        }),
+        status: "delivered"
+      }));
+
+    res.json(replies);
+  } catch (error) {
+    console.error('Telegram updates error:', error);
+    res.status(500).json({ error: 'Failed to get updates' });
+  }
+});
 app.get('/get-ip', (req, res) => {
   const ip = req.clientIp;
   console.log(`Получен IP: ${ip}`);
