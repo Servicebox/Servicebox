@@ -2,7 +2,6 @@
 
 const config = require('../config/config.json');
 const axios = require('axios');
-const axios = require('axios');
 const TELEGRAM_API_URL = 'https://api.telegram.org/bot';
 let lastUpdateId = 0; // Переменная для отслеживания последнего update_id
 
