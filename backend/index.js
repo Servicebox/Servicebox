@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+
 const { Server } = require('socket.io');
 //require('dotenv').config({ path: require('.env') })
 //console.log(require("dotenv").config())
@@ -36,11 +37,12 @@ const newsRoutes = require('./routes/newsRoutes');
 const News = require('./models/News');
 const promotionRoutes = require('./routes/promotionRoutes');
 const app = express();
+app.set('trust proxy', process.env.NODE_ENV === 'production' ? 2 : false);
 const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
 const YANDEX_PASS = process.env.YANDEX_PASS;
 const CLIENT_URL = 'https://servicebox35.ru';
-app.set('trust proxy', true);
+
 app.use(requestIp.mw());
 const PORT = 8000;
 const nodemailer = require('nodemailer');
@@ -179,17 +181,19 @@ const allowedCors = [
 
 ];
 
-const isBehindProxy = false; // Change to true if behind a proxy
 
-app.set('trust proxy', isBehindProxy);
-
-// Настройка Rate Limiting
 // Настройка Rate Limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 минут
-  max: 200, // Максимум 100 запросов с одного IP за windowMs
-  skip: (req) => req.method === 'OPTIONS', // Пропускаем CORS предзапросы
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  skip: (req) => req.method === 'OPTIONS',
   message: 'Слишком много запросов с этого IP, попробуйте позже.',
+  validate: {
+    trustProxy: false
+  },
+  keyGenerator: (req) => {
+     return req.socket.remoteAddress;
+  }
 });
 
 app.use(limiter);
