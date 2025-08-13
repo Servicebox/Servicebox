@@ -37,7 +37,7 @@ const newsRoutes = require('./routes/newsRoutes');
 const News = require('./models/News');
 const promotionRoutes = require('./routes/promotionRoutes');
 const app = express();
-app.set('trust proxy', process.env.NODE_ENV === 'production' ? 2 : false);
+app.set('trust proxy', true);
 const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
 const YANDEX_PASS = process.env.YANDEX_PASS;
@@ -181,19 +181,42 @@ const allowedCors = [
 
 ];
 
-// Настройка Rate Limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 200,
-  skip: (req) => req.method === 'OPTIONS',
-  message: 'Слишком много запросов с этого IP, попробуйте позже.',
-  validate: false ,
-  keyGenerator: (req) => {
-     return req.socket.remoteAddress;
+// Удалите весь блок с express-rate-limit
+// И замените на:
+const rateLimitMap = new Map();
+
+app.use((req, res, next) => {
+  const ip = req.ip;
+  const now = Date.now();
+  const windowSize = 15 * 60 * 1000; // 15 минут
+  const maxRequests = 200;
+
+  if (!rateLimitMap.has(ip)) {
+    rateLimitMap.set(ip, {
+      count: 1,
+      startTime: now
+    });
+    return next();
   }
+
+  const entry = rateLimitMap.get(ip);
+  
+  // Сброс счетчика если окно истекло
+  if (now - entry.startTime > windowSize) {
+    entry.count = 1;
+    entry.startTime = now;
+    return next();
+  }
+
+  // Проверка лимита
+  if (entry.count >= maxRequests) {
+    return res.status(429).send('Слишком много запросов');
+  }
+
+  entry.count++;
+  next();
 });
 
-app.use(limiter);
 const corsOptions = {
   origin: ['https://servicebox35.ru', 'https://servicebox35.pp.ru'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -201,11 +224,6 @@ const corsOptions = {
   credentials: true
 };
 
-// Мидлварь для проверки токена Telegram
-const telegramTokenMiddleware = (req, res, next) => {
- 
-  next();
-};
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 app.use(express.json());
@@ -1764,7 +1782,7 @@ const userMessageSchema = new mongoose.Schema({
 });
 const UserMessage = mongoose.model('UserMessage', userMessageSchema);
 // Маршрут для получения сообщений
-app.post('/send-message', async (req, res) => {
+app.post('/api/send-message', async (req, res) => {
   const { userId, userName, text } = req.body;
 
   if (!userId || !userName || !text) {
@@ -1811,7 +1829,7 @@ app.post('/send-message', async (req, res) => {
 });
 
 // Маршрут для получения сообщений
-app.get('/get-messages', async (req, res) => {
+app.get('/api/get-messages', async (req, res) => {
   const userId = req.query.userId;
 
   if (!userId) {
@@ -1865,7 +1883,7 @@ app.get('/get-messages', async (req, res) => {
 });
 // Эндпоинт для отправки сообщений в Telegram
 // Эндпоинты Telegram
-app.post('/telegram/send', express.json(), async (req, res) => {
+app.post('/api/telegram/send', express.json(), async (req, res) => {
   try {
     const { userId, userName, text } = req.body;
     const body = `✉️ Сообщение от ${userName} (ID:${userId}):\n\n${text}`;
@@ -1886,7 +1904,7 @@ app.post('/telegram/send', express.json(), async (req, res) => {
   }
 });
 
-app.get('/telegram/updates', async (req, res) => {
+app.get('/api/telegram/updates', async (req, res) => {
   try {
     const userId = req.query.userId;
     const response = await axios.get(
