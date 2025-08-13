@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 const config = require('./config/config.json');
-const request = require('request');
+const axios = require('axios');
 
 const wss = new WebSocket.Server({ port: 8000 });
 
@@ -27,7 +27,7 @@ wss.on('connection', (ws) => {
 const sendMessageToTelegram = (message) => {
   const msg = encodeURI(message);
   
-  request.post(
+  axios.post(
     `https://api.telegram.org/bot${config.telegram.token}/sendMessage?chat_id=${config.telegram.chat}&parse_mode=html&text=${msg}`,
     (error, response, body) => {
       if (!error && response.statusCode === 200) {

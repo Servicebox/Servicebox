@@ -600,9 +600,6 @@ const messageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('Message', messageSchema);
 
-
-
-//
 app.post('/api/removefromcart', fetchUser, async (req, res) => {
   try {
     const productId = req.body.itemId;
@@ -716,13 +713,7 @@ app.get('/api/allproducts', cache('5 minutes'), async (req, res) => {
     res.status(500).json({ success: false, message: 'Ошибка получения товаров' })
   }
 });
- ////
-
-
-
-
 // Получение подкатегорий для категории
-
 app.get('/api/categories-full', async (req, res) => {
   try {
     const categories = await Category.find().populate('subcategories');
@@ -1797,7 +1788,7 @@ const userMessageSchema = new mongoose.Schema({
 });
 const UserMessage = mongoose.model('UserMessage', userMessageSchema);
 // Маршрут для получения сообщений
-app.post('/api/send-message', async (req, res) => {
+app.post('/send-message', async (req, res) => {
   const { userId, userName, text } = req.body;
 
   if (!userId || !userName || !text) {
@@ -1844,7 +1835,7 @@ app.post('/api/send-message', async (req, res) => {
 });
 
 // Маршрут для получения сообщений
-app.get('/api/get-messages', async (req, res) => {
+app.get('/get-messages', async (req, res) => {
   const userId = req.query.userId;
 
   if (!userId) {
