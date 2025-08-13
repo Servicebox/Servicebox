@@ -181,9 +181,6 @@ const allowedCors = [
   'http://localhost:8000/api/telegram/send',
   'https://servicebox35.pp.ru/api/telegram/updates',
   'http://localhost:8000/api/telegram/updates',
-  
-
-
 
 ];
 
