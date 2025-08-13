@@ -181,7 +181,6 @@ const allowedCors = [
 
 ];
 
-
 // Настройка Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -525,31 +524,6 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
   }
 });
 
-// CRUD операций для продуктов
-{/*app.post('/api/addproduct', async (req, res) => {
-  try {
-    const lastProduct = await Product.findOne().sort({ id: -1 }).limit(1);
-    const id = lastProduct ? lastProduct.id + 1 : 1;
-    const productData = {
-      id,
-      name: req.body.name,
-      images: req.body.images,
-      category: req.body.category,
-      new_price: Number(req.body.new_price),
-      old_price: Number(req.body.old_price),
-      description: req.body.description,
-      quantity: Number(req.body.quantity)
-    };
-    const product = new Product(productData);
-
-    await product.save();
-    res.json({ success: true, product });
-  } catch (error) {
-    console.error('Error adding product:', error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-*/}
 router.get('/admin/bookings', async (req, res) => {
   try {
     const { status, date } = req.query;
