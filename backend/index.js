@@ -177,6 +177,12 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/bookings',
   'https://servicebox35.pp.ru/api/bookings/',
   'https://servicebox35.pp.ru/api/bookings/admin/bookings',
+  'https://servicebox35.pp.ru/api/telegram/send',
+  'http://localhost:8000/api/telegram/send',
+  'https://servicebox35.pp.ru/api/telegram/updates',
+  'http://localhost:8000/api/telegram/updates',
+  
+
 
 
 ];
@@ -1799,7 +1805,7 @@ app.post('/api/send-message', async (req, res) => {
       `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
       {
         chat_id: CHAT_ID,
-        text: messageText,
+        text: messageText ,
         parse_mode: 'HTML'
       }
     );
