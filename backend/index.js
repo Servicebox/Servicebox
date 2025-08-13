@@ -184,8 +184,6 @@ const allowedCors = [
 
 ];
 
-// Удалите весь блок с express-rate-limit
-// И замените на:
 const rateLimitMap = new Map();
 
 app.use((req, res, next) => {
