@@ -188,9 +188,7 @@ const limiter = rateLimit({
   max: 200,
   skip: (req) => req.method === 'OPTIONS',
   message: 'Слишком много запросов с этого IP, попробуйте позже.',
-  validate: {
-    trustProxy: false
-  },
+  validate: false ,
   keyGenerator: (req) => {
      return req.socket.remoteAddress;
   }
