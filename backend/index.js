@@ -54,8 +54,7 @@ const cache = apicache.middleware;
 const sharp = require('sharp');
 const Booking = require('./models/Booking');
 const Category = require('./models/Category');
-const BOT_TOKEN = '8313768073:AAGepLKCeWcrDr3KyfivGSRYuD_XNx6-Eso';
-const CHAT_ID = '406806305';
+
 const ReactDOMServer = require('react-dom/server');
 const ProductPage = require('./views/ProductPage');
 const Subcategory = require('./models/Subcategory');
@@ -65,8 +64,8 @@ const apiRouter = express.Router();
 
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
 const server = http.createServer(app); // Используйте server вместо http для создания экземпляра socket.io
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '8313768073:AAGepLKCeWcrDr3KyfivGSRYuD_XNx6-Eso';
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID || '406806305';
+const BOT_TOKEN = process.env.BOT_TOKEN || '8313768073:AAGepLKCeWcrDr3KyfivGSRYuD_XNx6-Eso';
+const CHAT_ID = process.env.CHAT_ID || '406806305';
 // Инициализация Socket.io сразу после создания сервера
 const io = new Server(server, {
   cors: {
@@ -1890,9 +1889,9 @@ app.post('/api/telegram/send', express.json(), async (req, res) => {
     const body = `✉️ Сообщение от ${userName} (ID:${userId}):\n\n${text}`;
 
     const response = await axios.post(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
       {
-        chat_id: TELEGRAM_CHAT_ID,
+        chat_id: CHAT_ID,
         text: body,
         parse_mode: 'HTML'
       }
@@ -1909,7 +1908,7 @@ app.get('/api/telegram/updates', async (req, res) => {
   try {
     const userId = req.query.userId;
     const response = await axios.get(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates`
+      `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`
     );
 
     const updates = response.data.result || [];
