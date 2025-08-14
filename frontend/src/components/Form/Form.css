@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2;
 }
 
 .form-container {
@@ -155,7 +155,7 @@ background: #023878;
 .close-button__img:hover { opacity: 1; }
 
  @media screen and (max-width: 767px) {
-  .form-container {
+  .form-container{
     width: 90%;
   }
   .close-button__img{

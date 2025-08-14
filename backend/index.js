@@ -177,9 +177,9 @@ const allowedCors = [
   'https://servicebox35.pp.ru/api/bookings/',
   'https://servicebox35.pp.ru/api/bookings/admin/bookings',
   'https://servicebox35.pp.ru/api/telegram/send',
-  'http://localhost:8000/api/telegram/send',
+  'https://servicebox35.pp.ru/api/telegram/send',
   'https://servicebox35.pp.ru/api/telegram/updates',
-  'http://localhost:8000/api/telegram/updates',
+  'https://servicebox35.pp.ru/api/telegram/updates',
 
 ];
 

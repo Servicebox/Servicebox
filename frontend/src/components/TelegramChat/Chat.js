@@ -25,7 +25,7 @@ function getUserName() {
 
 export default function Chat() {
   const USER_ID = getUserId();
-  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://servicebox35.pp.ru';
+  const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://servicebox35.pp.ru/api';
   
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);

@@ -6,68 +6,72 @@ const TELEGRAM_API_URL = 'https://api.telegram.org/bot';
 let lastUpdateId = 0; // Переменная для отслеживания последнего update_id
 
 // Функция для отправки сообщений
-module.exports.sendMsg = async (req, res) => {
-    let reqBody = req.body;
-    let fields = [
-        '<b>Name</b>: ' + reqBody.name,
-        '<b>Phone</b>: ' + reqBody.phone,
-        '<b>Description</b>: ' + reqBody.description,
-    ];
-    let msg = fields.join('\n');
-    msg = encodeURI(msg);
-
-   await axios.post(
-        `https://api.telegram.org/bot${config.telegram.token}/sendMessage?chat_id=${config.telegram.chat}&parse_mode=html&text=${msg}`,
-        function (error, response, body) {
-            console.log('error:', error);
-            console.log('statusCode:', response && response.statusCode);
-            console.log('body:', body);
-            if (response.statusCode === 200) {
-                res.status(200).json({
-                    status: 'ok',
-                    message: 'Успешно отправлено!',
-                });
-            } else {
-                res.status(400).json({
-                    status: 'error',
-                    message: 'Произошла ошибка!',
-                });
+// Универсальная функция для отправки сообщений
+async function sendTelegramMessage(text) {
+    try {
+        const response = await axios.post(
+            `${TELEGRAM_API_URL}${config.telegram.token}/sendMessage`,
+            {
+                chat_id: config.telegram.chat,
+                parse_mode: 'HTML',
+                text: text
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                timeout: 5000 // Таймаут 5 секунд
             }
-        }
-    );
+        );
+        
+        return response.data;
+    } catch (error) {
+        console.error('Telegram API error:', error.response?.data || error.message);
+        throw new Error('Failed to send message to Telegram');
+    }
+}
+
+module.exports.sendMsg = async (req, res) => {
+    try {
+        const { name, phone, description } = req.body;
+        const message = `
+            <b>Name</b>: ${name}
+            <b>Phone</b>: ${phone}
+            <b>Description</b>: ${description}
+        `;
+        
+        await sendTelegramMessage(message);
+        
+        res.status(200).json({
+            status: 'ok',
+            message: 'Успешно отправлено!'
+        });
+    } catch (error) {
+        console.error('Error sending message:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Ошибка при отправке сообщения'
+        });
+    }
 };
 
-// Функция для отправки сообщений из чата
 module.exports.sendChatMessage = async (req, res) => {
-    const { text, userId } = req.body;
-
-    if (!text || !userId) {
-        return res.status(400).json({ status: 'error', message: 'Недостаточно данных для отправки сообщения.' });
-    }
-
-    const message = `USER:${userId}\n${text}`;
-
     try {
-        const response = await axios.post(`${TELEGRAM_API_URL}${config.telegram.token}/sendMessage`, {
-            chat_id: config.telegram.chat,
-            parse_mode: 'HTML',
-            text: message
+        const { text, userId } = req.body;
+        const message = `USER:${userId}\n${text}`;
+        
+        await sendTelegramMessage(message);
+        
+        res.status(200).json({
+            status: 'ok',
+            message: 'Сообщение успешно отправлено!'
         });
-
-        if (response.status === 200) {
-            res.status(200).json({
-                status: 'ok',
-                message: 'Сообщение успешно отправлено!'
-            });
-        } else {
-            res.status(400).json({
-                status: 'error',
-                message: 'Ошибка при отправке сообщения.'
-            });
-        }
     } catch (error) {
-        console.error('Ошибка при отправке сообщения:', error.message);
-        res.status(500).json({ status: 'error', message: 'Ошибка сервера' });
+        console.error('Error sending chat message:', error);
+        res.status(500).json({
+            status: 'error',
+            message: 'Ошибка при отправке сообщения'
+        });
     }
 };
 let isFetchingUpdates = false;
