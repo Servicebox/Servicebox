@@ -87,7 +87,7 @@ function Header() {
                     <div className="contacts__block">
                         <ul className="contacts__icon">
                             <li className="contacts__icon-sochial pulse-one"><a href="https://vk.com/servicebox35" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faVk} /><span>VK</span></a></li>
-                            <li className="contacts__icon-sochial pulse-two"><a href="whatsapp://send?phone=79062960353" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faWhatsapp} /><span>Whatsapp</span></a></li>
+                            <li className="contacts__icon-sochial pulse-two"><a href="whatsapp://send?phone=79062960353" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faWhatsapp} /><span>WhatsApp</span></a></li>
                             <li className="contacts__icon-sochial pulse-three"><a href="tg://resolve?domain=@Tomkka" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faTelegram} /><span>Telegram</span></a></li>
                         </ul>
                     </div>

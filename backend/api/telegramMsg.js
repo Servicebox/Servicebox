@@ -6,7 +6,7 @@ const TELEGRAM_API_URL = 'https://api.telegram.org/bot';
 let lastUpdateId = 0; // Переменная для отслеживания последнего update_id
 
 // Функция для отправки сообщений
-module.exports.sendMsg = (req, res) => {
+module.exports.sendMsg = async (req, res) => {
     let reqBody = req.body;
     let fields = [
         '<b>Name</b>: ' + reqBody.name,
@@ -16,7 +16,7 @@ module.exports.sendMsg = (req, res) => {
     let msg = fields.join('\n');
     msg = encodeURI(msg);
 
-    axios.post(
+   await axios.post(
         `https://api.telegram.org/bot${config.telegram.token}/sendMessage?chat_id=${config.telegram.chat}&parse_mode=html&text=${msg}`,
         function (error, response, body) {
             console.log('error:', error);
