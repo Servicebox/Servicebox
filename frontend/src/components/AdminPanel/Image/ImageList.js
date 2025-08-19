@@ -86,33 +86,43 @@ const ImageList = () => {
   );
 
   // Отправка файлов
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (files.length === 0) {
-      alert('Пожалуйста, выберите файлы');
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (files.length === 0) {
+    alert('Пожалуйста, выберите файлы');
+    return;
+  }
 
-    setIsUploading(true);
-    const formData = new FormData();
-    files.forEach(file => formData.append('images', file));
-    formData.append('description', description);
+  if (files.length > 5) {
+    alert('Максимум 5 изображений');
+    return;
+  }
 
-    try {
-      const response = await fetch('https://servicebox35.pp.ru/api/gallery/group', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!response.ok) throw new Error('Ошибка загрузки');
-      await response.json();
-      resetForm();
-      await fetchImages();
-      alert('Изображения успешно загружены!');
-    } catch (error) {
-      alert(error.message);
+  setIsUploading(true);
+  const formData = new FormData();
+  files.forEach(file => formData.append('images', file));
+  formData.append('description', description);
+
+  try {
+    const response = await fetch('https://servicebox35.pp.ru/api/gallery/group', {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Ошибка загрузки');
     }
-    setIsUploading(false);
-  };
+    
+    const result = await response.json();
+    resetForm();
+    await fetchImages();
+    alert(`Изображения успешно загружены! Обработано: ${result.processedCount}`);
+  } catch (error) {
+    alert(error.message);
+  }
+  setIsUploading(false);
+};
 
   const resetForm = () => {
     setFiles([]);

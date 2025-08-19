@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+ const { uploadDir } = require('../config/multer');
 const newsSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -7,19 +7,17 @@ const newsSchema = new mongoose.Schema({
     trim: true,
     maxlength: [200, 'Заголовок не может быть длиннее 200 символов']
   },
-  content: {
-    type: String,
-    required: [true, 'Содержание обязательно'],
-    trim: true
-  },
-  image: {
-    type: String,
-    default: ''
-  },
-  video: {
-    type: String,
-    default: ''
-  },
+  contentBlocks: [{
+    type: { 
+      type: String, 
+      enum: ['text', 'image', 'video'],
+      required: true
+    },
+    content: String,
+    media: String,
+    mediaType: String,
+    description: String
+  }],
   createdAt: {
     type: Date,
     default: Date.now

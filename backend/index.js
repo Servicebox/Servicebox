@@ -61,11 +61,13 @@ const Subcategory = require('./models/Subcategory');
 // Создание API роутер
 const categoryRoutes = express.Router();
 const apiRouter = express.Router();
+const ffmpeg = require('fluent-ffmpeg');
 
 // Создаем объект для хранения соответствий сеансов с пользователями Telegram
 const server = http.createServer(app); // Используйте server вместо http для создания экземпляра socket.io
 const BOT_TOKEN = process.env.BOT_TOKEN || '8313768073:AAGepLKCeWcrDr3KyfivGSRYuD_XNx6-Eso';
 const CHAT_ID = process.env.CHAT_ID || '406806305';
+const Group = require('./models/Group');
 // Инициализация Socket.io сразу после создания сервера
 const io = new Server(server, {
   cors: {
@@ -307,8 +309,12 @@ if (!fs.existsSync(uploadDirectory)) {
   fs.mkdirSync(uploadDirectory, { recursive: true });
 }
 app.use('/uploads', express.static(uploadDirectory, {
-  maxAge: '3d',
-  etag: false,
+  maxAge: '365d',
+  setHeaders: (res, path) => {
+    if (path.endsWith('.webp')) {
+      res.setHeader('Content-Type', 'image/webp');
+    }
+  }
 }));
 
 app.use('/api/news', newsRoutes);
@@ -474,14 +480,14 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
     const newImage = new Image({
       filePath: `/uploads/gallery/${filename}`,
       description,
-      mimeType: mimetype,
+      mimeType: 'image/webp',
       likes: [],
     });
 
     await newImage.save();
 
     res.status(201).json({
-      message: 'Изображение успешно загружено',
+      message: 'Изображение успешно загружено и обработано',
       image: {
         _id: newImage._id,
         filePath: newImage.filePath,
@@ -503,7 +509,7 @@ fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
 
 app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
-  maxAge: '3d', // Кэширование на 1 день
+  maxAge: '365d',
   etag: false,
 }));
 
@@ -1469,7 +1475,6 @@ app.post('/api/images/like/:id', fetchUser, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 app.delete('/api/images/delete/:id', async (req, res) => {
   try {
     const image = await Image.findByIdAndDelete(req.params.id);

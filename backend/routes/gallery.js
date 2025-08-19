@@ -4,12 +4,16 @@ const router = express.Router();
 const path = require('path');
 const Image = require('../models/image');
 const Group = require('../models/Group');
-
-
+const sharp = require('sharp');
+const fs = require('fs').promises;
+const fsSync = require('fs');
 
 const fetchUser = require('../middlewares/fetchUser');
-const fs = require('fs');
 
+const galleryDir = path.join(__dirname, '../uploads/gallery');
+if (!fsSync.existsSync(galleryDir)) {
+  fsSync.mkdirSync(galleryDir, { recursive: true });
+}
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, '../uploads/gallery'));
@@ -18,19 +22,33 @@ const storage = multer.diskStorage({
     cb(null, `group_${Date.now()}_${file.originalname}`);
   }
 });
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB на файл
+const memoryStorage = multer.memoryStorage();
+const uploadMemory = multer({
+  storage: memoryStorage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB на файл
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Разрешены только изображения!'), false);
+    }
+  }
 });
+
 // Загрузка группы изображений
-router.post('/group', upload.array('images'), async (req, res) => {
-  console.log('Received files:', req.files.map(f => f.path));
+router.post('/group', uploadMemory.array('images', 5), async (req, res) => {
+  console.log('Received files:', req.files?.map(f => f.originalname));
+  
   try {
     const { description } = req.body;
     const files = req.files;
 
     if (!files || files.length === 0) {
       return res.status(400).json({ error: 'No files uploaded' });
+    }
+
+    if (files.length > 5) {
+      return res.status(400).json({ error: 'Максимум 5 изображений' });
     }
 
     const group = new Group({
@@ -40,24 +58,60 @@ router.post('/group', upload.array('images'), async (req, res) => {
 
     const savedGroup = await group.save();
 
-    const images = files.map(file => ({
-      filePath: `/uploads/gallery/${file.filename}`,
-      groupId: savedGroup._id,
-      description
-    }));
+    const images = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      try {
+        // Оптимизация и конвертация в WebP
+        const webpBuffer = await sharp(file.buffer)
+          .resize(1200, 1200, {
+            fit: 'inside',
+            withoutEnlargement: true
+          })
+          .webp({ 
+            quality: 80,
+            effort: 6 
+          })
+          .toBuffer();
+
+        const filename = `group_${savedGroup._id}_${i}_${Date.now()}.webp`;
+        const filePath = path.join(galleryDir, filename);
+        
+        await fs.writeFile(filePath, webpBuffer);
+
+        images.push({
+          filePath: `/uploads/gallery/${filename}`,
+          groupId: savedGroup._id,
+          description,
+          mimeType: 'image/webp'
+        });
+
+      } catch (processingError) {
+        console.error('Ошибка обработки изображения:', processingError);
+        // Пропускаем проблемное изображение, но продолжаем обработку остальных
+        continue;
+      }
+    }
+
+    if (images.length === 0) {
+      await Group.findByIdAndDelete(savedGroup._id);
+      return res.status(500).json({ error: 'Не удалось обработать ни одно изображение' });
+    }
 
     await Image.insertMany(images);
 
     res.status(201).json({
       message: 'Group uploaded successfully',
-      group: savedGroup
+      group: savedGroup,
+      processedCount: images.length
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Получение всех групп
+// Остальные маршруты остаются без изменений
 router.get('/group', async (req, res) => {
   try {
     const groups = await Group.aggregate([
@@ -79,7 +133,7 @@ router.get('/group', async (req, res) => {
 });
 
 // Загрузка изображения
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', uploadMemory .single('image'), async (req, res) => {
   try {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
@@ -132,7 +186,7 @@ router.get('/image/:filename', async (req, res) => {
 });
 
 // Обновление изображения
-router.put('/:id', upload.single('image'), async (req, res) => {
+router.put('/:id', uploadMemory .single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const { description } = req.body;

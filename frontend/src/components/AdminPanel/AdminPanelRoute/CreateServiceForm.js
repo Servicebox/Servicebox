@@ -14,7 +14,7 @@ const createNewService = async (serviceData) => {
     console.error('Ошибка при создании новой услуги:', error);
   }
 };
-
+const formData = new FormData();
 
 const CreateServiceForm = () => {
   const [formData, setFormData] = useState({

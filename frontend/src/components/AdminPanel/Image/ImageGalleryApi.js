@@ -169,11 +169,11 @@ const ImageGalleryApi = () => {
             <div className="group-preview">
               {group.images.slice(0, 4).map((img, index) => (
                 <img
-                  key={img._id}
-                  src={`https://servicebox35.pp.ru${img.filePath}`} // Добавляем базовый URL
-                  alt={group.description}
-                  onClick={() => handleGroupClick(group, index)}
-                />
+  key={img._id}
+  src={`https://servicebox35.pp.ru${img.filePath}`}
+  alt={group.description}
+  onClick={() => handleGroupClick(group, index)}
+/>
               ))}
               {group.images.length > 4 && (
                 <div className="more-images">+{group.images.length - 4}</div>

@@ -32,6 +32,7 @@ const NewsDetail = () => {
 
   if (loading) return <div className="news-loading">Загрузка новости...</div>;
   if (error) return <div className="news-error">{error}</div>;
+  if (!newsItem) return <div className="news-error">Новость не найдена</div>;
 
   return (
     <div className="news-detail-page">
@@ -53,30 +54,44 @@ const NewsDetail = () => {
           </div>
         </header>
 
-        {newsItem.image && (
-          <figure className="news-detail-image">
-            <img
-              src={`https://servicebox35.pp.ru/uploads/${newsItem.image}`}
-              alt={newsItem.title}
-            />
-          </figure>
-        )}
-
-        <div
-          className="news-detail-content"
-          dangerouslySetInnerHTML={{ __html: newsItem.content.replace(/\n/g, '<br/>') }}
-        />
-
-        {newsItem.video && (
-          <div className="news-video-wrapper">
-            <video controls className="news-video">
-              <source
-                src={`https://servicebox35.pp.ru/uploads/${newsItem.video}`}
-                type={`video/${newsItem.video.split('.').pop()}`}
-              />
-            </video>
+        {newsItem.contentBlocks && newsItem.contentBlocks.map((block, index) => (
+          <div key={index} className="content-block">
+            {block.type === 'text' && (
+              <div className="text-content">
+                {block.content.split('\n').map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+              </div>
+            )}
+            
+            {block.type === 'image' && block.media && (
+              <figure className="news-detail-image">
+                <img
+                  src={`https://servicebox35.pp.ru/uploads/${block.media}`}
+                  alt={block.description || newsItem.title}
+                />
+                {block.description && (
+                  <figcaption>{block.description}</figcaption>
+                )}
+              </figure>
+            )}
+            
+            {block.type === 'video' && block.media && (
+              <div className="news-video-wrapper">
+                <video controls className="news-video">
+                  <source
+                    src={`https://servicebox35.pp.ru/uploads/${block.media}`}
+                    type={block.mediaType || 'video/mp4'}
+                  />
+                  Ваш браузер не поддерживает видео тег.
+                </video>
+                {block.description && (
+                  <p className="video-description">{block.description}</p>
+                )}
+              </div>
+            )}
           </div>
-        )}
+        ))}
       </article>
     </div>
   );
