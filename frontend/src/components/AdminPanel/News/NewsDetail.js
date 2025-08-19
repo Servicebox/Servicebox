@@ -174,9 +174,6 @@ const NewsDetail = () => {
         </div>
       )}
 
-      <button onClick={() => navigate(-1)} className="back-button">
-        ← Назад к списку
-      </button>
 
       <article className="news-detail">
         <header className="news-detail-header">
@@ -233,6 +230,9 @@ const NewsDetail = () => {
           </div>
         ))}
       </article>
+       <button onClick={() => navigate(-1)} className="back-button">
+        ← Назад к списку
+      </button>
     </div>
   );
 };

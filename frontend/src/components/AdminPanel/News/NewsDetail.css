@@ -14,7 +14,7 @@
 }
 
 .back-button {
-  background: #f0f0f0;
+  background: #005084;
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
@@ -27,6 +27,7 @@
 
 .news-detail-header {
   margin-bottom: 30px;
+      padding: 10px 20px;
 }
 
 .news-detail-title {
