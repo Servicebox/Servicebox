@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
+
 }
 .news-detail-image {
   margin: 20px 0;
@@ -21,6 +21,8 @@
   cursor: pointer;
   margin-bottom: 20px;
   font-size: 16px;
+  width: 250px;
+  margin-top: 30px;
 }
 
 .news-detail-header {
