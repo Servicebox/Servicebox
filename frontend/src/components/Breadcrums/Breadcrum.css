@@ -11,6 +11,9 @@
 
         padding: 0 10px 0 10px;
 }
+.breadcrum-link{
+color: #292929;
+}
 .breadcrum-img{
     width: 5px;
 }

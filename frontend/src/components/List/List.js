@@ -4,7 +4,7 @@ function List({ products }) {
   return (
     <ol>
       {products.map((product) => (
-        <li key={product.id}>{product.title}</li>
+        <li key={product.slug}>{product.title}</li>
       ))}
     </ol>
   );

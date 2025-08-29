@@ -12,6 +12,14 @@
   width: 90%;
   margin: auto;
 }
+.productdisplay-right {
+  padding: 5px 20px;
+}
+.productdisplay-right-price-new{
+  font-weight: bold;
+  font-size: 30px;
+  color: #ff0000;
+}
 .productdisplay-left {
   display: flex;
   flex-direction: column;

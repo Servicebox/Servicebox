@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link, Route, Routes } from 'react-router-dom';
-import "./AdminPanelRoute.css"
+import "../AdminPanel.css"
 import CreateImage from '../Image/CreateImage';
 import CreateServiceForm from './CreateServiceForm';
 import DeleteService from './DeleteService';

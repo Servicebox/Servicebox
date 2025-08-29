@@ -13,7 +13,6 @@ const getDefaultCart = () => {
     return cart;
 };
 
-// Добавляем fetchWithAuth
 const fetchWithAuth = async (url, options = {}) => {
     const token = localStorage.getItem('auth-token');
     const headers = options.headers || {};
@@ -32,15 +31,15 @@ const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState(getDefaultCart());
     const [all_product, setAll_Product] = useState([]);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const checkTokenValidity = () => {
         const token = localStorage.getItem('auth-token');
         if (token) {
             try {
-                const decoded = jwtDecode(token); // Используем именованный импорт
+                const decoded = jwtDecode(token);
                 const currentTime = Date.now() / 1000;
                 if (decoded.exp < currentTime) {
-                    // Токен истек
                     localStorage.removeItem('auth-token');
                     localStorage.removeItem('refresh-token');
                     setIsAuthenticated(false);
@@ -60,35 +59,61 @@ const ShopContextProvider = (props) => {
 
     useEffect(() => {
         checkTokenValidity();
-
-        // Установить интервал для проверки каждые 5 минут
         const interval = setInterval(checkTokenValidity, 5 * 60 * 1000);
-
         return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
+                setLoading(true);
                 const response = await fetchWithAuth('https://servicebox35.pp.ru/api/allproducts');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
+                
+                // Обрабатываем разные форматы ответа
+                let productsArray = [];
+                
+                if (data.success && Array.isArray(data.products)) {
+                    // Формат: { success: true, products: [...] }
+                    productsArray = data.products;
+                } else if (Array.isArray(data)) {
+                    // Формат: прямой массив
+                    productsArray = data;
+                } else {
+                    console.error('Неверный формат данных:', data);
+                    productsArray = [];
+                }
 
-                // Проверка на уникальность ID
-                const ids = new Set();
-                const uniqueProducts = data.filter(product => {
-                    if (ids.has(product.id)) {
-                        console.error(`Duplicate product ID: ${product.id}`);
+                // Проверка на уникальность по slug
+                const slugs = new Set();
+                const uniqueProducts = productsArray.filter(product => {
+                    if (!product.slug) {
+                        console.error('Product without slug:', product);
                         return false;
                     }
-                    ids.add(product.id);
+                    if (slugs.has(product.slug)) {
+                        console.error(`Duplicate product slug: ${product.slug}`);
+                        return false;
+                    }
+                    slugs.add(product.slug);
                     return true;
                 });
 
+                console.log('Loaded products:', uniqueProducts.length);
                 setAll_Product(uniqueProducts);
             } catch (error) {
                 console.error('Fetch products error:', error);
+                setAll_Product([]);
+            } finally {
+                setLoading(false);
             }
         };
+
         const fetchCartItems = async () => {
             const token = localStorage.getItem('auth-token');
             if (token) {
@@ -97,7 +122,11 @@ const ShopContextProvider = (props) => {
                         method: 'POST',
                         body: JSON.stringify({}),
                     });
-                    if (!response.ok) throw new Error(`Network response was not ok ${response.statusText}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok ${response.statusText}`);
+                    }
+                    
                     let data = await response.json();
                     setCartItems(data);
                 } catch (error) {
@@ -110,31 +139,35 @@ const ShopContextProvider = (props) => {
         fetchCartItems();
     }, []);
 
-    const addToCart = async (itemId) => {
-        setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+    const addToCart = async (itemSlug) => {
+        setCartItems((prev) => ({ ...prev, [itemSlug]: (prev[itemSlug] || 0) + 1 }));
         const token = localStorage.getItem('auth-token');
         if (token) {
             try {
                 let response = await fetchWithAuth('https://servicebox35.pp.ru/api/addtocart', {
                     method: 'POST',
-                    body: JSON.stringify({ "itemId": itemId }),
+                    body: JSON.stringify({ "itemSlug": itemSlug }),
                 });
                 let data = await response.json();
-                console.log(data);
+                console.log('Add to cart response:', data);
             } catch (error) {
                 console.error('Add to cart error:', error);
             }
         }
     };
 
-    const removeFromCart = async (itemId) => {
-        setCartItems((prev) => ({ ...prev, [itemId]: Math.max(prev[itemId] - 1, 0) }));
+    const removeFromCart = async (itemSlug) => {
+        setCartItems((prev) => ({ 
+            ...prev, 
+            [itemSlug]: Math.max((prev[itemSlug] || 0) - 1, 0) 
+        }));
+        
         const token = localStorage.getItem('auth-token');
         if (token) {
             try {
                 let response = await fetchWithAuth('https://servicebox35.pp.ru/api/removefromcart', {
                     method: 'POST',
-                    body: JSON.stringify({ "itemId": itemId }),
+                    body: JSON.stringify({ "itemSlug": itemSlug }),
                 });
                 await response.json();
             } catch (error) {
@@ -142,19 +175,19 @@ const ShopContextProvider = (props) => {
             }
         }
     };
+
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for (const item in cartItems) {
             if (cartItems[item] > 0) {
-                let itemInfo = all_product.find((product) => product.id === Number(item));
+                let itemInfo = all_product.find((product) => product.slug === String(item));
                 if (itemInfo && itemInfo.new_price) {
                     totalAmount += itemInfo.new_price * cartItems[item];
                 }
             }
         }
         return totalAmount;
-    }
-
+    };
 
     const getTotalCartItems = () => {
         let totalItem = 0;
@@ -164,7 +197,7 @@ const ShopContextProvider = (props) => {
             }
         }
         return totalItem;
-    }
+    };
 
     const contextValue = {
         getTotalCartAmount,
@@ -174,7 +207,8 @@ const ShopContextProvider = (props) => {
         removeFromCart,
         getTotalCartItems,
         isAuthenticated,
-        setIsAuthenticated
+        setIsAuthenticated,
+        loading
     };
 
     return (
@@ -182,6 +216,6 @@ const ShopContextProvider = (props) => {
             {props.children}
         </ShopContext.Provider>
     );
-}
+};
 
 export default ShopContextProvider;

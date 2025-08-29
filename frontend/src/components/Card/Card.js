@@ -31,7 +31,7 @@ closeModal();
 }, []);
 
 useEffect(() => {
-const isItemAdded = addedItems.find((item) => item.id === product.id);
+const isItemAdded = addedItems.find((item) => item.id === product.slug);
 setIsAdded(isItemAdded ? true : false);
 document.addEventListener("keydown", escFunction, false);
 

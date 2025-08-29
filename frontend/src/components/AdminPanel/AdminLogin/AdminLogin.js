@@ -38,7 +38,7 @@ const AdminLogin = () => {
           <label>Password:</label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Логин</button>
       </form>
     </div>
   );

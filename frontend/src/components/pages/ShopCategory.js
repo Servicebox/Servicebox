@@ -9,11 +9,11 @@ const PLACEHOLDER = "data:image/svg+xml;utf8,<svg width='400' height='400' viewB
 
 const ShopCategory = () => {
   const [categories, setCategories] = useState([]);
-  const [openedCat, setOpenedCat] = useState(null); // текущий раскрытый аккордеон
+  const [openedCat, setOpenedCat] = useState(null);
   const [selectedCat, setSelectedCat] = useState('');
   const [selectedSubcat, setSelectedSubcat] = useState('');
   const [products, setProducts] = useState([]);
-  const [allProducts, setAllProducts] = useState([]); // для фильтрации поиска
+  const [allProducts, setAllProducts] = useState([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -22,17 +22,33 @@ const ShopCategory = () => {
     let ignore = false;
     (async () => {
       try {
-        const [cats, prods] = await Promise.all([
+        const [catsResponse, prodsResponse] = await Promise.all([
           axios.get(`${API_URL}/api/categories-with-subcategories`),
           axios.get(`${API_URL}/api/allproducts`),
         ]);
+        
         if (!ignore) {
-          setCategories(cats.data);
-          setProducts(prods.data.reverse());
-          setAllProducts(prods.data);
+          setCategories(catsResponse.data);
+          
+          // Обрабатываем ответ сервера - извлекаем массив products
+          const productsData = prodsResponse.data;
+          let productsArray = [];
+          
+          if (productsData.success && Array.isArray(productsData.products)) {
+            // Формат: { success: true, products: [...] }
+            productsArray = productsData.products;
+          } else if (Array.isArray(productsData)) {
+            // Формат: прямой массив (старый формат)
+            productsArray = productsData;
+          }
+          
+          console.log('Loaded products:', productsArray.length);
+          setProducts(productsArray.reverse());
+          setAllProducts(productsArray);
           setLoading(false);
         }
-      } catch {
+      } catch (error) {
+        console.error('Error fetching data:', error);
         setLoading(false);
       }
     })();
@@ -68,7 +84,7 @@ const ShopCategory = () => {
       );
     }
     setProducts(filtered);
-  }, [search]); // фильтруем только при изменении поиска (категории — в отдельном юз-эффекте)
+  }, [search, selectedCat, selectedSubcat, allProducts]);
 
   const handleCatClick = (cat) => {
     setOpenedCat(openedCat === cat ? null : cat);
@@ -76,6 +92,7 @@ const ShopCategory = () => {
     setSelectedSubcat('');
     setSearch('');
   };
+  
   const handleSubcatClick = (cat, subcat) => {
     setSelectedCat(cat);
     setSelectedSubcat(subcat);
@@ -103,11 +120,11 @@ const ShopCategory = () => {
                 aria-expanded={openedCat === cat.category}
               >
                 {cat.category}
-                {cat.subcategories.length > 0 &&
+                {cat.subcategories && cat.subcategories.length > 0 &&
                   <span className={`cat-arrow${openedCat === cat.category ? ' open' : ''}`}></span>
                 }
               </button>
-              {cat.subcategories.length > 0 && openedCat === cat.category && (
+              {cat.subcategories && cat.subcategories.length > 0 && openedCat === cat.category && (
                 <ul className="shopcategory-submenu">
                   <li>
                     <button
@@ -154,8 +171,21 @@ const ShopCategory = () => {
           <div className="shopcategory-empty"><b>Нет товаров.</b></div>
         ) : (
           <div className="shopcategory-grid">
-            {products.map(product => <Item key={product._id} {...product} />
-            )}
+            {products.map(product => (
+              <Item 
+                key={product.slug || product._id}
+                id={product.slug}
+                slug={product.slug}
+                name={product.name}
+                images={product.images}
+                new_price={product.new_price}
+                old_price={product.old_price}
+                description={product.description}
+                quantity={product.quantity}
+                category={product.category}
+                subcategory={product.subcategory}
+              />
+            ))}
           </div>
         )}
       </main>

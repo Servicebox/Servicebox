@@ -158,6 +158,7 @@
 }
 .shopcategory-grid {
   display: grid;
+  justify-items: center;
   --col: 4;
   grid-template-columns: repeat(var(--col), 1fr);
   gap: 28px 22px;

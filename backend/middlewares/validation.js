@@ -31,7 +31,7 @@ const createProductValidator = celebrate({
     image: Joi.string().required().regex(REGEX_URL_EMAIL),
     trailerLink: Joi.string().required().regex(REGEX_URL_EMAIL),
     thumbnail: Joi.string().required().regex(REGEX_URL_EMAIL),
-    productId: Joi.number().required(),
+    productSlug: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -39,7 +39,7 @@ const createProductValidator = celebrate({
 
 const deleteProductValidator = celebrate({
   params: Joi.object().keys({
-    productId: Joi.string().hex().length(24).required(),
+    productSlug: Joi.string().hex().length(24).required(),
   }),
 });
 

@@ -15,10 +15,13 @@ const jwt = require('jsonwebtoken');
 const compression = require('compression');
 const multer = require('multer');
 const fs = require('fs');
+const fsp = require('fs').promises;
+
 const axios = require('axios');
 const crypto = require('crypto');
 const fetchUser = require('./middlewares/fetchUser');
 const glassReplacementRoutes = require('./routes/glassReplacementRoutes');
+const Product = require('./models/product');
 const imageRoutes = require('./routes/images');
 const requestIp = require('request-ip');
 const bcrypt = require('bcrypt');
@@ -114,7 +117,7 @@ io.on('connection', (socket) => {
     console.log('User disconnected:', socket.id);
   });
 });
-
+const slugify = require('slugify');
 //const emailToken = crypto.randomBytes(64).toString('hex');
 const allowedCors = [
   'http://localhost:5173',
@@ -259,7 +262,7 @@ app.use('/api/bookings', bookingsRouter);
 // Динамическая генерация sitemap.xml
 app.get('/sitemap.xml', async (req, res) => {
   try {
-    const products = await Product.find({}, 'id updatedAt');
+    const products = await Product.find({}, 'slug updatedAt');
     const services = await Service.find({}, 'id updatedAt');
     
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -274,7 +277,7 @@ app.get('/sitemap.xml', async (req, res) => {
         <!-- Динамические страницы -->
         ${products.map(p => `
           <url>
-            <loc>https://servicebox35.ru/product/${p.id}</loc>
+            <loc>https://servicebox35.ru/product/${p.slug}</loc>
             <lastmod>${new Date(p.updatedAt).toISOString()}</lastmod>
             <priority>0.8</priority>
           </url>
@@ -304,9 +307,16 @@ const optimizeImage = async (buffer) => {
 };
 
 // Папка для загрузок
+// Папка для загрузок
 const uploadDirectory = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDirectory)) {
-  fs.mkdirSync(uploadDirectory, { recursive: true });
+try {
+  if (!fs.existsSync(uploadDirectory)) {
+    fs.mkdirSync(uploadDirectory, { recursive: true });
+    console.log('Upload directory created:', uploadDirectory);
+  }
+} catch (error) {
+  console.error('Error creating upload directory:', error);
+  process.exit(1);
 }
 app.use('/uploads', express.static(uploadDirectory, {
   maxAge: '365d',
@@ -321,7 +331,7 @@ app.use('/api/news', newsRoutes);
 app.use('/api', glassReplacementRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/admin', adminRoutes);
-app.use('/api/user', require('./routes/user.js'));
+
 app.use('/api', userRoutes);
 app.use('/api/order', orderRoutes);
 app.use('/api', userRoutes);
@@ -339,30 +349,76 @@ mongoose.connect(MONGODB_URI)
 // Определение моделей
 const Image = require('./models/image');
 const Service = require('./models/service');
-const ProductSchema = new mongoose.Schema({
-  id: { type: Number, required: true },
-  name: { type: String, required: true },
-  images: { type: [String], required: true },
-  category: { type: String, required: true },
-  subcategory: { type: String },
-  new_price: { type: Number, required: true },
-  old_price: { type: Number, required: true },
-  description: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  date: { type: Date, default: Date.now },
-  available: { type: Boolean, default: true }
-}, {
-  versionKey: false
-});
-const Product = mongoose.model('Product', ProductSchema);
+const customSlugify = (text) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // удаляем диакритические знаки
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+};
 
-ProductSchema.index({
-  name: "text",
-  description: "text",
-  category: "text",
-  subcategory: "text"
-});
+const processAndOptimizeImage = async (fileBuffer, originalName, originalMimetype) => {
+  
+  try {
+    
+    let optimizedBuffer;
+    
+    // Создаем безопасное имя файла
+    const safeName = originalName 
+      ? originalName.replace(/[^a-zA-Z0-9.]/g, '_') 
+      : 'image';
+    
+    // Определяем, нужно ли конвертировать в WebP
+    if (originalMimetype === 'image/webp') {
+      // Уже WebP - только сжатие
+      optimizedBuffer = await sharp(fileBuffer)
+        .resize(800, 800, {
+          fit: 'inside',
+          withoutEnlargement: true
+        })
+        .webp({ 
+          quality: 80, 
+          lossless: false, 
+          alphaQuality: 100,
+          effort: 4
+        })
+        .toBuffer();
+    } else {
+      // Другие форматы - конвертация в WebP + сжатие
+      optimizedBuffer = await sharp(fileBuffer)
+        .resize(800, 800, {
+          fit: 'inside',
+          withoutEnlargement: true
+        })
+        .webp({ 
+          quality: 80, 
+          lossless: false, 
+          alphaQuality: 100,
+          effort: 4
+        })
+        .toBuffer();
+    }
 
+    // Генерируем уникальное имя файла
+    const extension = 'webp';
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const webpFilename = `${safeName}-${uniqueSuffix}.${extension}`;
+    
+    return {
+      buffer: optimizedBuffer,
+      filename: webpFilename,
+      mimetype: 'image/webp'
+    };
+  } catch (error) {
+    console.error('Error processing image:', error);
+    throw error;
+  }
+};
 app.use((req, res, next) => {
   const { origin } = req.headers;
   if (allowedCors.includes(origin)) {
@@ -396,9 +452,9 @@ app.use('/api/gpt', require('./routes/gpt'));
 app.get("./", (req, res) => {
   res.send("Express App is runing")
 })
-app.get('/product/:id', async (req, res) => {
+app.get('/product/:slug', async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.slug);
 
     // Рендеринг React-компонента в HTML
     const html = ReactDOMServer.renderToString(
@@ -446,16 +502,67 @@ const productStorage = multer.diskStorage({
   }
 });
 
-const productUpload = multer({ storage: productStorage });
 
-
-app.post('/api/uploads', productUpload.array('product', 3), (req, res) => {
-  if (!req.files || req.files.length === 0) {
-    return res.status(400).json({ success: 0, message: 'Файлы не загружены' });
+const productUpload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: (req, file, cb) => {
+    // Проверяем тип файла
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  },
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
   }
-  const imageUrls = req.files.map(file => `/images/${file.filename}`);
-  res.json({ success: 1, image_urls: imageUrls });
 });
+
+app.post('/api/uploads', productUpload.array('product', 3), async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ success: 0, message: 'Файлы не загружены' });
+    }
+
+    const processedImages = [];
+    const uploadPath = path.join(__dirname, 'uploads', 'images');
+
+    // Создаем директорию если не существует
+    await fsp.mkdir(uploadPath, { recursive: true });
+
+    for (const file of req.files) {
+      try {
+        // Обрабатываем изображение
+        const processedImage = await processAndOptimizeImage(
+          file.buffer, 
+          file.originalname,
+          file.mimetype
+        );
+
+        const filePath = path.join(uploadPath, processedImage.filename);
+        
+        // Сохраняем обработанное изображение
+        await fsp.writeFile(filePath, processedImage.buffer);
+        
+        processedImages.push(`/images/${processedImage.filename}`);
+      } catch (error) {
+        console.error('Error processing file:', file.originalname, error);
+        // Пропускаем проблемный файл, но продолжаем обработку остальных
+        continue;
+      }
+    }
+
+    if (processedImages.length === 0) {
+      return res.status(400).json({ success: 0, message: 'Не удалось обработать ни один файл' });
+    }
+
+    res.json({ success: 1, image_urls: processedImages });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ success: 0, message: 'Ошибка обработки изображений: ' + error.message });
+  }
+});
+
 
 // Директория для сохранения изображений галереи
 const galleryStorage = multer.diskStorage({
@@ -475,10 +582,21 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
     if (!req.file) throw new Error('Необходимо загрузить файл.');
 
     const { description } = req.body;
-    const { filename, mimetype } = req.file;
+    
+    // Обрабатываем изображение
+    const processedImage = await processAndOptimizeImage(
+      req.file.buffer, 
+      req.file.originalname,
+      req.file.mimetype
+    );
+
+    const filePath = path.join(__dirname, 'uploads', 'gallery', processedImage.filename);
+    
+    // Сохраняем обработанное изображение
+    await fsp.writeFile(filePath, processedImage.buffer);
 
     const newImage = new Image({
-      filePath: `/uploads/gallery/${filename}`,
+      filePath: `/uploads/gallery/${processedImage.filename}`,
       description,
       mimeType: 'image/webp',
       likes: [],
@@ -496,16 +614,24 @@ app.post('/upload-gallery', galleryUpload.single('image'), async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('Gallery upload error:', error);
     res.status(500).json({ message: error.message });
   }
 });
-fs.mkdir(uploadDirectory, { recursive: true }, (err) => {
-  if (err && err.code !== 'EEXIST') {
-    console.error("Не могу создать папку для загрузок: ", err);
-    process.exit(1);
+async function ensureUploadDirectory() {
+  try {
+    await fsp.mkdir(uploadDirectory, { recursive: true });
+    console.log('Upload directory ensured:', uploadDirectory);
+  } catch (error) {
+    if (error.code !== 'EEXIST') {
+      console.error("Не могу создать папку для загрузок: ", error);
+      process.exit(1);
+    }
   }
-});
+}
 
+// Вызовите эту функцию при старте
+ensureUploadDirectory();
 
 app.use('/api/gallery', galleryUpload.single('image'), galleryRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
@@ -547,7 +673,83 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+///
+router.post('/api/removeproduct', async (req, res) => {
+  try {
+    await Product.findOneAndDelete({ slug: req.body.sslug });
+    console.log("Product removed");
+    res.json({ success: true, message: "Товар удалён" });
+  } catch (error) {
+    console.error('Remove product error:', error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
 
+// Получить все продукты
+router.get('/api/allproducts', async (req, res) => {
+  try {
+    let products = await Product.find({}, 'id name image category new_price old_price description quantity');
+    console.log("All products fetched");
+    res.send(products);
+  } catch (error) {
+    console.error('Fetch allproducts error:', error.message);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+});
+
+// Добавить продукт
+router.post('/add/addproduct', async (req, res) => {
+  try {
+    let products = await Product.find({});
+    let id = products.length ? products.slice(-1)[0].id + 1 : 1;
+
+    const product = new Product({
+      id,
+      slug: req.body.slug,
+      name: req.body.name,
+      image: req.body.image,
+      category: req.body.category,
+      new_price: req.body.new_price,
+      old_price: req.body.old_price,
+      description: req.body.description,
+      quantity: req.body.quantity,
+    });
+
+    await product.save();
+    console.log("Product saved");
+    res.json({ success: true, message: "Товар добавлен" });
+  } catch (error) {
+    console.error("Error during product addition:", error.message);
+    res.status(500).json({ success: false, message: "Ошибка сервера" });
+  }
+});
+
+// Обновить продукт
+router.put('/add/updateproduct/:id', async (req, res) => {
+  try {
+    const updatedProduct = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      {
+        name: req.body.name,
+        image: req.body.image,
+        category: req.body.category,
+        old_price: req.body.old_price,
+        new_price: req.body.new_price,
+        quantity: req.body.quantity
+      },
+      { new: true }
+    );
+    if (updatedProduct) {
+      res.json({ success: true, product: updatedProduct });
+    } else {
+      res.status(404).json({ success: false, message: 'Товар не найден' });
+    }
+  } catch (error) {
+    console.error('Error updating product:', error);
+    res.status(500).json({ success: false, message: 'Ошибка сервера' });
+  }
+});
+///
 router.get('/admin/bookings', async (req, res) => {
   try {
     const { status, date } = req.query;
@@ -602,16 +804,16 @@ const Message = mongoose.model('Message', messageSchema);
 
 app.post('/api/removefromcart', fetchUser, async (req, res) => {
   try {
-    const productId = req.body.itemId;
-    if (!productId) return res.status(400).json({ message: "Некорректный ID товара" });
+    const productSlug = req.body.itemSlug;
+    if (!productSlug) return res.status(400).json({ message: "Некорректный ID товара" });
 
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "Пользователь не найден" });
 
-    const product = await Product.findOne({ id: Number(productId) });
+    const product = await Product.findOne({ slug: String(productSlug) });
     if (!product) return res.status(404).json({ message: "Товар не найден" });
 
-    const cartKey = String(productId);
+    const cartKey = String(productSlug);
     const currentQuantity = user.cartData.get(cartKey) || 0;
 
     if (currentQuantity < 1)
@@ -658,59 +860,146 @@ app.get('/api/categories-with-subcategories', async (req, res) => {
   }
 });
 
-app.get('/api/products', cache('5 minutes'), async (req, res) => {
-  const { category, subcategory } = req.query;
-  const filter = {};
-  if (category) filter.category = category;
-  if (subcategory) filter.subcategory = subcategory;
+// Эндпоинт для получения товара по slug
+app.get('/api/product/:slug', async (req, res) => {
   try {
-    const products = await Product.find(filter).lean();
-    res.json(products);
-  } catch (e) {
-    res.status(500).json({ message: 'Ошибка сервера' });
+    const product = await Product.findOne({ slug: req.params.slug });
+    
+    if (!product) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'Товар не найден' 
+      });
+    }
+
+    // Добавляем полные URL для изображений
+    const productWithFullUrls = {
+      ...product.toObject(),
+      images: product.images.map(img => {
+        if (img.startsWith('http')) {
+          return img;
+        }
+        return `${req.protocol}://${req.get('host')}${img}`;
+      })
+    };
+
+    res.json({ 
+      success: true, 
+      product: productWithFullUrls 
+    });
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Ошибка сервера' 
+    });
   }
 });
-
-app.post('/api/addproduct', async (req, res) => {
+// Создание продукта
+app.post('/api/addproduct', [
+  body('name').trim().isLength({ min: 1 }).withMessage('Название обязательно'),
+], async (req, res) => {
   try {
-    const lastProduct = await Product.findOne().sort({ id: -1 }).limit(1);
-    const id = lastProduct ? lastProduct.id + 1 : 1;
-    const productData = {
-      id,
-      name: req.body.name,
-      images: req.body.images,
-      category: req.body.category,
-      subcategory: req.body.subcategory,
-      new_price: Number(req.body.new_price),
-      old_price: Number(req.body.old_price),
-      description: req.body.description,
-      quantity: Number(req.body.quantity)
-    };
-    const product = new Product(productData);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Ошибки валидации',
+        errors: errors.array()
+      });
+    }
 
+    const { name, images, category, subcategory, new_price, old_price, description, quantity } = req.body;
+    
+    // Проверяем существование товара с таким именем
+    const existingProduct = await Product.findOne({ 
+      name: { $regex: new RegExp(`^${name}$`, 'i') } 
+    });
+    
+    if (existingProduct) {
+      return res.status(400).json({
+        success: false,
+        message: 'Товар с таким названием уже существует'
+      });
+    }
+
+
+    // Создаем товар - slug сгенерируется автоматически в pre-save хуке
+ const productData = {
+      name: name.trim(),
+      images: Array.isArray(images) ? images : [],
+      category: category || '',
+      subcategory: subcategory || '',
+      new_price: Number(new_price),
+      old_price: Number(old_price) || Number(new_price),
+      description: description || '',
+      quantity: Number(quantity) || 0
+    };
+
+    const product = new Product(productData);
     await product.save();
-    res.json({ success: true, product });
+    
+    res.json({ 
+      success: true, 
+      product,
+      message: 'Товар успешно добавлен' 
+    });
   } catch (error) {
     console.error('Error adding product:', error);
-    res.status(500).json({ success: false, message: error.message });
+    
+    if (error.code === 11000) {
+      // Если все еще возникает ошибка дубликата
+      return res.status(400).json({
+        success: false,
+        message: 'Ошибка создания товара. Попробуйте изменить название.'
+      });
+    }
+    
+    res.status(500).json({ 
+      success: false, 
+      message: 'Ошибка сервера при добавлении товара' 
+    });
   }
 });
+
 app.get('/api/allproducts', cache('5 minutes'), async (req, res) => {
   try {
-    const products = await Product.find({}).lean();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const skip = (page - 1) * limit;
 
-    // Всегда делай images массивом, даже если внутри нет ничего
+    const products = await Product.find({})
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const total = await Product.countDocuments();
+    const totalPages = Math.ceil(total / limit);
+
     const productsWithFullUrls = products.map(product => ({
       ...product,
       images: Array.isArray(product.images) ? product.images.map(img =>
-        typeof img === 'string' && img.startsWith('http') ? img : `${req.protocol}://${req.get('host')}${img}`
-      ) : [],
+        img.startsWith('http') ? img : `${req.protocol}://${req.get('host')}${img}`
+      ) : []
     }));
 
-    res.json(productsWithFullUrls);
+    res.json({
+      success: true,
+      products: productsWithFullUrls,
+      pagination: {
+        current: page,
+        total: totalPages,
+        count: products.length,
+        totalItems: total
+      }
+    });
   } catch (error) {
-    console.error('Error fetching products:', error)
-    res.status(500).json({ success: false, message: 'Ошибка получения товаров' })
+    console.error('Error fetching products:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Ошибка получения товаров' 
+    });
   }
 });
 // Получение подкатегорий для категории
@@ -841,11 +1130,10 @@ app.get('/allservices', async (req, res) => {
 });
 
 //редактирование товара
-app.put('/api/updateproduct/:id', async (req, res) => {
+app.put('/api/updateproduct/:slug', async (req, res) => {
   try {
-    // Используем Number(id) — айди продукта по схеме!
     const updatedProduct = await Product.findOneAndUpdate(
-      { id: Number(req.params.id) },
+      { slug: req.params.slug },
       {
         name: req.body.name,
         images: req.body.images,
@@ -856,20 +1144,35 @@ app.put('/api/updateproduct/:id', async (req, res) => {
         description: req.body.description,
         quantity: Number(req.body.quantity)
       },
-      { new: true }
+      { new: true, runValidators: true }
     );
-    if (updatedProduct) {
-      res.json({ success: true, product: updatedProduct });
-    } else {
-      res.status(404).json({ success: false, message: 'Product not found' });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
     }
+
+    res.json({ success: true, product: updatedProduct });
   } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ success: false, message: error.message });
   }
 });
-// Определение модели пользователя
 
+// Удаление товара по slug
+app.delete('/api/removeproduct/:slug', async (req, res) => {
+  try {
+    const deletedProduct = await Product.findOneAndDelete({ 
+      slug: req.params.slug 
+    });
+    
+    if (!deletedProduct) {
+      return res.status(404).json({ success: false, message: 'Prod not found' });
+    }
+
+    res.json({ success: true, message: 'Product deleted' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 // Настройка почтового транспорта
 const transporter = nodemailer.createTransport({
@@ -931,12 +1234,17 @@ router.post('/login', [
       await User.findByIdAndUpdate(user.id, { refreshToken });
     }
 
-    res.json({
-      token,
-      refreshToken,
-      role: payload.role,
-      username: user.username
-    });
+  res.json({
+    tokens: {
+      accessToken,
+      refreshToken
+    },
+    role: payload.role,
+    username: user.username,
+    email: user.email,
+    id: user.id
+  });
+
 
   } catch (err) {
     console.error(err.message);
@@ -1012,7 +1320,72 @@ const loginLimiter = rateLimit({
   max: 20,
   message: "Слишком много попыток входа с этого IP, попробуйте позже."
 });
+// Добавьте этот код в ваш server.js после определения маршрутов
+app.post('/api/auth/login', [
+  body('email').isEmail().withMessage('Некорректный email'),
+  body('password').exists().withMessage('Пароль обязателен')
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
+  const { email, password } = req.body;
+
+  try {
+    // Проверка пользователя
+    let user = await User.findOne({ email });
+    let isAdmin = false;
+
+    if (!user) {
+      // Проверка администратора
+      const admin = await Admin.findOne({ email });
+      if (admin && await bcrypt.compare(password, admin.password)) {
+        isAdmin = true;
+        user = admin;
+      } else {
+        return res.status(401).json({ message: 'Неверные учетные данные' });
+      }
+    } else {
+      // Проверка пароля обычного пользователя
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: 'Неверные учетные данные' });
+      }
+    }
+
+    // Генерация токена
+    const payload = {
+      id: user.id,
+      role: isAdmin ? 'admin' : 'user'
+    };
+
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+    
+    // Сохранение refreshToken в базе
+    if (isAdmin) {
+      await Admin.findByIdAndUpdate(user.id, { refreshToken });
+    } else {
+      await User.findByIdAndUpdate(user.id, { refreshToken });
+    }
+
+    res.json({
+      tokens: {
+        accessToken,
+        refreshToken
+      },
+      role: payload.role,
+      username: user.username,
+      email: user.email,
+      id: user.id
+    });
+
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Ошибка сервера');
+  }
+});
 // Маршрут регистрации с верификацией email
 app.post('/api/signup',
   signupLimiter,
@@ -1355,29 +1728,52 @@ app.get('/api/popularinpart', async (req, res) => {
 // routes/products.js
 router.post('/api/addtocart', fetchUser, async (req, res) => {
   try {
-    const productId = req.body.itemId;
+    const productSlug = req.body.itemSlug;
     const userId = req.user.id;
 
+    // Находим товар
+    const product = await Product.findOne({ slug: productSlug });
+    if (!product) {
+      return res.status(404).json({ message: "Товар не найден" });
+    }
+
+    // Находим пользователя и текущее количество в корзине
+    const user = await User.findById(userId);
+    const currentInCart = user.cartData.get(productSlug) || 0;
+
+    // Проверяем доступное количество
+    if (currentInCart >= product.quantity) {
+      return res.status(400).json({ 
+        message: "Нельзя добавить больше товара", 
+        available: product.quantity,
+        inCart: currentInCart 
+      });
+    }
+
     // Атомарно уменьшаем количество и добавляем в корзину
-    const product = await Product.findOneAndUpdate(
+    const updatedProduct = await Product.findOneAndUpdate(
       {
-        id: productId,
+        slug: productSlug,
         quantity: { $gt: 0 }
       },
       { $inc: { quantity: -1 } },
       { new: true }
     );
 
-    if (!product) {
+    if (!updatedProduct) {
       return res.status(400).json({ message: "Товар недоступен" });
     }
 
     await User.updateOne(
       { _id: userId },
-      { $inc: { [`cartData.${productId}`]: 1 } }
+      { $inc: { [`cartData.${productSlug}`]: 1 } }
     );
 
-    res.json({ message: "Added", newQuantity: product.quantity });
+    res.json({ 
+      message: "Added", 
+      newQuantity: updatedProduct.quantity,
+      inCart: currentInCart + 1 
+    });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: "Ошибка сервера" });
@@ -1400,7 +1796,7 @@ app.get('/api/search', async (req, res) => {
     // Объединение всех результатов
     const results = [
       ...services.map(service => ({ id: service._id, title: service.serviceName, type: 'Service', description: service.description })),
-      ...products.map(product => ({ id: product._id, title: product.name, type: 'Product', description: product.category, quantity: product.quantity })),
+      ...products.map(product => ({ id: product.slug, title: product.name, type: 'Product', description: product.category, quantity: product.quantity })),
       ...images.map(image => ({ id: image._id, title: image.description, type: 'Image', description: image.filePath }))
     ];
 
@@ -1414,7 +1810,7 @@ app.get('/api/search', async (req, res) => {
 
 
 app.post('/api/removeproduct', async (req, res) => {
-  await Product.findOneAndDelete({ id: req.body.id });
+  await Product.findOneAndDelete({ slug: req.body.slug });
   console.log("Product removed");
   res.json({ success: true });
 });
@@ -1940,12 +2336,93 @@ app.get('/api/telegram/updates', async (req, res) => {
   }
 });
 ///
+// После подключения к MongoDB в основном файле сервера
+if (process.env.NODE_ENV === 'development') {
+const migrateProducts = async () => {
+  try {
+    const products = await Product.find({});
+    
+    for (let product of products) {
+      if (!product.slug) {
+        let baseSlug = slugify(product.name, {
+          lower: true,
+          strict: true,
+          locale: 'ru'
+        });
+        
+        let slug = baseSlug;
+        let counter = 1;
+        let existingProduct = await Product.findOne({ slug });
+        
+        while (existingProduct && existingProduct._id.toString() !== product._id.toString()) {
+          slug = `${baseSlug}-${counter}`;
+          counter++;
+          existingProduct = await Product.findOne({ slug });
+        }
+        
+        product.slug = slug;
+        await product.save();
+        console.log(`Migrated product: ${product.name} -> ${product.slug}`);
+      }
+    }
+    
+    console.log('Products migration completed');
+  } catch (error) {
+    console.error('Products migration failed:', error);
+  }
+};
+
+// Запустите миграцию
+migrateProducts();
+  
+  // Запускаем миграцию при старте сервера
+  migrateProducts();
+}
 app.get('/get-ip', (req, res) => {
   const ip = req.clientIp;
   console.log(`Получен IP: ${ip}`);
   res.json({ ip });
 });
-app.use((req, res, next) => {
+// ==================== HEALTH CHECK ====================
+// Расширенная версия health check
+app.get('/health', async (req, res) => {
+  try {
+    const dbState = mongoose.connection.readyState;
+    const dbStatus = dbState === 1 ? 'connected' : 'disconnected';
+    const dbPing = dbState === 1 ? await mongoose.connection.db.admin().ping() : false;
+
+    res.json({
+      status: 'OK',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      database: {
+        state: dbStatus,
+        ping: dbPing ? 'success' : 'failed',
+        name: mongoose.connection.name // добавить имя БД
+      },
+      memory: process.memoryUsage(),
+      environment: process.env.NODE_ENV || 'development',
+      version: require('./package.json').version // версия приложения
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'ERROR',
+      timestamp: new Date().toISOString(),
+      error: error.message
+    });
+  }
+});
+
+// ==================== ОБРАБОТЧИКИ ОШИБОК ====================
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    status: 'error',
+    message: 'Internal server error'
+  });
+});
+
+app.use((req, res) => {
   res.status(404).json({
     status: 'error',
     message: 'Resource not found'

@@ -136,7 +136,7 @@ const App = () => {
 
 const handleLoginSuccess = (responseData) => {
   // Сохраняем полные данные пользователя
-  localStorage.setItem('auth-token', responseData.token);
+  localStorage.setItem('auth-token', responseData.token.accessToken);
   localStorage.setItem('refresh-token', responseData.refreshToken);
   localStorage.setItem('username', responseData.user.username);
   localStorage.setItem('role', responseData.user.role);
@@ -256,7 +256,9 @@ const handleLoginSuccess = (responseData) => {
           <Route path="/usedspareparts" element={<ShopCategory category="usedsparepart" />} />
           <Route path="/bread-crums" element={<BreadCrums />} />
           <Route path='/product' element={<Product />} >
-            <Route path=':productId' element={<Product />} />
+          <Route path='/product/:productSlug' element={<Product/>} />
+          <Route path='/product/:productName' element={<Product/>} />
+            <Route path=':productSlug' element={<Product />} />            
             <Route path=':productName' element={<Product />} />
           </Route>
           <Route path='/cart' element={<Cart />} />

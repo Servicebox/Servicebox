@@ -1,33 +1,30 @@
-import React, { useContext, useState } from 'react'
-import './ProductDisplay.css'
+import React, { useContext, useState, useEffect } from 'react';
+import { ShopContext } from '../Contexst/ShopContext';
+import './ProductDisplay.css';
 
-import { Link } from 'react-router-dom'
-
-import { ShopContext } from '../Contexst/ShopContext'
 const PLACEHOLDER = "data:image/svg+xml;utf8,<svg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'><rect fill='%23F1F1F1' width='400' height='400'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='32' fill='%23b3b3b3'>Нет фото</text></svg>";
 
-const ProductDisplay = (props) => {
-  const { product } = props;
-  const { addToCart } = useContext(ShopContext);
+const ProductDisplay = ({ product }) => {
+  const { addToCart, cartItems } = useContext(ShopContext);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [currentQuantity, setCurrentQuantity] = useState(1);
 
-  if (!product) return <div>Загрузка...</div>;
+  if (!product) return <div className="loading">Загрузка товара...</div>;
 
-  // если нет фоток, то всегда используем placeholder
   const images = Array.isArray(product.images) && product.images.length > 0
     ? product.images
-    : ['/placeholder-image.jpg'];
+    : [PLACEHOLDER];
 
-  const handlePopupNavigation = (direction) => {
-    setSelectedImage(prev => {
-      if (direction === 'next') return (prev + 1) % images.length;
-      return (prev - 1 + images.length) % images.length;
-    });
+  const availableStock = product.quantity || 0;
+  const inCart = cartItems[product.slug] || 0;
+  const canAddToCart = availableStock > inCart;
+
+  const handleAddToCart = () => {
+    if (canAddToCart) {
+      addToCart(product.slug);
+    }
   };
-  const handleThumbnailClick = (idx) => setSelectedImage(idx);
-
-
 
   return (
     <div className="productdisplay">
@@ -37,8 +34,8 @@ const ProductDisplay = (props) => {
             <img
               key={i}
               src={img}
-              alt={`Миниатюра ${i}`}
-              onClick={() => handleThumbnailClick(i)}
+              alt={`Миниатюра ${i + 1}`}
+              onClick={() => setSelectedImage(i)}
               className={i === selectedImage ? 'selected-thumbnail' : ''}
               onError={e => e.target.src = PLACEHOLDER}
             />
@@ -50,55 +47,53 @@ const ProductDisplay = (props) => {
             src={images[selectedImage]}
             onClick={() => setIsPopupOpen(true)}
             onError={e => e.target.src = PLACEHOLDER}
+            alt={product.name}
           />
         </div>
-        {isPopupOpen && (
-          <div className="image-popup-overlay">
-            <div className="image-popup-content">
-              <span className="close-popup" onClick={() => setIsPopupOpen(false)}>&times;</span>
-              <img src={images[selectedImage]} alt={product.name} className="popup-main-image" />
-              <div className="popup-navigation">
-                <button onClick={() => handlePopupNavigation('prev')}>&lt;</button>
-                <button onClick={() => handlePopupNavigation('next')}>&gt;</button>
-              </div>
-              <div className="popup-thumbnails">
-                {images.map((img, index) => (
-                  <img
-                    key={index}
-                    src={img}
-                    alt={`Маленькая ${index}`}
-                    onClick={() => setSelectedImage(index)}
-                    className={index === selectedImage ? 'active-popup-thumbnail' : ''}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
+
       <div className="productdisplay-right">
         <h1>{product.name}</h1>
+        
         <div className="productdisplay-right-prices">
-          <div className="productdisplay-right-price-new">₽{product.new_price}</div>
+          <div className="productdisplay-right-price-new">{product.new_price}₽</div>
+        
         </div>
+
         <div className="productdisplay-right-description">
-          <h1>Описание</h1>
+          <h2>Описание</h2>
           <p>{product.description}</p>
         </div>
-        <div className="productdisplay-quantity">
-          <p className="productdisplay-right-category">
-            <span>На складе :</span> {product.quantity} шт
-          </p>
-        </div>
-        <button className='btn-productdisplay' onClick={() => addToCart(product.id)}>В корзину</button>
 
-        <p className="productdisplay-right-category"><span>Категория :</span> {product.category}</p>
-        <div className="back__btn">
-          <ul>
-            <li><Link to="/">На главную</Link></li>
-          </ul>
+        <div className="productdisplay-quantity-info">
+          <p>На складе: <strong>{availableStock} шт.</strong></p>
+          {inCart > 0 && <p>В вашей корзине: {inCart} шт.</p>}
+        </div>
+
+        <button 
+          className={`btn-productdisplay ${!canAddToCart ? 'disabled' : ''}`}
+          onClick={handleAddToCart}
+          disabled={!canAddToCart}
+        >
+          {canAddToCart ? 'В корзину' : 'Нет в наличии'}
+        </button>
+
+        <div className="productdisplay-meta">
+          <p><span>Категория:</span> {product.category}</p>
+          {product.subcategory && (
+            <p><span>Подкатегория:</span> {product.subcategory}</p>
+          )}
         </div>
       </div>
+
+      {isPopupOpen && (
+        <div className="image-popup-overlay" onClick={() => setIsPopupOpen(false)}>
+          <div className="image-popup-content" onClick={e => e.stopPropagation()}>
+            <span className="close-popup" onClick={() => setIsPopupOpen(false)}>×</span>
+            <img src={images[selectedImage]} alt={product.name} className="popup-main-image" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

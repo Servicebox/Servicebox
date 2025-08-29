@@ -87,82 +87,111 @@ const ListProduct = () => {
   };
 
   // Отправка нового товара
-  const handleNewSubmit = async (e) => {
-    e.preventDefault();
-    if (!newProduct.images || newProduct.images.length === 0) {
-      alert("Сначала загрузите минимум 1 изображение!");
-      return;
-    }
-    setAdding(true);
+const handleNewSubmit = async (e) => {
+  e.preventDefault();
+  if (!newProduct.images || newProduct.images.length === 0) {
+    alert("Сначала загрузите минимум 1 изображение!");
+    return;
+  }
+  setAdding(true);
 
-    // Категория и подкатегория финальные:
-    const cat = newProduct.category === "__new__" ? newProduct.category_typed : newProduct.category;
-    let subcat = "";
-    if (newProduct.category === "__new__") {
-      // Новая категория - можно ввести новую подкатегорию
-      subcat = newProduct.subcategory_typed || "";
-    } else {
-      // Существующая категория
-      if (newProduct.subcategory === "__new__") {
-        subcat = newProduct.subcategory_typed;
-      } else {
-        subcat = newProduct.subcategory || "";
-      }
-    }
+  try {
+    const cat = newProduct.category === "__new__" 
+      ? newProduct.category_typed 
+      : newProduct.category;
+      
+    const subcat = newProduct.subcategory === "__new__"
+      ? newProduct.subcategory_typed
+      : newProduct.subcategory;
 
-    try {
-      const response = await fetch(`${API_URL}/api/addproduct`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: newProduct.name,
-          category: cat,
-          subcategory: subcat,
-          old_price: Number(newProduct.old_price),
-          new_price: Number(newProduct.new_price),
-          description: newProduct.description.replace(/\n/g, '<br>'),
-          quantity: Number(newProduct.quantity),
-          images: newProduct.images
-        }),
-      });
-      if (!response.ok) throw new Error('Ошибка создания товара');
+    const response = await fetch(`${API_URL}/api/addproduct`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: newProduct.name,
+        category: cat,
+        subcategory: subcat,
+        old_price: Number(newProduct.old_price),
+        new_price: Number(newProduct.new_price),
+        description: newProduct.description.replace(/\n/g, '<br>'),
+        quantity: Number(newProduct.quantity),
+        images: newProduct.images
+      }),
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
       setNewProduct({ ...emptyProduct, images: [] });
       setNewProductPreview([]);
       await fetchInfo();
-    } catch {
-      alert("Ошибка при добавлении товара");
+      alert('Товар успешно добавлен!');
+    } else {
+      alert(data.message || 'Ошибка при добавлении товара');
     }
+  } catch (error) {
+    console.error('Error adding product:', error);
+    alert("Ошибка при добавлении товара: " + error.message);
+  } finally {
     setAdding(false);
-  };
-
-  // Получить все товары
-  const fetchInfo = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/allproducts`);
-      const data = await response.json();
-      setAllProducts(data);
-    } catch (e) {
-      alert("Ошибка загрузки списка товаров");
+  }
+};
+const fetchInfo = async () => {
+  try {
+    const response = await fetch(`${API_URL}/api/allproducts`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-  };
+    
+    const data = await response.json();
+    
+    if (data.success && Array.isArray(data.products)) {
+      setAllProducts(data.products);
+    } else if (Array.isArray(data)) {
+      setAllProducts(data);
+    } else {
+      console.error('Неверный формат данных:', data);
+      setAllProducts([]);
+    }
+  } catch (e) {
+    console.error("Ошибка загрузки списка товаров:", e);
+    setAllProducts([]);
+    alert("Ошибка загрузки списка товаров: " + e.message);
+  }
+};
 
   useEffect(() => { fetchInfo(); }, []);
 
   // Удаление товара
-  const remove_product = async (_id) => {
-    if (!window.confirm('Удалить этот товар?')) return;
-    try {
-      await fetch(`${API_URL}/api/removeproduct`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ _id })
-      });
+// Удаление товара по slug
+const remove_product = async (slug) => {
+  if (!slug) {
+    alert('Неверный идентификатор товара');
+    return;
+  }
+  
+  if (!window.confirm('Удалить этот товар?')) return;
+  
+  try {
+    const response = await fetch(`${API_URL}/api/removeproduct/${slug}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      alert('Товар успешно удален');
       await fetchInfo();
-    } catch {
-      alert("Ошибка удаления");
+    } else {
+      alert(data.message || 'Ошибка при удалении товара');
     }
-  };
-
+  } catch (error) {
+    console.error('Error removing product:', error);
+    alert('Ошибка удаления: ' + error.message);
+  }
+};
   // --- Редактирование
   const startEditing = (p) => {
     setEditingProduct({
@@ -236,7 +265,7 @@ const ListProduct = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct.id}`, {
+      const response = await fetch(`${API_URL}/api/updateproduct/${editingProduct.slug}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -397,8 +426,8 @@ const ListProduct = () => {
       <div className='listproduct-allproducts'>
         <hr />
         {filteredProducts.map((product) => (
-          <div key={product._id} className='listproduct-format-main listproduct-format'>
-            {editingProduct && editingProduct._id === product._id ? (
+          <div key={product.slug} className='listproduct-format-main listproduct-format'>
+            {editingProduct && editingProduct.slug === product.slug ? (
               <>
                 <div>
                   <input type="file" multiple accept="image/*" onChange={handleEditImages} />
@@ -499,29 +528,34 @@ const ListProduct = () => {
               </>
             ) : (
               <>
-                <div>
-                 // В списке товаров
-                  {(product.images ?? product.image ? [product.image] : []).slice(0, 3).map((img) =>
-                    !!img && <img
-                      key={`prod-img-${img}`}
-                      className='listproduct-product-icon'
-                      src={img}
-                      alt=''
-                      style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #eee', marginRight: 4 }}
-                    />
-
-                  )}
-                </div>
+              <div>
+  {(Array.isArray(product.images) ? product.images : 
+   product.image ? [product.image] : []).slice(0, 3).map((img) =>
+    img && <img
+      key={`prod-img-${img}`}
+      className='listproduct-product-icon'
+      src={img}
+      alt=''
+      style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #eee', marginRight: 4 }}
+    />
+  )}
+</div>
                 <p>{product.name}</p>
                 <p>{product.description}</p>
                 <p>{product.category}</p>
 
-                <p>₽{product.old_price}</p>
-                <p>₽{product.new_price}</p>
+                <p>{product.old_price}₽</p>
+                <p>{product.new_price}₽</p>
                 <p>{product.quantity}</p>
                 <div className='list-btn'>
                   <button className='list-button' onClick={() => startEditing(product)}>Редактировать</button>
-                  <img onClick={() => remove_product(product._id)} className='listproduct-remove-icon' src={cross_icon} style={{ cursor: 'pointer' }} alt='' />
+                  <img 
+  onClick={() => remove_product(product.slug)} 
+  className='listproduct-remove-icon' 
+  src={cross_icon} 
+  style={{ cursor: 'pointer' }} 
+  alt='Удалить' 
+/>
                 </div>
               </>
             )}

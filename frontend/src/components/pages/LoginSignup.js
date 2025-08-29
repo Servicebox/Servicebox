@@ -20,6 +20,7 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (!isOpen) {
@@ -60,45 +61,33 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
     }
   };
 
-  const login = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://servicebox35.pp.ru/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.password })
-      });
+const login = async () => {
+  setLoading(true);
+  try {
+    const response = await fetch('https://servicebox35.pp.ru/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email, password: formData.password })
+    });
+
+    if (response.ok) {
       const data = await response.json();
-      
-      if (response.ok) {
-        localStorage.setItem('auth-token', data.tokens.accessToken);
-        localStorage.setItem('refresh-token', data.tokens.refreshToken);
-        localStorage.setItem('role', data.role);
-        localStorage.setItem('username', data.username);
-        
-        onLoginSuccess();
-        onClose();
-        
-        if (data.role === 'admin') {
-          navigate('/admin-panel');
-        } else {
-          navigate('/');
-        }
-        onClose(); // Закрыть модалку после успешной авторизации
-        if (data.role === "admin") {
-          navigate('/admin-panel');
-        } else {
-          navigate('/');
-        }
-      } else {
-        setMessage(data.message || "Ошибка входа");
-      }
-    } catch (err) {
-      setMessage("Ошибка сети");
-    } finally {
-      setLoading(false);
+      localStorage.setItem('auth-token', data.tokens.accessToken);
+      localStorage.setItem('refresh-token', data.tokens.refreshToken);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('username', data.username);
+      onLoginSuccess();
+      onClose();
+      navigate('/admin-panel');
     }
-  };
+  } catch (err) {
+    console.error('Login error:', err);
+    setMessage(err.message || "Ошибка сети");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const signup = async () => {
     // Валидация на клиенте

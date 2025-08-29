@@ -93,14 +93,62 @@
     box-sizing: border-box;
     padding: 16px 3vw;
 }
+/* CartItems.css */
+.stock-info {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
 
+.cartitems-ctrl-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cartitems-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-col {
+  padding: 0 10px;
+}
+
+.cart-col-img {
+  width: 80px;
+}
+
+.cart-col-name {
+  flex: 2;
+}
+
+.cart-col-price {
+  width: 100px;
+  text-align: center;
+}
+
+.cart-col-controls {
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cart-col-total {
+  width: 100px;
+  text-align: center;
+}
+
+.cart-col-remove {
+  width: 60px;
+  text-align: center;
+}
 /* Основной flex-табличный вид */
 .cartitems-header,
-.cartitems-row {
-    display: flex;
-    align-items: flex-start;
-    min-width: 650px;
-}
+
 .cartitems-header {
     font-weight: bold;
     background: #f7f7f7;

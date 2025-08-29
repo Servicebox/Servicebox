@@ -6,7 +6,7 @@ const Product = require('./models/product');
 // Удалить продукт
 router.post('/api/removeproduct', async (req, res) => {
   try {
-    await Product.findOneAndDelete({ id: req.body.id });
+    await Product.findOneAndDelete({ slug: req.body.sslug });
     console.log("Product removed");
     res.json({ success: true, message: "Товар удалён" });
   } catch (error) {
@@ -57,7 +57,7 @@ router.post('/add/addproduct', async (req, res) => {
 router.put('/add/updateproduct/:id', async (req, res) => {
   try {
     const updatedProduct = await Product.findOneAndUpdate(
-      { id: req.params.id },
+      { slug: req.params.slug },
       {
         name: req.body.name,
         image: req.body.image,
