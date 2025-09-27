@@ -96,8 +96,9 @@
   border: none;
   border-radius: 7px;
   cursor: pointer;
-  background: #51aaff;
-  color: #fff;
+  background: var(--primary-color);
+  
+  color: var(--color-white);
 
   box-shadow: 0 2px 7px rgba(57,139,255,0.09);
   transition: background .14s;
@@ -109,7 +110,7 @@
 }
 .list-button:hover, .create__btn:hover,
 .glass__btn-active:hover {
-  background: #205bb1;
+  background: var(--primary-color-hover);
 }
 .glass__btn {
   background: #fff;

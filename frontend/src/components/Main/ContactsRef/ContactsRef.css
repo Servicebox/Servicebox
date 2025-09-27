@@ -1,90 +1,92 @@
+/* ContactsRef.css */
+
+
 .contactsRef {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    margin: 10px auto;
-  background-color: #004578;
-    clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
-    padding-bottom: 50px;
-  }
-
-
-  .contacts__content {
-    width: 90%;
-    max-width: 1200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-.contacts__icon-sochial{
-    list-style: none;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 10px auto;
+  clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
+  padding-bottom: 50px;
+  backdrop-filter: blur(1px);
 }
-.contacts__subtitle-ref{
+
+.contacts__content {
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contacts__icon-sochial {
+  list-style: none;
+}
+
+.contacts__subtitle-ref {
   color: white;
   margin: 0;
   padding: 0;
   margin-bottom: 10px;
 }
-.contacts__info{
+
+.contacts__info {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
 }
-.contacts__block-ref{
+
+.contacts__block-ref {
   display: flex;
   flex-direction: column;
-
   gap: 10px;
-
-  color:rgb(255, 255, 255);
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    
-    padding: 10px 15px;
+  color: rgb(63, 63, 63.1);
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 10px 15px;
 }
+
 .contactsRef {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-color: rgb(255, 255, 255);
-
- background-color: #004578;
-    clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
- 
+  color: rgb(255, 255, 255);
+  clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
 }
 
-.contacts__list-text{
+.contacts__list-text {
   margin: 0 auto;
   padding-top: 60px;
   text-align: center;
   padding-bottom: 10px;
-  color: #ffffff;
-
+  color: #292929;
 }
-.contacts__list-title{
+
+.contacts__list-title {
   margin: 0 auto;
 }
-.contacts__text-ref{
 
+.contacts__text-ref {
   cursor: pointer;
   border-bottom: 1px solid #f9a92c;
 }
-.contacts__text-ref:hover {
-  color: #F9A92C;
-}
-.contacts__block-sochial{
 
+.contacts__text-ref:hover {
+  color: var(--color-accent);
+}
+
+.contacts__block-sochial {
   display: flex;
   flex-direction: row;
   margin: 0 auto;
   border-bottom: 1px solid #f9a92c;
 }
-.contacts__image-sochial{
+
+.contacts__image-sochial {
   max-width: 50px;
   height: 50px;
   border: none;
@@ -93,7 +95,8 @@ color: rgb(255, 255, 255);
   margin: 0px auto;
   padding: 3px 6px;
 }
-.contacts__image{
+
+.contacts__image {
   max-width: 30px;
   height: 30px;
   border: none;
@@ -102,31 +105,111 @@ color: rgb(255, 255, 255);
   margin: 0;
 }
 
-
 @media (max-width: 768px) {
-    .contactsRef {
-      padding: 10px;
-    }
-
-
+  .contactsRef {
+    padding: 10px;
+  }
 }
 
 @media (min-width: 320px) and (max-width: 500px) {
-.contacts__info{
- flex-direction: column;
-}
-.contacts__block-ref{
+  .contacts__info {
+    flex-direction: column;
+  }
+
+  .contacts__block-ref {
     padding: 0;
   }
-.footer__contacts{
-  text-align: center;
 
-}
-.contacts__text-ref:hover {
-  color: #F9A92C;
-}
-.contacts__icon{
-  display: none !important;
+  .footer__contacts {
+    text-align: center;
+  }
+
+  .contacts__text-ref:hover {
+    color: var(--color-accent);
+  }
+
+  .contacts__icon {
+    display: none;
+  }
 }
 
+
+.subheading {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  margin-bottom: 0.5em;
 }
+
+
+
+.primary-button {
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow);
+}
+
+.primary-button:hover,
+.primary-button:focus {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.secondary-button {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  box-shadow: var(--shadow-light);
+}
+
+.secondary-button:hover,
+.secondary-button:focus {
+  background-color: var(--color-accent);
+  outline: 1px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+/* Utility Classes */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus Styles (improved for better visibility) */
+*:focus {
+  outline: 2px solid #F9A92C;
+  outline-offset: 2px;
+}
+
+/* Images */
+img {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lists */
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: 1em;
+  padding-left: 1.5em;
+}
+
+li {
+  margin-bottom: 0.25em;
+}
+

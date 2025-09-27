@@ -16,8 +16,6 @@ function CategoryDropdown({ categories, value, onChange }) {
         if (open) document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
     }, [open]);
-
-    // Узнать, есть ли у категории дети
     function hasChildren(catId) {
         return categories.some(cat => String(cat.parent) === String(catId));
     }
@@ -28,8 +26,6 @@ function CategoryDropdown({ categories, value, onChange }) {
             if (!parent && cat.parent) continue;
             if (parent && String(cat.parent) !== String(parent)) continue;
             arr.push({ value: cat._id, label: cat.name, level });
-
-            // Если текущая категория выбрана, раскрываем её дочерние
             if (String(cat._id) === String(selectedId)) {
                 arr = arr.concat(buildOptions(list, selectedId, cat._id, level + 1));
             }
@@ -40,9 +36,7 @@ function CategoryDropdown({ categories, value, onChange }) {
     const selected = value ? categories.find(cat => String(cat._id) === String(value)) : null;
     function handleClick(opt) {
         onChange(opt.value);
-        // Если у выбранной есть дети — не закрываем, пусть пользователь выберет дальше
         if (!hasChildren(opt.value)) setOpen(false);
-        // Если у неё есть подкатегории, остаёмся открытыми
     }
 
     return (
@@ -79,7 +73,6 @@ function CategoryDropdown({ categories, value, onChange }) {
                             onClick={() => handleClick(opt)}
                         >
                             {opt.label}
-                            {/* Отрисуем "→" для тех, у кого есть дети */}
                             {hasChildren(opt.value) && <span style={{ marginLeft: 5, color: "#acgfd", fontSize: 30 }}>▶</span>}
                         </div>
                     ))}

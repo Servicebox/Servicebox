@@ -7,10 +7,7 @@
     
 }
 
-.collections .item {
-    flex-basis: calc(33.333% - 20px); /* Ширина элемента, равная трети контейнера минус отступ */
-    margin-bottom: 20px; /* Отступ снизу для каждого товара */
-}
+
 .newcollections-text{
 text-align: center;
     padding: 5px;
@@ -63,7 +60,7 @@ text-align: center;
     justify-items: center;
 }
 
-/* Адаптивные стили */
+
 @media screen and (max-width: 480px) {
     .collections {
         grid-template-columns: 1fr;
@@ -92,12 +89,4 @@ text-align: center;
 }
 
 /* Стиль для элемента коллекции (Item) */
-.collections .item {
-    box-sizing: border-box;
-}
 
-.collections .item img {
-    width: 100%; /* Ширина изображения соответствует ширине элемента */
-    height: auto; /* Высота изображения автоматически регулируется */
-    display: block; /* Убираем лишние отступы */
-}

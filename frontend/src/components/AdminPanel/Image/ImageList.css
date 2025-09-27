@@ -84,7 +84,7 @@ h1, h2 {
   margin-top: 5px;
   padding: 8px 22px;
   background: #1677e3;
-  color: #fff;
+  color: var(--color-white);
   border: none;
   border-radius: 7px;
   transition: background .13s;
@@ -131,7 +131,7 @@ h1, h2 {
 .delete-btn {
   border: none;
   background: #ec4848;
-  color: #fff;
+  color: var(--color-white);
   padding: 6px 13px;
   border-radius: 6px;
   cursor: pointer;

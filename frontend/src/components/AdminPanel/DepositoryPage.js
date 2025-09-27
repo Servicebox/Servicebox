@@ -30,7 +30,6 @@ function useWindowWidth() {
     return width;
 }
 
-// --- Категории селект каскадный ---
 function CategorySelect({ categories, value, onChange }) {
     function renderOptions(list, level = 0) {
         return (Array.isArray(list) ? list : []).flatMap(c => [
@@ -47,8 +46,6 @@ function CategorySelect({ categories, value, onChange }) {
         </select>
     );
 }
-
-// --- Добавление категории ---
 function AddCategory({ categories, onAdd }) {
     const [name, setName] = useState('');
     const [parent, setParent] = useState('');
@@ -133,10 +130,6 @@ const DepositoryPage = ({ user }) => {
             fontFamily: "Segoe UI, Arial, sans-serif", color: "#24292f"
         }}>
             <h2 className='animated-title'> Депозиторий файлов для сервисного центра</h2>
-
-
-
-            {/* Фильтр по категориям */}
             <div style={{
                 margin: '18px 0 10px 0', display: 'flex', flexWrap: 'wrap', gap: 8
             }}>
@@ -151,8 +144,6 @@ const DepositoryPage = ({ user }) => {
                 >Все</button>
                 <CategorySelect categories={categories} value={category} onChange={setCategory} />
             </div>
-
-            {/* Загрузка файла */}
             <form
                 onSubmit={handleUpload}
                 style={{
@@ -187,8 +178,6 @@ const DepositoryPage = ({ user }) => {
                     Загрузить
                 </button>
             </form>
-
-            {/* Пример админской формы */}
             <AddCategory categories={categories} onAdd={() => axios.get(API + '/categories').then(r => setCategories(r.data))} />
 
             {loading && <div>Загрузка...</div>}

@@ -1,45 +1,62 @@
-import React, { useRef, useEffect } from "react";
-import "./BubbleBackground.css"; 
+import React, { useEffect, useRef } from "react";
+import "./BubbleBackground.css";
 
 function BubbleBackground() {
   const bubbleRef = useRef(null);
+  const animationRef = useRef(null);
+  const positionRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+
+  // Плавная анимация с requestAnimationFrame
+  const animateBubble = () => {
+    if (bubbleRef.current) {
+      bubbleRef.current.style.transform = `translate(${positionRef.current.x}px, ${positionRef.current.y}px)`;
+    }
+    animationRef.current = requestAnimationFrame(animateBubble);
+  };
 
   useEffect(() => {
-   
-    const bubble = document.getElementById('bubble');
-    const mouseFunction = (e) => {
-      let clientX = 0;
-      let clientY = 0;
-      if (e.clientX) {
-        clientX = e.clientX;
-        clientY = e.clientY;
-      } else if (e.touches && e.touches.length > 0) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-      }
-      bubble.style.setProperty('--top', `${clientY}px`);
-      bubble.style.setProperty('--left', `${clientX}px`);
+    // Запускаем анимацию
+    animationRef.current = requestAnimationFrame(animateBubble);
+
+    const handleMove = (clientX, clientY) => {
+      // Обновляем целевую позицию
+      positionRef.current = { x: clientX - 100, y: clientY - 100 }; // центрируем посередине пузыря
     };
 
-    window.addEventListener('mousemove', mouseFunction);
-    window.addEventListener('touchmove', mouseFunction);
+    const mouseMove = (e) => handleMove(e.clientX, e.clientY);
+    const touchMove = (e) => {
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        e.preventDefault(); // предотвращаем скролл при свайпе
+      }
+    };
+
+    window.addEventListener('mousemove', mouseMove);
+    window.addEventListener('touchmove', touchMove, { passive: false });
 
     return () => {
-      window.removeEventListener('mousemove', mouseFunction);
-      window.removeEventListener('touchmove', mouseFunction);
+      window.removeEventListener('mousemove', mouseMove);
+      window.removeEventListener('touchmove', touchMove);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
     };
-  }, [bubbleRef]);
+  }, []);
 
   return (
-    <div className="nav-bubble" >
-    <div ref={bubbleRef} className="bubble" id="bubble" style={{ "--top": "50vh", "--left": "50vw" }}>
-      <div className="bubble__rainbow"></div>
-      <div className="bubble__white"></div>
-      <div className="bubble__bright-circle bubble__bright-circle--first"></div>
-      <div className="bubble__bright-circle bubble__bright-circle--second"></div>
-      <div className="bubble__brightness bubble__brightness--first"></div>
-      <div className="bubble__brightness bubble__brightness--second"></div>
-    </div>
+    <div className="bubble-background">
+      <div 
+        ref={bubbleRef} 
+        className="bubble"
+        aria-hidden="true"
+      >
+        <div className="bubble__rainbow"></div>
+        <div className="bubble__white"></div>
+        <div className="bubble__bright-circle bubble__bright-circle--first"></div>
+        <div className="bubble__bright-circle bubble__bright-circle--second"></div>
+        <div className="bubble__brightness bubble__brightness--first"></div>
+        <div className="bubble__brightness bubble__brightness--second"></div>
+      </div>
     </div>
   );
 }

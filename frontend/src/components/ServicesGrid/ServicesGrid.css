@@ -118,7 +118,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: currentColor;
+  background: #f9a82d;
   transform: scaleX(0);
   transform-origin: right;
   transition: transform 0.3s ease;

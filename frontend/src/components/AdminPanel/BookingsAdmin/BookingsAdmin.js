@@ -31,9 +31,9 @@ const BookingsAdmin = () => {
     return fetch(url, newOptions);
   };
 
-  useEffect(() => {
-    fetchBookings();
-  }, []);
+useEffect(() => {
+  fetchBookings();
+}, [fetchBookings])
 
   useEffect(() => {
     filterBookings();

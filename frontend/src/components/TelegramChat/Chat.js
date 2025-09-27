@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./Chat.css";
-import Cha from "../../images/chatonlain.gif";
+
 import userIcon from "../../images/user.svg";
 import managerIcon from "../../images/manager.webp";
 import Icon from "../../images/Up.svg";
@@ -212,8 +212,8 @@ export default function Chat() {
 
       {!open && (
         <button className="open-chat-btn" onClick={handleToggle} aria-label="Открыть чат">
-          <img className="chat-icon" src={Cha} alt="чат" />
-          <span className="pulse-dot"></span>
+
+          <span className="pulse-dot">Чат</span>
         </button>
       )}
 

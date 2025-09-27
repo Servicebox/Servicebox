@@ -14,7 +14,7 @@
 .videocard-title {
 
   font-weight: 700;
-  background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+  background: var(--color-primary);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -35,7 +35,7 @@
   color: #ff6b6b;
   background: rgba(255, 107, 107, 0.1);
   padding: 0.5rem 1rem;
-  border-radius: 50px;
+  border-radius: 10px;
   margin-top: 0.5rem;
 }
 
@@ -102,7 +102,7 @@
 .price-badge {
   display: inline-block;
   background: rgba(37, 117, 252, 0.15);
-  color: #2575fc;
+  color: var(--color-primary);
   padding: 0.5rem 1.2rem;
   border-radius: 50px;
 
@@ -123,7 +123,7 @@
   gap: 10px;
   padding: 1rem 2rem;
   border: none;
-  border-radius: 50px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -136,8 +136,8 @@ background-color: #023878;
 
 .show-less-btn {
   background: transparent;
- color: #2575fc;
-  border: 2px solid #6a11cb;
+ color: var(--color-primary);
+  border: 2px solid var(--color-secondary);
 }
 
 .show-more-btn:hover {
@@ -146,7 +146,7 @@ background-color: #023878;
 }
 
 .show-less-btn:hover {
-  background: rgba(106, 17, 203, 0.05);
+  background: rgba(26, 17, 203, 0.05);
 }
 
 .additional-info {

@@ -162,7 +162,7 @@ const ImageGalleryApi = () => {
 
     <div className="foto">
 
-      <h2 className="animated-title ">Фотографии до и после ремонта</h2>
+      <h1 className="animated-title ">Фотографии до и после ремонта</h1>
       <div className="group-grid">
         {groups.map(group => (
           <div key={group._id} className="group-card">

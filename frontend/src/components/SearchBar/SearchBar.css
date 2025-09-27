@@ -14,7 +14,7 @@
   max-height: 150px;
   overflow-y: auto;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--color-white);
   z-index: 1000; /* чтобы список был поверх других элементов */
 }
 

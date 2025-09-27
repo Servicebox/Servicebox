@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import "./SpiralAnimation.css";
 
-export default function SpiralAnimation({ text = "SERVICEBOX / ЛЕНИНА / 6", radius = 90, duration = 7000 }) {
+export default function SpiralAnimation({ text = "SERVICEBOX / ЛЕНИНА / 6", radius = 90, duration = 8000 }) {
     const letters = text.split("");
     const ref = useRef();
 

@@ -28,7 +28,7 @@
     background: transparent;
     text-decoration: none;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     margin: 0 auto;
     text-align: center;
   }
@@ -92,7 +92,7 @@
   
     }
     .navigation__link{
-      color: #FFF;
+      color: var(--color-white);
       text-decoration: none;
       text-align: center;
       font-feature-settings: 'clig' off, 'liga' off;

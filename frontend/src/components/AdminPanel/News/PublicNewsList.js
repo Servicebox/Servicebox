@@ -54,7 +54,7 @@ const PublicNewsList = () => {
 
   return (
     <div className="news-page">
-      <h2 className="animated-title">Новости</h2>
+      <h1 className="animated-title">Новости</h1>
       <div className="news-grid">
         {news.map(item => {
           const firstImage = getFirstImage(item.contentBlocks);

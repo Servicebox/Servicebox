@@ -28,7 +28,7 @@
 
 .besplatnaya {
   background: linear-gradient(90deg, #fb2c5c, #f99f0e);
-  color: #fff;
+  color: var(--color-white);
   border-radius: 3px;
   padding: 0 6px;
   font-weight: 600;
@@ -125,7 +125,7 @@
 
 .form-overlay__btn.active {
   background: linear-gradient(90deg, #2884fa, #09decb);
-  color: #fff;
+  color: var(--color-white);
   cursor: pointer;
   box-shadow: 0 2px 6px #13bdc785;
 }

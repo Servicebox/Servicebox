@@ -88,7 +88,7 @@
     right: 10px;
     background: none;
     border: none;
-    color: #ffffff;
+    color: var(--background);
     cursor: pointer;
   }
   .card__text,

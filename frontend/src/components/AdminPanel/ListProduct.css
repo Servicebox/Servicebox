@@ -2,8 +2,8 @@
   max-width: 1200px;
   margin: 40px auto;
   padding: 24px 10px 32px 10px;
-  background: #fff;
-  border-radius: 24px;
+  background: #2c2c2c;
+  border-radius: 10px;
   box-shadow: 0 6px 42px rgba(80, 115, 198, 0.08);
 
 }
@@ -41,7 +41,7 @@ h2 {
   background: #e0f3ff;
   font-weight: 550;
   margin-bottom: 8px;
-  border: 1.4px dashed #49a7ff;
+  border: 1.4px dashed var(--primary-color);
 }
 
 .listproduct-format-main p,
@@ -85,8 +85,8 @@ input[type="number"]:focus, input[type="text"]:focus {
   border: none;
   border-radius: 7px;
   cursor: pointer;
-  background: #2389ea;
-  color: #fff;
+  background: var(--primary-color);
+  color: var(--color-text);
 
   margin-right: 3px;
   box-shadow: 0 2px 7px rgba(57,139,255,0.09);
@@ -98,7 +98,7 @@ input[type="number"]:focus, input[type="text"]:focus {
   cursor: not-allowed;
 }
 .create__btn:hover, .list-button:hover {
-  background: #1553a8;
+  background: var(--primary-color-hover);
 }
 .list-btn {
   display: flex;

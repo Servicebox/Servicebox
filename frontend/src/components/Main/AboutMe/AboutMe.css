@@ -1,9 +1,9 @@
-/* Основные стили */
+
+
 .about-me {
-  padding: 100px 0;
-  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
   position: relative;
   overflow: hidden;
+
 }
 
 .about-me::before {
@@ -13,41 +13,54 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 10% 20%, rgba(41, 128, 185, 0.05) 0%, transparent 20%),
-              radial-gradient(circle at 90% 80%, rgba(46, 204, 113, 0.05) 0%, transparent 20%);
   z-index: 0;
 }
 
 .about-me__content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2rem;
   position: relative;
   z-index: 1;
+
 }
 
-/* Стили для цитаты */
+
 .quote-container {
   position: relative;
-  max-width: 800px;
-  margin: 0 auto 80px;
+  max-width: 900px;
+  margin: 0 auto 4rem;
   text-align: center;
+
+
+
+  border-radius: var(--border-radius);
+  padding: 3rem 2rem;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: var(--transition);
+}
+
+.quote-container:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-5px);
 }
 
 .about-me__title {
-
+  font-size: 1.75rem;
   font-weight: 600;
-  line-height: 1.4;
-  color: #2c3e50;
-  margin-bottom: 30px;
+  line-height: 1.6;
+  color: var(--color-dark);
+  margin-bottom: 2rem;
   position: relative;
-  padding: 30px 0;
+  padding: 0;
 }
 
 .about-me__quote {
   display: inline-block;
   position: relative;
   z-index: 2;
+  font-style: italic;
 }
 
 .quote-decoration {
@@ -56,236 +69,123 @@
   left: 50%;
   transform: translateX(-50%);
   width: 80px;
-  height: 5px;
-  background: linear-gradient(90deg, #3498db, #9b59b6);
-  border-radius: 3px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: 2px;
 }
 
-.about-me__quote::before {
-
-  position: absolute;
-  top: -50px;
-  left: -40px;
-
-  color: rgba(52, 152, 219, 0.1);
-
-  z-index: -1;
-}
-
-.about-me__quote::after {
-  position: absolute;
-  bottom: -80px;
-  right: -40px;
-
-  color: rgba(52, 152, 219, 0.1);
- 
-  z-index: -1;
-}
-
-/* Галерея */
-.about-me__about {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.about-me__gallery {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-  height: 600px;
-  margin: auto ;
-}
-
-.image-container__about {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: opacity 0.5s ease;
-}
-
+/* Анимации для цитат */
 .fade-in {
   opacity: 1;
-  z-index: 1;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .fade-out {
   opacity: 0;
-  z-index: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
-.about-me__image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform 0.5s ease;
-}
-
-.about-me__gallery:hover .about-me__image {
-  transform: scale(1.03);
-}
-
-/* Навигация */
-.gallery-controls {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 20px;
-  transform: translateY(-50%);
-  z-index: 10;
-}
-
-.nav-button {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.nav-button:hover {
-  background: white;
-  transform: scale(1.1);
-}
-
-.nav-button img {
-  width: 24px;
-  height: 24px;
-}
-
-/* Точки */
-.about-me__dots {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
+/* Навигация по цитатам */
+.quote-navigation {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  z-index: 10;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-bottom: 6px;
 }
 
-.about-me__dot {
+.quote-dot {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: rgba(41, 3, 195, 0.881);
-  border: 2px solid white;
+  background: rgba(37, 99, 235, 0.3);
+  border: 2px solid transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   padding: 0;
 }
 
-.about-me__dot:hover {
+.quote-dot:hover {
   transform: scale(1.3);
-  background: #3498db;
+  background: var(--color-primary);
 }
 
-.about-me__dot.active {
-  background: #3498db;
+.quote-dot.active {
+  background: var(--color-primary);
   transform: scale(1.3);
-  box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 /* Анимации */
 @keyframes float {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
   100% { transform: translateY(0px); }
 }
 
 .quote-container {
-  animation: float 6s ease-in-out infinite;
+  animation: float 8s ease-in-out infinite;
 }
 
 /* Адаптивность */
 @media (max-width: 1200px) {
-  .about-me__gallery {
-    height: 500px;
+  .about-me__content {
+    max-width: 900px;
   }
-  
-
 }
 
 @media (max-width: 992px) {
-  .about-me {
-    padding: 80px 0;
-  }
+
   
-  .about-me__gallery {
-    height: 450px;
+  .quote-container {
+    padding: 2.5rem 1.5rem;
   }
   
   .about-me__title {
-
-    padding: 20px 0;
+    font-size: 1.5rem;
   }
   
   .quote-decoration {
     width: 60px;
   }
-  
-  .nav-button {
-    width: 50px;
-    height: 50px;
-  }
 }
 
 @media (max-width: 768px) {
   .about-me {
-    padding: 60px 0;
+    padding: 4rem 0;
   }
   
   .quote-container {
-    margin-bottom: 60px;
-  }
-  
-  .about-me__gallery {
-    height: 400px;
-    border-radius: 15px;
+    margin-bottom: 3rem;
+    padding: 2rem 1.5rem;
   }
   
   .about-me__title {
-
-    padding: 15px 0;
+    font-size: 1.35rem;
+    margin-bottom: 1.5rem;
   }
   
-
-  .about-me__quote::before {
-    top: -30px;
-    left: -20px;
-  }
-  
-  .about-me__quote::after {
-    bottom: -50px;
-    right: -20px;
+  .quote-navigation {
+    margin-top: 1.5rem;
   }
 }
 
 @media (max-width: 576px) {
   .about-me {
-    padding: 40px 0;
+    padding: 3rem 0;
   }
   
-  .about-me__gallery {
-    height: 300px;
+  .about-me__content {
+    padding: 0 1rem;
+  }
+  
+  .quote-container {
+    padding: 1.5rem 1rem;
   }
   
   .about-me__title {
-
-    margin-bottom: 20px;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
   }
   
   .quote-decoration {
@@ -293,32 +193,17 @@
     height: 3px;
   }
   
-  .nav-button {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .nav-button img {
-    width: 18px;
-    height: 18px;
-  }
-  
-  .about-me__dots {
-    bottom: 15px;
-  }
-  
-  .about-me__dot {
-    width: 10px;
-    height: 10px;
+  .quote-dot {
+    width: 12px;
+    height: 12px;
   }
 }
 
-@media (max-width: 400px) {
-  .about-me__gallery {
-    height: 250px;
+/* Улучшения для темной темы */
+@media (prefers-color-scheme: dark) {
+
+  
+  .about-me__title {
+    color: var(--color-text);
   }
-  
-
-  
-
 }

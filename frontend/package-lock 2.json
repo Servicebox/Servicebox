@@ -3433,8 +3433,8 @@
       "license": "MIT"
     },
     "node_modules/@mui/base": {
-      "version": "5.0.0-dev.20240529-082515-213b5e33ab",
-      "resolved": "https://registry.npmjs.org/@mui/base/-/base-5.0.0-dev.20240529-082515-213b5e33ab.tgz",
+      "version": "5.0.0-dev.20250529-082515-213b5e33ab",
+      "resolved": "https://registry.npmjs.org/@mui/base/-/base-5.0.0-dev.20250529-082515-213b5e33ab.tgz",
       "integrity": "sha512-3ic6fc6BHstgM+MGqJEVx3zt9g5THxVXm3VVFUfdeplPqAWWgW2QoKfZDLT10s+pi+MAkpgEBP0kgRidf81Rsw==",
       "deprecated": "This package has been replaced by @base-ui-components/react",
       "license": "MIT",
@@ -3442,8 +3442,8 @@
       "dependencies": {
         "@babel/runtime": "^7.24.6",
         "@floating-ui/react-dom": "^2.0.8",
-        "@mui/types": "^7.2.14-dev.20240529-082515-213b5e33ab",
-        "@mui/utils": "^6.0.0-dev.20240529-082515-213b5e33ab",
+        "@mui/types": "^7.2.14-dev.20250529-082515-213b5e33ab",
+        "@mui/utils": "^6.0.0-dev.20250529-082515-213b5e33ab",
         "@popperjs/core": "^2.11.8",
         "clsx": "^2.1.1",
         "prop-types": "^15.8.1"

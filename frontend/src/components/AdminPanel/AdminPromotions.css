@@ -1,15 +1,3 @@
-/* AdminPromotions.css */
-
-:root {
-  --blue-main: #023878;
-  --accent-blue: #7bb2ff;
-  --danger: #ea244d;
-  --light-bg: #f7faff;
-  --border-color: #cbe1fa;
-  --radius: 12px;
-  --shadow: 0 3px 18px #67a8e218;
-  --form-max: 700px;
-}
 
 body {
   /* Для предотвращения прокрутки на открытии формы, как в toggleForm */
@@ -96,22 +84,21 @@ button {
   border-radius: 6px;
   border: none;
   padding: 8px 20px;
-  color: #fff;
-  background: var(--blue-main);
+  color: var(--color-white);
+  background: var( --color-primary);
   margin-right: 10px;
   transition: background .12s;
   cursor: pointer;
 
-  margin-bottom: 4px;
 }
 
 button[type="button"] {
-  background: var(--blue-main);
-  color: #fff;
+  background: var( --color-primary);
+  color: var( --color-white);
 }
 
 button[type="button"]:hover {
-  background: #6c7899;
+  background: #f9a92c;
 }
 
 button[type="submit"]:hover {
@@ -120,7 +107,7 @@ button[type="submit"]:hover {
 
 button[style*="color: red"] {
   background: var(--danger);
-  color: #fff !important;
+  color: var(--color-white);
   margin-left: 8px;
 }
 

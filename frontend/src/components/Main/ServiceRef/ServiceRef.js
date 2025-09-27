@@ -1,5 +1,4 @@
-import React, { useRef , forwardRef} from "react";
-import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
+import React, { forwardRef } from "react";
 import "./ServiceRef.css";
 import Card from "../MainBanner/Card";
 
@@ -9,14 +8,14 @@ import Card from "../MainBanner/Card";
   const cardsData = [
     { 
       title: "Ноутбуками",
-      subtitle: "Ремонт ноутбуков любой сложности.Замнимаемься заменой мультиконтроллеров, USB портов, кулеров, северных мостов, CPU, пайка BGA, разъемов зарядки,замена матрицы.",
+      subtitle: "Ремонт ноутбуков любой сложности.Занимаемся заменой мультиконтроллеров, USB портов, кулеров, северных мостов, CPU, пайка BGA, разъемов зарядки,замена матрицы.",
       image: "Notebook",
       linkTo: "/notebook-service",
     },
 
     {
       title: "компьютерами и моноблоками",
-      subtitle: "Ремонт компьютером любой сложности,настройка и сборка, комплексное обслуживание.",
+      subtitle: "Ремонт компьютеров любой сложности,настройка и сборка, комплексное обслуживание.",
       image: "Monoblok",
       linkTo: "/monoblock-service",
     },
@@ -49,7 +48,7 @@ import Card from "../MainBanner/Card";
 
     {
       title: "Замена стекла",
-      subtitle: "Замена стекла происходит в течении дня*, на телефоне, планшете, часах. Если у вас есть изображение и нет фантомных нажатии- то можно просто поменять стекло",
+      subtitle: "Замена стекла происходит  дня*, на телефоне, планшете, часах. Если у вас есть изображение и нет фантомных нажатии- то можно просто поменять стекло",
       image: "Glass",
       linkTo: "/glass-replacement-price-lists",
     

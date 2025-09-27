@@ -48,7 +48,7 @@ const GlassReplacementPriceList = () => {
         <div className="glass-process">
           <h2 className="process-title">Процесс замены стекла</h2>
           <p className="process-description">
-            Замена стекла на телефоне производится в течении дня, если аппарат сдали до 13-00! 
+            Замена стекла на телефоне производится в течение дня, если аппарат сдали до 13-00! 
             Замена стекла необходима когда разбился тачскрин, на нем появились трещины, сколы, глубокие царапины.
           </p>
           
@@ -130,7 +130,7 @@ const GlassReplacementPriceList = () => {
                 </svg>
               </button>
             ) : (
-              <button className="show-less-btn" onClick={handleHideAll}>
+              <button className="show-less button" onClick={handleHideAll}>
                 <span>Свернуть список</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                   <path d="M19 9L12 16L5 9" stroke="currentColor" strokeWidth="2"/>

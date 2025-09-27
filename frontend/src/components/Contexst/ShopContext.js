@@ -1,5 +1,3 @@
-// ShopContext.js
-
 import React, { createContext, useState, useEffect } from "react";
 import { jwtDecode } from 'jwt-decode';
 
@@ -88,8 +86,6 @@ const ShopContextProvider = (props) => {
                     console.error('Неверный формат данных:', data);
                     productsArray = [];
                 }
-
-                // Проверка на уникальность по slug
                 const slugs = new Set();
                 const uniqueProducts = productsArray.filter(product => {
                     if (!product.slug) {

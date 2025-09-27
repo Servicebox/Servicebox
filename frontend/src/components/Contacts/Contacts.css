@@ -4,7 +4,7 @@
   position: relative;
   padding: 60px 20px;
  
-  color: #fff;
+  color: var(--color-white);
   overflow: hidden;
   clip-path: polygon(0% 0%, 100% 5%, 100% 95%, 0% 100%);
 }
@@ -121,7 +121,7 @@
 }
 
 .contacts__link:hover {
-  color: #f9a929;
+  color: var(--color-accent);
   transform: translateX(5px);
 }
 
@@ -157,7 +157,7 @@
 }
 
 .social__link:hover {
-  background: rgba(8, 1, 141, 0.15);
+  background: #f9a929;
   transform: translateY(-7px) scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.506);
 }
@@ -366,30 +366,8 @@
   left: 100%;
 }
 
-/* Анимации */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
 
-.pulse-one:hover {
-  animation: pulse 1s infinite, float 3s ease-in-out infinite;
-}
-
-.pulse-two:hover {
-  animation: pulse 1.2s infinite, float 3.2s ease-in-out infinite;
-}
-
-.pulse-three:hover {
-  animation: pulse 0.8s infinite, float 2.8s ease-in-out infinite;
-}
 
 /* Декоративные элементы */
 .contacts:before {

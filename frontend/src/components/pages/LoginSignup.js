@@ -49,8 +49,8 @@ const LoginSignup = ({ isOpen, onClose, onLoginSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(""); // Сброс сообщения
-    if (loading) return; // Предотвращаем отправку, если уже идет загрузка
+    setMessage("");
+    if (loading) return;
 
     if (mode === "Login") {
       await login();
@@ -208,7 +208,7 @@ const login = async () => {
 
       const responseData = await response.json();
       if (responseData.success) {
-        localStorage.setItem('auth-token', responseData.token); // Сохранение токена для авторизации
+        localStorage.setItem('auth-token', responseData.token);
         alert(responseData.message);
         onLoginSuccess();
         onClose();
@@ -280,7 +280,6 @@ const login = async () => {
           </form>
         ) : (
           <form className='loginsignup-fields' onSubmit={handleSubmit}>
-            {/* Добавлены поля для имени и телефона при регистрации */}
             {mode === "Sign Up" && (
               <>
                 <input

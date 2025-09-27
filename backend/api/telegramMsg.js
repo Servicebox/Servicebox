@@ -20,7 +20,7 @@ async function sendTelegramMessage(text) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                timeout: 5000 // Таймаут 5 секунд
+                timeout: 8000 // Таймаут 5 секунд
             }
         );
         

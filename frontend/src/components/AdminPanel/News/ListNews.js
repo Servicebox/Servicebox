@@ -56,7 +56,7 @@ const ListNews = () => {
 
   return (
     <div className="list-news">
-      <h2>Список Новостей</h2>
+      <h1>Список Новостей</h1>
 
       {alert && (
         <div className={`alert alert-${alert.type}`}>
@@ -71,7 +71,7 @@ const ListNews = () => {
             <li key={item._id} className="news-item">
               <div className="news-content">
                 <h3>{item.title}</h3>
-                <p className="news-content-text">{item.content}</p> {/* Исправлено с description на content */}
+                <p className="news-content-text">{item.content}</p> 
 
                 {item.image && (
                   <img

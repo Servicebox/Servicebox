@@ -44,7 +44,7 @@ app.set('trust proxy', true);
 const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
 const YANDEX_PASS = process.env.YANDEX_PASS;
-const CLIENT_URL = 'https://servicebox35.ru';
+const CLIENT_URL = 'http://localhost:3001';
 
 app.use(requestIp.mw());
 const PORT = 8000;
@@ -134,9 +134,9 @@ const allowedCors = [
   'http://servicebox35.pp.ru/services',
   'https://servicebox35.pp.ru/api',
   'http://servicebox35.pp.ru/api',
-  'https://localhost:5000',
-  'http://localhost:5000',
-  'https://localhost:5000',
+  'https://localhost:8000',
+  'https://servicebox35.pp.ru',
+  'https://localhost:8000',
   'https://localhost:8000/services',
   'https://servicebox35.pp.ru/services',
   'https://servicebox35.pp.ru/products',
@@ -146,7 +146,7 @@ const allowedCors = [
   'https://servicebox35.ru/send-request',
   'https://servicebox35.pp.ru/api/',
   'https://servicebox35.pp.ru',
-  'http://localhost:5000',
+  'https://servicebox35.pp.ru',
   'https://servicebox35.ru',
   'https://servicebox35.ru',
   'https://localhost:8000',
@@ -676,7 +676,7 @@ app.delete('/api/images/like/:id', fetchUser, async (req, res) => {
 ///
 router.post('/api/removeproduct', async (req, res) => {
   try {
-    await Product.findOneAndDelete({ slug: req.body.sslug });
+    await Product.findOneAndDelete({ slug: req.body.slug });
     console.log("Product removed");
     res.json({ success: true, message: "Товар удалён" });
   } catch (error) {

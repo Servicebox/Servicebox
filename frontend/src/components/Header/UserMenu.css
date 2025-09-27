@@ -33,7 +33,7 @@
     background: #eaf6ff;
 }
 .user-menu-logout {
-    color: #de3658 !important;
+    color: #de3658 ;
     font-weight: 600;
 }
 
@@ -58,7 +58,7 @@
 /* Админка кнопка */
 .admin-link-btn {
 
-    padding: 5px 14px !important;
+    padding: 5px 14px;
     border-radius: 8px;
     background: #ddeafe;
     color: #095dab;

@@ -69,6 +69,7 @@ const CartItems = () => {
                 <div className="cartitems-row" key={e.slug}>
                   <div className="cart-col cart-col-img">
                     <img 
+                    loading="lazy"
                       src={e.images && e.images.length > 0 ? e.images[0] : '/placeholder-image.jpg'} 
                       alt={e.name} 
                       className="cartitems-product-icon" 

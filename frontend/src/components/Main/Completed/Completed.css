@@ -117,7 +117,7 @@ padding: 0;
 }
 
 .completed__img-text {
-  color: #fff;
+  color: var(--color-white);
 
   text-align: center;
 }
@@ -228,7 +228,7 @@ display: none;
   }
   .completed__carousel-btn {
     background-color: transparent;
-    color: #fff;
+    color: var(--color-white);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -300,7 +300,7 @@ object-fit: cover;
   }
   .completed__carousel-btn {
     background-color: transparent;
-    color: #fff;
+    color: var(--color-white);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -366,7 +366,7 @@ object-fit: cover;
 
   .completed__carousel-btn {
     background-color: transparent;
-    color: #fff;
+    color: var(--color-white);
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;

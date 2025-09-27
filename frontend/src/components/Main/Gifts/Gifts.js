@@ -5,8 +5,8 @@ import FormWithoutOverlay from "../../FormWithoutOverlay/FormWithoutOverlay"; //
 function Gifts() {
     return (
         <section className="gifts">
-            <h2 className='deepshadow'> Задай вопрос сейчас и получи скидку на ремонт 20% </h2>
-            <FormWithoutOverlay /> {/* Отображение формы без оверлея */}
+            <h2 className='animated-title'> Задай вопрос сейчас и получи скидку на ремонт 20% </h2>
+            <FormWithoutOverlay />
         </section>
     )
 }

@@ -11,7 +11,6 @@ import ScrollToPlugin from "gsap/ScrollToPlugin";
 import Shop from "../pages/Shop";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
-//import Footer from "../Footer/Footer";
 import Form from "../Form/Form";
 import CookieMessage from "../CookieMessage/CookieMessage";
 import PrivacyPolicy from "../PrivacyPolicy/PrivacyPolicy";
@@ -70,7 +69,8 @@ import ServiceCategoryPage from '../ServiceCategoryPage/ServiceCategoryPage';
 import AllServicesPage from '../AllServicesPage/AllServicesPage';
 import BookingsAdmin from "../AdminPanel/BookingsAdmin/BookingsAdmin";
 import BookingForm from "../BookingForm/BookingForm";
-import { Categories } from "emoji-picker-react";
+import GEOSEO from "../GEOSEO";
+import ReviewsSection from "../ReviewsSection/ReviewsSection"
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -155,12 +155,16 @@ const handleLoginSuccess = (responseData) => {
     navigate('/');
   };
   return (
+    
     <AuthProvider value={{ currentUser, isLoggedIn, signOut, handleLoginSuccess }}>
+      <GEOSEO />
     <div className="">
       <Header />
+      <BubbleBackground />
       <div className="page__wrapper">
+          
         <div className="nav">
-          <BubbleBackground />
+
         </div>
 
         <Routes>
@@ -190,7 +194,6 @@ const handleLoginSuccess = (responseData) => {
            <Route path="/" element={<ServicesGrid />} />
             <Route path="/services/:categoryId" element={<ServiceCategoryPage />} />
               <Route path="/prices" element={<AllServicesPage />} />
-          {/* <Route exact path="/" component={ServiceRef} /> */}
           <Route path="/notebook-service" element={<NotebookService />} />
           <Route path="/monoblock-service" element={<MonoblockService />} />
           <Route path="/tv-service" element={<TvService />} />
@@ -283,13 +286,13 @@ const handleLoginSuccess = (responseData) => {
           <Route path="*" element={<NotFound />} />
 
         </Routes>
-        
+      
         {showForm && <Form toggleForm={handleFormToggle} />}
         <CookieMessage />
 
 
         <Chat />
-
+ <ReviewsSection />
         <Footer />
         
       </div>

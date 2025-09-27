@@ -12,9 +12,9 @@
 }
 .spiral-anim-letter {
   position: absolute; left: 0; top: 0;
-  color: #023878;
-  text-shadow: 0 2px 12px #cefdff, 0 1px 2px #008bbda0;
-  filter: drop-shadow(1px 2px 8px #23d3e388);
+  color: var(--background);
+
+  filter: drop-shadow(1px 2px 8px #fff200e8);
   user-select: none;
   white-space: pre;
   pointer-events: none;

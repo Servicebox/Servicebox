@@ -98,14 +98,14 @@
   .form__input_type_error:focus {
     border-bottom-color: #EE3465;
   }
-  
+
   .form__input-error {
     position: absolute;
     top: 69px;
     left: 0;
     margin: 0;
  
-    color: #ff4062;
+    color: var(--color-err);;
   }
   
   .form__input-error_active {

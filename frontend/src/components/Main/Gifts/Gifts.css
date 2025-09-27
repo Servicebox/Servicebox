@@ -1,59 +1,84 @@
-.gifts__title{
-    padding-top: 30px;
- 
-    font-weight: 700;
-    line-height: 78px;
-    letter-spacing: -1.1px;
-    max-width: 625px;
-    margin: 0 auto;
-    text-align: center;
-    padding-bottom: 30px;
-    /* background: linear-gradient(-45deg, #00338b, #F9A92C); */
-    /* -webkit-background-clip: text; */
-    /* -webkit-text-fill-color: transparent; */
-    /* background-clip: text; */
-    text-transform: uppercase;
-    color: rgb(45, 128, 196);
-    text-shadow: 2px 2px 2px black;
-    font-weight: bold;
+/* Gifts.css */
+.gifts {
+  padding: 60px 20px;
+  text-align: center;
+
+  color: white;
+  border-radius: var(--border-radius);
+  margin: 60px auto;
+  max-width: 1200px;
 }
 
-.bubble-text{
-    font-size: clamp(2rem,calc(2rem +3.5vw),8rem)
-    color; hyphenate-limit-chars:(0,8%,50%);
-    user-select: none;
-    & .split-char{
-        font-weight: 200;
-        transition: font-weight 0.5s ease;
-    }
-
+.gifts__title {
+  padding-top: 30px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -1.1px;
+  max-width: 625px;
+  margin: 0 auto 30px;
+  text-align: center;
+  
+  /* -webkit-background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  /* background-clip: text; */
+  text-transform: uppercase;
+  color: rgb(45, 128, 196);
+  text-shadow: 2px 2px 2px black;
+  font-weight: bold;
 }
 
-
-h2.elegantshadow {
-border-radius: 10px;
-    color: #ffffff;
-    background-color: #041e42;
-  letter-spacing: 0.15em;
-  text-shadow: 1px -1px 0 #767676, -1px 2px 1px #737272, -2px 4px 1px #767474, -3px 6px 1px #787777, -4px 8px 1px #7b7a7a, -5px 10px 1px #7f7d7d, -6px 12px 1px #828181, -7px 14px 1px #868585, -8px 16px 1px #8b8a89, -9px 18px 1px #8f8e8d, -10px 20px 1px #949392, -11px 22px 1px #999897, -12px 24px 1px #9e9c9c, -13px 26px 1px #a3a1a1, -14px 28px 1px #a8a6a6, -15px 30px 1px #adabab, -16px 32px 1px #b2b1b0, -17px 34px 1px #b7b6b5, -18px 36px 1px #bcbbba, -19px 38px 1px #c1bfbf, -20px 40px 1px #c6c4c4, -21px 42px 1px #cbc9c8, -22px 44px 1px #cfcdcd, -23px 46px 1px #d4d2d1, -24px 48px 1px #d8d6d5, -25px 50px 1px #dbdad9, -26px 52px 1px #dfdddc, -27px 54px 1px #e2e0df, -28px 56px 1px #e4e3e2;
-}
+/* Improved styles for the deepshadow effect */
 h2.deepshadow {
-
-    color: #ffffff;
-    background-color: #004578;
-    clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
+  color: var(--background);
+  background:#1b1d29; 
+  clip-path: polygon(0% -4%, 29% 5%, 58% 2%, 100% 12%, 101% 78%, 100% 100%, 12% 98%, 0% 100%);
   letter-spacing: 0.1em;
-  text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0 4px 0 #282828, 0 5px 0 #262626, 0 6px 0 #242424, 0 7px 0 #222, 0 8px 0 #202020, 0 9px 0 #1e1e1e, 0 10px 0 #1c1c1c, 0 11px 0 #1a1a1a, 0 12px 0 #181818, 0 13px 0 #161616, 0 14px 0 #141414, 0 15px 0 #121212, 0 22px 30px rgba(0, 0, 0, 0.9);
- 
+  text-shadow:
+    0 -1px 0 #fff,
+    0 1px 0 #2e2e2e,
+    0 2px 0 #2c2c2c,
+    0 3px 0 #2a2a2a,
+    0 4px 0 #282828,
+    0 5px 0 #262626,
+    0 6px 0 #242424,
+    0 7px 0 #222,
+    0 8px 0 #202020,
+    0 9px 0 #1e1e1e,
+    0 10px 0 #1c1c1c,
+    0 11px 0 #1a1a1a,
+    0 12px 0 #181818,
+    0 13px 0 #161616,
+    0 14px 0 #141414,
+    0 15px 0 #121212,
+    0 22px 30px rgba(0, 0, 0, 0.9);
   padding: 80px 5px;
   text-align: center;
   text-transform: uppercase;
   text-rendering: optimizeLegibility;
+  margin: 0; /* Remove default margin */
+  font-size: clamp(1.5rem, 4vw, 2.5rem); /* Responsive font size */
 }
-@media screen and (min-width: 320px) and (max-width: 514px) {
 
+/* Responsive adjustments for gifts section */
+@media screen and (max-width: 768px) {
+  .gifts {
+    padding: 40px 15px;
+    margin: 40px auto;
+  }
+
+  h2.deepshadow {
+    padding: 60px 5px;
+    clip-path: polygon(0% 0%, 15% 2%, 85% 2%, 100% 0%, 100% 100%, 85% 98%, 15% 98%, 0% 100%);
+  }
 }
 
-@media screen and (min-width: 514px) and (max-width: 800px) {
+@media screen and (max-width: 480px) {
+  .gifts {
+    padding: 30px 10px;
+  }
 
+  h2.deepshadow {
+    padding: 40px 5px;
+    font-size: clamp(1.2rem, 5vw, 2rem);
+  }
 }

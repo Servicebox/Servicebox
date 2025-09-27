@@ -33,9 +33,9 @@ const Contacts = forwardRef((props, ref) => {
     <section id="contacts" className="contacts" ref={ref}>
       <div className="contacts__container">
         <div className="contacts__header">
-          <h2 className="animated-title">Контактная информация</h2>
+          <h2 className="t3d-text t3d-animate">Контактная информация</h2>
           <p className="contacts__intro">
-            Ищете профессиональный ремонт ноутбуков, видеокарт, материнских плат, смартфонов и планшетов в Вологде? 
+            Ищете профессиональный ремонт ноутбуков, видеокарт, материнских плат, смартфонов и планшетов? 
             Сервисный центр ServiceBox предлагает комплексные решения для вашей электроники. 
             Наши квалифицированные специалисты с многолетним опытом оперативно диагностируют 
             и устранят любые неисправности, используя оригинальные комплектующие и современное оборудование.
@@ -84,7 +84,7 @@ const Contacts = forwardRef((props, ref) => {
               <div className="social__grid">
                 <a 
                   href="https://vk.com/servicebox35" 
-                  className="social__link pulse-one"
+                  className="social__link"
                   aria-label="Наша группа ВКонтакте"
                 >
                   <FontAwesomeIcon icon={faVk} />
@@ -92,7 +92,7 @@ const Contacts = forwardRef((props, ref) => {
                 </a>
                 <a 
                   href="whatsapp://send?phone=79062960353" 
-                  className="social__link pulse-two"
+                  className="social__link"
                   aria-label="Написать в WhatsApp"
                 >
                   <FontAwesomeIcon icon={faWhatsapp} />
@@ -100,7 +100,7 @@ const Contacts = forwardRef((props, ref) => {
                 </a>
                 <a 
                   href="tg://resolve?domain=@Tomkka" 
-                  className="social__link pulse-three"
+                  className="social__link"
                   aria-label="Написать в Telegram"
                 >
                   <FontAwesomeIcon icon={faTelegram} />
@@ -152,9 +152,9 @@ const Contacts = forwardRef((props, ref) => {
         </div>
 
         <div className="contacts__seo">
-          <h2 className="contacts__subtitle">Профессиональный ремонт техники в Вологде</h2>
+          <h2 className="contacts__subtitle">Профессиональный ремонт техники</h2>
           <p className="location__description">
-            ServiceBox - это современный сервисный центр в Вологде, специализирующийся 
+            ServiceBox - это современный сервисный центр, специализирующийся 
             на ремонте ноутбуков, смартфонов, планшетов и другой электроники. 
           </p>
           

@@ -1,37 +1,46 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faBasketShopping,
   faMobilePhone,
   faMailBulk,
   faMapLocation,
-  faTimes
+  faTimes,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 import { faVk, faTelegram, faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { ShopContext } from '../Contexst/ShopContext';
 import "./BurgerMenu.css";
 import logoImage from "../../images/Servicebox6.svg";
 
-function BurgerMenu({ scrollTo }) {
+function BurgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { getTotalCartItems } = useContext(ShopContext);
   const location = useLocation();
 
-  // Закрываем меню при изменении локации
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+    }
+
+    return () => {
+      document.body.classList.remove('menu-open');
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     setIsOpen(false);
-    document.body.style.overflow = 'auto';
   }, [location]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-    document.body.style.overflow = isOpen ? 'auto' : 'hidden';
   };
 
   const handleContactAction = (action) => {
     toggleMenu();
-    if (action === 'tel') window.location.href = "tel:+7 911 501 88 28";
+    if (action === 'tel') window.location.href = "tel:+79115018828";
     if (action === 'mail') window.location.href = "mailto:servicebox35@gmail.com";
   };
 
@@ -40,72 +49,52 @@ function BurgerMenu({ scrollTo }) {
       <button
         className={`burger-toggle ${isOpen ? "open" : ""}`}
         onClick={toggleMenu}
-        aria-label="Toggle menu"
+        aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
+        aria-expanded={isOpen}
       >
-        <div className="burger-line top"></div>
-        <div className="burger-line middle"></div>
-        <div className="burger-line bottom"></div>
+        <FontAwesomeIcon icon={faBars} className="burger-icon" />
+        <FontAwesomeIcon icon={faTimes} className="close-icon" />
       </button>
 
       <div className="menu-overlay" onClick={toggleMenu}></div>
 
-      <nav className="menu-content">
+      <nav className="menu-content" aria-label="Мобильное меню">
         <div className="menu-header">
-          <img className="menu-logo" src={logoImage} alt="ServiceBox Logo" />
-          <button
-            className="menu-close"
-            onClick={toggleMenu}
-            aria-label="Close menu"
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
+          <img 
+            className="menu-logo" 
+            loading="lazy"
+            src={logoImage} 
+            alt="ServiceBox Logo" 
+          />
         </div>
 
         <ul className="menu-list">
           <li className="menu-item">
-            <Link to="/contacts" className="menu-link" onClick={toggleMenu}>
-              Контакты
-            </Link>
+            <Link to="/contacts" className="menu-link" onClick={toggleMenu}>Контакты</Link>
           </li>
           <li className="menu-item">
-            <Link to="/about" className="menu-link" onClick={toggleMenu}>
-              О нас
-            </Link>
+            <Link to="/about" className="menu-link" onClick={toggleMenu}>О нас</Link>
           </li>
           <li className="menu-item">
-            <Link to="/service" className="menu-link" onClick={toggleMenu}>
-              Услуги
-            </Link>
+            <Link to="/service" className="menu-link" onClick={toggleMenu}>Услуги</Link>
           </li>
           <li className="menu-item">
-            <Link to="/image-gallery-api" className="menu-link" onClick={toggleMenu}>
-              Фото
-            </Link>
+            <Link to="/image-gallery-api" className="menu-link" onClick={toggleMenu}>Фото</Link>
           </li>
           <li className="menu-item">
-            <Link to="/parts" className="menu-link" onClick={toggleMenu}>
-              Каталог товаров
-            </Link>
+            <Link to="/parts" className="menu-link" onClick={toggleMenu}>Каталог товаров</Link>
           </li>
           <li className="menu-item">
-            <Link to="/news" className="menu-link" onClick={toggleMenu}>
-              Новости
-            </Link>
+            <Link to="/news" className="menu-link" onClick={toggleMenu}>Новости</Link>
           </li>
-          <li className="menu-item" >
-            <Link to='/promotions-page' className="menu-link" onClick={toggleMenu}>
-              Акции
-            </Link>
+          <li className="menu-item">
+            <Link to='/promotions-page' className="menu-link" onClick={toggleMenu}>Акции</Link>
           </li>
-          <li className=" menu-item" >
-            <Link to="/depository-public" className="menu-link" onClick={toggleMenu}>
-              Схемы/Bios
-            </Link>
+          <li className="menu-item">
+            <Link to="/depository-public" className="menu-link" onClick={toggleMenu}>Схемы/Bios</Link>
           </li>
-          <li className="menu-item" >
-            <Link to="/chat-with-gpt" className="menu-link" onClick={toggleMenu} >
-              🤖 GPT-Чат
-            </Link>
+          <li className="menu-item">
+            <Link to="/chat-with-gpt" className="menu-link" onClick={toggleMenu}>🤖 GPT-Чат</Link>
           </li>
         </ul>
 
@@ -151,15 +140,33 @@ function BurgerMenu({ scrollTo }) {
           </div>
 
           <div className="social-links">
-            <a href="https://vk.com/servicebox35" className="social-link vk">
-              <FontAwesomeIcon icon={faVk} />
-            </a>
-            <a href="whatsapp://send?phone=79062960353" className="social-link whatsapp">
-              <FontAwesomeIcon icon={faWhatsapp} />
-            </a>
-            <a href="tg://resolve?domain=@Tomkka" className="social-link telegram">
-              <FontAwesomeIcon icon={faTelegram} />
-            </a>
+            <a 
+  href="https://vk.com/servicebox35" 
+  className="social-link vk" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  aria-label="Написать нам в ВКонтакте"
+>
+  <FontAwesomeIcon icon={faVk} />
+</a>
+            <a 
+  href="https://wa.me/79062960353" 
+  className="social-link whatsapp" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  aria-label="Написать нам в WhatsApp"
+>
+  <FontAwesomeIcon icon={faWhatsapp} />
+</a>
+            <a 
+  href="https://t.me/Tomkka" 
+  className="social-link telegram" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  aria-label="Написать нам в Telegram"
+>
+  <FontAwesomeIcon icon={faTelegram} />
+</a>
           </div>
         </div>
       </nav>

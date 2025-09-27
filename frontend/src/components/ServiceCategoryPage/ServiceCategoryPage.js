@@ -1,4 +1,4 @@
-// components/ServiceCategoryPage.js
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
@@ -62,7 +62,7 @@ const ServiceCategoryPage = () => {
             
         
       title: "Замена стекла",
-      description: "Замена стекла происходит в течении дня*, на телефоне, планшете, часах. Если у вас есть изображение и нет фантомных нажатии- то можно просто поменять стекло",
+      description: "Замена стекла происходит в течение дня*, на телефоне, планшете, часах. Если у вас есть изображение и нет фантомных нажатии- то можно просто поменять стекло",
       image: "Glass",
       
     

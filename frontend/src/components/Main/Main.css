@@ -1,8 +1,6 @@
-.main-banner{
-    padding-top: 60px;
-}
-main {
-    display: block;
-    position: relative;
-
+/* Main.css */
+.main {
+  display: block;
+  position: relative;
+  isolation: isolate; /* Ensure proper stacking context */
 }

@@ -1,45 +1,30 @@
-body {
 
-    justify-content: center;
-    align-items: center;
-  
-  
+.bubble {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20rem;
+  height: 20rem;
+  transform: translate(calc(var(--left, 50vw) - 50vw), calc(var(--top, 50vh) - 50vh));
+  transition: transform 3s ease-out;
+  animation: bubble-waving 5s ease-in-out infinite;
 
-    background-position: center;
+  opacity: 0.95;
+  box-shadow: 2rem 2rem 1rem 1rem rgba(65, 145, 151, 0.3);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -99;
 
-  }
-  
-  .bubble {
-    position: relative;
-    width: 20rem;
-    height: 20rem;
-    transform: translate(calc(var(--left) - 50vw), calc(var(--top) - 50vh));
-    transition: transform 2s ease-in-out;
-    animation: bubble-waving;
-    animation-duration: 5s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    opacity: 0.95;
-    box-shadow: 2rem 2rem 1rem 1rem rgba(65, 145, 151, 0.3);
-    overflow: hidden;
-  }
-  @keyframes bubble-waving {
-    0%, 100% {
-      border-radius: 45% 50% 55% 45%;
-    }
-    20% {
-      border-radius: 50% 50% 55% 50%;
-    }
-    40% {
-      border-radius: 50% 55% 45% 55%;
-    }
-    60% {
-      border-radius: 55% 50% 50% 55%;
-    }
-    80% {
-      border-radius: 45% 55% 50% 50%;
-    }
-  }
+}
+
+@keyframes bubble-waving {
+  0%, 100% { border-radius: 45% 50% 55% 45%; }
+  20% { border-radius: 50% 50% 55% 50%; }
+  40% { border-radius: 50% 55% 45% 55%; }
+  60% { border-radius: 55% 50% 50% 55%; }
+  80% { border-radius: 45% 55% 50% 50%; }
+}
+
   .bubble:before {
     content: "";
     position: absolute;
@@ -138,54 +123,19 @@ body {
 
   @media screen and (min-width: 499px) and (max-width: 769px){
     .bubble {
-        position: relative;
+ 
         width: 20rem;
         height: 20rem;
-        transform: translate(calc(var(--left) - 50vw), calc(var(--top) - 50vh));
-        transition: transform 2s ease-in-out;
-        animation: bubble-waving;
-        animation-duration: 5s;
-        animation-timing-function: ease-in-out;
-        animation-iteration-count: infinite;
-        opacity: 0.95;
-        box-shadow: 2rem 2rem 1rem 1rem rgba(65, 145, 151, 0.3);
-        overflow: hidden;
-        z-index: 0;
+        z-index: -99;
       }
       .bubble:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 80%;
         height: 80%;
-    
-        background-position: center;
-        background-size: 100vw auto;
-        background-position: calc(10rem - var(--left)) calc(10rem - var(--top));
-        opacity: 0.8;
-        transition: background-position 2s ease-in-out;
-        filter: blur(5px);
-        animation: mirror;
-        animation-duration: 5s;
-        animation-timing-function: ease-in-out;
-        animation-iteration-count: infinite;
       }
   }
   @media screen and (min-width: 320px) and (max-width: 498px){
     .bubble {
-        position: relative;
         width: 10rem;
         height: 10rem;
-        transform: translate(calc(var(--left) - 50vw), calc(var(--top) - 50vh));
-        transition: transform 2s ease-in-out;
-        animation: bubble-waving;
-        animation-duration: 5s;
-        animation-timing-function: ease-in-out;
-        animation-iteration-count: infinite;
-        opacity: 0.95;
-        box-shadow: 2rem 2rem 1rem 1rem rgba(65, 145, 151, 0.3);
-        overflow: hidden;
-        z-index: 0;
       }
     }

@@ -7,10 +7,9 @@ padding: 20px;
     flex-direction: column;
     text-align: center;
     margin: 0 auto;
-    background: transparent;
-    backdrop-filter: blur(3px);
     border-radius: 15px;
     align-items: center;
+    
 }
 .error-message {
      color: #e53e3e;
@@ -47,7 +46,7 @@ padding: 20px;
 .form__title{
     margin: 0 auto;
     text-align: center;
-    color: #13171D;
+    color: var(--color-text);
 }
 .success-countdown {
   height: 5px;
@@ -71,7 +70,7 @@ padding: 20px;
   100% { width: 0%; }
 }
 
-/* Основные стили формы */
+
 .form-container__gift {
   display: flex;
   justify-content: center;
@@ -119,13 +118,13 @@ backdrop-filter: blur(3px);
 }
 
 .form-subtitle {
-  color: #718096;
+  color: #222222;
   font-size: 16px;
   max-width: 400px;
   margin: 0 auto;
 }
 
-/* Стили полей ввода */
+
 .form-group {
   margin-bottom: 25px;
   position: relative;
@@ -159,7 +158,7 @@ backdrop-filter: blur(3px);
   top: 16px;
   left: 15px;
   font-size: 16px;
-  color: #a0aec0;
+  color: var(--color-text);
   pointer-events: none;
   transition: all 0.3s ease;
   background: #f8fafc;
@@ -182,7 +181,7 @@ backdrop-filter: blur(3px);
   min-height: 100px;
 }
 
-/* Стили ошибок */
+
 .form-group.error .form-input,
 .form-group.error .form-textarea {
   border-color: #fc8181;
@@ -206,7 +205,7 @@ backdrop-filter: blur(3px);
   margin-right: 5px;
 }
 
-/* Кнопка отправки */
+
 .submit-btn {
   width: 100%;
   padding: 16px;
@@ -259,12 +258,12 @@ backdrop-filter: blur(3px);
 }
 
 .privacy-text {
-  color: #718096;
+  color: #222222;
   font-size: 14px;
 }
 
 .privacy-text a {
-  color: #4299e1;
+  color: #202020;
   text-decoration: none;
 }
 

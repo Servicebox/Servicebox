@@ -12,7 +12,7 @@
   margin-bottom: 3rem;
   position: relative;
   padding: 4rem 2rem;
-  border-radius: 20px;
+  border-radius: 10px;
     background: linear-gradient(135deg, #023878 0%, #004c7f 100%);
   overflow: hidden;
   box-shadow: 0 15px 35px rgba(106, 17, 203, 0.25);
@@ -52,11 +52,13 @@
   grid-template-columns: 1fr;
   gap: 3rem;
   margin-bottom: 3rem;
+  justify-content: center;
 }
 
 @media (min-width: 992px) {
   .glass-content {
     grid-template-columns: 1fr 1fr;
+    justify-content: center;
   }
 }
 
@@ -73,7 +75,7 @@
 .process-title {
 
   margin-bottom: 1.5rem;
-background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+background: var(--primary-color);
   background-clip: text ;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -115,20 +117,20 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
   left: 0;
   width: 5px;
   height: 100%;
- background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+ background: var(--primary-color);
 }
 
 .step-number {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  background: var(--primary-color);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 1rem;
+  margin-bottom: 0.3rem;
 }
 
 .step-text {
@@ -141,7 +143,7 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
   padding: 1.5rem;
   background: rgba(37, 117, 252, 0.05);
   border-radius: 15px;
-  border-left: 4px solid #2575fc;
+  border-left: 4px solid var(--color-primary);
 }
 
 .pricing-section {
@@ -171,7 +173,7 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
 .pricing-info h3 {
 
   margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  background: var(--primary-color);
   background-clip: text ;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -183,7 +185,7 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
 }
 
 .highlight {
-  color: #2575fc;
+  color: var(--color-primary);
   font-weight: 600;
 }
 
@@ -212,7 +214,7 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
 
 .table-header {
   display: flex;
-  background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
+  background: var(--primary-color);
   color: white;
   font-weight: 600;
 }
@@ -261,12 +263,12 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
   align-items: center;
   justify-content: center;
   background: rgba(37, 117, 252, 0.1);
-  color: #2575fc;
+  color: var(--color-primary);
   padding: 0.6rem 1.2rem;
-  border-radius: 50px;
+  border-radius: 10px;
   font-weight: 700;
   min-width: 100px;
-  box-shadow: 0 4px 10px rgba(37, 117, 252, 0.1);
+ 
 }
 
 .table-controls {
@@ -282,30 +284,33 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
   padding: 0.9rem 2rem;
 
   border: none;
-  border-radius: 50px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .show-more-btn {
   background-color: #023878;
+  border-radius: 10px;
   color: white;
-  box-shadow: 0 8px 25px rgba(106, 17, 203, 0.25);
+  box-shadow: 0 8px 25px rgba(36, 17, 203, 0.35);
 }
 
 .show-less-btn {
   background: transparent;
-  color: #2575fc;
-  border: 2px solid #6a11cb;
+  color: var(--color-primary);
+  border: 2px solid var(--color-secondary);
+  border-radius: 10px;
 }
 
 .show-more-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(106, 17, 203, 0.35);
+  box-shadow: 0 2px 3px rgba(36, 17, 203, 0.35);
+  border-radius: 10px;
 }
 
 .show-less-btn:hover {
-  background: rgba(106, 17, 203, 0.05);
+  background: rgba(17, 23, 203, 0.05);
 }
 
 .additional-info {
@@ -334,17 +339,17 @@ background: linear-gradient(135deg, #005083 0%, #3bbeff 100%);
   display: flex;
   align-items: center;
   gap: 8px;
- color: #2575fc;
+ color: var(--color-white);
   font-weight: 600;
   text-decoration: none;
   padding: 0.8rem 1.8rem;
-  border-radius: 50px;
+  border-radius: 10px;
   transition: all 0.3s ease;
   background: rgba(106, 17, 203, 0.05);
 }
 
 .home-link:hover {
-   background-color: #f9a92c;
+   background-color: var(--color-accent);
   transform: translateX(-5px);
 }
 

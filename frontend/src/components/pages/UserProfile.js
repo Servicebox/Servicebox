@@ -1,8 +1,6 @@
-// === FRONTEND: UserProfile.jsx ===
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { ShopContext } from "../Contexst/ShopContext";
 import { useLocation } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import "./UserProfile.css";
 
 const API_URL = "https://servicebox35.pp.ru/api";
@@ -12,7 +10,6 @@ const fetchWithAuth = async (url, options = {}) => {
   const headers = options.headers || {};
   
   if (token) {
-    // Исправлено: правильный формат заголовка
     headers['Authorization'] = `Bearer ${token}`;
     headers['Accept'] = 'application/json';
     headers['Content-Type'] = 'application/json';
@@ -23,32 +20,36 @@ const fetchWithAuth = async (url, options = {}) => {
 };
 
 const UserOrderList = React.forwardRef(({ orders }, ref) => (
-    <div className="user-orders-section" id="orders" ref={ref}>
-        <h3>Ваши заказы</h3>
-        {(!orders || orders.length === 0) &&
-            <div className="user-noorders">Заказы отсутствуют.</div>
-        }
-        {(orders && orders.length > 0) &&
-            <ul className="user-orders-list">
-                {orders.map((order, idx) => (
-                    <li key={order._id ?? idx} className="user-order">
-                        <div>
-                            <b>Заказ #:</b> {order._id} <br />
-                            <b>Дата:</b> {order.createdAt ? (new Date(order.createdAt).toLocaleString('ru')) : '-'} <br />
-                            <b>Статус:</b> {order.status} <br />
-                            <b>Состав заказа:</b>
-                            <ul>
-                                {order.products.map((p, i) => (
-                                    <li key={i}>{p.name} × {p.count} (₽{p.price})</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </li>
+  <div className="user-orders-section" id="orders" ref={ref}>
+    <h3>Ваши заказы</h3>
+    {(!orders || orders.length === 0) && (
+      <div className="user-noorders">Заказы отсутствуют.</div>
+    )}
+    {orders && orders.length > 0 && (
+      <ul className="user-orders-list">
+        {orders.map((order, idx) => (
+          <li key={order._id ?? idx} className="user-order">
+            <div>
+              <b>Заказ #:</b> {order._id} <br />
+              <b>Дата:</b> {order.createdAt ? new Date(order.createdAt).toLocaleString('ru') : '-'} <br />
+              <b>Статус:</b> {order.status} <br />
+              <b>Состав заказа:</b>
+              <ul>
+                {order.products.map((p, i) => (
+                  <li key={i}>
+                    {p.name} × {p.count} (₽{p.price})
+                  </li>
                 ))}
-            </ul>
-        }
-    </div>
+              </ul>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
 ));
+
+UserOrderList.displayName = 'UserOrderList';
 
 const UserProfile = () => {
     const [loading, setLoading] = useState(false);
@@ -87,7 +88,6 @@ const UserProfile = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
-            // Здесь предполагается, что у вас есть /api/order/my endpoint
             const res = await fetchWithAuth(`${API_URL}/order`);
             if (res.ok) {
                 const data = await res.json();
@@ -96,16 +96,13 @@ const UserProfile = () => {
         };
         fetchOrders();
     }, []);
-
-    // scroll to section if hash exists
     useEffect(() => {
         if (location.hash === "#orders" && ordersRef.current) {
-            // небольшой таймаут, чтобы успело отрендериться
             setTimeout(() => {
                 ordersRef.current.scrollIntoView({ behavior: "smooth" });
             }, 150);
         }
-    }, [location, orders]); // важно, чтобы при загрузке заказов это сработало
+    }, [location, orders]);
 
     if (loading) return <div className="userprof-loader">Загрузка...</div>;
     if (error) return <div className="userprof-error">{error}</div>;

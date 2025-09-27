@@ -8,15 +8,13 @@ const ListService = () => {
   const [showAll, setShowAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [editingService, setEditingService] = useState(null);
-
-  // Для строки создания новой услуги:
   const [newService, setNewService] = useState({
     serviceName: '',
     description: '',
     price: '',
     category: ''
   });
-  const [adding, setAdding] = useState(false); // индикатор ожидания
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     fetchServices();
@@ -61,8 +59,6 @@ const ListService = () => {
     const { name, value } = e.target;
     setEditingService(prev => ({ ...prev, [name]: value }));
   };
-
-  // ---- ДЛЯ СОЗДАНИЯ -----
   const handleNewChange = (e) => {
     const { name, value } = e.target;
     setNewService(prev => ({ ...prev, [name]: value }));
@@ -106,8 +102,6 @@ const ListService = () => {
           <p>Категория</p>
           <p>Действия</p>
         </div>
-
-        {/* Строка для добавления */}
         <form className='listservice-format-main listservice-format listservice-create-row'
           onSubmit={handleNewSubmit}>
           <input

@@ -49,15 +49,22 @@
 }
 
 .pulse-dot {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 12px;
-  height: 12px;
-  background-color: #4cff00;
-  border-radius: 50%;
-  box-shadow: 0 0 0 0 rgba(76, 255, 0, 0.7);
-  animation: pulse 1.5s infinite;
+color: #242424;
+    font-size: 1.5rem;
+    font-weight: bold;
+    position: absolute;
+    top: 6px;
+    right: 5px;
+    width: 60px;
+    height: 60px;
+    background-color: #4cff00;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(76, 255, 0, 0.7);
+    animation: pulse 1.5s infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
 }
 
 @keyframes pulse {
@@ -119,7 +126,7 @@
 
 .name-modal h3 {
   margin-bottom: 10px;
-  color: #2c3e50;
+  color: var(--primary-dark);
   font-size: 1.4rem;
 }
 
@@ -248,7 +255,7 @@
 }
 
 .user-name-badge strong {
-  color: #2c3e50;
+  color: var(--primary-dark);
   font-weight: 600;
 }
 
@@ -354,7 +361,7 @@
 
 .welcome-bubble h3 {
   margin: 0 0 8px;
-  color: #2c3e50;
+  color: var(--primary-dark);
   font-size: 1.1rem;
 }
 
@@ -540,7 +547,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2c3e50;
+  color: var(--primary-dark);
 }
 
 .chat-input {

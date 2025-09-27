@@ -2,9 +2,7 @@ import React, { forwardRef } from 'react'; // Добавляем forwardRef
 
 import "./ContactsRef.css";
 
-import Telephone from "../../../images/phonecol.svg";
-import location from "../../../images/location.svg";
-import Mail from "../../../images/mail.svg";
+
 import { faMobilePhone, faMailBulk, faMapLocation} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -68,7 +66,7 @@ const ContactsRef = forwardRef((props, ref) => {
                   <div className="social__grid">
                     <a 
                       href="https://vk.com/servicebox35" 
-                      className="social__link pulse-one"
+                      className="social__link "
                       aria-label="Наша группа ВКонтакте"
                     >
                       <FontAwesomeIcon icon={faVk} />
@@ -76,7 +74,7 @@ const ContactsRef = forwardRef((props, ref) => {
                     </a>
                     <a 
                       href="whatsapp://send?phone=79062960353" 
-                      className="social__link pulse-two"
+                      className="social__link"
                       aria-label="Написать в WhatsApp"
                     >
                       <FontAwesomeIcon icon={faWhatsapp} />
@@ -84,7 +82,7 @@ const ContactsRef = forwardRef((props, ref) => {
                     </a>
                     <a 
                       href="tg://resolve?domain=@Tomkka" 
-                      className="social__link pulse-three"
+                      className="social__link"
                       aria-label="Написать в Telegram"
                     >
                       <FontAwesomeIcon icon={faTelegram} />

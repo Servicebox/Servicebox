@@ -4,23 +4,17 @@ import './ImageList.css';
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const ImageList = () => {
-  // Для вывода изображений
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Для загрузки
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [description, setDescription] = useState('');
   const [isUploading, setIsUploading] = useState(false);
 
-  // Получаем список изображений
   useEffect(() => {
     fetchImages();
-    // очистка превью при размонтировании
     return () => previews.forEach(url => URL.revokeObjectURL(url));
-    // eslint-disable-next-line
   }, []);
 
   const fetchImages = async () => {
@@ -46,7 +40,6 @@ const ImageList = () => {
     setLoading(false);
   };
 
-  // Удаление изображения
   const handleDelete = async (id) => {
     if (window.confirm('Вы уверены, что хотите удалить это изображение?')) {
       try {
@@ -76,7 +69,6 @@ const ImageList = () => {
       return;
     }
     setFiles(selectedFiles);
-    // Превью
     previews.forEach(url => URL.revokeObjectURL(url));
     setPreviews(selectedFiles.map(file => URL.createObjectURL(file)));
   };
@@ -85,7 +77,6 @@ const ImageList = () => {
     file.type.startsWith('image/') && file.size <= MAX_FILE_SIZE
   );
 
-  // Отправка файлов
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (files.length === 0) {
@@ -130,13 +121,9 @@ const handleSubmit = async (e) => {
     setPreviews([]);
     setDescription('');
   };
-
-  // Верстка
   return (
     <div className="image-list-wrapper">
       <h1>Галерея изображений</h1>
-
-      {/* Блок загрузки */}
       <div className="upload-container">
         <h2>Загрузка изображений</h2>
         <form className="upload-form" onSubmit={handleSubmit}>

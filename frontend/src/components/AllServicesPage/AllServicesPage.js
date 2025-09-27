@@ -1,4 +1,4 @@
- // components/ServicesGrid/ServicesGrid.jsx
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -166,7 +166,7 @@ const handleBookingSuccess = (bookingData) => {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <div сlassName="animated-title">
+                    <div className="animated-title">
                         <motion.h1
                         
                             initial={{ y: -20, opacity: 0 }}

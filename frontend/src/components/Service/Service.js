@@ -1,5 +1,5 @@
-import React, { useRef, forwardRef } from "react";
-import { BrowserRouter as Router, Link, useLocation, NavLink } from "react-router-dom";
+import React, { forwardRef } from "react";
+import { BrowserRouter as  Link } from "react-router-dom";
 import "./Service.css";
 import Card from "../Main/MainBanner/Card";
 
@@ -9,14 +9,14 @@ import Card from "../Main/MainBanner/Card";
 const cardsData = [
   {
     title: "Ноутбуками",
-    subtitle: "Ремонт ноутбуков любой сложности.Замнимаемься заменой мультиконтроллеров, USB портов, кулеров, северных мостов и разъемов зарядки,замена матрицы.",
+    subtitle: "Ремонт ноутбуков любой сложности.Занимаемся заменой мультиконтроллеров, USB портов, кулеров, северных мостов и разъемов зарядки,замена матрицы.",
     image: "Notebook",
     linkTo: "/notebook-service",
   },
 
   {
     title: "компьютерами и моноблоками",
-    subtitle: "Ремонт компьютером любой сложности,настройка и сборка.",
+    subtitle: "Ремонт компьютеров любой сложности,настройка и сборка.",
     image: "Monoblok",
     linkTo: "/monoblock-service",
   },

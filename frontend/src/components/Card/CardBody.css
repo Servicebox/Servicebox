@@ -38,7 +38,7 @@ margin: 0 auto;
   padding-right: 50px;
 }
 .card__btn:hover{
-  background-color: #F9A92C;
+  background-color: var(--color-accent);
 }
 .sub-section {
   max-height: 0;

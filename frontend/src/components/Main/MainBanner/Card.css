@@ -1,137 +1,165 @@
+/* Card.css */
 .card_one {
-    perspective: 1000px;
-    height: 300px;
+  perspective: 1000px;
+  height: 300px;
+  cursor: pointer;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+  /* Improve accessibility */
+  position: relative; /* Needed for focus outline */
+  outline: none;
+}
+
+.card_one:hover,
+.card_one:focus {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.card_one:focus {
+  /* Ensure focus is visible even if not hovered */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .cards {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.8s;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.card_one:hover .cards {
-    transform: rotateY(180deg);
+.card_one.flipped .cards {
+  transform: rotateY(180deg);
 }
 
-.cover-item, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border-radius: 15px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+.cover-item,
+.card-back {
+  position: absolute;
+  inset: 0; /* Use logical properties */
+  backface-visibility: hidden;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .cover-item {
-
-    padding: 20px;
-    text-align: center;
+  padding: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #fff 0%, #f0f9ff 100%);
 }
 
 .card-back {
-    background: white;
-    transform: rotateY(180deg);
-    padding: 25px;
-    text-align: center;
+  background: white;
+  transform: rotateY(180deg);
+  padding: 25px;
+  text-align: center;
 }
 
 .card-cover {
-    max-width: 180px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-    transition: all 0.5s ease;
-    background: transparent;
-    transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-    transform-style: preserve-3d;
-
+  max-width: 180px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+  transition: all 0.5s ease;
+  background: transparent;
+  transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  transform-style: preserve-3d;
 }
 
 .card_one:hover .card-cover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .card__title-one {
-    color: rgb(0, 0, 0);
-    margin-bottom: 10px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  color: rgb(0, 0, 0);
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .card__subtitle-one {
-    color: #2c3e50;
-
-    margin-bottom: 20px;
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .link-card {
-    display: inline-block;
-    padding: 12px 30px;
-       background: var(--blue-main);
-    color: white;
-    text-decoration: none;
-    border-radius: 8px; /* Уменьшенная скругленность */
-    font-weight: 600;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); /* Плавная кривая анимации */
-    box-shadow: 0 4px 15px rgba(78, 115, 223, 0.3);
-    position: relative;
-    overflow: hidden;
-    border: none;
-    cursor: pointer;
-    letter-spacing: 0.5px;
-    transform: translateZ(0); /* Для сглаживания анимации */
+  display: inline-block;
+  padding: 12px 30px;
+  background: var(--blue-main); /* Note: This should ideally use --color-primary from index.css */
+  color: var(--color-black);
+  text-decoration: none;
+  border-radius: 8px; /* Уменьшенная скругленность */
+  font-weight: 600;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); /* Плавная кривая анимации */
+  box-shadow: 0 4px 15px rgba(78, 115, 223, 0.3);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transform: translateZ(0); /* Для сглаживания анимации */
+  /* Improve accessibility */
+  min-height: 44px; /* Minimum touch target size */
+  text-align: center;
+  line-height: 1.4;
 }
 
 .link-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: 0.5s;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: 0.5s;
 }
 
-.link-card:hover {
-    background:#1ad1ff ;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(78, 115, 223, 0.4);
+.link-card:hover,
+.link-card:focus {
+  background: #f9a92c;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(78, 115, 223, 0.4);
+  outline: 2px solid #1ad1ff;
+  outline-offset: 2px;
 }
 
-.link-card:hover::before {
-    left: 100%;
+.link-card:hover::before,
+.link-card:focus::before {
+  left: 100%;
 }
 
 /* Адаптивность карточек */
 @media (max-width: 768px) {
-    .card_one {
-        height: 280px;
-    }
-    
-  
+  .card_one {
+    height: 280px;
+  }
 }
 
 @media (max-width: 480px) {
-    .card_one {
-        height: 320px;
-    }
-    
-    .cover-item, .card-back {
-        padding: 15px;
-    }
-    
- 
+  .card_one {
+    height: 320px;
+  }
+
+  .cover-item,
+  .card-back {
+    padding: 15px;
+  }
 }
 
 /* Для очень маленьких экранов */
 @media (max-width: 360px) {
-    .card_one {
-        height: 350px;
-    }
+  .card_one {
+    height: 350px;
+  }
 }

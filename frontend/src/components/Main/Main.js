@@ -10,8 +10,8 @@ import Completed from "./Completed/Completed";
 import ArronService from "./ArronService/ArronService";
 import AboutMe from "./AboutMe/AboutMe";
 import Gifts from "./Gifts/Gifts";
-import ImageGalleryApi from "../AdminPanel/Image/ImageGalleryApi";
 import SerchBar from "../pages/SearchBar";
+import WorkSteps from "./WorkSteps/WorkSteps";
 
 function Main() {
   const navigate = useNavigate();
@@ -30,10 +30,9 @@ function Main() {
         <MainBanner />
         <ServiceRef />
         <AboutRef />
-        <Completed />
-
         <ArronService />
         <AboutMe />
+        <WorkSteps />
         <Gifts />
         <ContactsRef />
       </main>

@@ -1,196 +1,249 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import "./Header.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShopContext } from '../Contexst/ShopContext';
 import headerLogo from "../../images/Servicebox6.svg";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import LoginSignup from "../pages/LoginSignup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBasketShopping, faMobilePhone, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBasketShopping,
+  faMobilePhone,
+  faUser,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 import { faVk, faTelegram, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import gsap from "gsap";
-import ScrollToPlugin from "gsap/ScrollToPlugin";
-
-import "./UserMenu.css"; // Ниже стили
+import "./Header.css";
 
 function Header() {
-    const { getTotalCartItems, isAuthenticated, setIsAuthenticated } = useContext(ShopContext);
+  const { getTotalCartItems, isAuthenticated, setIsAuthenticated } = useContext(ShopContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [menu, setMenu] = useState("shop");
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [role, setRole] = useState(localStorage.getItem('role') || '');
+  const [username, setUsername] = useState(localStorage.getItem('username') || '');
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-    gsap.registerPlugin(ScrollToPlugin);
-    const navigate = useNavigate();
-    const [menu, setMenu] = useState("shop");
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const [role, setRole] = useState(localStorage.getItem('role') || '');
-    const [username, setUsername] = useState(localStorage.getItem('username') || '');
-    const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef();
 
-    const userMenuRef = useRef();
+  useEffect(() => {
+    setRole(localStorage.getItem('role') || '');
+    setUsername(localStorage.getItem('username') || '');
+  }, [isAuthenticated]);
 
-    useEffect(() => {
-        setRole(localStorage.getItem('role') || '');
-        setUsername(localStorage.getItem('username') || '');
-    }, [isAuthenticated]);
-
-    useEffect(() => {
-        const handleClickOutside = event => {
-            if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-                setShowUserMenu(false);
-            }
-        };
-        if (showUserMenu) document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [showUserMenu]);
-
-    // авторизация админа на админку, обычного на главную, появление меню, ресета
-    const handleLoginSuccess = () => {
-        setIsAuthenticated(true);
-        setRole(localStorage.getItem('role') || '');
-        setUsername(localStorage.getItem('username') || '');
-        setIsLoginOpen(false);
-        if (localStorage.getItem('role') === "admin") {
-            navigate("/admin-panel");
-        } else {
-            navigate("/");
-        }
-    };
-
-    const logout = () => {
-        localStorage.clear();
-        setIsAuthenticated(false);
-        setRole('');
-        setUsername('');
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
-        navigate("/");
+      }
     };
+    
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showUserMenu]);
 
-    // header меню юзера
-    const UserDropdownMenu = () => (
-        <div className="user-menu-dropdown" ref={userMenuRef}>
-            <Link to="/profile" onClick={() => setShowUserMenu(false)}>Мои данные</Link>
-            <Link to="/profile#orders" onClick={() => setShowUserMenu(false)}>Мои заказы</Link>
-            <button className="user-menu-logout" onClick={logout}>Выход</button>
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes('/contacts')) setMenu("contacts");
+    else if (path.includes('/about')) setMenu("about");
+    else if (path.includes('/prices')) setMenu("price-list");
+    else if (path.includes('/image-gallery-api')) setMenu("gallery");
+    else if (path.includes('/parts')) setMenu("parts");
+    else if (path.includes('/news')) setMenu("newsdetail");
+    else if (path.includes('/promotions-page')) setMenu("promotionspage");
+    else if (path.includes('/depository-public')) setMenu("depository");
+    else if (path.includes('/chat-with-gpt')) setMenu("chatwithgpt");
+    else setMenu("shop");
+  }, [location.pathname]);
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+    setRole(localStorage.getItem('role') || '');
+    setUsername(localStorage.getItem('username') || '');
+    setIsLoginOpen(false);
+    
+    if (localStorage.getItem('role') === "admin") {
+      navigate("/admin-panel");
+    } else {
+      navigate("/");
+    }
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    setIsAuthenticated(false);
+    setRole('');
+    setUsername('');
+    setShowUserMenu(false);
+    navigate("/");
+  };
+
+  const UserDropdownMenu = () => (
+    <div className="user-menu-dropdown" ref={userMenuRef}>
+      <Link to="/profile" onClick={() => setShowUserMenu(false)}>Мои данные</Link>
+      <Link to="/profile#orders" onClick={() => setShowUserMenu(false)}>Мои заказы</Link>
+      <button className="user-menu-logout" onClick={logout}>Выход</button>
+    </div>
+  );
+
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  return (
+    <>
+      <div className={`header-top-bar ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="header-top-bar__container">
+          <div className="header-contacts">
+            <a href="tel:+79115018828" className="header-contact-link">
+              <FontAwesomeIcon icon={faMobilePhone} />
+              <span>+7 (911) 501-88-28</span>
+            </a>
+            <a href="tel:+79115010696" className="header-contact-link">
+              <FontAwesomeIcon icon={faMobilePhone} />
+              <span>+7 (911) 501-06-96</span>
+            </a>
+            <span className="header-work-hours">Пн-Пт: 10:00 - 19:00</span>
+          </div>
+
+          <div className="header-socials">
+            <a 
+              href="https://vk.com/servicebox35" 
+              className="social-link vk" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Написать нам в ВКонтакте"
+            >
+              <FontAwesomeIcon icon={faVk} />
+            </a>
+            <a 
+              href="https://wa.me/79062960353" 
+              className="social-link whatsapp" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Написать нам в WhatsApp"
+            >
+              <FontAwesomeIcon icon={faWhatsapp} />
+            </a>
+            <a 
+              href="https://t.me/Tomkka" 
+              className="social-link telegram" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label="Написать нам в Telegram"
+            >
+              <FontAwesomeIcon icon={faTelegram} />
+            </a>
+          </div>
         </div>
-    );
+      </div>
+      <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="header__container">
+          <Link to="/" className="header-logo-link" aria-label="На главную страницу ServiceBox">
+            <img 
+              src={headerLogo} 
+              alt="Логотип ServiceBox - ремонт техники в Вологде" 
+              className="header-logo" 
+              width="65" 
+              height="45" 
+            />
+            <span className="header-logo-text">
+              <span className="header-logo-main">ServiceBox</span>
+              <span className="header-logo-sub">Вологда</span>
+            </span>
+          </Link>
 
-    // mobile/desktop адаптация
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-    return (
-        <header className="header" id="header">
-            <div className="container container__main">
-                <div className="container__contacts">
-                    <li>
-                        <Link to="/" className="form__logo">
-                            <img src={headerLogo} alt="Логотип сайта" className="logo" />
-                        </Link>
-                    </li>
-                    <div className="contacts__block">
-                        <ul className="contacts__icon">
-                            <li className="contacts__icon-sochial pulse-one"><a href="https://vk.com/servicebox35" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faVk} /><span>VK</span></a></li>
-                            <li className="contacts__icon-sochial pulse-two"><a href="whatsapp://send?phone=79062960353" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faWhatsapp} /><span>WhatsApp</span></a></li>
-                            <li className="contacts__icon-sochial pulse-three"><a href="tg://resolve?domain=@Tomkka" target="_blank" rel="noopener noreferrer"><FontAwesomeIcon icon={faTelegram} /><span>Telegram</span></a></li>
-                        </ul>
-                    </div>
-                    <div className="content-holder">
-                        <span className="heading-span">Часы работы</span><br /><span>Понедельник-Пятница <br />(10:00 - 19:00)</span>
-                    </div>
-                    <div className="contact-info">
-                        <p className="contact-info__location">Адрес: г.Вологда, ул. Северная 7А, 405</p>
-                        <p className="contact-info__location">Адрес: г.Вологда, ул. Ленина 6</p>
-                    </div>
-                    <div className="nav-login-cart">
-                        {isAuthenticated ? (
-                            <div className="nav-user">
-                                {/* Иконка человека */}
-                                <span className="nav-user-icon" onClick={() => setShowUserMenu(!showUserMenu)}>
-                                    <FontAwesomeIcon icon={faUser} size="lg" />
-                                    {/* для мобильного выводим имя */}
-                                    {!isMobile && <span className="nav-username">{username || (role === "admin" ? "Админ" : "Пользователь")}</span>}
-                                </span>
-                                {!isMobile && showUserMenu && <UserDropdownMenu />}
-                                {isMobile && showUserMenu && (
-                                    <div className="user-menu-mobilemask">
-                                        <UserDropdownMenu />
-                                    </div>
-                                )}
-                                {role === "admin" && (
-                                    <Link to="/admin-panel" className="admin-link-btn">Админка</Link>
-                                )}
-                            </div>
-                        ) : (
-                            <button onClick={() => setIsLoginOpen(true)}>Вход</button>
-                        )}
-                        <LoginSignup
-                            isOpen={isLoginOpen}
-                            onClose={() => setIsLoginOpen(false)}
-                            onLoginSuccess={handleLoginSuccess}
-                        />
-                        <Link to='/cart'>
-                            <FontAwesomeIcon icon={faBasketShopping} />
-                        </Link>
-                        <div className="nav-cart-count">{getTotalCartItems()}</div>
-                    </div>
-                    <BurgerMenu scrollTo={target => gsap.to(window, { duration: 1, scrollTo: target })} />
-                </div>
-            </div>
-            <div className="header__top">
-                <nav className="navigation">
-                    <div className="nav__info">
-                        <p className="contact-info__number" style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-                            <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} /> +7 911 501 88 28
-                        </p>
-                        <p className="contact-info__number" style={{ display: 'inline-flex', alignItems: 'center', cursor: 'pointer' }}>
-                            <FontAwesomeIcon icon={faMobilePhone} style={{ marginRight: '3px' }} /> +7 911 501 06 96
-                        </p>
-                    </div>
-                    <ul className="navigation__lists">
-                        <li className="navigation__list" onClick={() => setMenu("contacts")}>
-                            <Link className="navigation__list" to="/contacts">Контакты {menu === "contacts" && <hr />}</Link>
-                        </li>
-                        <li className="navigation__list" onClick={() => setMenu("about")}>
-                            <Link className="navigation__list" to="/about">О нас {menu === "about" && <hr />}</Link>
-                        </li>
-                        <li className="navigation__list" onClick={() => setMenu("price-list")}>
-                            <Link className="navigation__list" to="/prices">Цены {menu === "price-list" && <hr />}</Link>
-                        </li>
-                        <li className="navigation__list" onClick={() => setMenu("gallery")}>
-                            <Link className="navigation__list" to="/image-gallery-api">Фото {menu === "gallery" && <hr />}</Link>
-                        </li>
-                    </ul>
-                    <ul className='navigation__lists'>
-                        <li className="navigation__list" onClick={() => { setMenu("parts") }}>
-                            <Link style={{ textDecoration: 'none' }} to='/parts'>Каталог</Link>
-                            {menu === "parts" ? <hr /> : <></>}
-                        </li>
-                        <li className="navigation__list" onClick={() => { setMenu("newsdetail") }}>
-                            <Link style={{ textDecoration: 'none' }} to='/news'>Новости</Link>
-                            {menu === "newsdetail" ? <hr /> : <></>}
-                        </li>
-                        <li className="navigation__list" onClick={() => { setMenu("promotionspage") }}>
-                            <Link style={{ textDecoration: 'none' }} to='/promotions-page'>Акции</Link>
-                            {menu === "promotionspage" ? <hr /> : <></>}
-                        </li>
-                        <li className="navigation__list" onClick={() => setMenu("depository")}>
-                            <Link to="/depository-public" >
-                                Схемы/Bios
-                            </Link>
-                            {menu === "depository" ? <hr /> : null}
-                        </li>
-                        <li className="navigation__list" onClick={() => { setMenu("chatwithgpt") }}>
-                            <Link to="/chat-with-gpt" >
-                                🤖 GPT-Чат
-                            </Link>
-                            {menu === "chatwithgpt" ? <hr /> : <></>}
-                        </li>
-                    </ul>
-                    <a className="nav-login" href="https://pm-31768.promaster.app/index_cl" target="_blank" rel="noopener noreferrer">
-                        <span className="button-text">СТАТУС РЕМОНТА</span>
+          <nav className="header-nav" aria-label="Основная навигация">
+            <ul className="header-nav-list">
+              <li className={`header-nav-item ${menu === "about" ? 'active' : ''}`}>
+                <Link to="/about" className="header-nav-link">О нас</Link>
+              </li>
+              <li className={`header-nav-item ${menu === "parts" ? 'active' : ''}`}>
+                <Link to="/parts" className="header-nav-link">Каталог</Link>
+              </li>
+              <li className={`header-nav-item ${menu === "prices" ? 'active' : ''}`}>
+                <Link to="/prices" className="header-nav-link">Цены</Link>
+              </li>
+              <li className={`header-nav-item ${menu === "gallery" ? 'active' : ''}`}>
+                <Link to="/image-gallery-api" className="header-nav-link">Фото</Link>
+              </li>
+              <li className="header-nav-item dropdown">
+                <button className="header-nav-link dropdown-toggle" aria-haspopup="true">
+                  Ещё <FontAwesomeIcon icon={faChevronDown} size="xs" />
+                </button>
+                <ul className="dropdown-menu">
+                  <li><Link to="/news" className="dropdown-item">Блог</Link></li>
+                  <li><Link to="/promotions-page" className="dropdown-item">Акции</Link></li>
+                  <li><Link to="/depository-public" className="dropdown-item">Схемы/Bios</Link></li>
+                  <li>
+                    <a 
+                      href="https://pm-31768.promaster.app/index_cl" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="dropdown-item external-link"
+                    >
+                      Статус ремонта
                     </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
 
-                </nav>
-                <div className="list-header"></div>
-            </div>
-        </header>
-    );
+          <div className="header-actions">
+            {isAuthenticated ? (
+              <div className="nav-user-group">
+                <Link to="/profile" className="nav-user-icon" aria-label="Личный кабинет">
+                  <FontAwesomeIcon icon={faUser} />
+                  {!isMobile && <span className="nav-username">{username || (role === "admin" ? "Админ" : "Пользователь")}</span>}
+                </Link>
+
+                {role === "admin" && (
+                  <Link to="/admin-panel" className="admin-panel-btn" aria-label="Админ-панель">
+                    Админка
+                  </Link>
+                )}
+
+                <button className="logout-btn" onClick={logout} aria-label="Выйти">
+                  Выйти
+                </button>
+              </div>
+            ) : (
+              <button className="header-login-btn" onClick={() => setIsLoginOpen(true)}>
+                Вход
+              </button>
+            )}
+
+            <Link to="/cart" className="header-cart-link" aria-label="Корзина">
+              <FontAwesomeIcon icon={faBasketShopping} />
+              {getTotalCartItems() > 0 && (
+                <span className="header-cart-count">{getTotalCartItems()}</span>
+              )}
+            </Link>
+
+            <BurgerMenu />
+          </div>
+        </div>
+      </header>
+
+      <LoginSignup
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
+    </>
+  );
 }
+
 export default Header;

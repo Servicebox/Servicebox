@@ -23,12 +23,9 @@ const ListProduct = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // State for new product
   const [newProduct, setNewProduct] = useState({ ...emptyProduct, images: [] });
   const [newProductPreview, setNewProductPreview] = useState([]);
 
-  // Первый fetch категорий
   useEffect(() => {
     fetch(`${API_URL}/api/categories-with-subcategories`)
       .then(res => res.json())
@@ -36,21 +33,17 @@ const ListProduct = () => {
       .catch(() => setCategories([]));
   }, []);
 
-  // Авто-обновление подкатегорий при выборе категории для newProduct
   useEffect(() => {
     const selectedCategory = categories.find(c => c.category === newProduct.category);
     setSubcategories(selectedCategory ? selectedCategory.subcategories : []);
   }, [newProduct.category, categories]);
 
-  // Авто-обновление подкатегорий при выборе категории для editingProduct (edit mode)
   useEffect(() => {
     if (!editingProduct) return;
     const selectedCategory = categories.find(c => c.category === editingProduct.category);
     setEditingSubcategories(selectedCategory ? selectedCategory.subcategories : []);
   }, [editingProduct?.category, categories]);
 
-  // ---------- Функции ----------
-  // Загрузка картинок (новый товар)
   const handleNewImages = async (e) => {
     const files = Array.from(e.target.files).slice(0, 3);
     if (files.length < 1) return;
@@ -77,8 +70,6 @@ const ListProduct = () => {
       alert(`Ошибка загрузки: ${error.message}`);
     }
   };
-
-  // Получение значений форм
   const handleNewChange = (e) => {
     setNewProduct(prev => ({
       ...prev,
@@ -86,7 +77,6 @@ const ListProduct = () => {
     }));
   };
 
-  // Отправка нового товара
 const handleNewSubmit = async (e) => {
   e.preventDefault();
   if (!newProduct.images || newProduct.images.length === 0) {
@@ -163,8 +153,6 @@ const fetchInfo = async () => {
 
   useEffect(() => { fetchInfo(); }, []);
 
-  // Удаление товара
-// Удаление товара по slug
 const remove_product = async (slug) => {
   if (!slug) {
     alert('Неверный идентификатор товара');
@@ -192,13 +180,11 @@ const remove_product = async (slug) => {
     alert('Ошибка удаления: ' + error.message);
   }
 };
-  // --- Редактирование
   const startEditing = (p) => {
     setEditingProduct({
       ...p,
       images: Array.isArray(p.images) ? p.images : [p.images]
     });
-    // Для начального значения выберем подкатегории для категории
     const selectedCategory = categories.find(c => c.category === p.category);
     setEditingSubcategories(selectedCategory ? selectedCategory.subcategories : []);
   };
@@ -215,11 +201,10 @@ const remove_product = async (slug) => {
     setEditingProduct(prev => ({
       ...prev,
       category: value,
-      subcategory: "", // сбросить подкатегорию при смене категории
+      subcategory: "",
       category_typed: "",
       subcategory_typed: ""
     }));
-    // Обновляем список подкатегорий
     const selectedCategory = categories.find(c => c.category === value);
     setEditingSubcategories(selectedCategory ? selectedCategory.subcategories : []);
   };
@@ -231,7 +216,6 @@ const remove_product = async (slug) => {
     }));
   };
 
-  // Загрузка новых изображений (replace все картинки)
   const handleEditImages = async (e) => {
     const files = Array.from(e.target.files).slice(0, 3);
     if (files.length < 1) return;
@@ -246,7 +230,6 @@ const remove_product = async (slug) => {
       alert('Ошибка загрузки изображений');
     }
   };
-  // Сохранение измененного товара
   const saveEdit = async () => {
     if (!editingProduct) return;
     // Аналогичная логика, как в handleNewSubmit
@@ -295,9 +278,6 @@ const remove_product = async (slug) => {
       (product.subcategory && product.subcategory.toLowerCase().includes(q))
     );
   });
-
-
-  // ------------- JSX -------------
   return (
     <div className='list-product'>
       <h2>Добавить новый товар</h2>
@@ -313,7 +293,7 @@ const remove_product = async (slug) => {
           <div style={{ display: 'flex', gap: 8, marginTop: 5 }}>
             {(newProduct.images?.length > 0 ? newProduct.images : newProductPreview).map((img, i) => (
               <img
-                key={`new-img-${img}`} // Используем URL изображения как ключ
+                key={`new-img-${img}`}
                 src={img}
                 alt="preview"
                 style={{ width: 48, height: 48, objectFit: 'cover', border: '1px solid #ccc' }}
@@ -323,8 +303,6 @@ const remove_product = async (slug) => {
         </div>
         <input name="name" placeholder="Название" value={newProduct.name} onChange={handleNewChange} required />
         <textarea name="description" placeholder="Описание" value={newProduct.description} onChange={handleNewChange} rows={3} required />
-
-        {/* Категория */}
         <select
           name="category"
           value={newProduct.category}
@@ -345,7 +323,6 @@ const remove_product = async (slug) => {
           ))}
           <option value="__new__">+ Новая категория</option>
         </select>
-        {/* Новая категория (инпут) */}
         {newProduct.category === "__new__" && (
           <input
             name="category_typed"
@@ -358,8 +335,6 @@ const remove_product = async (slug) => {
             required
           />
         )}
-
-        {/* Подкатегория */}
         {(
           (newProduct.category === "__new__") || subcategories.length > 0
         ) && (
@@ -444,8 +419,6 @@ const remove_product = async (slug) => {
                 </div>
                 <input name="name" value={editingProduct.name} onChange={handleEditChange} />
                 <textarea name="description" value={editingProduct.description} onChange={handleEditChange} rows={3} />
-
-                {/* Категория */}
                 <select
                   name="category"
                   value={editingProduct.category}
@@ -458,7 +431,6 @@ const remove_product = async (slug) => {
                   ))}
                   <option value="__new__">+ Новая категория</option>
                 </select>
-                {/* Новая категория (инпут) */}
                 {editingProduct.category === "__new__" && (
                   <input
                     name="category_typed"
@@ -472,8 +444,6 @@ const remove_product = async (slug) => {
                     required
                   />
                 )}
-
-                {/* Подкатегория */}
                 {(
                   (editingProduct.category === "__new__") || editingSubcategories.length > 0
                 ) && (
