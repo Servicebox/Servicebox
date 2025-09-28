@@ -505,7 +505,7 @@ const remove_product = async (slug) => {
       key={`prod-img-${img}`}
       className='listproduct-product-icon'
       src={img}
-      alt=''
+      alt='Запчасти для ремонта телефонов, планшетов, ноутбуков, видеокарт в Вологде'
       style={{ width: 40, height: 40, objectFit: 'cover', border: '1px solid #eee', marginRight: 4 }}
     />
   )}

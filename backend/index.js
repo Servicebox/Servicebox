@@ -44,7 +44,7 @@ app.set('trust proxy', true);
 const User = require('./models/Users');
 const YANDEX_USER = process.env.YANDEX_USER;
 const YANDEX_PASS = process.env.YANDEX_PASS;
-const CLIENT_URL = 'http://localhost:3001';
+const CLIENT_URL = 'https://servicebox35.ru';
 
 app.use(requestIp.mw());
 const PORT = 8000;

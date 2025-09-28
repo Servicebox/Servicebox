@@ -33,7 +33,7 @@ const Contacts = forwardRef((props, ref) => {
     <section id="contacts" className="contacts" ref={ref}>
       <div className="contacts__container">
         <div className="contacts__header">
-          <h2 className="t3d-text t3d-animate">Контактная информация</h2>
+          <h2 className="animated-title">Контактная информация</h2>
           <p className="contacts__intro">
             Ищете профессиональный ремонт ноутбуков, видеокарт, материнских плат, смартфонов и планшетов? 
             Сервисный центр ServiceBox предлагает комплексные решения для вашей электроники. 

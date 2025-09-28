@@ -11,13 +11,11 @@ import ErrorBoundary from './ErrorBoundary';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-
   <React.StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
         <ShopContextProvider>
           <App />
-          {/* <Widget link="tg://resolve?domain=@Tomkka" imageName="telegram" />*/}
         </ShopContextProvider>
       </BrowserRouter>
     </ErrorBoundary>
