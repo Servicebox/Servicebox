@@ -27,7 +27,6 @@ top: 0;
     background-color: var(--color-secondary);
     color: var(--color-white);
     font-size: 0.75rem;
-    z-index: var(--header-top-z-index);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
