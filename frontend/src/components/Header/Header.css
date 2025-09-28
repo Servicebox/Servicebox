@@ -21,6 +21,7 @@ top: 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 2;
 }
 .nav-user-group {
   display: flex;
@@ -172,7 +173,7 @@ top: 0;
   color: var(--color-white);
   box-shadow: var(--shadow-medium);
   transition: all 0.3s ease;
-  z-index: var(--header-main-z-index);
+z-index: 4;
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
 }
