@@ -27,7 +27,7 @@ function BubbleBackground() {
     const touchMove = (e) => {
       if (e.touches.length > 0) {
         handleMove(e.touches[0].clientX, e.touches[0].clientY);
-        e.preventDefault(); // предотвращаем скролл при свайпе
+     
       }
     };
 
