@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Основные страницы -->
   <url>
     <loc>https://servicebox35.ru/</loc>
     <lastmod>2025-06-16</lastmod>
@@ -19,8 +18,6 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Услуги -->
   <url>
     <loc>https://servicebox35.ru/services</loc>
     <lastmod>2025-06-16</lastmod>
@@ -87,8 +84,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Информационные разделы -->
   <url>
     <loc>https://servicebox35.ru/news</loc>
     <lastmod>2025-06-16</lastmod>
@@ -107,8 +102,6 @@
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
-
-  <!-- Дополнительные сервисы -->
   <url>
     <loc>https://servicebox35.ru/prices</loc>
     <lastmod>2025-06-16</lastmod>
