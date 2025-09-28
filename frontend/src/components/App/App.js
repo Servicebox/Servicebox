@@ -87,7 +87,6 @@ const App = () => {
   const location = useLocation();
   gsap.registerPlugin(ScrollToPlugin);
 
-  const toggleForm = () => setIsFormOpen(!isFormOpen);
   const [showForm, setShowForm] = useState(false);
   const handleFormToggle = () => setShowForm(prev => !prev);
   const openModal = () => setIsModalOpen(true);
@@ -98,11 +97,8 @@ const App = () => {
       closeModal();
     }
   }, []);
-  const openForm = useCallback(() => {
-    setIsFormOpen(true);
-  }, []);
 
-  const scrollTo = (target) => gsap.to(window, { duration: 1, scrollTo: target });
+
 
   useEffect(() => {
  const checkAuth = async () => {

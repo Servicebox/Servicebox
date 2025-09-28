@@ -18,17 +18,17 @@ function BurgerMenu() {
   const { getTotalCartItems } = useContext(ShopContext);
   const location = useLocation();
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add('menu-open');
-    } else {
-      document.body.classList.remove('menu-open');
-    }
+useEffect(() => {
+  if (isOpen) {
+    document.body.style.overflow = 'hidden';
+  } else {
+    document.body.style.overflow = 'auto';
+  }
 
-    return () => {
-      document.body.classList.remove('menu-open');
-    };
-  }, [isOpen]);
+  return () => {
+    document.body.style.overflow = 'auto';
+  };
+}, [isOpen]);
 
   useEffect(() => {
     setIsOpen(false);

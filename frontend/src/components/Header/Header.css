@@ -1,12 +1,3 @@
-/* Глобальные переменные для header */
-:root {
-  --header-top-height: 35px;
-  --header-main-height: 70px;
-  --header-main-height-mobile: 60px;
-  --header-top-z-index: 3;
-  --header-main-z-index: 4;
-  --burger-z-index: 1001;
-}
 
 /* Сброс стилей */
 .header-top-bar,

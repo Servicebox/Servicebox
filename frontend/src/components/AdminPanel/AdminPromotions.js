@@ -9,11 +9,7 @@ export default function AdminPromotions() {
     const [imagePreview, setImagePreview] = useState('');
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggleForm = () => {
-        setIsOpen(!isOpen);
-        document.body.style.overflow = isOpen ? 'auto' : 'hidden';
-    };
-
+const toggleForm = () => setIsOpen(!isOpen);
     useEffect(() => {
         const handleEsc = (event) => {
             if (event.keyCode === 27) {
