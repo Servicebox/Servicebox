@@ -16,6 +16,9 @@ html, body {
     touch-action: pan-y;
   }
 }
+.page__wrapper{
+      padding: 55px 0;
+}
 
 :root {
   /* Fonts */
